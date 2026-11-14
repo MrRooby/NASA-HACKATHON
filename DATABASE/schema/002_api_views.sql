@@ -60,7 +60,7 @@ CREATE OR REPLACE VIEW indicators AS
 SELECT i.code AS indicator_code, i.label, i.category,
        i.body_system_code AS body_system, bs.body_region,
        i.canonical_unit AS unit, i.value_type, i.scope,
-       i.threshold_id, i.baseline_threshold_id, i.description,
+       i.threshold_id, i.baseline_threshold_id, i.description, i.clinical_use, i.is_derived,
        COUNT(DISTINCT o.subject_id) AS n_subjects,
        COUNT(o.id)                  AS n_observations,
        GROUP_CONCAT(DISTINCT o.source_id ORDER BY o.source_id SEPARATOR ', ') AS sources
@@ -68,7 +68,8 @@ FROM astro_core.indicator i
 LEFT JOIN astro_core.body_system bs ON bs.code = i.body_system_code
 LEFT JOIN astro_core.observation o  ON o.indicator_id = i.id
 GROUP BY i.id, i.code, i.label, i.category, i.body_system_code, bs.body_region,
-         i.canonical_unit, i.value_type, i.scope, i.threshold_id, i.baseline_threshold_id, i.description;
+         i.canonical_unit, i.value_type, i.scope, i.threshold_id, i.baseline_threshold_id, i.description,
+         i.clinical_use, i.is_derived;
 
 -- ---------- B. Mapy pokrycia: źródło x wskaźnik, osoba x wskaźnik ----------
 
@@ -414,3 +415,12 @@ CREATE OR REPLACE VIEW import_log AS
 SELECT id AS batch_id, source_id, adapter, file_name, file_sha256, started_at, finished_at,
        status, rows_read, rows_upserted, rows_rejected, notes
 FROM astro_core.import_batch;
+
+-- ---------- E. Widoki dla GUI diagnostycznego (0.3) ----------
+
+-- E1. latest zawężony do wskaźników diagnostycznych (bez cytokin, DXA, środowiska)
+CREATE OR REPLACE VIEW diagnostic_latest AS
+SELECT l.*
+FROM latest l
+JOIN astro_core.indicator i ON i.code = l.indicator_code
+WHERE i.clinical_use = 'diagnostic';

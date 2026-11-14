@@ -351,9 +351,179 @@ class Gen:
         e("S12", "SYN-02", "heart_rate_resting", "R+0", "caution", False, "absolute", "HR 101-121")
 
 
+MARS_MISSION = dict(
+    code="SYN-MARS-HAB-600", name="Synthetic Mars habitat mission (600 sols)",
+    environment_code="mars_surface", start_date="2039-01-01", duration_days=600,
+)
+MARS_PROFILES = [
+    dict(code="SYN-02", crew="C1", sex="M", age_band="40-49", mass=84.0),
+    dict(code="SYN-01", crew="C2", sex="F", age_band="30-39", mass=62.0),
+    dict(code="SYN-03", crew="C3", sex="M", age_band="50-59", mass=80.0),
+    dict(code="SYN-04", crew="C4", sex="F", age_band="40-49", mass=65.0),
+]
+
+MARS_INDICATORS = [
+    ("body_mass", "Body mass", "nutrition", "nutrition", "kg"),
+    ("vitamin_d_25oh", "Vitamin D, 25-OH", "lab_cmp", "metabolic", "ng/mL"),
+    ("vitamin_b12", "Vitamin B12", "lab_cmp", "metabolic", "pg/mL"),
+    ("cortisol_am", "Morning cortisol", "lab_cmp", "metabolic", "µg/dL"),
+    ("handgrip_strength", "Hand grip strength", "fitness", "musculoskeletal", "kg"),
+    ("visual_acuity_logmar", "Visual acuity", "vitals", "cardiovascular", "logMAR"),
+    ("intraocular_pressure", "Intraocular pressure", "vitals", "cardiovascular", "mmHg"),
+    ("fvc", "Forced vital capacity", "fitness", "respiratory", "L"),
+    ("fev1", "Forced expiratory volume in 1 second", "fitness", "respiratory", "L"),
+    ("muscle_pct", "Muscle mass", "body_composition", "musculoskeletal", "%"),
+    ("fat_pct", "Body fat", "body_composition", "nutrition", "%"),
+    ("body_water_pct", "Body water", "body_composition", "nutrition", "%"),
+    ("bone_mass", "Bone mass", "body_composition", "musculoskeletal", "kg"),
+    ("bmr", "Basal metabolic rate", "nutrition", "nutrition", "kcal/d"),
+    ("sleep_efficiency", "Sleep efficiency", "sleep", "sleep", "%"),
+    ("deep_sleep_pct", "Deep sleep", "sleep", "sleep", "%"),
+    ("rem_sleep_pct", "REM sleep", "sleep", "sleep", "%"),
+    ("headache_score", "Headache score", "mood", "behavioral", "score 0-10"),
+    ("nausea_score", "Nausea score", "mood", "behavioral", "score 0-10"),
+    ("vision_change", "Reported vision change", "mood", "behavioral", "boolean"),
+    ("fatigue_score", "Fatigue score", "mood", "behavioral", "score 1-5"),
+    ("pvt_reaction_ms", "PVT reaction time", "fitness", "behavioral", "ms"),
+]
+
+MARS_LAB_UNITS = {
+    "rbc": "Million/uL", "hemoglobin": "g/dL", "hematocrit": "%",
+    "mcv": "fL", "mch": "pg", "mchc": "g/dL", "rdw": "%",
+    "wbc": "Thousand/uL", "platelets": "Thousand/uL", "neutrophils_pct": "%",
+    "lymphocytes_pct": "%", "monocytes_pct": "%", "eosinophils_pct": "%",
+    "basophils_pct": "%", "glucose": "mg/dL", "sodium": "mmol/L",
+    "potassium": "mmol/L", "chloride": "mmol/L", "bicarbonate": "mmol/L",
+    "calcium": "mg/dL", "bun": "mg/dL", "creatinine": "mg/dL",
+    "albumin": "g/dL", "total_protein": "g/dL", "bilirubin_total": "mg/dL",
+    "alt": "U/L", "ast": "U/L", "alp": "U/L",
+}
+
+MARS_LAB_BASE = {
+    "rbc": 4.7, "hemoglobin": 14.0, "hematocrit": 42.0, "mcv": 89.0, "mch": 30.0,
+    "mchc": 34.0, "rdw": 13.0, "wbc": 5.8, "platelets": 245.0,
+    "neutrophils_pct": 56.0, "lymphocytes_pct": 34.0, "monocytes_pct": 7.0,
+    "eosinophils_pct": 2.0, "basophils_pct": 1.0, "glucose": 88.0, "sodium": 140.0,
+    "potassium": 4.2, "chloride": 103.0, "bicarbonate": 24.0, "calcium": 9.4,
+    "bun": 15.0, "creatinine": 0.9, "albumin": 4.4, "total_protein": 7.1,
+    "bilirubin_total": 0.7, "alt": 22.0, "ast": 21.0, "alp": 70.0,
+}
+
+
+def _mars_indicator_meta():
+    rows = []
+    for code, label, category, body, unit in MARS_INDICATORS:
+        rows.append(dict(code=code, label=label, category=category, body_system_code=body,
+                         canonical_unit=unit, clinical_use="diagnostic"))
+    for code, unit in MARS_LAB_UNITS.items():
+        if code not in {r["code"] for r in rows}:
+            rows.append(dict(code=code, label=code.replace("_", " ").title(), category="lab_cbc",
+                             body_system_code="hematologic", canonical_unit=unit, clinical_use="diagnostic"))
+    return rows
+
+
+def generate_mars(seed, out):
+    """Generate the shared Mars health dataset without changing the legacy demo."""
+    rng = random.Random(seed)
+    epoch = dt.datetime(2039, 1, 1)
+    sol_seconds = 88775.244
+    obs = []
+    expected = []
+
+    def add(p, code, unit, sol, value, sample, hour=7, nd=2):
+        t = epoch + dt.timedelta(seconds=(sol - 1) * sol_seconds + hour * 3600)
+        obs.append(dict(source_id=SOURCE, subject_code=p["code"], mission_code=MARS_MISSION["code"],
+                        indicator_code=code, timepoint_label=f"Sol {sol}", anchor="launch",
+                        day_offset=sol, time_is_approx=0, measured_at=t.strftime("%Y-%m-%d %H:%M:%S"),
+                        replicate=1, value=round(value, nd), unit=unit, ref_min="", ref_max="",
+                        sample_type=sample, is_synthetic=1, raw_name="", raw_value="", raw_unit=""))
+
+    for p in MARS_PROFILES:
+        for sol in range(0, 601):
+            in_flight = sol >= 1
+            # Daily vitals and the required daily symptom/sleep streams.
+            mass_loss = max(0, sol - 1) / 600 * (0.06 if p["code"] == "SYN-03" else 0.03)
+            add(p, "heart_rate_resting", "bpm", sol, 64 + rng.gauss(0, 3) + (2 if sol > 250 else 0), "wearable", 6, 0)
+            add(p, "bp_systolic", "mmHg", sol, 115 + rng.gauss(0, 4), "manual_device")
+            add(p, "bp_diastolic", "mmHg", sol, 74 + rng.gauss(0, 3), "manual_device")
+            add(p, "body_temperature", "°C", sol, 36.6 + rng.gauss(0, .12), "manual_device")
+            add(p, "spo2", "%", sol, 97.5 + rng.gauss(0, .5), "wearable", 6, 1)
+            headache = 0
+            if sol == 142 and p["crew"] in ("C1", "C2"):
+                headache = 5
+            add(p, "headache_score", "score 0-10", sol, headache, "self_report", 20, 0)
+            add(p, "nausea_score", "score 0-10", sol, 1 if headache else 0, "self_report", 20, 0)
+            sans = p["crew"] == "C3" and sol >= 200
+            add(p, "vision_change", "boolean", sol, 1 if sans else 0, "self_report", 20, 0)
+            add(p, "fatigue_score", "score 1-5", sol, 4 if sol in range(250, 256) and p["crew"] == "C2" else 2, "self_report", 20, 0)
+            add(p, "sleep_efficiency", "%", sol, 88 + rng.gauss(0, 3), "wearable", 6, 1)
+            add(p, "deep_sleep_pct", "%", sol, 20 + rng.gauss(0, 2), "wearable", 6, 1)
+            add(p, "rem_sleep_pct", "%", sol, 22 + rng.gauss(0, 2), "wearable", 6, 1)
+            add(p, "pvt_reaction_ms", "ms", sol, 280 + rng.gauss(0, 20), "manual_device", 8, 0) if sol % 7 == 0 else None
+            if sol % 7 == 0:
+                add(p, "body_mass", "kg", sol, p["mass"] * (1 - mass_loss) + rng.gauss(0, .2), "manual_device", 6, 1)
+                add(p, "glucose", "mg/dL", sol, 88 + rng.gauss(0, 4), "lab_serum", 7, 0)
+                add(p, "cortisol_am", "µg/dL", sol, 14 + rng.gauss(0, 2), "lab_serum", 7, 1)
+            for code, unit, value in (
+                ("rbc", "Million/uL", 4.7), ("hemoglobin", "g/dL", 14), ("hematocrit", "%", 42),
+                ("wbc", "Thousand/uL", 5.8), ("platelets", "Thousand/uL", 245),
+                ("neutrophils_pct", "%", 56), ("lymphocytes_pct", "%", 34),
+                ("calcium", "mg/dL", 9.4), ("sodium", "mmol/L", 140), ("potassium", "mmol/L", 4.2),
+                ("chloride", "mmol/L", 103), ("bicarbonate", "mmol/L", 24),
+                ("creatinine", "mg/dL", 0.9), ("bun", "mg/dL", 15),
+            ):
+                if sol % 7 == 0:
+                    value += rng.gauss(0, max(value * .03, .05))
+                    if p["crew"] == "C2" and 250 <= sol <= 255 and code in ("bun", "creatinine"):
+                        value *= 1.3
+                    add(p, code, unit, sol, value, "lab_whole_blood" if code in ("rbc", "hemoglobin", "hematocrit", "wbc", "platelets", "neutrophils_pct", "lymphocytes_pct") else "lab_serum", 7, 2)
+            if sol == 0 or sol % 30 == 0:
+                for code, unit, value in (
+                    ("vitamin_d_25oh", "ng/mL", 32), ("vitamin_b12", "pg/mL", 500),
+                    ("handgrip_strength", "kg", 42 if p["sex"] == "M" else 28),
+                    ("visual_acuity_logmar", "logMAR", .0 if not sans else .25),
+                    ("intraocular_pressure", "mmHg", 15), ("fvc", "L", 4.5 if p["sex"] == "M" else 3.4),
+                    ("fev1", "L", 3.7 if p["sex"] == "M" else 2.8), ("muscle_pct", "%", 38 if p["sex"] == "M" else 30),
+                    ("fat_pct", "%", 20 if p["sex"] == "M" else 28), ("body_water_pct", "%", 58),
+                    ("bone_mass", "kg", 3.2), ("bmr", "kcal/d", 1700 if p["sex"] == "M" else 1400),
+                ):
+                    if code == "handgrip_strength" and p["crew"] == "C3" and 360 <= sol <= 420:
+                        value -= 8
+                    add(p, code, unit, sol, value + rng.gauss(0, .1), "manual_device", 9, 2)
+    expected.extend([
+        dict(scenario="H1", subject_code="SYN-02", indicator_code="headache_score", day="Sol 142", status="alert"),
+        dict(scenario="H4", subject_code="SYN-01", indicator_code="bun", day="Sol 250-255", status="caution"),
+        dict(scenario="H5", subject_code="SYN-03", indicator_code="handgrip_strength", day="Sol 360-420", status="caution"),
+        dict(scenario="H8", subject_code="SYN-02", indicator_code="lymphocytes_pct", day="Sol 470", status="ok",
+             note="monitoring działa, wynik prawidłowy"),
+        dict(scenario="SANS", subject_code="SYN-03", indicator_code="visual_acuity_logmar", day="Sol 200+", status="alert"),
+    ])
+    meta = dict(
+        generator=VERSION, dataset="mars", seed=seed, source=dict(
+            id=SOURCE, title="Synthetic Mars health data generator v1", publisher="NASA-HACKATHON team",
+            data_kind="synthetic", access_status="generated"),
+        missions=[dict(MARS_MISSION, end_date="2040-08-22", source_id=SOURCE, is_synthetic=True)],
+        subjects=[dict(code=p["code"], source_subject_code=p["code"], source_id=SOURCE, sex=p["sex"],
+                       age_band_code=p["age_band"], is_synthetic=True) for p in MARS_PROFILES],
+        participations=[dict(subject_code=p["code"], mission_code=MARS_MISSION["code"],
+                             role="synthetic_crew", group_label=p["crew"]) for p in MARS_PROFILES],
+        indicators=_mars_indicator_meta(),
+        clinical_schedule={"daily": ["CBC core", "glucose", "electrolytes", "sleep", "symptoms"],
+                           "weekly": ["CMP", "cortisol", "PVT"], "sol_30": ["vitamins", "vision", "IOP", "spirometry", "grip", "BIA"]},
+    )
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "meta.json").write_text(json.dumps(meta, indent=1, ensure_ascii=False) + "\n")
+    (out / "expected.json").write_text(json.dumps(expected, indent=1, ensure_ascii=False) + "\n")
+    with (out / "observations.canonical.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=list(obs[0]), lineterminator="\n")
+        w.writeheader()
+        w.writerows(obs)
+    print(f"{out}: observations={len(obs)} expected={len(expected)}")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--dataset", default="demo", choices=["demo"])
+    ap.add_argument("--dataset", default="demo", choices=["demo", "mars"])
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--until", default=None, help="np. FD68 albo R+5: utnij dane po tym dniu (tryb as-of)")
     ap.add_argument("--out", default=None)
@@ -361,6 +531,10 @@ def main():
     until = parse_until(a.until)
     out = Path(a.out) if a.out else ROOT / "data" / "synthetic" / (a.dataset + (f"_until_{a.until}" if a.until else ""))
     out.mkdir(parents=True, exist_ok=True)
+
+    if a.dataset == "mars":
+        generate_mars(a.seed, out)
+        return
 
     g = Gen(a.seed, until)
     cal = lab_calibration()
@@ -389,7 +563,8 @@ def main():
             w = csv.DictWriter(f, fieldnames=list(rows[0]), lineterminator="\n")
             w.writeheader()
             w.writerows(rows)
-    print(f"{out.relative_to(ROOT)}: observations={len(g.obs)} env={len(g.env)} expected={len(g.expected)}")
+    shown_out = out.relative_to(ROOT) if out.is_relative_to(ROOT) else out
+    print(f"{shown_out}: observations={len(g.obs)} env={len(g.env)} expected={len(g.expected)}")
 
 
 if __name__ == "__main__":

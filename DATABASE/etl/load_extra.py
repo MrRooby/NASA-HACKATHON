@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from load import ROOT, connect, num, upsert  # noqa: E402
+from load import DERIVED, ROOT, clinical_use_for, connect, num, prune_batches, upsert  # noqa: E402
 
 ENV = ROOT / "data" / "env"
 LSDA = ROOT / "data" / "lsda" / "mr035g" / "files"
@@ -91,7 +91,8 @@ class Ind:
         upsert(self.cur, "indicator", dict(
             code=code, label=label, category=category, body_system_code=body, canonical_unit=unit,
             value_type="numeric", scope=scope, threshold_id=None, baseline_threshold_id=baseline_threshold_id,
-            description=description), ("code",))
+            description=description, clinical_use=clinical_use_for(code, category, scope),
+            is_derived=code in DERIVED), ("code",))
         self.cur.execute("SELECT id FROM indicator WHERE code=%s", (code,))
         self.ids[code] = self.cur.fetchone()[0]
         return self.ids[code]
@@ -474,6 +475,8 @@ def main(argv):
             for s in steps:
                 STEPS[s](cur, ind)
                 con.commit()
+            print(f"dziennik importów: usunięto {prune_batches(cur)} starych wpisów")
+            con.commit()
     except Exception:
         con.rollback()
         raise

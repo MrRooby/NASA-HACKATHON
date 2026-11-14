@@ -11,7 +11,8 @@ docker compose up -d
 ```
 
 - Port jest wystawiony **tylko na adresie Tailscale** (`DB_BIND_IP`, obecnie `100.118.238.112:3306`). Nie działa na `localhost` ani w sieci LAN, więc backend na tej samej maszynie też łączy się przez adres Tailscale.
-- `schema/001_core.sql` … `006_habitat_api_views.sql` wykonują się automatycznie **tylko przy pierwszym starcie** (pusty wolumen `astro_mariadb_data`). Po zmianie schematu: `docker compose down -v && docker compose up -d` (**kasuje dane**).
+- `schema/001_core.sql` … `012_users_extra.sql` wykonują się automatycznie **tylko przy pierwszym starcie** (pusty wolumen `astro_mariadb_data`). Po zmianie schematu: `docker compose down -v && docker compose up -d` (**kasuje dane**).
+- Wspólny demo-zestaw Marsa generuje `python3 DATABASE/synthetic/generate.py --dataset mars --seed 42 --out data/synthetic/mars_demo`, a ładuje go `uv run --no-project --with pymysql==1.1.1 python DATABASE/etl/load_canonical.py data/synthetic/mars_demo`. Powiązanie C1–C4 z SYN-02, SYN-01, SYN-03, SYN-04 tworzy `007_mars_crew_link.sql`.
 - Połączenie backendu: `mariadb -h 100.118.238.112 -u astro_reader -p astro_api` (tylko odczyt widoków).
 
 ## Import danych

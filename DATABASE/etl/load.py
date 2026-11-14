@@ -66,6 +66,23 @@ def upsert(cur, table: str, row: dict, keys_no_update: tuple = ()) -> None:
     cur.execute(sql, [row[c] for c in cols])
 
 
+def prune_batches(cur) -> int:
+    """Usuwa z dziennika starsze wpisy importu tego samego pliku, do których nie odwołuje się już żaden wiersz
+    (ponowny import idempotentny przepina wiersze na nowy wpis). Dzięki temu dziennik nie puchnie od powtórzeń."""
+    cur.execute("""
+        DELETE b FROM astro_core.import_batch b
+        WHERE b.status = 'ok'
+          AND EXISTS (SELECT 1 FROM (SELECT id, source_id, adapter, file_name FROM astro_core.import_batch) n
+                      WHERE n.source_id = b.source_id AND n.adapter = b.adapter AND n.file_name = b.file_name
+                        AND n.id > b.id)
+          AND NOT EXISTS (SELECT 1 FROM astro_core.observation o WHERE o.import_batch_id = b.id)
+          AND NOT EXISTS (SELECT 1 FROM astro_core.env_observation e WHERE e.import_batch_id = b.id)
+          AND NOT EXISTS (SELECT 1 FROM astro_core.cohort c WHERE c.import_batch_id = b.id)
+          AND NOT EXISTS (SELECT 1 FROM astro_habitat.reading r WHERE r.import_batch_id = b.id)
+          AND NOT EXISTS (SELECT 1 FROM astro_habitat.event v WHERE v.import_batch_id = b.id)""")
+    return cur.rowcount
+
+
 def num(s):
     if s is None:
         return None
@@ -208,7 +225,6 @@ LAB_LONG = {
     "CREATININE": ("creatinine", "Creatinine", "renal"),
     "BUN/CREATININE RATIO": ("bun_creatinine_ratio", "BUN/creatinine ratio", "renal"),
     "eGFR NON-AFR. AMERICAN": ("egfr", "eGFR", "renal"),
-    "eGFR AFRICAN AMERICAN": ("egfr_aa", "eGFR (race-adjusted formula, legacy)", "renal"),
     "ALBUMIN": ("albumin", "Albumin", "hepatic"),
     "GLOBULIN": ("globulin", "Globulin", "hepatic"),
     "PROTEIN; TOTAL": ("total_protein", "Total protein", "hepatic"),
@@ -219,6 +235,8 @@ LAB_LONG = {
     "ALKALINE PHOSPHATASE": ("alp", "Alkaline phosphatase", "hepatic"),
 }
 UNIT_FIX = {"(calc)": "ratio"}
+# Pomijane analityty: eGFR z korektą rasową - od 2021 niezalecany (NKF-ASN), zostaje samo eGFR.
+LAB_SKIP = {"eGFR AFRICAN AMERICAN"}
 
 CARDIO = {  # prefiks kolumny -> (code, label, canonical unit, factor)
     "a2_macroglobulin": ("a2_macroglobulin", "Alpha-2-macroglobulin", "ng/mL", 1),
@@ -246,6 +264,21 @@ def cytokine_code(prefix: str) -> tuple[str, str]:
     return "cyt_" + code, label
 
 
+DERIVED = {"body_mass_change_pct", "vo2max_pct_baseline", "strength_pct_baseline", "bmd_hip_spine_pct_baseline",
+           "bmd_femoral_neck_pct_baseline"}   # id progów liczonych z innych pomiarów (bez własnych pomiarów)
+
+
+def clinical_use_for(code: str, category: str, scope: str) -> str:
+    """Do czego służy wskaźnik (indicator.clinical_use); GUI diagnostyczne pokazuje tylko 'diagnostic'."""
+    if category == "lab_cytokine" or (category == "lab_cardio" and code != "crp"):
+        return "research"                      # badania naukowe, niewykonalne w locie (CRP zostaje: point-of-care)
+    if category == "bone_dxa":
+        return "reference"                     # DXA tylko na Ziemi, przed/po misji
+    if scope == "environment" or category == "environment":
+        return "environment_context"
+    return "diagnostic"
+
+
 class Indicators:
     def __init__(self, cur):
         self.cur = cur
@@ -257,7 +290,8 @@ class Indicators:
         upsert(self.cur, "indicator", dict(
             code=code, label=label, category=category, body_system_code=body, canonical_unit=unit,
             value_type="numeric", scope=scope, threshold_id=threshold_id,
-            baseline_threshold_id=baseline_threshold_id, description=description), ("code",))
+            baseline_threshold_id=baseline_threshold_id, description=description,
+            clinical_use=clinical_use_for(code, category, scope), is_derived=code in DERIVED), ("code",))
         self.cur.execute("SELECT id FROM indicator WHERE code=%s", (code,))
         self.ids[code] = self.cur.fetchone()[0]
         self.units[code] = unit
@@ -348,6 +382,7 @@ def obs(cur, b: Batch, **row):
 
 def lab_ranges(rows, tcol):
     """Normy z plików: per (code, sex) jednoznaczna norma, albo None gdy zależna od osoby (wiek)."""
+    rows = [r for r in rows if r["ANALYTE"] not in LAB_SKIP]
     per_subject = collections.defaultdict(collections.Counter)  # (code, subj) -> Counter(range)
     sex_of = {}
     for r in rows:
@@ -372,6 +407,8 @@ def load_i4_long(cur, ind: Indicators, mission_id, subj, path: Path, source_id, 
             unit = next(r["UNITS"] for r in rows if r["ANALYTE"] == raw)
             cat = "lab_cbc" if "cbc" in path.name else "lab_cmp"
             ind.add(code, label, cat, body, UNIT_FIX.get(unit, unit))
+    skipped = sum(r["ANALYTE"] in LAB_SKIP for r in rows)
+    rows = [r for r in rows if r["ANALYTE"] not in LAB_SKIP]
     for raw in {r["ANALYTE"] for r in rows}:
         unit = next(r["UNITS"] for r in rows if r["ANALYTE"] == raw)
         ind.alias(source_id, raw, unit, LAB_LONG[raw][0])
@@ -398,6 +435,10 @@ def load_i4_long(cur, ind: Indicators, mission_id, subj, path: Path, source_id, 
             ref_max=rmax, sample_type=sample_type, raw_name=r["ANALYTE"], raw_value=r["VALUE"],
             raw_unit=r["UNITS"])
     b.notes.insert(0, f"zastąpione normy przeciwnej płci: {fixed}")
+    if skipped:
+        b.read += skipped
+        b.rejected += skipped
+        b.notes.insert(1, f"pominięte (LAB_SKIP, eGFR z korektą rasową): {skipped}")
     b.finish()
     rr_sink.append((source_id, consensus))
     return b
@@ -556,6 +597,8 @@ def main():
             b = load_mendeley(cur, ind)
             con.commit()
             print(f"mendeley_bp_in_spaceflight.csv: read={b.read} cohorts={b.upserted} rejected={b.rejected}")
+            print(f"dziennik importów: usunięto {prune_batches(cur)} starych wpisów")
+            con.commit()
     except Exception:
         con.rollback()
         raise

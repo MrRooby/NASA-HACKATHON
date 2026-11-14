@@ -60,6 +60,13 @@ CREATE TABLE indicator (
   threshold_id     VARCHAR(60)  NULL,                         -- progi dla wartości bezwzględnej
   baseline_threshold_id VARCHAR(60) NULL,                     -- progi dla % baseline'u, np. 'bmd_hip_spine_pct_baseline'
   description      TEXT NULL,
+  -- do czego służy wskaźnik w aplikacji (GUI diagnostyczne pokazuje tylko 'diagnostic'):
+  --   diagnostic          - badanie wykonalne w misji i używane do oceny zdrowia
+  --   research            - badanie naukowe (np. cytokiny), nie do diagnostyki w locie
+  --   reference           - badanie referencyjne na Ziemi (np. DXA przed/po misji)
+  --   environment_context - pomiar środowiska (tło dla oceny osoby)
+  clinical_use     ENUM('diagnostic','research','reference','environment_context') NOT NULL DEFAULT 'diagnostic',
+  is_derived       BOOLEAN NOT NULL DEFAULT FALSE,            -- id progu liczonego z innych pomiarów (np. % baseline'u), bez własnych pomiarów
   CONSTRAINT fk_ind_body FOREIGN KEY (body_system_code) REFERENCES body_system(code)
 ) ENGINE=InnoDB;
 

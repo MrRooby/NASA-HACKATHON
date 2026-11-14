@@ -1,0 +1,22 @@
+[
+  {
+    "attachment_code": "ATT-SANS-C3-US",
+    "event_code": "SANS-C3-IMAGING",
+    "file_name": "sans_c3_sol201_ultrasound.svg",
+    "relative_path": "data/synthetic/medical_demo/attachments/sans_c3_sol201_ultrasound.svg",
+    "attachment_type": "ultrasound",
+    "reviewer": "earth-doctor-01",
+    "review_status": "pending",
+    "doctor_status": "requested"
+  },
+  {
+    "attachment_code": "ATT-SANS-C3-PHOTO",
+    "event_code": "SANS-C3-IMAGING",
+    "file_name": "sans_c3_sol201_photo.png",
+    "relative_path": "data/synthetic/medical_demo/attachments/sans_c3_sol201_photo.png",
+    "attachment_type": "photo",
+    "reviewer": "earth-doctor-01",
+    "review_status": "pending",
+    "doctor_status": "requested"
+  }
+]

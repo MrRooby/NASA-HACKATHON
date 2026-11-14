@@ -27,6 +27,12 @@ services:
       - ./schema/004_habitat_core.sql:/docker-entrypoint-initdb.d/004_habitat_core.sql:ro
       - ./schema/005_habitat_seed.sql:/docker-entrypoint-initdb.d/005_habitat_seed.sql:ro
       - ./schema/006_habitat_api_views.sql:/docker-entrypoint-initdb.d/006_habitat_api_views.sql:ro
+      - ./schema/007_mars_crew_link.sql:/docker-entrypoint-initdb.d/007_mars_crew_link.sql:ro
+      - ./schema/008_wearables_core.sql:/docker-entrypoint-initdb.d/008_wearables_core.sql:ro
+      - ./schema/009_wearables_api_views.sql:/docker-entrypoint-initdb.d/009_wearables_api_views.sql:ro
+      - ./schema/010_medical_core.sql:/docker-entrypoint-initdb.d/010_medical_core.sql:ro
+      - ./schema/011_medical_api_views.sql:/docker-entrypoint-initdb.d/011_medical_api_views.sql:ro
+      - ./schema/012_users_extra.sql:/docker-entrypoint-initdb.d/012_users_extra.sql:ro
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s

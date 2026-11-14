@@ -35,8 +35,9 @@ def ids(cur, sql, *args):
 
 
 def start_batch(cur, source_id, adapter, path: Path):
+    file_name = path.resolve().relative_to(ROOT) if path.resolve().is_relative_to(ROOT) else path.resolve()
     cur.execute("INSERT INTO import_batch (source_id, adapter, file_name, file_sha256) VALUES (%s,%s,%s,%s)",
-                (source_id, adapter, str(path.resolve().relative_to(ROOT)), sha256(path)))
+                (source_id, adapter, str(file_name), sha256(path)))
     return cur.lastrowid
 
 
@@ -65,7 +66,9 @@ def load_meta(cur, meta):
                                       value_type="numeric", scope=i.get("scope", "subject"),
                                       threshold_id=i.get("threshold_id"),
                                       baseline_threshold_id=i.get("baseline_threshold_id"),
-                                      description=i.get("description")), ("code",))
+                                      description=i.get("description"),
+                                      clinical_use=i.get("clinical_use", "diagnostic"),
+                                      is_derived=bool(i.get("is_derived", False))), ("code",))
     for m in meta.get("missions", []):
         upsert(cur, "mission", dict(code=m["code"], name=m["name"], environment_code=m["environment_code"],
                                     source_id=m["source_id"], start_date=m.get("start_date"),
@@ -174,6 +177,25 @@ def load_env(cur, path: Path, source_id):
     print(f"{path.name}: read={read} upserted={ok} rejected={sum(rej.values())} {dict(rej) if rej else ''}")
 
 
+def link_mars_crew(cur):
+    """Make the shared Mars health/habitat demo link work after data import."""
+    cur.execute("""
+        UPDATE astro_habitat.habitat h
+        JOIN astro_core.mission m ON m.code = 'SYN-MARS-HAB-600'
+        SET h.mission_id = m.id
+        WHERE h.code = 'MARS-LT-ELYSIUM'
+    """)
+    cur.execute("""
+        UPDATE astro_habitat.crew c
+        JOIN astro_habitat.habitat h ON h.id = c.habitat_id
+        JOIN astro_core.subject s ON s.code = CASE c.code
+          WHEN 'C1' THEN 'SYN-02' WHEN 'C2' THEN 'SYN-01'
+          WHEN 'C3' THEN 'SYN-03' WHEN 'C4' THEN 'SYN-04' END
+        SET c.subject_id = s.id
+        WHERE h.code = 'MARS-LT-ELYSIUM'
+    """)
+
+
 def main(argv):
     if not argv:
         raise SystemExit("użycie: load_canonical.py <katalog> [<katalog> ...]")
@@ -191,6 +213,8 @@ def main(argv):
                 if (d / "env_observations.canonical.csv").exists():
                     load_env(cur, d / "env_observations.canonical.csv", src)
                     con.commit()
+            link_mars_crew(cur)
+            con.commit()
     except Exception:
         con.rollback()
         raise

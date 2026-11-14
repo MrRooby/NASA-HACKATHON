@@ -157,6 +157,10 @@ ON DUPLICATE KEY UPDATE label=VALUES(label), category=VALUES(category), unit=VAL
   threshold_ref=VALUES(threshold_ref), normal_min=VALUES(normal_min), normal_max=VALUES(normal_max), basis=VALUES(basis),
   sources=VALUES(sources), description=VALUES(description);
 
+-- kanały techniczne (dla modułu HABITAT, nie dla GUI diagnostycznego)
+UPDATE channel SET health_relevant = (category NOT IN ('integrity','structure_thermal','power','exterior')
+                                      AND code NOT IN ('water_tank_level','water_recovery','zone_occupancy','fecal_canister_fill'));
+
 -- ---------- limity spoza config/thresholds.json (README §3) ----------
 -- Semantyka jak w threshold_band: min_value włącznie, max_value wyłącznie. Limit "> X" zapisujemy jako
 -- min_value tuż nad X (np. O2 > 34 % -> 34.0001), żeby wartość nominalna X nie wpadała w przedział.

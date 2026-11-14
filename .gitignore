@@ -5,6 +5,7 @@ CLAUDE.local.md
 # Hasła i lokalne dane bazy
 .env
 **/.env
+**/__pycache__/
 
 # Duże pliki generatora HABITAT (deterministyczne: python3 DATABASE/synthetic/habitat_generate.py --seed 7)
 data/synthetic/habitat_demo/*.csv.gz

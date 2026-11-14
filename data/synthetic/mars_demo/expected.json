@@ -1,0 +1,38 @@
+[
+ {
+  "scenario": "H1",
+  "subject_code": "SYN-02",
+  "indicator_code": "headache_score",
+  "day": "Sol 142",
+  "status": "alert"
+ },
+ {
+  "scenario": "H4",
+  "subject_code": "SYN-01",
+  "indicator_code": "bun",
+  "day": "Sol 250-255",
+  "status": "caution"
+ },
+ {
+  "scenario": "H5",
+  "subject_code": "SYN-03",
+  "indicator_code": "handgrip_strength",
+  "day": "Sol 360-420",
+  "status": "caution"
+ },
+ {
+  "scenario": "H8",
+  "subject_code": "SYN-02",
+  "indicator_code": "lymphocytes_pct",
+  "day": "Sol 470",
+  "status": "ok",
+  "note": "monitoring działa, wynik prawidłowy"
+ },
+ {
+  "scenario": "SANS",
+  "subject_code": "SYN-03",
+  "indicator_code": "visual_acuity_logmar",
+  "day": "Sol 200+",
+  "status": "alert"
+ }
+]

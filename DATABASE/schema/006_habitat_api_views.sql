@@ -16,7 +16,7 @@ JOIN astro_habitat.zone z ON z.habitat_id = h.id;
 CREATE OR REPLACE VIEW habitat_channels AS
 SELECT c.code AS channel_code, c.label, c.category, c.unit, c.value_type, c.allowed_values,
        c.cadence_real, c.cadence_demo, c.cadence_s, c.zone_scope, c.redundant, c.per_crew,
-       c.threshold_ref, c.normal_min, c.normal_max, c.basis, c.sources, c.description,
+       c.threshold_ref, c.normal_min, c.normal_max, c.basis, c.sources, c.description, c.health_relevant,
        (SELECT GROUP_CONCAT(CONCAT(l.level, ': ',
                                    COALESCE(CONCAT('>=', l.min_value), ''),
                                    IF(l.min_value IS NOT NULL AND l.max_value IS NOT NULL, ' & ', ''),
@@ -147,3 +147,10 @@ SELECT h.code AS habitat_code, s.code AS scenario_code, s.name, s.channels, s.zo
        s.start_sol, s.end_sol, s.expected_reaction
 FROM astro_habitat.scenario s
 JOIN astro_habitat.habitat h ON h.id = s.habitat_id;
+
+-- H11. Ostatnie odczyty tylko kanałów istotnych dla zdrowia (powietrze, woda, mocz, mikroby, dawka, hałas, światło)
+CREATE OR REPLACE VIEW habitat_health_latest AS
+SELECT l.*
+FROM habitat_latest l
+JOIN astro_habitat.channel c ON c.code = l.channel_code
+WHERE c.health_relevant = 1;

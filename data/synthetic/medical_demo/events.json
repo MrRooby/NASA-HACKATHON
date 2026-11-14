@@ -1,0 +1,1696 @@
+[
+  {
+    "event_code": "PMC-W01",
+    "event_type": "report",
+    "sol": 7,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 7",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 1
+    }
+  },
+  {
+    "event_code": "PMC-W02",
+    "event_type": "report",
+    "sol": 14,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 14",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 2
+    }
+  },
+  {
+    "event_code": "PMC-W03",
+    "event_type": "report",
+    "sol": 21,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 21",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 3
+    }
+  },
+  {
+    "event_code": "PMC-W04",
+    "event_type": "report",
+    "sol": 28,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 28",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 4
+    }
+  },
+  {
+    "event_code": "PMC-W05",
+    "event_type": "report",
+    "sol": 35,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 35",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 5
+    }
+  },
+  {
+    "event_code": "PMC-W06",
+    "event_type": "report",
+    "sol": 42,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 42",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 6
+    }
+  },
+  {
+    "event_code": "PMC-W07",
+    "event_type": "report",
+    "sol": 49,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 49",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 7
+    }
+  },
+  {
+    "event_code": "PMC-W08",
+    "event_type": "report",
+    "sol": 56,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 56",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 8
+    }
+  },
+  {
+    "event_code": "PMC-W09",
+    "event_type": "report",
+    "sol": 63,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 63",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 9
+    }
+  },
+  {
+    "event_code": "PMC-W10",
+    "event_type": "report",
+    "sol": 70,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 70",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 10
+    }
+  },
+  {
+    "event_code": "PMC-W11",
+    "event_type": "report",
+    "sol": 77,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 77",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 11
+    }
+  },
+  {
+    "event_code": "PMC-W12",
+    "event_type": "report",
+    "sol": 84,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 84",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 12
+    }
+  },
+  {
+    "event_code": "PMC-W13",
+    "event_type": "report",
+    "sol": 91,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 91",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 13
+    }
+  },
+  {
+    "event_code": "PMC-W14",
+    "event_type": "report",
+    "sol": 98,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 98",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 14
+    }
+  },
+  {
+    "event_code": "PMC-W15",
+    "event_type": "report",
+    "sol": 105,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 105",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 15
+    }
+  },
+  {
+    "event_code": "PMC-W16",
+    "event_type": "report",
+    "sol": 112,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 112",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 16
+    }
+  },
+  {
+    "event_code": "PMC-W17",
+    "event_type": "report",
+    "sol": 119,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 119",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 17
+    }
+  },
+  {
+    "event_code": "PMC-W18",
+    "event_type": "report",
+    "sol": 126,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 126",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 18
+    }
+  },
+  {
+    "event_code": "PMC-W19",
+    "event_type": "report",
+    "sol": 133,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 133",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 19
+    }
+  },
+  {
+    "event_code": "PMC-W20",
+    "event_type": "report",
+    "sol": 140,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 140",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 20
+    }
+  },
+  {
+    "event_code": "PMC-W21",
+    "event_type": "report",
+    "sol": 147,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 147",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 21
+    }
+  },
+  {
+    "event_code": "PMC-W22",
+    "event_type": "report",
+    "sol": 154,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 154",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 22
+    }
+  },
+  {
+    "event_code": "PMC-W23",
+    "event_type": "report",
+    "sol": 161,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 161",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 23
+    }
+  },
+  {
+    "event_code": "PMC-W24",
+    "event_type": "report",
+    "sol": 168,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 168",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 24
+    }
+  },
+  {
+    "event_code": "PMC-W25",
+    "event_type": "report",
+    "sol": 175,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 175",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 25
+    }
+  },
+  {
+    "event_code": "PMC-W26",
+    "event_type": "report",
+    "sol": 182,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 182",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 26
+    }
+  },
+  {
+    "event_code": "PMC-W27",
+    "event_type": "report",
+    "sol": 189,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 189",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 27
+    }
+  },
+  {
+    "event_code": "PMC-W28",
+    "event_type": "report",
+    "sol": 196,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 196",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 28
+    }
+  },
+  {
+    "event_code": "PMC-W29",
+    "event_type": "report",
+    "sol": 203,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 203",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 29
+    }
+  },
+  {
+    "event_code": "PMC-W30",
+    "event_type": "report",
+    "sol": 210,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 210",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 30
+    }
+  },
+  {
+    "event_code": "PMC-W31",
+    "event_type": "report",
+    "sol": 217,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 217",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 31
+    }
+  },
+  {
+    "event_code": "PMC-W32",
+    "event_type": "report",
+    "sol": 224,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 224",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 32
+    }
+  },
+  {
+    "event_code": "PMC-W33",
+    "event_type": "report",
+    "sol": 231,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 231",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 33
+    }
+  },
+  {
+    "event_code": "PMC-W34",
+    "event_type": "report",
+    "sol": 238,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 238",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 34
+    }
+  },
+  {
+    "event_code": "PMC-W35",
+    "event_type": "report",
+    "sol": 245,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 245",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 35
+    }
+  },
+  {
+    "event_code": "PMC-W36",
+    "event_type": "report",
+    "sol": 252,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 252",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 36
+    }
+  },
+  {
+    "event_code": "PMC-W37",
+    "event_type": "report",
+    "sol": 259,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 259",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 37
+    }
+  },
+  {
+    "event_code": "PMC-W38",
+    "event_type": "report",
+    "sol": 266,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 266",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 38
+    }
+  },
+  {
+    "event_code": "PMC-W39",
+    "event_type": "report",
+    "sol": 273,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 273",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 39
+    }
+  },
+  {
+    "event_code": "PMC-W40",
+    "event_type": "report",
+    "sol": 280,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 280",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 40
+    }
+  },
+  {
+    "event_code": "PMC-W41",
+    "event_type": "report",
+    "sol": 287,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 287",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 41
+    }
+  },
+  {
+    "event_code": "PMC-W42",
+    "event_type": "report",
+    "sol": 294,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 294",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 42
+    }
+  },
+  {
+    "event_code": "PMC-W43",
+    "event_type": "report",
+    "sol": 301,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 301",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 43
+    }
+  },
+  {
+    "event_code": "PMC-W44",
+    "event_type": "report",
+    "sol": 308,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 308",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 44
+    }
+  },
+  {
+    "event_code": "PMC-W45",
+    "event_type": "report",
+    "sol": 315,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 315",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 45
+    }
+  },
+  {
+    "event_code": "PMC-W46",
+    "event_type": "report",
+    "sol": 322,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 322",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 46
+    }
+  },
+  {
+    "event_code": "PMC-W47",
+    "event_type": "report",
+    "sol": 329,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 329",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 47
+    }
+  },
+  {
+    "event_code": "PMC-W48",
+    "event_type": "report",
+    "sol": 336,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 336",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 48
+    }
+  },
+  {
+    "event_code": "PMC-W49",
+    "event_type": "report",
+    "sol": 343,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 343",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 49
+    }
+  },
+  {
+    "event_code": "PMC-W50",
+    "event_type": "report",
+    "sol": 350,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 350",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 50
+    }
+  },
+  {
+    "event_code": "PMC-W51",
+    "event_type": "report",
+    "sol": 357,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 357",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 51
+    }
+  },
+  {
+    "event_code": "PMC-W52",
+    "event_type": "report",
+    "sol": 364,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 364",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 52
+    }
+  },
+  {
+    "event_code": "PMC-W53",
+    "event_type": "report",
+    "sol": 371,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 371",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 53
+    }
+  },
+  {
+    "event_code": "PMC-W54",
+    "event_type": "report",
+    "sol": 378,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 378",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 54
+    }
+  },
+  {
+    "event_code": "PMC-W55",
+    "event_type": "report",
+    "sol": 385,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 385",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 55
+    }
+  },
+  {
+    "event_code": "PMC-W56",
+    "event_type": "report",
+    "sol": 392,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 392",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 56
+    }
+  },
+  {
+    "event_code": "PMC-W57",
+    "event_type": "report",
+    "sol": 399,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 399",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 57
+    }
+  },
+  {
+    "event_code": "PMC-W58",
+    "event_type": "report",
+    "sol": 406,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 406",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 58
+    }
+  },
+  {
+    "event_code": "PMC-W59",
+    "event_type": "report",
+    "sol": 413,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 413",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 59
+    }
+  },
+  {
+    "event_code": "PMC-W60",
+    "event_type": "report",
+    "sol": 420,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 420",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 60
+    }
+  },
+  {
+    "event_code": "PMC-W61",
+    "event_type": "report",
+    "sol": 427,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 427",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 61
+    }
+  },
+  {
+    "event_code": "PMC-W62",
+    "event_type": "report",
+    "sol": 434,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 434",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 62
+    }
+  },
+  {
+    "event_code": "PMC-W63",
+    "event_type": "report",
+    "sol": 441,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 441",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 63
+    }
+  },
+  {
+    "event_code": "PMC-W64",
+    "event_type": "report",
+    "sol": 448,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 448",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 64
+    }
+  },
+  {
+    "event_code": "PMC-W65",
+    "event_type": "report",
+    "sol": 455,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 455",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 65
+    }
+  },
+  {
+    "event_code": "PMC-W66",
+    "event_type": "report",
+    "sol": 462,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 462",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 66
+    }
+  },
+  {
+    "event_code": "PMC-W67",
+    "event_type": "report",
+    "sol": 469,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 469",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 67
+    }
+  },
+  {
+    "event_code": "PMC-W68",
+    "event_type": "report",
+    "sol": 476,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 476",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 68
+    }
+  },
+  {
+    "event_code": "PMC-W69",
+    "event_type": "report",
+    "sol": 483,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 483",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 69
+    }
+  },
+  {
+    "event_code": "PMC-W70",
+    "event_type": "report",
+    "sol": 490,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 490",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 70
+    }
+  },
+  {
+    "event_code": "PMC-W71",
+    "event_type": "report",
+    "sol": 497,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 497",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 71
+    }
+  },
+  {
+    "event_code": "PMC-W72",
+    "event_type": "report",
+    "sol": 504,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 504",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 72
+    }
+  },
+  {
+    "event_code": "PMC-W73",
+    "event_type": "report",
+    "sol": 511,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 511",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 73
+    }
+  },
+  {
+    "event_code": "PMC-W74",
+    "event_type": "report",
+    "sol": 518,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 518",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 74
+    }
+  },
+  {
+    "event_code": "PMC-W75",
+    "event_type": "report",
+    "sol": 525,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 525",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 75
+    }
+  },
+  {
+    "event_code": "PMC-W76",
+    "event_type": "report",
+    "sol": 532,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 532",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 76
+    }
+  },
+  {
+    "event_code": "PMC-W77",
+    "event_type": "report",
+    "sol": 539,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 539",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 77
+    }
+  },
+  {
+    "event_code": "PMC-W78",
+    "event_type": "report",
+    "sol": 546,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 546",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 78
+    }
+  },
+  {
+    "event_code": "PMC-W79",
+    "event_type": "report",
+    "sol": 553,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 553",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 79
+    }
+  },
+  {
+    "event_code": "PMC-W80",
+    "event_type": "report",
+    "sol": 560,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 560",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 80
+    }
+  },
+  {
+    "event_code": "PMC-W81",
+    "event_type": "report",
+    "sol": 567,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 567",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 81
+    }
+  },
+  {
+    "event_code": "PMC-W82",
+    "event_type": "report",
+    "sol": 574,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 574",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 82
+    }
+  },
+  {
+    "event_code": "PMC-W83",
+    "event_type": "report",
+    "sol": 581,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 581",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 83
+    }
+  },
+  {
+    "event_code": "PMC-W84",
+    "event_type": "report",
+    "sol": 588,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 588",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 84
+    }
+  },
+  {
+    "event_code": "PMC-W85",
+    "event_type": "report",
+    "sol": 595,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 595",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 85
+    }
+  },
+  {
+    "event_code": "PMC-W86",
+    "event_type": "report",
+    "sol": 602,
+    "subject_code": null,
+    "crew_code": null,
+    "title": "Weekly private medical conference report \u2014 sol 602",
+    "severity": "info",
+    "report_kind": "pmc_weekly",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "recipients": "flight_surgeon",
+      "week": 86
+    }
+  },
+  {
+    "event_code": "H1-CO2-ESC",
+    "event_type": "diagnosis",
+    "sol": 142,
+    "subject_code": "SYN-02",
+    "crew_code": "C1",
+    "title": "CO2 exposure assessment for C1/C2",
+    "severity": "major",
+    "report_kind": "none",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "habitat_event_code": "evt-H1-scrubber-fault"
+    }
+  },
+  {
+    "event_code": "H4-DEHYDRATION-C2",
+    "event_type": "diagnosis",
+    "sol": 252,
+    "subject_code": "SYN-01",
+    "crew_code": "C2",
+    "title": "Dehydration pattern: low urine volume",
+    "severity": "major",
+    "report_kind": "none",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "habitat_reading": {
+        "channel_code": "urine_volume_24h",
+        "sol": 252,
+        "crew_code": "C2"
+      }
+    }
+  },
+  {
+    "event_code": "H5-HYPERCALCIURIA-C3",
+    "event_type": "diagnosis",
+    "sol": 390,
+    "subject_code": "SYN-03",
+    "crew_code": "C3",
+    "title": "Hypercalciuria trend requires renal review",
+    "severity": "major",
+    "report_kind": "none",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "habitat_reading": {
+        "channel_code": "urine_calcium_24h",
+        "sol": 390,
+        "crew_code": "C3"
+      }
+    }
+  },
+  {
+    "event_code": "H8-SPE-ALERT",
+    "event_type": "diagnosis",
+    "sol": 470,
+    "subject_code": "SYN-02",
+    "crew_code": "C1",
+    "title": "SPE exposure during EVA; shelter protocol",
+    "severity": "critical",
+    "report_kind": "none",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "habitat_event_code": "evt-H8-spe"
+    }
+  },
+  {
+    "event_code": "H8-SPE-ALERT-C4",
+    "event_type": "diagnosis",
+    "sol": 470,
+    "subject_code": "SYN-04",
+    "crew_code": "C4",
+    "title": "SPE exposure during EVA; shelter protocol",
+    "severity": "critical",
+    "report_kind": "none",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "habitat_event_code": "evt-H8-spe"
+    }
+  },
+  {
+    "event_code": "AED-DRILL-420",
+    "event_type": "drill",
+    "sol": 420,
+    "subject_code": "SYN-01",
+    "crew_code": "C2",
+    "title": "AED response exercise (DRILL \u2014 NOT a real cardiac arrest)",
+    "severity": "info",
+    "report_kind": "none",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": true,
+    "details": {
+      "clearly_marked": true,
+      "outcome": "pass"
+    }
+  },
+  {
+    "event_code": "SANS-C3-SYMPTOMS",
+    "event_type": "symptom",
+    "sol": 200,
+    "subject_code": "SYN-03",
+    "crew_code": "C3",
+    "title": "SANS: transient visual change and headache",
+    "severity": "major",
+    "report_kind": "none",
+    "value_num": null,
+    "value_text": "visual change; headache score 6/10",
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "risk": "SANS"
+    }
+  },
+  {
+    "event_code": "SANS-C3-IMAGING",
+    "event_type": "imaging",
+    "sol": 201,
+    "subject_code": "SYN-03",
+    "crew_code": "C3",
+    "title": "SANS ocular ultrasound and fundus photo",
+    "severity": "major",
+    "report_kind": "none",
+    "value_num": null,
+    "value_text": null,
+    "unit": null,
+    "is_drill": false,
+    "details": {
+      "risk": "SANS",
+      "requested_review": true
+    }
+  }
+]

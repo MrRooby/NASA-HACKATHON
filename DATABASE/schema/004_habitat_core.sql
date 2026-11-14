@@ -88,6 +88,7 @@ CREATE TABLE channel (
   basis                ENUM('nasa','clinical','team_assumption') NOT NULL,
   sources              VARCHAR(400) NULL,                            -- id z config/sources.json albo cytowania
   description          VARCHAR(600) NULL,
+  health_relevant      BOOLEAN NOT NULL DEFAULT TRUE,                -- FALSE = kanał techniczny (zasilanie, konstrukcja, otoczenie...)
   KEY ix_ch_category (category)
 ) ENGINE=InnoDB;
 

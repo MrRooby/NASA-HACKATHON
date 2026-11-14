@@ -12,6 +12,10 @@ Wersja schematu i kontraktu **0.2** (2026-11-14). Co się zmieniło: sekcja „H
 | [`api_contract.json`](api_contract.json) | Ten sam kontrakt w formie do odczytu maszynowego (np. do generowania modeli Pydantic/TypeScript) | backend |
 | [`001_core.sql`](001_core.sql) | Tabele `astro_core` (zapis tylko przez import) | baza / import |
 | [`002_api_views.sql`](002_api_views.sql) | Widoki `astro_api`: **jedyne miejsce, z którego czyta backend** | baza, backend (do wglądu) |
+| [`007_mars_crew_link.sql`](007_mars_crew_link.sql) | Powiązanie załogi habitatu z osobami misji Mars i widoki dawka–krew / nawodnienie–nerki | baza, backend |
+| [`008_wearables_core.sql`](008_wearables_core.sql), [`009_wearables_api_views.sql`](009_wearables_api_views.sql) | Urządzenia, próbki, agregaty i widoki opasek oraz snu | wearables, backend |
+| [`010_medical_core.sql`](010_medical_core.sql), [`011_medical_api_views.sql`](011_medical_api_views.sql) | Zdarzenia medyczne, załączniki, opinie, transmisje i eskalacje | medyczny, backend |
+| [`012_users_extra.sql`](012_users_extra.sql) | Uprawnienia ETL i administratora do nowych baz modułowych | wdrożenie |
 | [`003_users.sh`](003_users.sh) | Użytkownicy `astro_etl` (zapis) i `astro_reader` (odczyt); hasła ze zmiennych środowiskowych | wdrożenie |
 | [`../mariadb.cnf`](../mariadb.cnf) | Ustawienia serwera, na których polega kontrakt (UTC, `group_concat_max_len`) | wdrożenie |
 | [`../.env.example`](../.env.example) | Wzór pliku `.env` z hasłami i danymi połączenia | backend, wdrożenie |
