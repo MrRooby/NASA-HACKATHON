@@ -25,7 +25,8 @@ concurrency:
 jobs:
   deploy:
     name: Deploy to team server
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    # auto-deploy only after a successful run for a version tag (vX.Y.Z), not after branch builds
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'v'))
     runs-on: ubuntu-latest
     env:
       TS_OAUTH_CLIENT_ID: ${{ secrets.TS_OAUTH_CLIENT_ID }}

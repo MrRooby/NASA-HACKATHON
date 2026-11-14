@@ -2,8 +2,10 @@ name: Release
 
 on:
   push:
+    branches: [master, "release/**"]   # every push: full bundles + images (no GitHub Release)
     tags:
-      - "v*.*.*"
+      - "v*.*.*"                        # tag: everything above + GitHub Release
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -27,9 +29,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Version from tag
+      - name: Version (tag vX.Y.Z -> X.Y.Z, branch -> <branch>-<sha7>)
         id: v
-        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+        run: |
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then v="${GITHUB_REF_NAME#v}"; else b="${GITHUB_REF_NAME//\//-}"; v="${b}-${GITHUB_SHA::7}"; fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
 
       - name: Download GUI build from CI
         uses: actions/download-artifact@v4
@@ -104,7 +108,9 @@ jobs:
           images: ${{ env.IMAGE_PREFIX }}-${{ matrix.name }}
           tags: |
             type=semver,pattern={{version}}
-            type=raw,value=latest
+            type=ref,event=branch
+            type=sha,format=short
+            type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
       - uses: docker/build-push-action@v6
         with:
           context: ${{ matrix.context }}
@@ -117,6 +123,7 @@ jobs:
 
   github-release:
     name: GitHub Release
+    if: startsWith(github.ref, 'refs/tags/v')
     needs: [package, images]
     runs-on: ubuntu-latest
     permissions:

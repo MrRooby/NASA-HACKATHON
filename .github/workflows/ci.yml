@@ -2,6 +2,8 @@ name: CI
 
 on:
   push:
+    # master and release/** are built (with these same checks) by release.yml
+    branches-ignore: [master, "release/**"]
   pull_request:
   workflow_call:   # reused by release.yml so a tag is only released after the same checks pass
 
