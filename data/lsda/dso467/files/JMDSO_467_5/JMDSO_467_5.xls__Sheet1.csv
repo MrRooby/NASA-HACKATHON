@@ -1,0 +1,38 @@
+"NASA Life Science Data Archive (http://lsda.jsc.nasa.gov)
+Investigator Name: Janice Meck
+Mission (Payload): Detailed Supplementary Objectives
+Experiment title (ID): DSO 467
+File Name/Inventory ID: JMDSO_467_5.xls
+",,,,,
+Measurements from all subjects on all test days,,,,,
+,,,,Postflight Day,
+,,,,,
+,Preflight,Landing Day,2,3,8-10
+,,,,,
+"Systolic pressure, mmHg",116 ± 2,116 ± 2,117 ± 2,116 ± 2,116 ± 2
+"Diastolic pressure, mmHg",75 ± 1,73 ± 2,72 ± 2,73 ± 2,74 ± 2
+"R-R interval, ms","1,123 ± 42",965 ± 25*,"1,069 ± 38","1,134 ± 39","1,069 ± 31"
+"Standard deviation of R-R, ms",62 ± 6,40 ± 4*,58 ± 6,55 ± 5,47 ± 5
+"Body weight, kg",75.6 ± 4.0,74.4 ± 2.4*,75.2 ± 2.4,75.3 ± 2.4,75.4 ± 2.1
+,,,,,
+,,Baroreflex measurements,,,
+"Maximum slope, ms/mmHg",75.6 ± 4.0,74.4 ± 2.4*,75.2 ± 2.4,75.3 ± 2.4,75.4 ± 2.1
+"Operational point, %",48.9 ± 3.5,29.4 ± 4.2†,39.8 ± 3.6,52.4 ± 4.7,42.4 ± 6.0
+"R-R interval, ms",,,,,
+Range,243 ± 47,182 ± 25,177 ± 20*,192 ± 102*,189 ± 27*
+Minimum,"1,081 ± 43",923 ± 30*,"1,036 ± 39","1,084 ± 35","1,037 ± 31"
+Maximum,"1,324 ± 68","1,104 ± 31*","1,213 ± 41*","1,275 ± 43","1,226 ± 38*"
+"Carotid distending pressure, mmHg",,,,,
+At minimum R-R,80 ± 4,83 ± 4,92 ± 9,82 ± 7,75 ± 2
+At maximum R-R,153 ± 8,172 ± 4,160 ± 6,157 ± 7,161 ± 5
+,,,,,
+"Values are means ± SE. All comparisons between landing day and preflight measurements used only 11 subjects; those between landing day and measurements taken 8-10 days after landing used only 12 subjects.
+* P < 0.05; † P < 0.01.",,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+Source: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.,,,,,

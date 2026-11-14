@@ -1,0 +1,124 @@
+{
+  "source_id": "lsda_neemo_actiwatch",
+  "experiment_identifier": "NEEMO-ACTIWATCH",
+  "nlsp_experiment_id": "62a350af-45b3-58f7-badb-7fcf7f6772a2",
+  "lsda_guid": "cl62azhqvcden01o6gpry8rhx",
+  "title": "Actigraphy:  A Tool for Monitoring Sleep and Activity in an Isolated Environment (Aquarius)",
+  "doi": "10.83263/skft-eh56",
+  "missions": [
+    [
+      [
+        "NEEMO 5"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/62a350af-45b3-58f7-badb-7fcf7f6772a2/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/62a350af-45b3-58f7-badb-7fcf7f6772a2"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "Sleep results (latency, duration, efficiency, illumination; n=4, pre-mission vs in-mission) exist ONLY as graph images (TIF) - not downloaded, see skipped_files.",
+    "The downloaded xls is the data-collection timetable, not measurements. Not importable to observation; could seed time-point metadata (NEEMO 5, 2003-06-16..2003-06-29, MD1..MD14)."
+  ],
+  "content": {
+    "files/NEEMO_ACTIWATCH__1400547290/NEEMO_ACTIWATCH__1400547290.xls_NEEMO_5_NEEMO-ACTIWATCH_2010_182_080723.xls": {
+      "csv": "files/NEEMO_ACTIWATCH__1400547290/NEEMO_ACTIWATCH__1400547290.xls_NEEMO_5_NEEMO-ACTIWATCH_2010_182_080723.xls__Actiwatch.csv",
+      "what": "Session record: protocol (Actiwatch on non-dominant wrist + activity log), parameters (illumination, movement, sleep duration/latency/efficiency), table of sessions",
+      "granularity": "schedule only",
+      "subjects": 4,
+      "time_points": [
+        "L-2 weeks (6 rows)",
+        "MD1..MD14 = 2003-06-16..2003-06-29 (3-4 subjects per day)"
+      ],
+      "importable_to_observation": false
+    }
+  },
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 8288,
+      "sha256": "245308e75a300bc263c65cb09c9951e54e1e3ade7165fb16aa68d0a314e54210",
+      "note": "experiment record subset + dataset/file tree"
+    },
+    {
+      "path": "files/NEEMO_ACTIWATCH__1400547290/NEEMO_ACTIWATCH__1400547290.xls_NEEMO_5_NEEMO-ACTIWATCH_2010_182_080723.xls",
+      "bytes": 24064,
+      "sha256": "7429553638cdcf568698428d7610f731e879b2e33b0777fdfd67f58687e8fa47",
+      "dataset_catalog": "NEEMO_ACTIWATCH__1400547290",
+      "dataset_name": "Data Collection Timetables for Experiment NEEMO_ACTIWATCH",
+      "dataset_description": "This spreadsheet represents the data collection timetables for data collection sessions for this experiment. Information included in this spreadsheet may include information on the test protocol, data collection constraints, parameters measured, hardware used, scheduled versus actual days of data collection, and subject information.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "NEEMO_ACTIWATCH__1400547290.xls_NEEMO_5_NEEMO-ACTIWATCH_2010_182_080723.xls",
+      "file_key": "12b8d0b7-bc70-5bb5-b466-fa4a9c91f08b",
+      "url": "https://nlsp.nasa.gov/api/v1/files/12b8d0b7-bc70-5bb5-b466-fa4a9c91f08b/download",
+      "sheets_csv": [
+        {
+          "sheet": "Actiwatch",
+          "path": "files/NEEMO_ACTIWATCH__1400547290/NEEMO_ACTIWATCH__1400547290.xls_NEEMO_5_NEEMO-ACTIWATCH_2010_182_080723.xls__Actiwatch.csv",
+          "rows": 43,
+          "cols": 5,
+          "sha256": "fd3bfbef04d1f8b7c23056db35bab0c7e34a3a5ae2d54f6d1afd1dc4118c9640"
+        }
+      ]
+    }
+  ],
+  "skipped_files": [
+    {
+      "dataset_catalog": "NEEMO_ACTIWATCH__1820759835",
+      "dataset_name": "NEEMO 5 Average Sleep Latency",
+      "dataset_description": "Average sleep latency in minutes is presented in this figure for the NEEMO 5 crew (n=4).  Measurements were taken pre-mission and during the mission.  An increase of 9 minutes was observed in sleep latency during the mission, however this difference is not statistically significant.<BR>Source: unpublished data.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "NEEMO_ACTIWATCH__1820759835.tif_NEEMO_5_NEEMO-ACTIWATCH_2010_182_080705.tif",
+      "file_key": "59c6238d-a1c0-515a-b93a-0c65c8833ad3",
+      "url": "https://nlsp.nasa.gov/api/v1/files/59c6238d-a1c0-515a-b93a-0c65c8833ad3/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "NEEMO_ACTIWATCH__1820735945",
+      "dataset_name": "NEEMO 5 Average Sleep Duration",
+      "dataset_description": "Average sleep duration in hours is presented in this figure for the NEEMO 5 crew (n=4).  Measurements were taken pre-mission and during the mission.<BR>Source: unpublished data.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "NEEMO_ACTIWATCH__1820735945.tif_NEEMO_5_NEEMO-ACTIWATCH_2010_182_070745.tif",
+      "file_key": "1aa5e78a-7339-5e27-9aad-22859ce3ef58",
+      "url": "https://nlsp.nasa.gov/api/v1/files/1aa5e78a-7339-5e27-9aad-22859ce3ef58/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "NEEMO_ACTIWATCH__1820836319",
+      "dataset_name": "NEEMO 5 Average Illumination",
+      "dataset_description": "Average illumination (Lux) is presented in this figure for the NEEMO 5 crew (n=4).  Measurements were taken pre-mission and during the mission.  The average illumination during the mission decreased significantly (p>0.05).<BR>Source: unpublished data.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "NEEMO_ACTIWATCH__1820836319.tif_NEEMO_5_NEEMO-ACTIWATCH_2010_182_080756.tif",
+      "file_key": "3f41d6a2-23a2-5a50-a9d6-2b117f14b6be",
+      "url": "https://nlsp.nasa.gov/api/v1/files/3f41d6a2-23a2-5a50-a9d6-2b117f14b6be/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "NEEMO_ACTIWATCH__1820813971",
+      "dataset_name": "NEEMO 5 Average Sleep Efficiency",
+      "dataset_description": "Average sleep efficiency (percent) is presented in this figure for the NEEMO 5 crew (n=4).  Measurements were taken pre-mission and during the mission.<BR>Source: unpublished data.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "NEEMO_ACTIWATCH__1820813971.tif_NEEMO_5_NEEMO-ACTIWATCH_2010_182_080733.tif",
+      "file_key": "e3e7ef3f-6917-5b08-9374-0270389e62e1",
+      "url": "https://nlsp.nasa.gov/api/v1/files/e3e7ef3f-6917-5b08-9374-0270389e62e1/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T14:22:00Z",
+  "generated_by": "scripts/fetch_data.py"
+}

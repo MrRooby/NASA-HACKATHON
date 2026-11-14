@@ -1,0 +1,9 @@
+date_utc,instrument_id,module,n_samples,coverage_hours,absorbed_dose_rate_uGy_per_h_sample_mean,absorbed_dose_rate_uGy_per_h_time_weighted_mean,absorbed_dose_rate_uGy_per_h_min,absorbed_dose_rate_uGy_per_h_max,absorbed_dose_uGy_per_day_est,dose_equivalent_rate_uSv_per_h_time_weighted_mean
+2013-01-24,DosTel2,Columbus,399,10.01,33.7132,10.9723,1.5177,367.4304,263.33,
+2013-01-25,DosTel2,Columbus,914,24.00,29.2846,10.0734,1.4306,497.4848,241.76,
+2013-01-26,DosTel2,Columbus,891,24.02,19.9753,7.9638,1.3122,440.2658,191.13,
+2013-01-27,DosTel2,Columbus,908,23.99,24.1490,8.8887,1.4157,347.0076,213.33,
+2013-01-28,DosTel2,Columbus,890,24.00,22.3526,8.3836,1.3678,411.3389,201.21,
+2013-01-29,DosTel2,Columbus,897,23.99,22.4118,8.6104,1.4302,456.2242,206.65,
+2013-01-30,DosTel2,Columbus,890,24.00,21.8230,8.4127,1.4070,411.6579,201.91,
+2013-01-31,DosTel2,Columbus,898,24.06,23.7865,8.7150,1.2345,395.1691,209.16,

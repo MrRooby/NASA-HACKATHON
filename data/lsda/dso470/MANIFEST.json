@@ -1,0 +1,69 @@
+{
+  "source_id": "lsda_dso470",
+  "experiment_identifier": "DSO 470",
+  "nlsp_experiment_id": "004b2d69-c1e0-571f-9667-76f040ddbc72",
+  "lsda_guid": "cl62aymducd7701o67cnn2hvl",
+  "title": "The Relationship of Space Adaptation Syndrome to Middle Cerebral Artery Blood Velocity Measured in Flight by Doppler",
+  "doi": "10.83263/ycac-pj81",
+  "missions": [
+    [
+      [
+        "STS-29"
+      ]
+    ],
+    [
+      [
+        "STS-34"
+      ]
+    ],
+    [
+      [
+        "STS-42"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/004b2d69-c1e0-571f-9667-76f040ddbc72/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/004b2d69-c1e0-571f-9667-76f040ddbc72"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "Downloaded the only file (PDF, 1 page) - it contains just the LSDA header (PI, missions STS-29/34/42, title); NO data. Middle cerebral artery Doppler velocity is not HR/BP anyway.",
+    "Not importable."
+  ],
+  "content": {
+    "files/DSO_470__2720518404/DSO_470__2720518404.pdf_STS-29_DSO_470_2012_272_050948.pdf": {
+      "what": "LSDA cover page only (no table)",
+      "importable_to_observation": false
+    }
+  },
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 8610,
+      "sha256": "88984d2066e854aeed4a190f345e9176117716c9a8b2482f6731187f76b0713f",
+      "note": "experiment record subset + dataset/file tree"
+    },
+    {
+      "path": "files/DSO_470__2720518404/DSO_470__2720518404.pdf_STS-29_DSO_470_2012_272_050948.pdf",
+      "bytes": 951384,
+      "sha256": "58c2d919fb758402483f42a5649f711b86a8539567063866b26f464f833b2386",
+      "dataset_catalog": "DSO 470__2720518404",
+      "dataset_name": "Relationship between SMS and middle cerebral artery blood flow velocities during spaceflight",
+      "dataset_description": "Relationship between SMS and middle cerebral artery blood flow velocities during spaceflight as shown in 8 subjects.  Source: Bagian JP, Hackett P. Cerebral blood flow: comparison of ground-based and spaceflight data and correlation with space adaptation syndrome. J Clin Pharmacol. 1991 Oct;31(10):1036-40.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "DSO_470__2720518404.pdf_STS-29_DSO_470_2012_272_050948.pdf",
+      "file_key": "9ee4346d-ed38-5f5a-bec8-1df45295875f",
+      "url": "https://nlsp.nasa.gov/api/v1/files/9ee4346d-ed38-5f5a-bec8-1df45295875f/download"
+    }
+  ],
+  "skipped_files": [],
+  "fetched_at_utc": "2026-11-14T14:21:56Z",
+  "generated_by": "scripts/fetch_data.py"
+}

@@ -1,0 +1,142 @@
+mission,series,milestone,datetime
+RR-1,telemetry,Launch,2014-09-21 09:49
+RR-1,telemetry,Reached_orbit,2014-09-23 17:19
+RR-1,telemetry,Animal transfer to ISS,2014-09-25 16:05
+RR-1,telemetry,Sacrifice 1,2014-10-12 00:00
+RR-1,telemetry,Sacrifice 2,2014-10-13 00:00
+RR-1,telemetry,LAR Return,2014-10-25 19:36
+RR-1,telemetry,Sacrifice 3,2014-10-28 00:01
+RR-1,radiation,Launch,2014-09-21 00:00
+RR-1,radiation,Reached orbit,2014-09-23 00:00
+RR-1,radiation,Animal transfer to ISS,2014-09-25 00:00
+RR-1,radiation,Sacrifice 1,2014-10-12 00:00
+RR-1,radiation,Sacrifice 2,2014-10-13 00:00
+RR-1,radiation,LAR Return,2014-10-25 00:00
+RR-1,radiation,Sacrifice 3,2014-10-28 00:00
+RR-3,telemetry,Launch,2016-04-08 20:45
+RR-3,telemetry,Animal transfer to ISS,2016-04-12 12:15
+RR-3,telemetry,Sacrifice 1,2016-05-17 00:04
+RR-3,telemetry,Sacrifice 2,2016-05-18 00:04
+RR-3,telemetry,Sacrifice 3,2016-05-19 00:04
+RR-3,telemetry,Sacrifice 4,2016-05-20 00:04
+RR-3,radiation,Launch,2016-04-08 00:00
+RR-3,radiation,Animal transfer to ISS,2016-04-12 00:00
+RR-3,radiation,Sacrifice 1,2016-05-17 00:00
+RR-3,radiation,Sacrifice 2,2016-05-18 00:00
+RR-3,radiation,Sacrifice 3,2016-05-19 00:00
+RR-3,radiation,Sacrifice 4,2016-05-20 00:00
+RR-4,radiation,Animal transfer to ISS,2017-02-24 00:00
+RR-4,radiation,Sacrifice 1,2017-03-11 00:00
+RR-4,radiation,Sacrifice 2,2017-03-12 00:00
+RR-4,radiation,Sacrifice 3,2017-03-13 00:00
+RR-4,radiation,Sacrifice 4,2017-03-14 00:00
+RR-5,telemetry,Launch,2017-06-03 21:05
+RR-5,telemetry,Animal transfer to ISS,2017-06-07 10:20
+RR-5,telemetry,Sacrifice 1,2017-07-30 00:02
+RR-5,telemetry,Sacrifice 2,2017-07-31 00:02
+RR-5,telemetry,Sacrifice 3,2017-08-01 00:02
+RR-5,telemetry,Sacrifice 4,2017-08-02 00:02
+RR-6,telemetry,Launch,2017-12-15 15:35
+RR-6,telemetry,Animal transfer to ISS,2017-12-19 10:05
+RR-6,telemetry,LAR Return,2018-01-13 00:04
+RR-6,telemetry,Sacrifice 1,2018-02-06 00:09
+RR-6,radiation,Launch,2017-12-15 00:00
+RR-6,radiation,Animal transfer to ISS,2017-12-19 00:00
+RR-6,radiation,LAR Return,2018-01-13 00:00
+RR-7,telemetry,Launch,2018-06-29 00:00
+RR-7,telemetry,Animal transfer to ISS,2018-07-04 04:02
+RR-7,telemetry,Sacrifice 1,2018-07-24 03:59
+RR-7,telemetry,Sacrifice 2,2018-07-25 03:59
+RR-7,telemetry,Sacrifice 3,2018-09-12 04:01
+RR-7,telemetry,Sacrifice 4,2018-09-13 04:01
+RR-7,radiation,Launch,2018-06-29 00:00
+RR-7,radiation,Animal transfer to ISS,2018-07-04 00:00
+RR-7,radiation,Sacrifice 1,2018-07-24 00:00
+RR-7,radiation,Sacrifice 2,2018-07-25 00:00
+RR-7,radiation,Sacrifice 3,2018-09-12 00:00
+RR-7,radiation,Sacrifice 4,2018-09-13 00:00
+RR-8,radiation,Launch,2018-12-05 00:00
+RR-8,radiation,Animal transfer to ISS,2018-12-10 00:00
+RR-8,radiation,Sacrifice 1,2018-12-27 00:00
+RR-8,radiation,Sacrifice 2,2018-12-28 00:00
+RR-8,radiation,LAR Return,2019-01-13 00:00
+RR-9,telemetry,Launch,2018-08-14 16:33
+RR-9,telemetry,Animal transfer to ISS,2018-08-18 15:43
+RR-9,telemetry,Undock,2018-09-16 08:43
+RR-9,telemetry,LAR Return,2018-09-17 14:13
+RR-9,radiation,Animal transfer to ISS,2017-08-18 00:00
+RR-9,radiation,Undock,2017-09-16 00:00
+RR-9,radiation,LAR Return,2017-09-17 00:00
+RR-10,telemetry,Launch,2020-12-05 00:00
+RR-10,telemetry,Animal transfer to ISS,2020-12-09 00:00
+RR-10,telemetry,Sacrifice 1,2021-01-02 00:00
+RR-10,telemetry,Sacrifice 2,2021-01-03 00:00
+RR-10,telemetry,Sample return,2021-01-13 00:00
+RR-12,telemetry,Launch,2019-04-17 20:44
+RR-12,telemetry,Animal_transfer_to_ISS,2019-04-21 06:40
+RR-12,telemetry,Sacrifice 1,2019-05-05 08:18
+RR-12,telemetry,Sacrifice 2,2019-05-07 08:23
+RR-12,telemetry,Sacrifice 3,2019-05-21 00:00
+RR-12,telemetry,Sacrifice 4,2019-05-22 00:04
+RR-12,radiation,Launch,2019-04-17 00:00
+RR-12,radiation,Animal transfer to ISS,2019-04-21 00:00
+RR-12,radiation,Sacrifice 1,2019-05-05 00:00
+RR-12,radiation,Sacrifice 2,2019-05-07 00:00
+RR-12,radiation,Sacrifice 3,2019-05-21 00:00
+RR-12,radiation,Sacrifice 4,2019-05-22 00:00
+RR-17,radiation,Launch,2019-07-25 00:00
+RR-17,radiation,Animal transfer to ISS,2019-07-29 00:00
+RR-17,radiation,LAR Return,2019-08-27 00:00
+RR-17,radiation,Sacrifice 1,2019-09-16 00:00
+RR-17,radiation,Sacrifice 2,2019-09-17 00:00
+RR-17,radiation,Sacrifice 3,2019-09-18 00:00
+RR-17,radiation,Sacrifice 4,2019-09-20 00:00
+RR-18,telemetry,Launch,2021-12-21 05:06
+RR-18,telemetry,Animal transfer to ISS,2021-12-23 00:00
+RR-18,telemetry,LAR Return,2022-01-24 00:00
+RR-18,telemetry,Sample Return,2022-08-20 00:00
+RR-19,telemetry,Launch,2019-12-05 17:29
+RR-19,telemetry,Animal transfer to ISS,2019-12-10 15:09
+RR-19,telemetry,LAR Return,2020-01-07 20:10
+RR-19,radiation,Launch,2019-12-05 00:00
+RR-19,radiation,Animal transfer to ISS,2019-12-09 00:00
+RR-19,radiation,LAR Return,2020-01-08 00:00
+RR-20,telemetry,Launch,2023-11-10 00:00
+RR-20,telemetry,LAR Return,2023-12-22 00:00
+RR-20,telemetry,Sample Return,2024-04-30 00:00
+RR-23,telemetry,Launch,2020-12-06 00:00
+RR-23,telemetry,Animal transfer to ISS,2020-12-09 11:00
+RR-23,telemetry,Sample Return,2021-01-13 00:00
+RR-23,radiation,Launch,2020-12-06 00:00
+RR-23,radiation,Animal transfer to ISS,2020-12-09 00:00
+RR-23,radiation,Sample Return,2021-01-13 00:00
+RR-25,telemetry,Launch,2022-11-29 09:15
+RR-25,telemetry,Dissection 1,2023-01-23 00:00
+RR-25,telemetry,Dissection 2,2023-01-24 00:00
+RR-25,telemetry,Dissection 3,2023-01-25 00:00
+RR-28,telemetry,Launch,2024-03-21 00:00
+RR-28,telemetry,Animal transfer to ISS,2024-03-24 20:17
+RR-28,telemetry,LAR Return,2024-04-30 00:00
+RR-28,telemetry,Sacrifice 1,2024-05-05 00:01
+APEX-03-1,telemetry,SpaceX Launch,2015-01-10 04:40
+APEX-03-1,telemetry,Activation on ISS,2015-01-15 00:10
+APEX-03-1,telemetry,6-day harvest ISS,2015-01-21 00:10
+APEX-03-1,telemetry,6-day harvest Ground Control,2015-01-23 00:10
+APEX-03-1,telemetry,11-day harvest ISS,2015-01-26 00:10
+APEX-03-1,telemetry,11-day harvest Ground Control,2015-01-28 00:10
+APEX-03-2,telemetry,Activation on ISS,2015-01-26 10:10
+APEX-03-2,telemetry,11-day harvest Ground Control,2015-01-28 00:10
+APEX-03-2,telemetry,4-day harvest ISS,2015-01-30 00:10
+APEX-03-2,telemetry,8-day harvest ISS,2015-02-03 00:10
+APEX-03-2,telemetry,MELFI Sample Insertion,2015-02-04 00:10
+APEX-03-2,telemetry,4-day harvest Ground Control,2015-02-05 00:10
+APEX-04,telemetry,Initiation Date ISS,2017-02-26 00:30
+APEX-04,telemetry,Initiation Date Ground Control,2017-02-28 00:30
+APEX-04,telemetry,Harvest Date ISS,2017-03-08 00:30
+APEX-04,telemetry,Harvest Date Ground Control,2017-03-10 00:30
+VEG-01A,telemetry,NA,2014-04-18 00:15
+VEG-01A,telemetry,SpaceX-3 Launch,2014-04-18 15:30
+VEG-01A,telemetry,VEG-01A Initiation Date ISS,2014-05-08 00:15
+VEG-01A,telemetry,VEG-01A Initiation Date Ground Control,2014-05-09 00:15
+VEG-01A,telemetry,VEG-01A Harvest Date (Day 33) ISS,2014-06-10 00:15
+VEG-01A,telemetry,VEG-01A Harvest Date (Day 33) Ground Control,2014-06-11 00:15

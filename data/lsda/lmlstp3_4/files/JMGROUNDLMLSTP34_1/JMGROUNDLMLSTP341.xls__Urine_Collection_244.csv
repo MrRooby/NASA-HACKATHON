@@ -1,0 +1,61 @@
+SESSION RECORD,,,,
+Session Name,,,,
+Urine collection ,,,,
+LSDA Exp ID,Experiment Title,,,
+LMLSTP3.4,Assessment of Sleep Dynamics in a Simulated Space Station Environment ,,,
+,,,,
+,,,,
+Protocol,,,,
+"Each data collection session lasted 48 hours.  During that time, void-by-void urine samples were collected.  All urine samples were processed and stored at -40 degrees Celsius until analysis.
+",,,,
+Session Constraints,,,,
+No constraints were  identified.,,,,
+Parameters Measured,,,,
+"Melatonin sulfate acrophase, urine",,,,
+Hardware Items,,,,Hardware ID
+,,,,
+Table of Sessions Performed,,,,
+Payload ID,Scheduling Information,,,Subject Information
+,Scheduled Day,Actual Day,Calendar Date,
+"LMLSTP
+Phase II",Pre-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase II",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase II",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase II",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase II",Post-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",Pre-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",Post-chamber,not available,not available,4 subjects

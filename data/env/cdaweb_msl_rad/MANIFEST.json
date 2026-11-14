@@ -1,0 +1,1251 @@
+{
+  "source_id": "cdaweb_msl_rad",
+  "title": "MSL Curiosity RAD Level 2 dosimetry on Mars surface (CDAWeb MSL_RAD_OBS-L2, variable DOSIMETRY_TOTAL_f)",
+  "urls": [
+    "https://cdaweb.gsfc.nasa.gov/WS/cdasr/1/dataviews/sp_phys/datasets/MSL_RAD_OBS-L2/inventory",
+    "https://cdaweb.gsfc.nasa.gov/WS/cdasr/1/dataviews/sp_phys/datasets/MSL_RAD_OBS-L2/variables",
+    "https://cdaweb.gsfc.nasa.gov/WS/cdasr/1/dataviews/sp_phys/datasets/MSL_RAD_OBS-L2/data/<YYYYMM01T000000Z>,<next month YYYYMM01T000000Z>/DOSIMETRY_TOTAL_f?format=text (one request per calendar month, header Accept: application/json; the JSON response names a temporary text file which is then downloaded)"
+  ],
+  "license": "NASA open data; CDAWeb rules of use: 'The RAD data are archived as fully citable data. Please acknowledge the RAD Principal Investigator Dr. Hassler of Southwest Research Institute Boulder.'",
+  "unit_source": "units row of the CDAWeb text listing: uGray/day_(good_Q)",
+  "notes": [
+    "DOSIMETRY_TOTAL_f = quality-filtered variant (data flagged by FLAGGED_DATA removed); rows with fill values are skipped per column.",
+    "Three columns: TOTAL_DOSE_B (Si), RTG_CORRECTED_DOSE_B (Si, MMRTG background removed), TOTAL_DOSE_E (tissue-equivalent plastic). For a 'Mars surface GCR dose' the RTG-corrected B value is the physically cleanest; E is closer to tissue. Choose one explicitly in the importer.",
+    "Dose rates are absorbed dose (Gy), not dose equivalent (Sv). Convert to mGy/day by /1000.",
+    "Inventory starts 2012-08-17 (landing 2012-08-06); large gaps exist (e.g. 2012-08-18 .. 2013-03-22, 2024-03/04).",
+    "Days are UTC Earth days; one sol = 24 h 39 min."
+  ],
+  "files": [
+    {
+      "path": "msl_rad_daily.csv",
+      "bytes": 425242,
+      "sha256": "c64e3bd9539a41fc9e1c263dafecb4135179caeb5c3a7a9e6271216cf2bf8f83",
+      "rows": 4893,
+      "columns": [
+        {
+          "name": "date_utc",
+          "unit": "YYYY-MM-DD (UTC Earth date, not sol)"
+        },
+        {
+          "name": "n_obs",
+          "unit": "count",
+          "description": "number of RAD observations in the day (nominal cadence ~16 min, often ~1 h in L2)"
+        },
+        {
+          "name": "total_dose_b_uGy_per_day_mean",
+          "unit": "uGy/day",
+          "description": "daily mean of quality-filtered observation dose rates; absorbed dose rate in silicon detector B, total (includes MMRTG background)"
+        },
+        {
+          "name": "rtg_corrected_dose_b_uGy_per_day_mean",
+          "unit": "uGy/day",
+          "description": "daily mean of quality-filtered observation dose rates; absorbed dose rate in silicon detector B with MMRTG (rover power source) contribution subtracted"
+        },
+        {
+          "name": "total_dose_e_uGy_per_day_mean",
+          "unit": "uGy/day",
+          "description": "daily mean of quality-filtered observation dose rates; absorbed dose rate in detector E (tissue-equivalent plastic)"
+        },
+        {
+          "name": "total_dose_b_uGy_per_day_min",
+          "unit": "uGy/day"
+        },
+        {
+          "name": "total_dose_b_uGy_per_day_max",
+          "unit": "uGy/day"
+        },
+        {
+          "name": "rtg_corrected_dose_b_uGy_per_day_min",
+          "unit": "uGy/day"
+        },
+        {
+          "name": "rtg_corrected_dose_b_uGy_per_day_max",
+          "unit": "uGy/day"
+        },
+        {
+          "name": "total_dose_e_uGy_per_day_min",
+          "unit": "uGy/day"
+        },
+        {
+          "name": "total_dose_e_uGy_per_day_max",
+          "unit": "uGy/day"
+        }
+      ],
+      "note": "dates 2012-08-17 .. 2026-11-11"
+    },
+    {
+      "path": "raw/2012/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2012-08.txt",
+      "bytes": 13779,
+      "sha256": "5fac9deed245c07d5c48298e2b671e1ed78ff0a1470e3f819ce61acd2124974a",
+      "rows": 42,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2013/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2013-03.txt",
+      "bytes": 37832,
+      "sha256": "b604eb49216fdfa5b2c22bde7c9bb513b30d001f23b6cd9374cd6e12c3e67992",
+      "rows": 227,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2013/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2013-04.txt",
+      "bytes": 94698,
+      "sha256": "cb8697ee6d69bc0c34b7ddf7c8449da598fa7584da5eb1e91aaec9981ed9884a",
+      "rows": 664,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2013/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2013-05.txt",
+      "bytes": 124145,
+      "sha256": "9f647e643d784dafdfd2c7e09bd7b1b77ff3cc9402eb1be2fbfc5dcf463e82a5",
+      "rows": 895,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2013/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2013-06.txt",
+      "bytes": 184973,
+      "sha256": "398036bda6c5e6f1aa13468b81437e0d3b6fd9cdaae3da2b970ea78af3f61f68",
+      "rows": 1370,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2013/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2013-07.txt",
+      "bytes": 177235,
+      "sha256": "34b2adb25f29f86aaa2e144b28fb197a21c0c1aa506c515498c2ccbe541f17cf",
+      "rows": 1311,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2013/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2013-08.txt",
+      "bytes": 173616,
+      "sha256": "59c473824a50f3cebea1074f3c0dc4e4c304b995b0681f7cb49ad795660c3bfb",
+      "rows": 1282,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2013/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2013-09.txt",
+      "bytes": 257642,
+      "sha256": "aed1ac60fb09b8a0dee6cf33508478b11a1fbbe8f40480935b20aa1dfc0be71a",
+      "rows": 1937,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2013/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2013-10.txt",
+      "bytes": 273130,
+      "sha256": "17295c742bb6905e5e4ecd7c54d25cfba027a9141e2ed2b9ee67884d50418aba",
+      "rows": 2058,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2013/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2013-11.txt",
+      "bytes": 138912,
+      "sha256": "da62215c44ed0037a7e1e5d07d5629256021ebe905fc4c63bbf4d1ba247c2652",
+      "rows": 1014,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2013/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2013-12.txt",
+      "bytes": 261652,
+      "sha256": "0710bd7a0aabc48aa517a78b37d860207be7777a1a2d9dca2166a8672ee6892d",
+      "rows": 1970,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-01.txt",
+      "bytes": 337323,
+      "sha256": "75ca39e50f791f80350b0cebba3fe2f101b2e938850d829b1162783682957e45",
+      "rows": 2559,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-02.txt",
+      "bytes": 305549,
+      "sha256": "f577e7be41e7adc6f7eb17a771e23f95cde74c7342ef01225670903c82f6497d",
+      "rows": 2312,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-03.txt",
+      "bytes": 333099,
+      "sha256": "776e7b661bf870d6205d331e2b0f1a21364acaf9872a401fc49776aee718fedf",
+      "rows": 2526,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-04.txt",
+      "bytes": 340330,
+      "sha256": "a0b7705e247f536412abd7cc3915b40dfa5084f6e656601995cc480dc3cd5821",
+      "rows": 2583,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-05.txt",
+      "bytes": 351275,
+      "sha256": "7c5eb7af22223571daea24d6f4270179e70b430cf4aa0dc8c1e760558014c77c",
+      "rows": 2668,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-06.txt",
+      "bytes": 340330,
+      "sha256": "914291b1e83640c9d036f3ce02c1050d795c2110aa1bf20c5b3531b536a82149",
+      "rows": 2583,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-07.txt",
+      "bytes": 351147,
+      "sha256": "953c067094e510c92da57192bce7c4f465b871a6df3968e905d8aab452201f1e",
+      "rows": 2667,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-08.txt",
+      "bytes": 351531,
+      "sha256": "8228a055dbf407f71872492e92f300205d4fc7f3ebdb670da19d48c017ffe1dc",
+      "rows": 2670,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-09.txt",
+      "bytes": 347370,
+      "sha256": "2902fa08691560065a6ac75c1f452c7de4e01314d32374a7e92a1989a77c568e",
+      "rows": 2638,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-10.txt",
+      "bytes": 351403,
+      "sha256": "b49998be1741d89b7143c7e9228c67cbd489021589e5fb24cc4c4cacbdd9fabc",
+      "rows": 2669,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-11.txt",
+      "bytes": 340330,
+      "sha256": "a68b5633f41818894ecb4d855be4bf40f1db61fbaaf3e0d8aa527d0d39f338af",
+      "rows": 2583,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2014/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2014-12.txt",
+      "bytes": 351531,
+      "sha256": "2670832d4d3df96e8f1a5075fae1b29ce2f4a04d9ff83368e238a2c87c73814e",
+      "rows": 2670,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-01.txt",
+      "bytes": 282544,
+      "sha256": "68135c82a8a24c379fbc51126e77acc151d6a180faa0416190d785978867c37e",
+      "rows": 2133,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-02.txt",
+      "bytes": 317965,
+      "sha256": "e9f60b6b3ed500fc6dc19c896d1113a1e064026f8d64c58432517e0f15970c6b",
+      "rows": 2409,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-03.txt",
+      "bytes": 351019,
+      "sha256": "b97bd95aa6884228beaaf03230f371b8883b7ab9544dc9c5363fac16ae94e287",
+      "rows": 2666,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-04.txt",
+      "bytes": 339562,
+      "sha256": "b438cee00c03e285e59dfbb15dde865b8bd9888ca725af0528e1c9746ecce417",
+      "rows": 2577,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-05.txt",
+      "bytes": 350635,
+      "sha256": "848a0ddabe05cad6e0bc96bb5d3a4d4f9390730abe63e935c36d7521e62788e3",
+      "rows": 2663,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-06.txt",
+      "bytes": 337771,
+      "sha256": "9999f9821398b2254dd353017716b019cb999024b59244a9768d9cf068387afb",
+      "rows": 2563,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-07.txt",
+      "bytes": 349868,
+      "sha256": "0e9e55f9f6625e9ce966ca4b5adee009559cc4b0ad6fa6103a67bc3e17eb7164",
+      "rows": 2657,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-08.txt",
+      "bytes": 350124,
+      "sha256": "5a76745d278c1a3b99a0a507f73831c045514cfbde0712e24e5e86eaef90ef75",
+      "rows": 2659,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-09.txt",
+      "bytes": 158334,
+      "sha256": "19f1c0e9516b865ca3c7392a0be2dfd62e4ee53c4ba23fbc6b13ebfa286f3b27",
+      "rows": 1165,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-10.txt",
+      "bytes": 321487,
+      "sha256": "12fa8cf4e938de6722166f4b62b34f8d0c4a8b41ad7e2e5ca04d46c9c04b24aa",
+      "rows": 2436,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-11.txt",
+      "bytes": 337259,
+      "sha256": "cbe728f19af6230887a942fdd3e21618da2232eaab2dd420bbfa6490d75536d6",
+      "rows": 2559,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2015/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2015-12.txt",
+      "bytes": 350636,
+      "sha256": "1170f0f9934f0128501bda1f6c5d74c42d4ed719db8ead700ed16c61568f4b94",
+      "rows": 2663,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-01.txt",
+      "bytes": 349484,
+      "sha256": "c073a18113c07d34f7e9bb63fa6978ffe970ccac246e65a0a3d4f313d27fad4f",
+      "rows": 2654,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-02.txt",
+      "bytes": 327503,
+      "sha256": "8d15202490bfc56e90b5e48218bb58c7b0297424ce57f068450dde1fd154440f",
+      "rows": 2483,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-03.txt",
+      "bytes": 348844,
+      "sha256": "da3eb893f9450bea7c1edf11abab116a3ac88260e516c934eea6b60c85bb6f83",
+      "rows": 2649,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-04.txt",
+      "bytes": 338027,
+      "sha256": "e223286f27c7aab6b65c756c559acaf99d0033442a0912eab95c6d3ba5aad81b",
+      "rows": 2565,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-05.txt",
+      "bytes": 349356,
+      "sha256": "174bcff0f08d2460e8caeb2b012b42b25e73d127b32bd8b8735a6dc65502899a",
+      "rows": 2653,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-06.txt",
+      "bytes": 338923,
+      "sha256": "8a9daef39dc72225605c8aa5880e45d32ecebd4be5d2f209a09d6a0beac83192",
+      "rows": 2572,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-07.txt",
+      "bytes": 338092,
+      "sha256": "29cc4927200d46bb47b7ebbdbd745f251662c66ad3139f9dfc75659a29adce29",
+      "rows": 2565,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-08.txt",
+      "bytes": 349100,
+      "sha256": "cd389a1c09bc0bcd35a86f3b777371ad5749859eae7f1fb2870747dc8b496dad",
+      "rows": 2651,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-09.txt",
+      "bytes": 338411,
+      "sha256": "9078f190502a8278f997401669b37d1a01455fc51ebdd39fd26757581c06b409",
+      "rows": 2568,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-10.txt",
+      "bytes": 349996,
+      "sha256": "67a10fbcf84a1ea4c1cd137bf757b4e96e5ec7aa6af8bae10d86ba01f0cbcbe7",
+      "rows": 2658,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-11.txt",
+      "bytes": 328683,
+      "sha256": "946ff0e551ebcc4e13c2bce1886beff00e544d1067308199bb6cf88ec4c3ef85",
+      "rows": 2492,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2016/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2016-12.txt",
+      "bytes": 350124,
+      "sha256": "41c2317243bbca916a2052b0da70ca90188adc9f6e53b6e1734e4a0fea9b8383",
+      "rows": 2659,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-01.txt",
+      "bytes": 350252,
+      "sha256": "ab0dd06efa0f93d59187de94d3b99c856c81bb855030747096dd3885c706fee9",
+      "rows": 2660,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-02.txt",
+      "bytes": 316046,
+      "sha256": "00b9add613c986f4f874a1f9461177bd08fd4aa0a4646c6944d9bb1e317aa979",
+      "rows": 2394,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-03.txt",
+      "bytes": 349740,
+      "sha256": "85646cea81acabb15c0f7881a83e0d904a91b4fc5d5f65e209a94f143c3e8858",
+      "rows": 2656,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-04.txt",
+      "bytes": 339051,
+      "sha256": "4067af925316e9ff0b0bfacd8ea66fc3c154d27f9eb8276ecc96af5add83a92a",
+      "rows": 2573,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-05.txt",
+      "bytes": 349484,
+      "sha256": "b9ab6a9a361bb4e6745717edc1cf23c31d28e11d2afe6eb44c7968905fa1a08f",
+      "rows": 2654,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-06.txt",
+      "bytes": 337643,
+      "sha256": "786a2d75d7b71104ea684d154a6c353488f17e02ed433492fdf039321450ca2f",
+      "rows": 2562,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-07.txt",
+      "bytes": 347308,
+      "sha256": "b5b11ba0d38da969c2673d7aba2c4be4b3d6ba724d5592fa10ccfd6f6faa1d24",
+      "rows": 2637,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-08.txt",
+      "bytes": 350124,
+      "sha256": "aac32ad19018923e86d899c0e048f69b9fb7c122defca9f22ecee4f02c1b636f",
+      "rows": 2659,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-09.txt",
+      "bytes": 348907,
+      "sha256": "fe4cf338e30525fb64f5627b4df16969ed1b268d50dd7ff22393335bde038307",
+      "rows": 2650,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-10.txt",
+      "bytes": 349868,
+      "sha256": "2593c5b5fbed6a17ba743c4e54dbb1d9647f2540cfef6db3b5dd40129803dd0b",
+      "rows": 2657,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-11.txt",
+      "bytes": 339307,
+      "sha256": "1532bd8c3f6270187d4992d7ce843ff25569853accf5ca41aa8fe48671331c8e",
+      "rows": 2575,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2017/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2017-12.txt",
+      "bytes": 351020,
+      "sha256": "48a99552bd7354ed7129b5ef97b4cd14654d03fad121ca7b40d8ed12b34b08a8",
+      "rows": 2666,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-01.txt",
+      "bytes": 350380,
+      "sha256": "92c5af566a91b6f1773b1bc671455884f25456854448803999cf28af97da458b",
+      "rows": 2661,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-02.txt",
+      "bytes": 315918,
+      "sha256": "b8d94c56327dd4688319aa50a1d41cdedf7a3bd7f36f9944cee638bf329df6bb",
+      "rows": 2393,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-03.txt",
+      "bytes": 348844,
+      "sha256": "02e4ca79aa54721dd349bdb98b664515a7942cffa1d299f8a2c62cb250528263",
+      "rows": 2649,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-04.txt",
+      "bytes": 338027,
+      "sha256": "16eeb6d4b2c2214d34ed9686a36edf87fef8b36c2e325b4cbce01ce05416feb1",
+      "rows": 2565,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-05.txt",
+      "bytes": 348972,
+      "sha256": "07c76456f35f3c1b15a6071a2e76c56f550898415cdfb211b5c298231cd85476",
+      "rows": 2650,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-06.txt",
+      "bytes": 338923,
+      "sha256": "362e5a86f520a5d14f0ba18f1a55b67e54ae81285cf88c2c35963abfa4dba30f",
+      "rows": 2572,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-07.txt",
+      "bytes": 350764,
+      "sha256": "0a4ed8d9abdab90bdba7ccdf155d07508264e33ce3d99cf6568fe6dee160a19a",
+      "rows": 2664,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-08.txt",
+      "bytes": 349996,
+      "sha256": "2398b0140b5b70afa6ea82cd95ee15a0b2af02cd95a5e913d501467d59971c13",
+      "rows": 2658,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-09.txt",
+      "bytes": 203262,
+      "sha256": "4aa1f73b5a3be4e405dfdff835aecb6edddc16d3f7226addb4ba7b7da0a399a9",
+      "rows": 1516,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-10.txt",
+      "bytes": 155907,
+      "sha256": "dc92173a1ef3bb3d3332ee0ac39f5877faba200b369177ce8f3097b2b01c4677",
+      "rows": 1148,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-11.txt",
+      "bytes": 338155,
+      "sha256": "ab7db33b53eb44d43f91b27304118848a7cf068aeb5d12edcd321a351de29e54",
+      "rows": 2566,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2018/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2018-12.txt",
+      "bytes": 348716,
+      "sha256": "3f10a8f8fa744d6e0c465d403ffe7ead640c651dc6ddd03a8a5cd05521ca5097",
+      "rows": 2648,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-01.txt",
+      "bytes": 349740,
+      "sha256": "1eada15842ca5bc7f3f38b8ed3a18f847c2e3c3740296d78965d592030c5db7d",
+      "rows": 2656,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-02.txt",
+      "bytes": 314638,
+      "sha256": "6602430337f6bb76e9c056c8d611d1515456a5c7def9aa41a8cb9f649d954864",
+      "rows": 2383,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-03.txt",
+      "bytes": 323307,
+      "sha256": "a3c5fdb913f82cca3cc05ea9853d1fb807f0aeeba1a83e782529e295160ad9b9",
+      "rows": 2450,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-04.txt",
+      "bytes": 332523,
+      "sha256": "8ac06abdc498e8a3cd50de9065b5b68ca94ac37d3e8b4c4ffd04bb9e4ffc7183",
+      "rows": 2522,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-05.txt",
+      "bytes": 348460,
+      "sha256": "41fb0b068bb9b3fcd6397bebaaa6d92cea2aecfb285cb2246e209f159e73aac1",
+      "rows": 2646,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-06.txt",
+      "bytes": 337771,
+      "sha256": "a98705fe15fff271a37234bbedd9b32461963edb4821258e0c9b52148559187b",
+      "rows": 2563,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-07.txt",
+      "bytes": 348460,
+      "sha256": "deb073557545982bea67b5bcc292faeba7bfd0fc1d98c9546114800e185ae8bd",
+      "rows": 2646,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-08.txt",
+      "bytes": 347948,
+      "sha256": "1dc74cdc6242f41f3c46ed016fa9b3e5c3884a69aff3b1d71971102eea3a8831",
+      "rows": 2642,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-09.txt",
+      "bytes": 336363,
+      "sha256": "55dbec89a72bc87fccf02c383688a8e9beb8540bad71ed45f8d9cdaf992a3bb4",
+      "rows": 2552,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-10.txt",
+      "bytes": 349484,
+      "sha256": "249a55b1022401100e37f35a3a8ca7792778f0b7950a5b128856997f4e7ba899",
+      "rows": 2654,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-11.txt",
+      "bytes": 338027,
+      "sha256": "4772336c2bf864814db0bc9facfeb82762c51712cda0b653606c71a2303d0137",
+      "rows": 2565,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2019/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2019-12.txt",
+      "bytes": 349740,
+      "sha256": "c79ad3df338702892cb9c16baf5b6e1097765623a2c3cd2b2ce7953dd6b1197d",
+      "rows": 2656,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-01.txt",
+      "bytes": 349228,
+      "sha256": "e618d7e0067786803adca4b5c05c90b2af85235d31b6fe18ee04f5389e43e43c",
+      "rows": 2652,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-02.txt",
+      "bytes": 326607,
+      "sha256": "9e120251f8644f943469866be522f92455a589f7245f0a4a84668a50162ceb62",
+      "rows": 2476,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-03.txt",
+      "bytes": 349100,
+      "sha256": "ec499af21138ce0d6890286b0eb714d6d9df18e67af5173dce0d57879b7a43b6",
+      "rows": 2651,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-04.txt",
+      "bytes": 341867,
+      "sha256": "c06243897aedfb4764b8e45b280f1f7e7c45c3b17264df8cb823e51a3b3cd63b",
+      "rows": 2595,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-05.txt",
+      "bytes": 354732,
+      "sha256": "5a37894f74718fb443e7ef2079b67011e737a00ed1e01b1840a57481abb60cf3",
+      "rows": 2695,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-06.txt",
+      "bytes": 320079,
+      "sha256": "3e08b8affdea161a3ff62f54b646e6eb6afc866c62c2c02f0ee60f56a2076768",
+      "rows": 2425,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-07.txt",
+      "bytes": 308175,
+      "sha256": "0ce50013ce8617127a004be78c050545ec4581ebfe239fdf8ef016c18a63315f",
+      "rows": 2332,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-08.txt",
+      "bytes": 348588,
+      "sha256": "5044c263d211f654aeedbba1b9d351bfc3ac51d1cc06cf57d70ba2dc29ff5dd0",
+      "rows": 2647,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-09.txt",
+      "bytes": 336875,
+      "sha256": "8672b34baca8630921b6941532890696af94646df92f96b3f4243a12497c5d3b",
+      "rows": 2556,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-10.txt",
+      "bytes": 347948,
+      "sha256": "d5a33f9b4068c36cc0c6a86c46fee20c724481548c1845bf71fbe8f102bf166b",
+      "rows": 2642,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-11.txt",
+      "bytes": 337387,
+      "sha256": "eb3953fe20beb3d6e5b4489ed130545b5f5bd680a1c29e27bc8be32e5e685b4d",
+      "rows": 2560,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2020/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2020-12.txt",
+      "bytes": 344876,
+      "sha256": "01557bed69b3796f32fb82ee00d8a366ce50720ea340bbe2560a1266c8bc9d1c",
+      "rows": 2618,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-01.txt",
+      "bytes": 347948,
+      "sha256": "b6fc06b2c895d29e60f3d4a16804c7743b49da3de2ea456d417e9fedffb7b987",
+      "rows": 2642,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-02.txt",
+      "bytes": 315022,
+      "sha256": "0178b5759fc6bd9b09643351f0ac82e05448bbcce6aded380a5660c4902c8c99",
+      "rows": 2386,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-03.txt",
+      "bytes": 336300,
+      "sha256": "e4d21e5c100fa3ad69fb743a480b8bf81608b59d78deb37e65cb78d42b49d53c",
+      "rows": 2551,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-04.txt",
+      "bytes": 337387,
+      "sha256": "966dc0e68b803d048b78285cdeabe41c386b31dfdf01974d624c220163a7fbc0",
+      "rows": 2560,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-05.txt",
+      "bytes": 348332,
+      "sha256": "b55e0c57409d3fe21cffccf1808d00137639a12f1b2a8eb80b76bf9099f8457c",
+      "rows": 2645,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-06.txt",
+      "bytes": 337131,
+      "sha256": "4ec2ad49f4ed1e14f25f3a6330ca6d79ff2ef58ca139dd663b0d1231d214424d",
+      "rows": 2558,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-07.txt",
+      "bytes": 348332,
+      "sha256": "b7397225e58841b7680e95fa6db08ca5c9f3e294d06ba22bfc031961543c950c",
+      "rows": 2645,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-08.txt",
+      "bytes": 348076,
+      "sha256": "750c8f66281773a5df1a7d42911e8c7d8247d3bd1aa8f1dac65123e832651056",
+      "rows": 2643,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-09.txt",
+      "bytes": 337003,
+      "sha256": "b636d4362b2ac7f36728ceead9b50b10e15c15f58070633efea2707694e46e12",
+      "rows": 2557,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-10.txt",
+      "bytes": 353324,
+      "sha256": "479e04a5945c1adf8b646567dd3ec35d1f99c164380da4f81be7a200a3bbf006",
+      "rows": 2684,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-11.txt",
+      "bytes": 337259,
+      "sha256": "b73b424e3a61f3e60b5425b18b98ce25df435f62e171e2be427f1911bbc0924d",
+      "rows": 2559,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2021/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2021-12.txt",
+      "bytes": 347948,
+      "sha256": "eee637d5a411dd7ee6107fbd0ae11f70c749af118c18407b0007ea0d6ee5185f",
+      "rows": 2642,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-01.txt",
+      "bytes": 347436,
+      "sha256": "2d24133a614296c8b31110a840cb0a65e6368ec3438478a2be265196e343c194",
+      "rows": 2638,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-02.txt",
+      "bytes": 322062,
+      "sha256": "8c2a0dbc3b9e27b11e9315be687187ce4c7c5cb88ae87f3bb31f23b9dd7838c8",
+      "rows": 2441,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-03.txt",
+      "bytes": 337196,
+      "sha256": "829fd4cca7345cb7cfc8ebf8ee07c1dcbcd5f2a72a55f83e37bdb594780852d8",
+      "rows": 2558,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-04.txt",
+      "bytes": 335851,
+      "sha256": "95c78c64f235bdb9949d97cfedcfcc38186ae025cb64f5cf1ea1b9802a89c88f",
+      "rows": 2548,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-05.txt",
+      "bytes": 350252,
+      "sha256": "d4bcb85b6dc98aa5145ad26544e722cff328d843e5ec1c50758a9c5530d042e9",
+      "rows": 2660,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-06.txt",
+      "bytes": 337643,
+      "sha256": "47e058288fe07487f1a68892373ebc86a76e3e1f353fdfda03f7d1bdbe7305fb",
+      "rows": 2562,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-07.txt",
+      "bytes": 350252,
+      "sha256": "c4f6c1b695a54086b05755da5826593e95c048e8a80a76fd56ac5d76dbf672f2",
+      "rows": 2660,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-08.txt",
+      "bytes": 357804,
+      "sha256": "85e2a19bea111e4a5801d8aa87eca4853f4640470d443280de95d43c7bf22aa2",
+      "rows": 2719,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-09.txt",
+      "bytes": 336491,
+      "sha256": "0b34ae65be430e34cf855a5cdcc41ba779201fffec9217c07887eb29effc0879",
+      "rows": 2553,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-10.txt",
+      "bytes": 347948,
+      "sha256": "b8d84b016d8cc6bafd1a5af3d6f32dbbff03624df5421e2fd8bbe909b2ae5a83",
+      "rows": 2642,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-11.txt",
+      "bytes": 336619,
+      "sha256": "d6afc3ffb378e257b537b65965cf467689aee4b7ec5d90231fffeb26e9fb9232",
+      "rows": 2554,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2022/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2022-12.txt",
+      "bytes": 347948,
+      "sha256": "3cb811ddf2963f79eb73faf1bf4848e97458a2e4a46a32f7cd588e7a2ca0eab2",
+      "rows": 2642,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-01.txt",
+      "bytes": 347436,
+      "sha256": "ab78ef274f628239cc076ec5bb111d77997db260dbdb115073c008c5085bd411",
+      "rows": 2638,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-02.txt",
+      "bytes": 314510,
+      "sha256": "c8a714166b52bd9ebaad4550d03fa79e3b53278047409a30a19fc22b7b66ca72",
+      "rows": 2382,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-03.txt",
+      "bytes": 337068,
+      "sha256": "d8d7eb6aa5dba38c3fe280aa4837184e66c455e32645c8b7edfc27662728c939",
+      "rows": 2557,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-04.txt",
+      "bytes": 284081,
+      "sha256": "1044595c81ee5c52422bb0c45560374c0dc8fa4b03b71a76c34ecfb3f85715f4",
+      "rows": 2145,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-05.txt",
+      "bytes": 347692,
+      "sha256": "1226896aeb0a49466c73657eeff49290bf13a1651236423c6eecac30f09bffb6",
+      "rows": 2640,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-06.txt",
+      "bytes": 335851,
+      "sha256": "39481e6f7ed1190bec4e38087b12a6e871514071aadfafaf666289b461c1ff59",
+      "rows": 2548,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-07.txt",
+      "bytes": 346668,
+      "sha256": "8cfe461d7c9889779987874bfe889b5ec122e3d382d6462885057a829fadd6fc",
+      "rows": 2632,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-08.txt",
+      "bytes": 347820,
+      "sha256": "3ac9f53a3d1b22431396dfd5ac17bd206df081254755864ceb48a0df47467a6b",
+      "rows": 2641,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-09.txt",
+      "bytes": 335467,
+      "sha256": "5fc0e2b850ddccc408719b39642ee4b3f28443ecb62c1e79f8f1012bb62a8a39",
+      "rows": 2545,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-10.txt",
+      "bytes": 347436,
+      "sha256": "c775f8cc748c31b6d005dd78171dd9bcc36ef3960ff3125d7a3853bd0af79a56",
+      "rows": 2638,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-11.txt",
+      "bytes": 336875,
+      "sha256": "27ac88279146cffa6f9d40b532d0f34fd8e20ed24f97d042ca31d9c2c9e7825b",
+      "rows": 2556,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2023/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2023-12.txt",
+      "bytes": 346796,
+      "sha256": "24be372279b14cbdc62e53ea2b47314d6d9b837fd05b3fd8be7c1752e06ebb3e",
+      "rows": 2633,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-01.txt",
+      "bytes": 353836,
+      "sha256": "bdc680f09ab5d0f3246fe9fb917531305cd5b31ce6fe1442630ad53cdbefca31",
+      "rows": 2688,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-02.txt",
+      "bytes": 336975,
+      "sha256": "ee90b8d7969fada8d0be7b33d394cb420d2f12eed7eaed8fbff298b2884c4149",
+      "rows": 2557,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-03.txt",
+      "bytes": 322348,
+      "sha256": "b12b5518f5581902e7f554476f57554ab09fd343d8dbfa6af644cc94ec0a241f",
+      "rows": 2442,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-04.txt",
+      "bytes": 330603,
+      "sha256": "57f44e28e54a4f6f7d1727b8ac8a498e1805d40eb5a53f850d2fa04ab94066b6",
+      "rows": 2507,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-05.txt",
+      "bytes": 357420,
+      "sha256": "17b40ff2ffad840e7782cdab2d0b0bc164c6ac4fc275123a2adf232d3d8ac942",
+      "rows": 2716,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-06.txt",
+      "bytes": 336491,
+      "sha256": "8b041c4b377b3ae7dcde8bb078cde40e61f5b064b5c6808a18313e136015b5ad",
+      "rows": 2553,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-07.txt",
+      "bytes": 347436,
+      "sha256": "32f7ea11e5e9f681d01179f557d06144231176204f596958af3cbb406788dbae",
+      "rows": 2638,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-08.txt",
+      "bytes": 345900,
+      "sha256": "74776e8ec27ef3ac94c29f6fd955a026abd9c9b95bd72ef1999e37fac6757f75",
+      "rows": 2626,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-09.txt",
+      "bytes": 335979,
+      "sha256": "8bd7b3196dc48fed200e7b759054f654da94687132b1bc3a46fbfee9cd5ce9be",
+      "rows": 2549,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-10.txt",
+      "bytes": 359852,
+      "sha256": "84d9cda5f20994ac3cdaa10492fdfa5bd8fcf6d2cc5d12880cceb8e66bacc279",
+      "rows": 2735,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-11.txt",
+      "bytes": 336107,
+      "sha256": "a3345c247d49499adcaeeea9879c80bb59b085993c4fd4b62392d9e5859a05c8",
+      "rows": 2550,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2024/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2024-12.txt",
+      "bytes": 346924,
+      "sha256": "c65a4cc2ab1a040b3f2cfb921b154ebcf1e8e97fedd6a7b83477f863a6009282",
+      "rows": 2634,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-01.txt",
+      "bytes": 346796,
+      "sha256": "6f67c46fdf560324d2e1a6c625a51e0425f35a4e4719ad56ea7666f233f0910a",
+      "rows": 2633,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-02.txt",
+      "bytes": 314766,
+      "sha256": "388993dbfbb6c408ac9833b87a00b368c89d92d098b70a3d5654a5334a972f2e",
+      "rows": 2384,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-03.txt",
+      "bytes": 347180,
+      "sha256": "48dc7fae5e16f87597b1752c3488d03f25f2c9a36ca92f320a2b16868464f4d8",
+      "rows": 2636,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-04.txt",
+      "bytes": 336363,
+      "sha256": "366a8f8f91949637e09f2e75ffb312cd80dad77768437efc9db2f1f148fbdfcb",
+      "rows": 2552,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-05.txt",
+      "bytes": 347052,
+      "sha256": "d1fc8ce69abb7fdb16d6884f197453609f47bb2ec580214b242d3d634ff85e73",
+      "rows": 2635,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-06.txt",
+      "bytes": 336363,
+      "sha256": "7cc7c4734b239c9575b27266da08b49a2575be03a8221bf65e2fd675d3faec9a",
+      "rows": 2552,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-07.txt",
+      "bytes": 346924,
+      "sha256": "a39e16176394c328cdf7cd6a5c7432c6cec387bdb8e621e94f4b146a13630400",
+      "rows": 2634,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-08.txt",
+      "bytes": 347180,
+      "sha256": "7c8329a6788efeb96e4c796758c5616430534968203dc274efad447e2187eeb5",
+      "rows": 2636,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-09.txt",
+      "bytes": 335339,
+      "sha256": "6a8f67a605c4ba8b309822066f67ba00d1b6d43a3734abf92b6c78b292effe10",
+      "rows": 2544,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-10.txt",
+      "bytes": 347436,
+      "sha256": "fbdd90555353e97b5b9493c1a10219470b1dd8fadb3c9e006849347cf6256cb8",
+      "rows": 2638,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-11.txt",
+      "bytes": 335467,
+      "sha256": "5b16b76545f379540cb967e8fd7888e79f9968a321e6906eb611f522adb1c0ad",
+      "rows": 2545,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2025/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2025-12.txt",
+      "bytes": 351532,
+      "sha256": "30efaabf073f6c0c7b8887239a3584230d16c2ab53d3d54be0b0adda0d25dd1e",
+      "rows": 2670,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-01.txt",
+      "bytes": 347308,
+      "sha256": "e914f78d49ef164ebd9f14efbd4fec62e36d5db76715de6782f03ae609209e41",
+      "rows": 2637,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-02.txt",
+      "bytes": 320142,
+      "sha256": "eca9bbca7d2b3ceb3d353c1c40ed2a6f71d5ed61767127de06484330f6640640",
+      "rows": 2426,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-03.txt",
+      "bytes": 347052,
+      "sha256": "ceb6e81b14815fad1f2d9a573b27ff0872b8c77bba1f5a1336a0429bef6869dc",
+      "rows": 2635,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-04.txt",
+      "bytes": 336235,
+      "sha256": "c125f69e818b957f686bb272b50503a1adcdd449047e758b2705d87cc8208a94",
+      "rows": 2551,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-05.txt",
+      "bytes": 346540,
+      "sha256": "f55d2dbe273d439b90588088c79d46a892daa3c00778e733c4b08d73b239d5fd",
+      "rows": 2631,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-06.txt",
+      "bytes": 336619,
+      "sha256": "0c46353761c0a4588d2c018f73a39941d4489aef3b613f38cf212a8cdcdbc3d2",
+      "rows": 2554,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-07.txt",
+      "bytes": 346412,
+      "sha256": "9f00fb3e4f4542640764b7a19a2563f3d7db50d3f448b21cdeb104b2db1c910f",
+      "rows": 2630,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-08.txt",
+      "bytes": 347052,
+      "sha256": "7ae0514118fecaccec2f27742d29ddb33dd78814245e557f0a2ff6eaab49bf38",
+      "rows": 2635,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-09.txt",
+      "bytes": 335211,
+      "sha256": "b5976919c02deb1b83374d7912956b74abf80095918cc804b619a455180fcf67",
+      "rows": 2543,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-10.txt",
+      "bytes": 346540,
+      "sha256": "c487fb2f74814d17b7ce18c212fc4281899ac52f369c98658eb96f4b0f624dd6",
+      "rows": 2631,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/2026/msl_rad_obs-l2_DOSIMETRY_TOTAL_f_2026-11.txt",
+      "bytes": 125450,
+      "sha256": "a86a89f33c7774db32ff8b604db143027955ec70c362124b81bad470f55b689f",
+      "rows": 911,
+      "note": "raw CDAWeb text listing (ISTP header + data)"
+    },
+    {
+      "path": "raw/inventory.json",
+      "bytes": 8537,
+      "sha256": "c826afbeacb05c6ea45b7586974a7b509faabd83382a277c98a2acdad3bb4c4f"
+    },
+    {
+      "path": "raw/variables.json",
+      "bytes": 2269,
+      "sha256": "b4e5c326fb3c6c0b8c61f99fb30369a9c494d3b198de420d9431155dbe0fbcc7"
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T14:07:57Z",
+  "generated_by": "scripts/fetch_data.py"
+}

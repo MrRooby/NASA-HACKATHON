@@ -1,0 +1,172 @@
+[
+ {
+  "scenario": "S1",
+  "subject_code": "SYN-02",
+  "indicator_code": "bp_systolic",
+  "day": "FD62",
+  "status": "caution",
+  "escalate": false,
+  "rule": "absolute",
+  "note": "SBP >= 120"
+ },
+ {
+  "scenario": "S1",
+  "subject_code": "SYN-02",
+  "indicator_code": "bp_systolic",
+  "day": "FD70",
+  "status": "alert",
+  "escalate": true,
+  "rule": "absolute",
+  "note": "SBP >= 140"
+ },
+ {
+  "scenario": "S2",
+  "subject_code": "SYN-01",
+  "indicator_code": "sleep_hours",
+  "day": "FD47",
+  "status": "caution",
+  "escalate": false,
+  "rule": "rolling_3d_mean<6",
+  "note": ""
+ },
+ {
+  "scenario": "S2",
+  "subject_code": "SYN-01",
+  "indicator_code": "sleep_hours",
+  "day": "FD51",
+  "status": "alert",
+  "escalate": true,
+  "rule": "rolling_7d_mean<5",
+  "note": ""
+ },
+ {
+  "scenario": "S3",
+  "subject_code": "SYN-04",
+  "indicator_code": "mood",
+  "day": "FD104",
+  "status": "alert",
+  "escalate": true,
+  "rule": "rolling_5d_count_below_3>=4",
+  "note": ""
+ },
+ {
+  "scenario": "S4",
+  "subject_code": "SYN-03",
+  "indicator_code": "body_temperature",
+  "day": "FD120",
+  "status": "caution",
+  "escalate": false,
+  "rule": "absolute",
+  "note": "37.6-38.5"
+ },
+ {
+  "scenario": "S4",
+  "subject_code": "SYN-03",
+  "indicator_code": "body_temperature",
+  "day": "FD121",
+  "status": "alert",
+  "escalate": true,
+  "rule": "absolute",
+  "note": ">= 38.5"
+ },
+ {
+  "scenario": "S5",
+  "subject_code": null,
+  "indicator_code": "cabin_co2",
+  "day": "FD86",
+  "status": "caution",
+  "escalate": false,
+  "rule": "rolling_7d_mean>=2.5",
+  "note": ""
+ },
+ {
+  "scenario": "S6",
+  "subject_code": null,
+  "indicator_code": "solar_proton_flux_10MeV",
+  "day": "FD150",
+  "status": "alert",
+  "escalate": true,
+  "rule": "absolute",
+  "note": ">= 1000 pfu: no EVA"
+ },
+ {
+  "scenario": "S6",
+  "subject_code": null,
+  "indicator_code": "radiation_daily_vs_environment",
+  "day": "FD150",
+  "status": "alert",
+  "escalate": true,
+  "rule": "absolute",
+  "note": ">= 5x"
+ },
+ {
+  "scenario": "S7",
+  "subject_code": "SYN-03",
+  "indicator_code": "body_mass",
+  "day": "FD91",
+  "status": "caution",
+  "escalate": false,
+  "rule": "baseline_percent_change",
+  "note": "< -5 %"
+ },
+ {
+  "scenario": "S8",
+  "subject_code": "SYN-02",
+  "indicator_code": "vo2max",
+  "day": "FD45",
+  "status": "caution",
+  "escalate": false,
+  "rule": "baseline_percent",
+  "note": "80-85 %"
+ },
+ {
+  "scenario": "S9",
+  "subject_code": "SYN-01",
+  "indicator_code": "exercise_minutes_daily",
+  "day": "FD136",
+  "status": "caution",
+  "escalate": false,
+  "rule": "rolling_7d_sum<360",
+  "note": ""
+ },
+ {
+  "scenario": "S10",
+  "subject_code": "SYN-04",
+  "indicator_code": "heart_rate_resting",
+  "day": "FD25",
+  "status": "ok",
+  "escalate": false,
+  "rule": "gap",
+  "note": "no data FD20-FD25; latest as-of FD25 shows FD19"
+ },
+ {
+  "scenario": "S11",
+  "subject_code": "SYN-02",
+  "indicator_code": "glucose_fasting",
+  "day": "FD33",
+  "status": "alert",
+  "escalate": true,
+  "rule": "absolute",
+  "note": "< 70 mg/dL"
+ },
+ {
+  "scenario": "S12",
+  "subject_code": "SYN-02",
+  "indicator_code": "bp_systolic",
+  "day": "R+0",
+  "status": "caution",
+  "escalate": false,
+  "rule": "absolute",
+  "note": "SBP < 90"
+ },
+ {
+  "scenario": "S12",
+  "subject_code": "SYN-02",
+  "indicator_code": "heart_rate_resting",
+  "day": "R+0",
+  "status": "caution",
+  "escalate": false,
+  "rule": "absolute",
+  "note": "HR 101-121"
+ }
+]

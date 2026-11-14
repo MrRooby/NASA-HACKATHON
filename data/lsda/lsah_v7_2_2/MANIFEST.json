@@ -1,0 +1,141 @@
+{
+  "source_id": "lsda_lsah_v7_2_2",
+  "experiment_identifier": "LSAHNEWSV7_2_2",
+  "nlsp_experiment_id": "df39f06f-c34a-52e4-97e6-ed5a2cdf77aa",
+  "lsda_guid": "cl62ay1nbcd2901o64efddloe",
+  "title": "Association Between Aging and Specific Physiological Measurements",
+  "doi": "10.83263/0e0b-nn59",
+  "missions": [
+    [
+      [
+        "LSAH"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/df39f06f-c34a-52e4-97e6-ed5a2cdf77aa/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/df39f06f-c34a-52e4-97e6-ed5a2cdf77aa"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "LSAH newsletter (Oct 1998, vol 7(2)) tables: mean values by 5-year age band for female/male astronauts vs female/male comparison group. No per-person data, no flight-relative time points. Not importable to observation; usable as population reference curves."
+  ],
+  "content": {
+    "files/JMLSAHNEWSV722_152/JMLSAHNEWSV722_152.xls": {
+      "csv": "files/JMLSAHNEWSV722_152/JMLSAHNEWSV722_152.xls__Vol_7_I2_d.csv",
+      "what": "Blood pressure - mean values by age",
+      "granularity": "group means by age band (<35, 35-39, 40-44, 45-49, 50-54, 55-59, 60+) x group (Female/Male Astronauts, Female/Male Comparisons)",
+      "columns": [
+        {
+          "name": "first 4 data rows",
+          "unit": "mmHg",
+          "description": "DIASTOLIC (values 65-82) - not labelled in the file"
+        },
+        {
+          "name": "last 4 data rows",
+          "unit": "mmHg",
+          "description": "SYSTOLIC (values 101-131) - not labelled in the file"
+        }
+      ],
+      "pitfalls": [
+        "Systolic/diastolic blocks are NOT labelled; identified by value range only.",
+        "Females 40+ pooled into 40-44 (footnote in sister file)."
+      ],
+      "importable_to_observation": false
+    },
+    "files/JMLSAHNEWSV722_151/JMLSAHNEWSV722_151.xls": {
+      "csv": "files/JMLSAHNEWSV722_151/JMLSAHNEWSV722_151.xls__Vol_7_I2_c.csv",
+      "what": "LDL cholesterol - mean values by age (dataset name; values 96-156, mg/dL presumed, unit not stated)",
+      "importable_to_observation": false
+    },
+    "files/JMLSAHNEWSV722_153/JMLSAHNEWSV722_153.xls": {
+      "csv": "files/JMLSAHNEWSV722_153/JMLSAHNEWSV722_153.xls__Vol_7_I2_e.csv",
+      "what": "Hearing - mean values by age (dataset name; values 8-49, presumably hearing threshold in dB HL; unit/frequency not stated)",
+      "importable_to_observation": false
+    }
+  },
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 8484,
+      "sha256": "77d0adc882efb083c59db118007123d83f8040856ec0dace93c8dcc2ed7052fd",
+      "note": "experiment record subset + dataset/file tree"
+    },
+    {
+      "path": "files/JMLSAHNEWSV722_152/JMLSAHNEWSV722_152.xls",
+      "bytes": 17920,
+      "sha256": "cd3ce01fb1085e5e0811fda65355644eaf4c68f1303881e114448a92645e71fb",
+      "dataset_catalog": "JMLSAHNEWSV722_152",
+      "dataset_name": "Blood Pressure-Mean Values by Age in the Longitudinal Study for Astronaut Health (LSAH)  Population",
+      "dataset_description": "The graph shows mean values by age for sitting diastolic and systolic blood pressure in the Longitudinal Study of Astronaut Health (LSAH) population: female and male astronauts, and female and male comparison subjects.<P>\r\nSource: National Aeronautics and Space Administration. Association between aging and specific physiological measurements. In: Longitudinal Study of Astronaut Health Newsletter. October 1998;7(2).",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMLSAHNEWSV722_152.xls",
+      "file_key": "27674820-da9c-5d20-a71c-d0179593aafb",
+      "url": "https://nlsp.nasa.gov/api/v1/files/27674820-da9c-5d20-a71c-d0179593aafb/download",
+      "sheets_csv": [
+        {
+          "sheet": "Vol 7 I2 d",
+          "path": "files/JMLSAHNEWSV722_152/JMLSAHNEWSV722_152.xls__Vol_7_I2_d.csv",
+          "rows": 16,
+          "cols": 9,
+          "sha256": "57ca89377a30a29dce15064f7db8ffa7741c0577e4decdb5b0443d20f74a6936"
+        }
+      ]
+    },
+    {
+      "path": "files/JMLSAHNEWSV722_153/JMLSAHNEWSV722_153.xls",
+      "bytes": 17920,
+      "sha256": "4e46e63c01cd39a38ef9b281828918bc366524818616259258f2e1bf4d83776d",
+      "dataset_catalog": "JMLSAHNEWSV722_153",
+      "dataset_name": "Hearing-Mean Values by Age in the Longitudinal Study for Astronaut Health (LSAH)  Population",
+      "dataset_description": "The graph shows mean values by age for hearing in the Longitudinal Study of Astronaut Health (LSAH) population: female and male astronauts, and female and male comparison subjects.  Hearing was measured in the right ear at 6000 Hz.<P>\r\nSource: National Aeronautics and Space Administration. Association between aging and specific physiological measurements. In: Longitudinal Study of Astronaut Health Newsletter. October 1998;7(2).",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMLSAHNEWSV722_153.xls",
+      "file_key": "7c3f557e-7cc9-52cf-bc90-42e8bbb66f43",
+      "url": "https://nlsp.nasa.gov/api/v1/files/7c3f557e-7cc9-52cf-bc90-42e8bbb66f43/download",
+      "sheets_csv": [
+        {
+          "sheet": "Vol 7 I2 e",
+          "path": "files/JMLSAHNEWSV722_153/JMLSAHNEWSV722_153.xls__Vol_7_I2_e.csv",
+          "rows": 12,
+          "cols": 9,
+          "sha256": "7fff986b704e9647862748e662906480cd6498548be56d46af8598a3df2a3608"
+        }
+      ]
+    },
+    {
+      "path": "files/JMLSAHNEWSV722_151/JMLSAHNEWSV722_151.xls",
+      "bytes": 23552,
+      "sha256": "20cfc2e265902690e6a128bbe1c8b909401ae5a30caaa122c0e7f1c79b23de4b",
+      "dataset_catalog": "JMLSAHNEWSV722_151",
+      "dataset_name": "LDL Cholesterol-Mean Values by Age in the Longitudinal Study for Astronaut Health (LSAH)  Population",
+      "dataset_description": "The graph shows mean values by age for LDL Cholesterol in the Longitudinal Study of Astronaut Health (LSAH) population: female and male astronauts, and female and male comparison subjects.<P>\r\nSource: National Aeronautics and Space Administration. Association between aging and specific physiological measurements. In: Longitudinal Study of Astronaut Health Newsletter. October 1998;7(2).",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMLSAHNEWSV722_151.xls",
+      "file_key": "590e46f7-08f9-5faa-a2ea-203df3123372",
+      "url": "https://nlsp.nasa.gov/api/v1/files/590e46f7-08f9-5faa-a2ea-203df3123372/download",
+      "sheets_csv": [
+        {
+          "sheet": "Vol 7 I2 c",
+          "path": "files/JMLSAHNEWSV722_151/JMLSAHNEWSV722_151.xls__Vol_7_I2_c.csv",
+          "rows": 38,
+          "cols": 9,
+          "sha256": "495be3767097a6c8ec597fb3c7ff992b11a101be45b190cc860fd2309d690203"
+        }
+      ]
+    }
+  ],
+  "skipped_files": [],
+  "fetched_at_utc": "2026-11-14T14:22:06Z",
+  "generated_by": "scripts/fetch_data.py"
+}

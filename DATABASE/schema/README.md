@@ -2,7 +2,7 @@
 
 Wersja schematu i kontraktu **0.2** (2026-11-14). Co się zmieniło: sekcja „Historia zmian” w [`api_contract.md`](api_contract.md). Pełny opis modelu: [`../DATABASE_PLAN.md`](../DATABASE_PLAN.md).
 
-> **Status:** projekt. Pliki SQL nie były jeszcze uruchomione na serwerze MariaDB. Zostaną zweryfikowane przy wdrożeniu. Nazwy widoków i kolumn są uzgodnione i można na nich budować backend.
+> **Status:** schemat uruchomiony na MariaDB 11.4.13 (docker, `DATABASE/docker-compose.yml`), 2026-11-14: tabele, widoki i uprawnienia działają; danych jeszcze nie importowano. Nazwy widoków i kolumn są uzgodnione i można na nich budować backend.
 
 ## Pliki w tym katalogu
 

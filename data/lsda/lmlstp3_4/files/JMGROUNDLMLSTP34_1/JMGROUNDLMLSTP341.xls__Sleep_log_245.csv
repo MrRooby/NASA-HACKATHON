@@ -1,0 +1,86 @@
+SESSION RECORD,,,,
+Session Name,,,,
+Sleep log documentation ,,,,
+LSDA Exp ID,Experiment Title,,,
+LMLSTP3.4,Assessment of Sleep Dynamics in a Simulated Space Station Environment ,,,
+Protocol,,,,
+"An electronic sleep/wake questionnaire was completed upon awakening and before bedtime using the Ames Interactive Reporting Log (AIRLOG).  AIRLOG is a tool developed exclusively for research in aviation and ground transportation environments; the instrument was developed by NASA Ames Research Center and includes separate components that relate to the events of the day preceding the sleep period, the quality of sleep period, and the ensuing wake time.",,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+Session Constraints,,,,
+No constraints were identified.,,,,
+Parameters Measured,,,,
+"Number of awakenings
+Percent sleep efficiency
+Sleep duration
+Sleep efficiency
+Sleep latency
+Sleep quality
+Wake after sleep onset
+
+",,,,
+Hardware Items,,,,Hardware ID
+Sleep/Activity Log,,,,1070
+Table of Sessions Performed,,,,
+Payload ID,Scheduling Information,,,Subject Information
+,Scheduled Day,Actual Day,Calendar Date,
+"LMLSTP
+Phase II",Pre-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase II",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",,not available,not available,
+"LMLSTP
+Phase II",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase II",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase II",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase II",Post-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",Pre-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",In-chamber,not available,not available,4 subjects
+"LMLSTP
+Phase III",Post-chamber,not available,not available,4 subjects

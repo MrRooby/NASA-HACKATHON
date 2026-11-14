@@ -1,0 +1,21 @@
+"NASA’s Life Sciences Data Archive (http://lsda.jsc.nasa.gov)
+Investigator Name: Farhi, Leon
+Mission (Payload): STS-40 and STS-58
+Experiment title (ID): Inflight Study of Cardiovascular Deconditioning (178066)
+File Name/Inventory ID: 178066__3141213517.xlsx
+",,,,,,,,,
+,,,,,,,,,
+Table3. Regression slopes,,,,,,,,,
+,,,,,,,,,
+,              Erect,,,              Flight,,,            Supine,,
+Q,0.92,±,0.07,0.68,±,0.06,1,±,0.1
+MAP,0.12,±,0.01,0.14,±,0.04,0.15,±,0.02
+RQ,0.17,±,0.02,0.17,±,0.02,0.19,±,0.02
+HR,1.9,±,0.1,2.1,±,0.3,1.9,±,0.2
+VE,2.8,±,0.3,3.4,±,0.4,3.3,±,0.4
+VT,1.01,±,0.07,0.95,±,0.07,1.01,±,0.1
+   Values are slopes ± SE of regression normalized by resting value,,,,,,,,,
+"for condition. RQ, respiratory quotient; VE, minute ventilation; VT, ",,,,,,,,,
+tidal volume.,,,,,,,,,
+,,,,,,,,,
+"Source: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology 1996 Jul; 81(1):26-32. ",,,,,,,,,

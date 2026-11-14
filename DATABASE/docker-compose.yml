@@ -1,0 +1,49 @@
+# docker-compose.yml | MariaDB 11.4 LTS dla astro_core / astro_api
+# Uruchomienie (z katalogu DATABASE, po skopiowaniu .env.example -> .env i uzupełnieniu haseł):
+#   docker compose up -d
+# Port wystawiony tylko na adresie Tailscale (DB_BIND_IP w .env), nie na 0.0.0.0.
+# Skrypty w schema/ wykonują się automatycznie tylko przy PIERWSZYM starcie (pusty wolumen).
+# Ponowna inicjalizacja od zera: docker compose down -v && docker compose up -d
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: astro-mariadb
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?ustaw w .env}
+      ASTRO_ETL_PASSWORD: ${ASTRO_ETL_PASSWORD:?ustaw w .env}
+      ASTRO_READER_PASSWORD: ${ASTRO_READER_PASSWORD:?ustaw w .env}
+      ASTRO_ADMIN_PASSWORD: ${ASTRO_ADMIN_PASSWORD:-admin}
+      HABITAT_WRITER_PASSWORD: ${HABITAT_WRITER_PASSWORD:?ustaw w .env}
+    ports:
+      - "${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306"
+    volumes:
+      - astro_mariadb_data:/var/lib/mysql
+      - ./mariadb.cnf:/etc/mysql/conf.d/astro.cnf:ro
+      - ./schema/001_core.sql:/docker-entrypoint-initdb.d/001_core.sql:ro
+      - ./schema/002_api_views.sql:/docker-entrypoint-initdb.d/002_api_views.sql:ro
+      - ./schema/003_users.sh:/docker-entrypoint-initdb.d/003_users.sh:ro
+      - ./schema/004_habitat_core.sql:/docker-entrypoint-initdb.d/004_habitat_core.sql:ro
+      - ./schema/005_habitat_seed.sql:/docker-entrypoint-initdb.d/005_habitat_seed.sql:ro
+      - ./schema/006_habitat_api_views.sql:/docker-entrypoint-initdb.d/006_habitat_api_views.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Podgląd bazy w przeglądarce: http://<DB_BIND_IP>:8080 (serwer: mariadb, np. użytkownik astro_reader)
+  adminer:
+    image: adminer:5.3.0
+    container_name: astro-adminer
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb
+    ports:
+      - "${DB_BIND_IP:-127.0.0.1}:${ADMINER_PORT:-8080}:8080"
+
+volumes:
+  astro_mariadb_data:

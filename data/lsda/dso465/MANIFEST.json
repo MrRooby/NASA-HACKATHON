@@ -1,0 +1,52 @@
+{
+  "source_id": "lsda_dso465",
+  "experiment_identifier": "DSO 465",
+  "nlsp_experiment_id": "ae2d7b7f-0e69-5ef2-a044-bf2758539aff",
+  "lsda_guid": "cl62azf4zcde001o62a1hf9ky",
+  "title": "Pre- and Postflight Echocardiography",
+  "doi": "10.83263/dbpg-dg91",
+  "missions": [
+    [
+      [
+        "STS-61C"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/ae2d7b7f-0e69-5ef2-a044-bf2758539aff/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/ae2d7b7f-0e69-5ef2-a044-bf2758539aff"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "NOTHING DOWNLOADED: the only dataset file is a graph image (TIF, 'Effect of Space Flight on LVDI' - left-ventricular volume index, echocardiography, STS-61C). Not HR/BP and not machine-readable. URL in skipped_files."
+  ],
+  "content": {},
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 5417,
+      "sha256": "3bb1a4ba989bc88f4db7e101b8d01137d62a54aeec48c68527a39f1489151717",
+      "note": "experiment record subset + dataset/file tree"
+    }
+  ],
+  "skipped_files": [
+    {
+      "dataset_catalog": "DSO 465__610810660",
+      "dataset_name": "Effect of Space Flight on LVDI",
+      "dataset_description": "This graph depicts the relationship between the crewmembers’ preflight left ventricular volume and their relative loss of volume during their flights.\r\n<p>\r\nSource: Space Shuttle Medical Detailed Supplementary Objectives: An Interim Report compiled by the Space Research Institute (SBRI) for NASA.  June 1986.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "DSO_465__610810660.TIF_STS-61C_DSO_465_2011_64_030307.TIF",
+      "file_key": "31ed581f-24f0-5343-8322-2d369b947f40",
+      "url": "https://nlsp.nasa.gov/api/v1/files/31ed581f-24f0-5343-8322-2d369b947f40/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T14:21:53Z",
+  "generated_by": "scripts/fetch_data.py"
+}

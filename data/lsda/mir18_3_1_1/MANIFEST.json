@@ -1,0 +1,222 @@
+{
+  "source_id": "lsda_mir18_3_1_1",
+  "experiment_identifier": "3.1.1",
+  "nlsp_experiment_id": "fd8098b1-8859-572c-a546-184360f7d5af",
+  "lsda_guid": "cl62atwqycanm01o65k718lri",
+  "title": "Studies of Orthostatic Intolerance with the Use of LBNP",
+  "doi": "10.83263/vezd-4r90",
+  "missions": [
+    [
+      [
+        "Mir 18"
+      ]
+    ],
+    [
+      [
+        "STS-71"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/fd8098b1-8859-572c-a546-184360f7d5af/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/fd8098b1-8859-572c-a546-184360f7d5af"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "No per-subject numeric data. Files = session timetable (xls) + 7 report PDFs (Mir 18 / STS-71 final, 180-day and 1-year science reports, 30-day operational report, MSRD, Chibis vs Skylab LBNP device comparison - the last one is a scanned image PDF without text layer).",
+    "Reports give HR/SV/TPR responses to LBNP mostly as averaged figures (e.g. 1-year report Fig. 1 'Averaged Heart Rate'), with crew referred to by role (18-CDR, 18-FE, 18-CR, 19-CDR ...) - no personal data needed; PI/co-investigator names appear in report headers only.",
+    "3 graph TIFs (HR response to LBNP, LBNP tolerance, hemodynamics at max decompression) not downloaded.",
+    "Not importable to observation; the timetable could seed session/time-point metadata (L-120 ... R+42)."
+  ],
+  "content": {
+    "files/3.1.1__2500236209/311__2500236209.xls_STS-71_3.1.1_2010_250_020939.xls": {
+      "csv": "files/3.1.1__2500236209/311__2500236209.xls_STS-71_3.1.1_2010_250_020939.xls__LBNP_3.1.1.csv",
+      "what": "LSDA 'Session record': protocol text, hardware list and table of sessions performed (Payload, Scheduled Day, Actual Day, Calendar Date, number of subjects)",
+      "granularity": "session schedule, no measurements",
+      "subjects": "up to 5 (Mir 18 + STS-71 crews; 1-2 subjects per in-flight session)",
+      "time_points": [
+        "Mir 18: L-147..L-145 (Oct 1994), L-56..52 (Jan 1995), L-11..10 (Mar 1995), MD15, MD21, MD23, MD47, MD48, MD53, MD85, MD98, MD102",
+        "SL-M (STS-71): FD6, FD9, FD10, R+1, R+2, R+4, R+12, R+42"
+      ],
+      "pitfalls": [
+        "Calendar dates are mixed: ISO datetime strings for single days, free text ranges ('18-20 Oct 1994') for preflight.",
+        "Several empty 'Mir 18' rows.",
+        "'Not performed' entries."
+      ],
+      "importable_to_observation": false
+    }
+  },
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 19629,
+      "sha256": "4f9073bf4fc49b6240f368381dbccdbf3f3bbf5c54ba59135228c5699ae54bc2",
+      "note": "experiment record subset + dataset/file tree"
+    },
+    {
+      "path": "files/3.1.1__2630758615/3.pdf_Mir_18_3.1.1_2013_303_041025.pdf",
+      "bytes": 463840,
+      "sha256": "0e229683f840fe49296ed906fc573867529612f7cc6953fe2794da4618ffa230",
+      "dataset_catalog": "3.1.1__2630758615",
+      "dataset_name": "Final Report for Experiment 3.1.1",
+      "dataset_description": "This file contains the 30 day, 180 day, one year, and final report for the 3.1.1 study.  The Mission Science Requirement Document (MSRD) is also attached.  Data collection time tables are also included.  Data represented in the final report:<BR>\r\nFigure 1. Averaged Heart Rate data from preflight\r\nand inflight LBNP \"ramp\" tests on Shuttle (<15 days),\r\nSkylab (28-84 days) and Mir (110 days)\r\ncrewmembers. It is apparent that all three groups\r\nare similar, both preflight and in flight at their\r\nrespective test times.<P>\r\nFigure 2. Preflight, inflight, and postflight\r\ncomparisons of Systolic, Diastolic, and Mean\r\nArterial Blood Pressure, Heart Rate, Stroke Volume,\r\nand Total Peripheral Resistance at maximum\r\ndecompression (-50 mmHg). There is a significant\r\nincrease in Heart Rate from preflight to in flight\r\n(p=0.04) as was expected for the three Mir\r\ncrewmembers (see *). There were no significant\r\ndifferences in any other parameters.<P>\r\nFigure 3. Measure of tolerance - Systolic, Diastolic,\r\nand Mean Arterial Blood Pressure, Heart Rate,\r\nStroke Volume, and Total Peripheral Resistance are\r\npresented as the % change from 0-50 mmHg (control\r\nto maximum decompression). This figure illustrates\r\nthe delta from baseline, thus factoring in the\r\ndifferent endpoints for each crewmember and\r\npresenting the result as a group average. The\r\nchange in Stroke Volume was significantly greater in\r\nflight and postflight compared to preflight (p=0.02)\r\n(see *). No other parameters exhibited a significant\r\nchange, in part due to the large individual\r\nvariability and small sample size. In fact, the\r\nstatistical power for all of these comparisons should\r\nbe considered when drawing any conclusions from\r\nthese data.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "3.pdf_Mir_18_3.1.1_2013_303_041025.pdf",
+      "file_key": "d75d961a-b7f1-521f-8a26-ef3c57207b0f",
+      "url": "https://nlsp.nasa.gov/api/v1/files/d75d961a-b7f1-521f-8a26-ef3c57207b0f/download"
+    },
+    {
+      "path": "files/3.1.1__2630758615/3.pdf_STS-71_3.1.1_2013_304_031045.pdf",
+      "bytes": 175880,
+      "sha256": "e832452985c836b61b47d27c6d2fa0a1714619ead9b46be276c0a57d15d31b84",
+      "dataset_catalog": "3.1.1__2630758615",
+      "dataset_name": "Final Report for Experiment 3.1.1",
+      "dataset_description": "This file contains the 30 day, 180 day, one year, and final report for the 3.1.1 study.  The Mission Science Requirement Document (MSRD) is also attached.  Data collection time tables are also included.  Data represented in the final report:<BR>\r\nFigure 1. Averaged Heart Rate data from preflight\r\nand inflight LBNP \"ramp\" tests on Shuttle (<15 days),\r\nSkylab (28-84 days) and Mir (110 days)\r\ncrewmembers. It is apparent that all three groups\r\nare similar, both preflight and in flight at their\r\nrespective test times.<P>\r\nFigure 2. Preflight, inflight, and postflight\r\ncomparisons of Systolic, Diastolic, and Mean\r\nArterial Blood Pressure, Heart Rate, Stroke Volume,\r\nand Total Peripheral Resistance at maximum\r\ndecompression (-50 mmHg). There is a significant\r\nincrease in Heart Rate from preflight to in flight\r\n(p=0.04) as was expected for the three Mir\r\ncrewmembers (see *). There were no significant\r\ndifferences in any other parameters.<P>\r\nFigure 3. Measure of tolerance - Systolic, Diastolic,\r\nand Mean Arterial Blood Pressure, Heart Rate,\r\nStroke Volume, and Total Peripheral Resistance are\r\npresented as the % change from 0-50 mmHg (control\r\nto maximum decompression). This figure illustrates\r\nthe delta from baseline, thus factoring in the\r\ndifferent endpoints for each crewmember and\r\npresenting the result as a group average. The\r\nchange in Stroke Volume was significantly greater in\r\nflight and postflight compared to preflight (p=0.02)\r\n(see *). No other parameters exhibited a significant\r\nchange, in part due to the large individual\r\nvariability and small sample size. In fact, the\r\nstatistical power for all of these comparisons should\r\nbe considered when drawing any conclusions from\r\nthese data.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "3.pdf_STS-71_3.1.1_2013_304_031045.pdf",
+      "file_key": "bdd13a75-b7d7-5295-abd9-ce0db383223b",
+      "url": "https://nlsp.nasa.gov/api/v1/files/bdd13a75-b7d7-5295-abd9-ce0db383223b/download"
+    },
+    {
+      "path": "files/3.1.1__2630758615/Mir_18_180_day.pdf_Mir_18_3.1.1_2013_303_041004.pdf",
+      "bytes": 73030,
+      "sha256": "ba29f58144b2fb89937708acb7d4ee9f20622409fb0bcc1e48180467fac6c4c4",
+      "dataset_catalog": "3.1.1__2630758615",
+      "dataset_name": "Final Report for Experiment 3.1.1",
+      "dataset_description": "This file contains the 30 day, 180 day, one year, and final report for the 3.1.1 study.  The Mission Science Requirement Document (MSRD) is also attached.  Data collection time tables are also included.  Data represented in the final report:<BR>\r\nFigure 1. Averaged Heart Rate data from preflight\r\nand inflight LBNP \"ramp\" tests on Shuttle (<15 days),\r\nSkylab (28-84 days) and Mir (110 days)\r\ncrewmembers. It is apparent that all three groups\r\nare similar, both preflight and in flight at their\r\nrespective test times.<P>\r\nFigure 2. Preflight, inflight, and postflight\r\ncomparisons of Systolic, Diastolic, and Mean\r\nArterial Blood Pressure, Heart Rate, Stroke Volume,\r\nand Total Peripheral Resistance at maximum\r\ndecompression (-50 mmHg). There is a significant\r\nincrease in Heart Rate from preflight to in flight\r\n(p=0.04) as was expected for the three Mir\r\ncrewmembers (see *). There were no significant\r\ndifferences in any other parameters.<P>\r\nFigure 3. Measure of tolerance - Systolic, Diastolic,\r\nand Mean Arterial Blood Pressure, Heart Rate,\r\nStroke Volume, and Total Peripheral Resistance are\r\npresented as the % change from 0-50 mmHg (control\r\nto maximum decompression). This figure illustrates\r\nthe delta from baseline, thus factoring in the\r\ndifferent endpoints for each crewmember and\r\npresenting the result as a group average. The\r\nchange in Stroke Volume was significantly greater in\r\nflight and postflight compared to preflight (p=0.02)\r\n(see *). No other parameters exhibited a significant\r\nchange, in part due to the large individual\r\nvariability and small sample size. In fact, the\r\nstatistical power for all of these comparisons should\r\nbe considered when drawing any conclusions from\r\nthese data.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "Mir_18_180_day.pdf_Mir_18_3.1.1_2013_303_041004.pdf",
+      "file_key": "689cd195-8a86-5b2c-8e48-67dfc876451d",
+      "url": "https://nlsp.nasa.gov/api/v1/files/689cd195-8a86-5b2c-8e48-67dfc876451d/download"
+    },
+    {
+      "path": "files/3.1.1__2630758615/3.pdf_Mir_18_3.1.1_2013_304_031013.pdf",
+      "bytes": 1361816,
+      "sha256": "174a2a6279f69a631aad9c416e650ae38ee5250528ad6c34c9d709f5fd30905f",
+      "dataset_catalog": "3.1.1__2630758615",
+      "dataset_name": "Final Report for Experiment 3.1.1",
+      "dataset_description": "This file contains the 30 day, 180 day, one year, and final report for the 3.1.1 study.  The Mission Science Requirement Document (MSRD) is also attached.  Data collection time tables are also included.  Data represented in the final report:<BR>\r\nFigure 1. Averaged Heart Rate data from preflight\r\nand inflight LBNP \"ramp\" tests on Shuttle (<15 days),\r\nSkylab (28-84 days) and Mir (110 days)\r\ncrewmembers. It is apparent that all three groups\r\nare similar, both preflight and in flight at their\r\nrespective test times.<P>\r\nFigure 2. Preflight, inflight, and postflight\r\ncomparisons of Systolic, Diastolic, and Mean\r\nArterial Blood Pressure, Heart Rate, Stroke Volume,\r\nand Total Peripheral Resistance at maximum\r\ndecompression (-50 mmHg). There is a significant\r\nincrease in Heart Rate from preflight to in flight\r\n(p=0.04) as was expected for the three Mir\r\ncrewmembers (see *). There were no significant\r\ndifferences in any other parameters.<P>\r\nFigure 3. Measure of tolerance - Systolic, Diastolic,\r\nand Mean Arterial Blood Pressure, Heart Rate,\r\nStroke Volume, and Total Peripheral Resistance are\r\npresented as the % change from 0-50 mmHg (control\r\nto maximum decompression). This figure illustrates\r\nthe delta from baseline, thus factoring in the\r\ndifferent endpoints for each crewmember and\r\npresenting the result as a group average. The\r\nchange in Stroke Volume was significantly greater in\r\nflight and postflight compared to preflight (p=0.02)\r\n(see *). No other parameters exhibited a significant\r\nchange, in part due to the large individual\r\nvariability and small sample size. In fact, the\r\nstatistical power for all of these comparisons should\r\nbe considered when drawing any conclusions from\r\nthese data.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "3.pdf_Mir_18_3.1.1_2013_304_031013.pdf",
+      "file_key": "a4699187-fb39-51ac-bbb4-5ef7c720bf08",
+      "url": "https://nlsp.nasa.gov/api/v1/files/a4699187-fb39-51ac-bbb4-5ef7c720bf08/download"
+    },
+    {
+      "path": "files/3.1.1__2630758615/One_year_report.pdf_Mir_18_3.1.1_2013_303_041042.pdf",
+      "bytes": 59302,
+      "sha256": "db47cf339d40cec1e8b465bc791048ba36c58802bc1a61bae0821591ff39b5c6",
+      "dataset_catalog": "3.1.1__2630758615",
+      "dataset_name": "Final Report for Experiment 3.1.1",
+      "dataset_description": "This file contains the 30 day, 180 day, one year, and final report for the 3.1.1 study.  The Mission Science Requirement Document (MSRD) is also attached.  Data collection time tables are also included.  Data represented in the final report:<BR>\r\nFigure 1. Averaged Heart Rate data from preflight\r\nand inflight LBNP \"ramp\" tests on Shuttle (<15 days),\r\nSkylab (28-84 days) and Mir (110 days)\r\ncrewmembers. It is apparent that all three groups\r\nare similar, both preflight and in flight at their\r\nrespective test times.<P>\r\nFigure 2. Preflight, inflight, and postflight\r\ncomparisons of Systolic, Diastolic, and Mean\r\nArterial Blood Pressure, Heart Rate, Stroke Volume,\r\nand Total Peripheral Resistance at maximum\r\ndecompression (-50 mmHg). There is a significant\r\nincrease in Heart Rate from preflight to in flight\r\n(p=0.04) as was expected for the three Mir\r\ncrewmembers (see *). There were no significant\r\ndifferences in any other parameters.<P>\r\nFigure 3. Measure of tolerance - Systolic, Diastolic,\r\nand Mean Arterial Blood Pressure, Heart Rate,\r\nStroke Volume, and Total Peripheral Resistance are\r\npresented as the % change from 0-50 mmHg (control\r\nto maximum decompression). This figure illustrates\r\nthe delta from baseline, thus factoring in the\r\ndifferent endpoints for each crewmember and\r\npresenting the result as a group average. The\r\nchange in Stroke Volume was significantly greater in\r\nflight and postflight compared to preflight (p=0.02)\r\n(see *). No other parameters exhibited a significant\r\nchange, in part due to the large individual\r\nvariability and small sample size. In fact, the\r\nstatistical power for all of these comparisons should\r\nbe considered when drawing any conclusions from\r\nthese data.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "One_year_report.pdf_Mir_18_3.1.1_2013_303_041042.pdf",
+      "file_key": "c96d704e-9453-5a63-a3d2-3ed1c525edb2",
+      "url": "https://nlsp.nasa.gov/api/v1/files/c96d704e-9453-5a63-a3d2-3ed1c525edb2/download"
+    },
+    {
+      "path": "files/3.1.1__2630758615/311__2630758615.pdf_Mir_18_3.1.1_2013_263_080919.pdf",
+      "bytes": 857243,
+      "sha256": "7971f8785bd0ab07c1ee781ca0cd533f2a4063184dd8c01d82c9e1dea9361c02",
+      "dataset_catalog": "3.1.1__2630758615",
+      "dataset_name": "Final Report for Experiment 3.1.1",
+      "dataset_description": "This file contains the 30 day, 180 day, one year, and final report for the 3.1.1 study.  The Mission Science Requirement Document (MSRD) is also attached.  Data collection time tables are also included.  Data represented in the final report:<BR>\r\nFigure 1. Averaged Heart Rate data from preflight\r\nand inflight LBNP \"ramp\" tests on Shuttle (<15 days),\r\nSkylab (28-84 days) and Mir (110 days)\r\ncrewmembers. It is apparent that all three groups\r\nare similar, both preflight and in flight at their\r\nrespective test times.<P>\r\nFigure 2. Preflight, inflight, and postflight\r\ncomparisons of Systolic, Diastolic, and Mean\r\nArterial Blood Pressure, Heart Rate, Stroke Volume,\r\nand Total Peripheral Resistance at maximum\r\ndecompression (-50 mmHg). There is a significant\r\nincrease in Heart Rate from preflight to in flight\r\n(p=0.04) as was expected for the three Mir\r\ncrewmembers (see *). There were no significant\r\ndifferences in any other parameters.<P>\r\nFigure 3. Measure of tolerance - Systolic, Diastolic,\r\nand Mean Arterial Blood Pressure, Heart Rate,\r\nStroke Volume, and Total Peripheral Resistance are\r\npresented as the % change from 0-50 mmHg (control\r\nto maximum decompression). This figure illustrates\r\nthe delta from baseline, thus factoring in the\r\ndifferent endpoints for each crewmember and\r\npresenting the result as a group average. The\r\nchange in Stroke Volume was significantly greater in\r\nflight and postflight compared to preflight (p=0.02)\r\n(see *). No other parameters exhibited a significant\r\nchange, in part due to the large individual\r\nvariability and small sample size. In fact, the\r\nstatistical power for all of these comparisons should\r\nbe considered when drawing any conclusions from\r\nthese data.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "311__2630758615.pdf_Mir_18_3.1.1_2013_263_080919.pdf",
+      "file_key": "41e1640d-cad6-5856-b109-0b933e322257",
+      "url": "https://nlsp.nasa.gov/api/v1/files/41e1640d-cad6-5856-b109-0b933e322257/download"
+    },
+    {
+      "path": "files/3.1.1__2500236209/311__2500236209.xls_STS-71_3.1.1_2010_250_020939.xls",
+      "bytes": 28672,
+      "sha256": "2b3b85dd7117bb304a1a676aaecfe9ebe8a72a6a1f43df15037d93a120ba9852",
+      "dataset_catalog": "3.1.1__2500236209",
+      "dataset_name": "Data Collection Timetables for Experiment 3.1.1",
+      "dataset_description": "This spreadsheet represents the data collection timetables for data collection sessions for this experiment: crew, air, surface and water microbiology. Information included in this spreadsheet may include information on the test protocol, data collection constraints, parameters measured, hardware used, scheduled versus actual days of data collection, and subject information.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "311__2500236209.xls_STS-71_3.1.1_2010_250_020939.xls",
+      "file_key": "ee2971ac-8718-58c1-a709-e87f51bbec87",
+      "url": "https://nlsp.nasa.gov/api/v1/files/ee2971ac-8718-58c1-a709-e87f51bbec87/download",
+      "sheets_csv": [
+        {
+          "sheet": "LBNP 3.1.1",
+          "path": "files/3.1.1__2500236209/311__2500236209.xls_STS-71_3.1.1_2010_250_020939.xls__LBNP_3.1.1.csv",
+          "rows": 63,
+          "cols": 5,
+          "sha256": "e4e85991761b8635a0ed5e04576f5ddd1e9470f7096d9182ba90c5e6061172f7"
+        }
+      ]
+    },
+    {
+      "path": "files/3.1.1__18103145/311__18103145.pdf_Mir_18_3.1.1_2012_181_030649.pdf",
+      "bytes": 120970,
+      "sha256": "1ed66617549845ad99db6e326cb9c814376e81f2dd9527387d13ff610706645f",
+      "dataset_catalog": "3.1.1__18103145",
+      "dataset_name": "Comparison of Chibis and Skylab LBNP Devices",
+      "dataset_description": "This dataset comprises several graphs that show comparisons between the Russian Chibis LBNP device and the Skylab LBNP device.\r\n<P>\r\n<LI>Chibis LBNP vs. Skylab LBNP heart rate n=8 subjects\r\n<LI>Chibis LBNP vs. Skylab LBNP systolic and diastolic blood pressure n=8 subjects\r\n<LI>Chibis LBNP vs. Skylab LBNP mean arterial pressure (MAP) and pulse pressure n=8 subjects\r\n<LI>Chibis LBNP vs. Skylab LBNP stroke volume n=6 subjects\r\n<LI>Chibis LBNP vs. Skylab LBNP cardiac output n=6 subjects\r\n<LI>Chibis LBNP vs. Skylab LBNP peripheral resistance n=6 subjects\r\n<LI>Chibis LBNP vs. Skylab LBNP room temperature and LBNP temperature monitoring n=8 subjects\r\n<P>\r\nSource: unpublished data",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "311__18103145.pdf_Mir_18_3.1.1_2012_181_030649.pdf",
+      "file_key": "4f2abec5-7909-52b0-9a55-c875f20b52de",
+      "url": "https://nlsp.nasa.gov/api/v1/files/4f2abec5-7909-52b0-9a55-c875f20b52de/download"
+    }
+  ],
+  "skipped_files": [
+    {
+      "dataset_catalog": "J0000870",
+      "dataset_name": "Heart Rate Response to LBNP",
+      "dataset_description": "Averaged HR data from preflight and inflight LBNP ?ramp? tests on Shuttle (<15 days), Skylab (28-84 days) and Mir (110 days)  crewmembers.  It is apparent that all three groups are similar, both preflight and inflight at their respective test times.  Source: Charles JB. Studies of Orthostatic Intolerance with the Use of LBNP. Mir 18 Final Science Report. Houston TX: National Aeronautics and Space Administration, Lyndon B. Johnson Space Center. <END>",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMMIR311_38.tif",
+      "file_key": "a662fc77-b23a-5f09-96e6-c08da33416ef",
+      "url": "https://nlsp.nasa.gov/api/v1/files/a662fc77-b23a-5f09-96e6-c08da33416ef/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "J0000872",
+      "dataset_name": "Measure of Tolerance - LBNP Mir 18",
+      "dataset_description": "Measure of tolerance - systolic, diastolic, and mean arterial blood pressure, heart rate, stroke volume, and total peripheral resistance are presented as the % change from 0-50 mmHg (control to maximum decompression).  This figure illustrates the delta from baseline, thus factoring in the different endpoints for each crewmember and presenting the result as a group average.  The change in stroke volume was significantly greater inflight and postflight compared to preflight (p=0.02).  No other parameters exhibited a significant change, in part due to the large individual variability and small sample size.  In fact, the low statistical power for all of these comparisons should be considered when drawing any conclusions from these data. Source: Charles JB. Studies of Orthostatic Intolerance with the Use of LBNP. Mir 18 Final Science Report. Houston TX: National Aeronautics and Space Administration, Lyndon B. Johnson Space Center. <END>",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMMIR311_110.tif",
+      "file_key": "f6d6d68d-e22d-545c-b90e-aee795b80bdf",
+      "url": "https://nlsp.nasa.gov/api/v1/files/f6d6d68d-e22d-545c-b90e-aee795b80bdf/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "J0000871",
+      "dataset_name": "Hemodynamic Comparisons at Max LBNP Decompression",
+      "dataset_description": "Preflight, inflight, and postflight comparisons of systolic, diastolic, and mean arterial blood pressure, heart rate, stroke volume, and total peripheral resistance at maximum decompression (-50 mmHg).  There is a significant increase in heart rate from preflight to inflight (p=0.04) as was expected for the three Mir crewmembers.  There were no significant differences in any other parameters. Source: Charles JB. Studies of Orthostatic Intolerance with the Use of LBNP. Mir 18 Final Science Report. Houston TX: National Aeronautics and Space Administration, Lyndon B. Johnson Space Center. <END>",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMMIR311_109.tif",
+      "file_key": "5939165f-9f68-549b-8e7a-e179fcbea856",
+      "url": "https://nlsp.nasa.gov/api/v1/files/5939165f-9f68-549b-8e7a-e179fcbea856/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T14:21:51Z",
+  "generated_by": "scripts/fetch_data.py"
+}

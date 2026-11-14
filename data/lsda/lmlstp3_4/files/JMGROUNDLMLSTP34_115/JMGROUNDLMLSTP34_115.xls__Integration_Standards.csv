@@ -1,0 +1,26 @@
+NASA Life Sciences Data Archive (http://lsda.jsc.nasa.gov),,,,
+Investigator Name:  Lakshmi Putcha,,,,
+Mission (Payload):  GROUND (LMLSTP),,,,
+Experiment Name (ID):  Assessment of Sleep Dynamics in a Simulated Space Station Environment (LMLSTP3.4),,,,
+File Name/Inventory ID:  JMGROUNDLMLSTP34 _115.xls,,,,
+,,,,
+,,,,
+Sleep Variables in Chamber Crewmembers,,,,
+,,,,
+,Objective Measurement,,Subjective Measurement,
+,Baseline,Chamber,Baseline,Chamber
+Duration (h),6.62±0.31,6.00±0.24,6.78±0.27,6.21±0.21
+% Efficiency,88.50±1.44,88.10±1.73,96.40±1.16,95.66±1.03
+Latency (h),0.27±0.06,0.20±0.05,0.20±0.05,0.24±0.05
+WASO **,0.90±0.12,0.86±0.15,N/A,N/A
+Quality,N/A,N/A,1.31±0.11,1.08±0.21
+Number of Awakenings,4.65±1.43,4.22±0.59,7.11±0.31,7.33±0.30
+,,,,
+*  Values are Mean SEM of 8 subjects,,,,
+**  Wake after sleep onset,,,,
+,,,,
+,,,,
+Reference:,,,,
+"Putcha L, Nimmagudda R, and Rivera C. Assessment Of Sleep Dynamics In A Simulated Space Station Environment",,,,
+"In : Lane HW, Sauer RL, and Feeback DL, eds. Isolation: NASA Experiments in Closed-Environment Living.  ",,,,
+"American Astronautical Society Science and Technology Series; Vol 104. San Diego, CA. Univelt, Incorporated; 2002: 141-154.",,,,

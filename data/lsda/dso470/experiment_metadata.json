@@ -1,0 +1,77 @@
+{
+ "experiment_id": "DSO 470",
+ "experiment_identifier": "DSO 470",
+ "title": "The Relationship of Space Adaptation Syndrome to Middle Cerebral Artery Blood Velocity Measured in Flight by Doppler",
+ "doi": "10.83263/ycac-pj81",
+ "archive_status": "Data preservation is complete. All datasets are publicly available.",
+ "missions": [
+  [
+   [
+    "STS-29"
+   ]
+  ],
+  [
+   [
+    "STS-34"
+   ]
+  ],
+  [
+   [
+    "STS-42"
+   ]
+  ]
+ ],
+ "parameter_name": [
+  "Blood flow acceleration",
+  "Diastolic blood pressure",
+  "Heart rate",
+  "Mean velocity",
+  "Minimum velocity",
+  "Percent systole",
+  "Pourcelot ratio",
+  "Pulsatility index",
+  "Systolic displacement",
+  "Velocity index",
+  "Velocity, maximum",
+  "Time in systole, percentage"
+ ],
+ "description": "OBJECTIVES:<br>\r\nSpace Adaptation Syndrome (SAS) has an incidence of approximately 73 percent in first-time flyers, typically occurs during the first three days of space flight, and can include many symptoms ranging from malaise to repeated bouts of vomiting.  The pathophysiology of SAS has not been determined, but one etiology may be related to the head ward fluid shifts that occur during this adaptation period.  These fluid shifts may cause changes in cerebral blood flow as well as intracranial pressure (ICP).  Symptoms such as nausea, vomiting, lethargy, and malaise may be manifested by those with increased ICP as well as by astronauts with SAS.  To study these phenomena as they relate to SAS during space flight, a noninvasive method of measurement was sought.\r\n<p>\r\nTranscranial Doppler (TCD) uses Doppler technology to noninvasively measure intracranial blood flow velocity through a window in the temporal bone of the skull, where the bone is thin enough to permit insonation.  From this window, the middle cerebral artery (MCA) is typically the only artery found at depth between 25 and 50 millimeters, making it relatively easy to locate.  Since it carries approximately 80 percent of the blood flow to the hemisphere and does not exhibit acute changes in diameter, the MCA is often chosen as the optimal vessel to study for indications of cerebral blood flow.\r\n<p>\r\nAPPROACH:<br>\r\nCrewmembers on three Space Shuttle missions volunteered to be subjects for TCD MCA measurements preflight and in-flight.  Each subject was studied a minimum of four times preflight and two times inflight.  Preflight data were collected in both the supine and sitting postures.  Three of the subjects were trained as operators and assigned subjects on whom they collected all data. At the beginning of each data collection session, the operator measured the subject's pulse rate (at the radial artery) and blood pressure (by ascultative sphygmomanometry at the brachial artery). The operator then obtained the MCA flow velocity in a reproducible sample volume using a plastic template. These templates were developed to locate the optimal temporal window and sample depth previously determined for each subject by an experienced operator.\r\n<p>\r\nSpace motion sickness symptoms were reported for each day in flight on a symptom response sheet. This sheet included the following symptoms: headache, malaise, sluggishness, impaired concentration, disorientation, decreased appetite, stomach awareness, nausea, vomiting, and a space to indicate other symptoms. Each subject's symptoms were evaluated by the investigators and each subject was assigned a general score from 0 (no symptoms) to 3 (severely ill) for each flight day.\r\n<p>\r\nDoppler data were analyzed postflight using a system developed by Micco and Dietrich at the University of Colorado. The tape recording of each session was divided into 30-second segments. After the 30-second segments of data were analyzed, the segment with the greatest number of cardiac cycles having the highest velocities was analyzed in greater detail. Systolic and diastolic blood pressure data were also compared, and systolic resistance (systolic blood pressure/maximum velocity), mean resistance (mean blood pressure/mean velocity), and diastolic resistance (diastolic blood pressure/minimum velocity) were calculated for comparison.\r\n<p>\r\nPreflight and in-flight data were also divided into post-sleep (morning) and pre-sleep (afternoon and evening) groups to study diurnal variations. The terms post-sleep and pre-sleep are used because morning and night do not apply in the same context while in Earth orbit. Thus, one preflight post-sleep data set and one preflight pre-sleep data set were established for each subject. In-flight data were also diurnally grouped by flight day (FD). The only in-flight pre-sleep data collection occurred on FD 1; all other in-flight data collection occurred in the post-sleep period.\r\n<p>\r\nRESULTS:<br>\r\n<i>Preflight Trends</i>\r\n<p>\r\nWhen general comparisons were made between all preflight data, there were no significant differences between TCD or any related parameter. When viewed with respect to diurnal (post-sleep vs. pre-sleep) variation, there were significant increases in mean velocity, maximum velocity, pulsatility index, and blood flow acceleration. Diastolic blood pressure decreased significantly from 68.9 to 65.25 mmHg, as did systolic resistance from 1.87 to 1.51 mmHg/cm/s, mean resistance from 2.21 to 1.79 mmHg/cm/s, and diastolic resistance from 2.58 to 3.22 mmHg/cm/s.\r\n<p>\r\n<i>Preflight to Inflight Changes</i>\r\n<p>\r\nPreflight and in-flight general data were grouped according to SAS scores: subjects with a score of 0 or 1 (well) and subjects with a score of 2 or 3 (sick). Using the SAS groups from FD 1 (five sick, three well), there were no significant SAS main effects and no significant day main effects between the preflight general average and FD 1. However, there was a significant SAS-by-day interaction between the preflight average and FD 1 for mean velocity and mean resistance.\r\n<p>\r\nFor the preflight averages only, the two SAS groups did not have different mean velocities or different mean resistances, but on FD 1 only the SAS groups did have significantly different mean velocities and mean resistances approaching significance. These changes in significance of the SAS main effect across days explain the SAS-by-day interaction.\r\n<p>\r\n<i>In-flight Trends</i>\r\n<p>\r\nThere was a significant general in-flight decrease from 5.56 to 4.16 mls/s in blood flow acceleration between FD 2 and FD 5. No in-flight diurnal effects could be determined from FD 3 or FD 5 data. SAS in-flight effects were not calculated due to the fact that different subjects were sick on different days, so there was no uniform way to group subjects for multivariate analysis.\r\n<p>",
+ "publications": [
+  "Frey MA, Mader TH, Bagian JP, Charles JB, Meehan RT. Cerebral blood velocity and other cardiovascular responses to 2 days of head-down tilt. J Appl Physiol. 1993 Jan;74(1):319-25. [<a href=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=8444709&dopt=Abstract\" target=\"blank\"><img src=\"/images/pubmed.gif\" alt=\"pubmed.gov\" align=\"top\" border=0></a>]",
+  "Bagian JP, Hackett P. Cerebral blood flow: comparison of ground-based and spaceflight data and correlation with space adaptation syndrome. J Clin Pharmacol. 1991 Oct;31(10):1036-40. [<a href=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=1761714&dopt=Abstract\" target=\"blank\"><img src=\"/images/pubmed.gif\" alt=\"pubmed.gov\" align=\"top\" border=0></a>]"
+ ],
+ "datasets": [
+  {
+   "key": "IDP-LSDA_DATASET-0000000000001529",
+   "label": "DSO 470__2720518404",
+   "type": "folder",
+   "dataset_info": {
+    "dataset_name": "Relationship between SMS and middle cerebral artery blood flow velocities during spaceflight",
+    "dataset_catalog": "DSO 470__2720518404",
+    "dataset_description": [
+     "Relationship between SMS and middle cerebral artery blood flow velocities during spaceflight as shown in 8 subjects.  Source: Bagian JP, Hackett P. Cerebral blood flow: comparison of ground-based and spaceflight data and correlation with space adaptation syndrome. J Clin Pharmacol. 1991 Oct;31(10):1036-40."
+    ],
+    "processing_level": [
+     "Summarized"
+    ],
+    "experiment_id": [
+     "DSO 470"
+    ]
+   },
+   "meta": "1 file",
+   "date": "2022-07-28",
+   "children": [
+    {
+     "key": "9ee4346d-ed38-5f5a-bec8-1df45295875f",
+     "label": "DSO_470__2720518404.pdf_STS-29_DSO_470_2012_272_050948.pdf",
+     "type": "file",
+     "ext": "pdf",
+     "file_size": 0,
+     "meta": "",
+     "date": "2022-07-28",
+     "dataset_file_info": {}
+    }
+   ]
+  }
+ ]
+}

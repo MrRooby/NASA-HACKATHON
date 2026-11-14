@@ -1,0 +1,51 @@
+NASA Life Science Data Archive (http://lsda.jsc.nasa.gov),,,,
+Investigator Name: Lakshmi Putcha ,,,,
+Mission (Payload): NEEMO 5,,,,
+Experiment title (ID): NEEMO_ACTIWATCH,,,,
+File Name/Inventory ID: NEEMO_ACTIWATCH__1400547290.xls,,,,
+,,,,
+SESSION RECORD,,,,
+Session Name,,,,
+Sleep and Activity Monitoring,,,,
+LSDA Exp ID,Experiment Title,,,
+NEEMO-ACTIWATCH,Actigraphy:  A Tool for Monitoring Sleep and Activity in an Isolated Environment (Aquarius),,,
+Protocol,,,,
+"Unstow and don actiwatch on non-dominant arm.
+
+Record activity information (sleep/wake time, sleep activity, doff/don time, in-suit Doppler use) each day on Actiwatch Activity Log.
+
+At the end of the mission, remove actiwatch and stow.",,,,
+Session Constraints,,,,
+No constraints were identified,,,,
+Parameters Measured,,,,
+"Illumination level
+Movement
+Sleep duration
+Sleep latency
+Sleep efficiency",,,,
+Hardware Items,,,,Hardware ID
+Actiwatch,,,,1136
+Sleep/Activity Log,,,,1070
+Table of Sessions Performed,,,,
+Payload ID,Scheduling Information,,,Subject Information
+,Scheduled Day,Actual Day,Calendar Date,
+NEEMO 5,L-2 weeks,L-2 weeks,Not available,4 subjects
+NEEMO 5,L-2 weeks,L-2 weeks,Not available,4 subjects
+NEEMO 5,L-2 weeks,L-2 weeks,Not available,4 subjects
+NEEMO 5,L-2 weeks,L-2 weeks,Not available,4 subjects
+NEEMO 5,L-2 weeks,L-2 weeks,Not available,4 subjects
+NEEMO 5,L-2 weeks,L-2 weeks,Not available,4 subjects
+NEEMO 5,MD1,MD1,2003-06-16T00:00:00,4 subjects
+NEEMO 5,MD2,MD2,2003-06-17T00:00:00,4 subjects
+NEEMO 5,MD3,MD3,2003-06-18T00:00:00,3 subjects
+NEEMO 5,MD4,MD4,2003-06-19T00:00:00,4 subjects
+NEEMO 5,MD5,MD5,2003-06-20T00:00:00,4 subjects
+NEEMO 5,MD6,MD6,2003-06-21T00:00:00,4 subjects
+NEEMO 5,MD7,MD7,2003-06-22T00:00:00,4 subjects
+NEEMO 5,MD8,MD8,2003-06-23T00:00:00,4 subjects
+NEEMO 5,MD9,MD9,2003-06-24T00:00:00,4 subjects
+NEEMO 5,MD10,MD10,2003-06-25T00:00:00,4 subjects
+NEEMO 5,MD11,MD11,2003-06-26T00:00:00,3 subjects
+NEEMO 5,MD12,MD12,2003-06-27T00:00:00,3 subjects
+NEEMO 5,MD13,MD13,2003-06-28T00:00:00,3 subjects
+NEEMO 5,MD14,MD14,2003-06-29T00:00:00,3 subjects

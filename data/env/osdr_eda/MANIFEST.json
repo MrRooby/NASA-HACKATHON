@@ -1,0 +1,271 @@
+{
+  "source_id": "osdr_eda",
+  "title": "OSDR Environmental Data App - ISS / ground telemetry (T, RH, CO2) and radiation per Rodent Research / APEX / VEG mission",
+  "urls": [
+    "https://visualization.osdr.nasa.gov/eda/",
+    "https://visualization.osdr.nasa.gov/eda/dashboard_<MISSION>",
+    "https://visualization.osdr.nasa.gov/eda/static/js/telemetry_plots.js",
+    "https://visualization.osdr.nasa.gov/eda/static/js/radiation_plots.js"
+  ],
+  "license": "NASA OSDR open data",
+  "unit_source": "axis labels in EDA static/js/telemetry_plots.js ('Degrees [C]', 'RH [%]', 'CO2 [ppm]') and radiation_plots.js ('Dose [mGy/day]'); table headers Temp_degC_*, RH_percent_*, CO2_ppm_*",
+  "notes": [
+    "*_iss columns = ISS cabin / flight unit sensors, *_ground = ground-control habitat; ground dates were shifted to match flight dates (per EDA mission note).",
+    "CO2 is present only for RR missions (APEX/VEG pages carry only temperature and RH).",
+    "Radiation doses: 'Doses are in water based on standard conversion from dose in silicon ... preliminary analysis ... SRAG, NASA-JSC'. accumulated_mGy is cumulative.",
+    "Values are mission-period snapshots (2014+), not a continuous ISS record.",
+    "All listed missions fetched."
+  ],
+  "files": [
+    {
+      "path": "eda_telemetry_raw.csv",
+      "bytes": 37505100,
+      "sha256": "695c2cae70a30a1b1c21f5d4e5ea3c5d83ed9a3883be60d1fb86b7c8789df50b",
+      "rows": 759525,
+      "columns": [
+        {
+          "name": "mission",
+          "unit": "-",
+          "description": "OSDR payload id, e.g. RR-1 (Rodent Research), APEX, VEG"
+        },
+        {
+          "name": "time_utc",
+          "unit": "YYYY-MM-DD HH:MM:SS GMT",
+          "description": "Controller_Time_GMT in the EDA table; cadence 1, 5, 10 or 15 min depending on mission"
+        },
+        {
+          "name": "temp_degC_ground",
+          "unit": "degC",
+          "description": "ground-control habitat"
+        },
+        {
+          "name": "temp_degC_iss",
+          "unit": "degC",
+          "description": "ISS cabin / flight hardware"
+        },
+        {
+          "name": "rh_percent_ground",
+          "unit": "% RH",
+          "description": "ground-control habitat"
+        },
+        {
+          "name": "rh_percent_iss",
+          "unit": "% RH",
+          "description": "ISS cabin / flight hardware"
+        },
+        {
+          "name": "co2_ppm_ground",
+          "unit": "ppm",
+          "description": "ground-control chamber (only RR missions)"
+        },
+        {
+          "name": "co2_ppm_iss",
+          "unit": "ppm",
+          "description": "ISS cabin (only RR missions)"
+        }
+      ],
+      "note": "20 missions; times 2014-04-18 00:15:00 .. 2024-05-06 13:16:00"
+    },
+    {
+      "path": "eda_telemetry_daily.csv",
+      "bytes": 55444,
+      "sha256": "9b8c84f648761b182085077ed8e8658695458f55b989aefa6ac365d068793e0d",
+      "rows": 973,
+      "note": "daily means of eda_telemetry_raw.csv per mission; same units, column suffix _mean"
+    },
+    {
+      "path": "eda_radiation_daily.csv",
+      "bytes": 23048,
+      "sha256": "952a7b2c29734b0e0d6db5e41cb4c195f6b2929511d681ee1b7d3e47c40d4a40",
+      "rows": 467,
+      "columns": [
+        {
+          "name": "mission",
+          "unit": "-"
+        },
+        {
+          "name": "date",
+          "unit": "YYYY-MM-DD"
+        },
+        {
+          "name": "gcr_mGy_per_day",
+          "unit": "mGy/day",
+          "description": "galactic cosmic ray absorbed dose, in water (converted from Si)"
+        },
+        {
+          "name": "saa_mGy_per_day",
+          "unit": "mGy/day",
+          "description": "South Atlantic Anomaly (trapped protons) absorbed dose"
+        },
+        {
+          "name": "total_mGy_per_day",
+          "unit": "mGy/day",
+          "description": "gcr + saa"
+        },
+        {
+          "name": "accumulated_mGy",
+          "unit": "mGy",
+          "description": "cumulative sum of total over the mission (cumulative, NOT per day)"
+        }
+      ]
+    },
+    {
+      "path": "eda_milestones.csv",
+      "bytes": 6914,
+      "sha256": "a916e32904d21f8582031ac422d8495ecab0b99e53c6bb2d78fa391319ac5d8b",
+      "rows": 141
+    },
+    {
+      "path": "eda_missions.csv",
+      "bytes": 3351,
+      "sha256": "1bbe4f12b83128858cbf7b21cb25fc3c9e8cd30fd486e5a927b8fe99d80fe54e",
+      "rows": 24
+    },
+    {
+      "path": "raw/APEX-03-1.json.gz",
+      "bytes": 23496,
+      "sha256": "3ab1d79c7211b9337111e1268dbd1ecceaef01f62828c749066490f7262f3245",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/APEX-03-2.json.gz",
+      "bytes": 22761,
+      "sha256": "40bbe16d9e895c5d02276720e1b318cb1d046575db112f1023a413f9d76dbcd3",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/APEX-04.json.gz",
+      "bytes": 31579,
+      "sha256": "afba5caac832cc05e7370a137d842012dbe57e83f1bbda5614b965ff62086c00",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-1.json.gz",
+      "bytes": 84987,
+      "sha256": "d0c40bafbd608d0fe6d0ccc3dd57619eef732a5794fb3c69db94767a523461bd",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-10.json.gz",
+      "bytes": 221668,
+      "sha256": "e79284b10ac15012b6f23e7e91c1c8cb2f65a28220d3c6d79b779a69278ac1e8",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-12.json.gz",
+      "bytes": 82175,
+      "sha256": "1c2eb6e9723befc43d4a29abcf703a914a6067e19bf30bc9176ee5e773c1ad1c",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-17.json.gz",
+      "bytes": 1959,
+      "sha256": "1b408f5923880d428dff4adf1da6c024f71a9a06b812f97ea1c9f251b1468e9f",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-18.json.gz",
+      "bytes": 407191,
+      "sha256": "fd1256ba5c35e810ea4826e26bb35446b74553ae125a252a0a37566897ef0ce9",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-19.json.gz",
+      "bytes": 67432,
+      "sha256": "c35ae3c142f42fbce5882260d17b40e7a446a5c7f6a8b6eeef1e36c25e2847b6",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-20.json.gz",
+      "bytes": 383454,
+      "sha256": "17b6fe5361618c93610ea717f1230712e319330eefad015d850a5c9722a36773",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-22.json.gz",
+      "bytes": 461251,
+      "sha256": "07668cfa25aefd11c2fba75982f2b3903cd60ef4300c6f3ccf512a7f36b7f82b",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-23.json.gz",
+      "bytes": 268490,
+      "sha256": "4f4bdd19c8d360403fe3c04f87654597fd52580a3fee9308107d0a0bbee6a99c",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-25.json.gz",
+      "bytes": 558074,
+      "sha256": "4330552f35c1b822854f4e280804fb7c7dd72ac7a5064529ba54041ad681ad58",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-28.json.gz",
+      "bytes": 369699,
+      "sha256": "427f2b9f53cba20656d7e465132600727fcec71173507f834d5ab3017fd3712c",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-3.json.gz",
+      "bytes": 102880,
+      "sha256": "43baf1433e655c9981c2609aba8f9804deaf3ab2096327baf33b06cb0638dd37",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-4.json.gz",
+      "bytes": 1065,
+      "sha256": "081220159de2377a961fdfd6004ada02eacf448bc7c2c00bb9e9bf76ea650420",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-5.json.gz",
+      "bytes": 118319,
+      "sha256": "bf6179b24fa3872fd00be5c02ba9b18fd0432f4cd0e6096283537c05d1ec7909",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-6.json.gz",
+      "bytes": 113556,
+      "sha256": "7393a9c49168097d134347e1c8c48b59146040592bd06aa6901283f229e9234c",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-7.json.gz",
+      "bytes": 154284,
+      "sha256": "abb0ef36c1652f0b72369d9c22d80137b59600b5ce01b00b7e37942631959e28",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-8.json.gz",
+      "bytes": 1386,
+      "sha256": "ee96747d43ac5c7a37a883eb3d8d0c51612a0ff54166839e67a540beac9935ad",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/RR-9.json.gz",
+      "bytes": 66790,
+      "sha256": "f9f0699307825e9303f8b8aaa7c5306794a3532b3bdf0514fc2aeb6130ac5ff1",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/VEG-01A.json.gz",
+      "bytes": 53767,
+      "sha256": "3fd084b40fbc59496384a78fdc491c782eb1b3cb59702265ab35a0c59bf3320e",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/VEG-01B.json.gz",
+      "bytes": 1756,
+      "sha256": "624502a5ce9437110608081837fce40a16756e27fa8bf0b54f473e44fce417e8",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    },
+    {
+      "path": "raw/VEG-01C.json.gz",
+      "bytes": 265164,
+      "sha256": "28c8c6e2d22a86268217bc38c57970387c337e3be18aad2cb1b2b4919f2df810",
+      "note": "embedded <script id=data> JSON extracted from dashboard page (gzip)"
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T13:51:05Z",
+  "generated_by": "scripts/fetch_data.py"
+}

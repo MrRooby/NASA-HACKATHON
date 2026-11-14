@@ -1,0 +1,37 @@
+"NASA Life Science Data Archive (http://lsda.jsc.nasa.gov)
+Investigator Name: Janice Meck
+Mission (Payload): Detailed Supplementary Objectives
+Experiment title (ID): DSO 467
+File Name/Inventory ID: JMDSO_467_6.xls
+",,,,,
+Subjects grouped according to relative orthostatic tolerance judged by cardiovascular parameters,,,,,
+,,,,,
+,10 Days Before Launch,,,Landing Day,
+,More Resistant,Less Resistant,,More Resistant,Less Resistant
+,,,,,
+"Weight, kg",74.30 ± 3.3,77.20 ± 2.9,,73.86 ± 3.3,75.76 ± 2.9
+"Age, yr",42.1 ± 2.4,43.1 ± 1.8,,,
+,,,,,
+,,Stand Tests,,,
+"Systolic pressure, mmHg",,,,,
+Supine,110.4 ± 3.4,106.4 ± 3.0,,110.3 ± 3.7,117.9 ± 3.9
+Standing,121.4 ± 3.4,118.9 ± 2.0,,124.3 ± 4.0,114.0 ± 2.9
+"Diastolic pressure, mmHg",,,,,
+Supine,66.0 ± 3.0,68.6 ± 3.2,,71.8 ± 3.8,80.9 ± 3.8
+Standing,81.0 ± 2.6,84.7 ± 2.0,,87.7 ± 3.4,87.7 ± 9.1
+"Heart rate, beats/min",,,,,
+Supine,58.6 ± 2.3,51.3 ± 2.6,,67.0 ± 2.4,66.7 ± 2.6
+Standing,76.9 ± 3.0,66.9 ± 3.0*,,98.3 ± 3.7,104.4 ± 4.2
+"R-R interval, m",,,,,
+Supine,"1,032 ± 10","1,205 ± 11*",,901 ± 9,931 ±10
+Standing,791 ± 10,912 ± 11*,,640 ± 9,613 ± 12
+,,,,,
+,,Baroreflex measurements,,,
+"Maximum slope, ms/mmHg",3.7 ± 1.5,5.9 ± 2.3*,,3.2 ± 1.2,5.0 ± 2.0*
+"R-R range, ms",194 ± 9,232 ± 13,,177 ± 8,225 ± 12
+"Operational point, %",45.8 ± 3.3,54.4 ± 3.4*,,32.4 ± 3.3,27.7 ± 4.1
+,,,,,
+Values are means ± SE for 11 subjects. *P  ≤ 0.05 between groups.,,,,,
+,,,,,
+,,,,,
+Source: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.,,,,,

@@ -1,0 +1,109 @@
+source_id,subject_code,mission_code,indicator_code,timepoint_label,anchor,day_offset,time_is_approx,measured_at,replicate,value,unit,ref_min,ref_max,sample_type,is_synthetic,raw_name,raw_value,raw_unit
+lsda_e066,E066-S01,E066-STS40-STS58,heart_rate_resting,PRE erect,launch,-2,1,,1,80,bpm,,,manual_device,0,HR,80,beats/min
+lsda_e066,E066-S01,E066-STS40-STS58,bp_systolic,PRE erect,launch,-2,1,,1,112,mmHg,,,manual_device,0,BP (systolic part),112/87,mmHg
+lsda_e066,E066-S01,E066-STS40-STS58,bp_diastolic,PRE erect,launch,-2,1,,1,87,mmHg,,,manual_device,0,BP (diastolic part),112/87,mmHg
+lsda_e066,E066-S01,E066-STS40-STS58,bp_mean_arterial,PRE erect,launch,-2,1,,1,95,mmHg,,,manual_device,0,MAP,95,mmHg
+lsda_e066,E066-S01,E066-STS40-STS58,cardiac_output,PRE erect,launch,-2,1,,1,5.7,L/min,,,manual_device,0,Q,5.7,l/m
+lsda_e066,E066-S01,E066-STS40-STS58,stroke_volume,PRE erect,launch,-2,1,,1,73,mL,,,manual_device,0,SV,73,ml
+lsda_e066,E066-S02,E066-STS40-STS58,heart_rate_resting,PRE erect,launch,-2,1,,1,74,bpm,,,manual_device,0,HR,74,beats/min
+lsda_e066,E066-S02,E066-STS40-STS58,bp_systolic,PRE erect,launch,-2,1,,1,112,mmHg,,,manual_device,0,BP (systolic part),112/73,mmHg
+lsda_e066,E066-S02,E066-STS40-STS58,bp_diastolic,PRE erect,launch,-2,1,,1,73,mmHg,,,manual_device,0,BP (diastolic part),112/73,mmHg
+lsda_e066,E066-S02,E066-STS40-STS58,bp_mean_arterial,PRE erect,launch,-2,1,,1,86,mmHg,,,manual_device,0,MAP,86,mmHg
+lsda_e066,E066-S02,E066-STS40-STS58,cardiac_output,PRE erect,launch,-2,1,,1,6.9,L/min,,,manual_device,0,Q,6.9,l/m
+lsda_e066,E066-S02,E066-STS40-STS58,stroke_volume,PRE erect,launch,-2,1,,1,94,mL,,,manual_device,0,SV,94,ml
+lsda_e066,E066-S03,E066-STS40-STS58,heart_rate_resting,PRE erect,launch,-2,1,,1,65,bpm,,,manual_device,0,HR,65,beats/min
+lsda_e066,E066-S03,E066-STS40-STS58,bp_systolic,PRE erect,launch,-2,1,,1,115,mmHg,,,manual_device,0,BP (systolic part),115/78,mmHg
+lsda_e066,E066-S03,E066-STS40-STS58,bp_diastolic,PRE erect,launch,-2,1,,1,78,mmHg,,,manual_device,0,BP (diastolic part),115/78,mmHg
+lsda_e066,E066-S03,E066-STS40-STS58,bp_mean_arterial,PRE erect,launch,-2,1,,1,90,mmHg,,,manual_device,0,MAP,90,mmHg
+lsda_e066,E066-S03,E066-STS40-STS58,cardiac_output,PRE erect,launch,-2,1,,1,5.3,L/min,,,manual_device,0,Q,5.3,l/m
+lsda_e066,E066-S03,E066-STS40-STS58,stroke_volume,PRE erect,launch,-2,1,,1,82,mL,,,manual_device,0,SV,82,ml
+lsda_e066,E066-S04,E066-STS40-STS58,heart_rate_resting,PRE erect,launch,-2,1,,1,74,bpm,,,manual_device,0,HR,74,beats/min
+lsda_e066,E066-S04,E066-STS40-STS58,bp_systolic,PRE erect,launch,-2,1,,1,111,mmHg,,,manual_device,0,BP (systolic part),111/74,mmHg
+lsda_e066,E066-S04,E066-STS40-STS58,bp_diastolic,PRE erect,launch,-2,1,,1,74,mmHg,,,manual_device,0,BP (diastolic part),111/74,mmHg
+lsda_e066,E066-S04,E066-STS40-STS58,bp_mean_arterial,PRE erect,launch,-2,1,,1,87,mmHg,,,manual_device,0,MAP,87,mmHg
+lsda_e066,E066-S04,E066-STS40-STS58,cardiac_output,PRE erect,launch,-2,1,,1,6.7,L/min,,,manual_device,0,Q,6.7,l/m
+lsda_e066,E066-S04,E066-STS40-STS58,stroke_volume,PRE erect,launch,-2,1,,1,91,mL,,,manual_device,0,SV,91,ml
+lsda_e066,E066-S05,E066-STS40-STS58,heart_rate_resting,PRE erect,launch,-2,1,,1,78,bpm,,,manual_device,0,HR,78,beats/min
+lsda_e066,E066-S05,E066-STS40-STS58,bp_systolic,PRE erect,launch,-2,1,,1,112,mmHg,,,manual_device,0,BP (systolic part),112/79,mmHg
+lsda_e066,E066-S05,E066-STS40-STS58,bp_diastolic,PRE erect,launch,-2,1,,1,79,mmHg,,,manual_device,0,BP (diastolic part),112/79,mmHg
+lsda_e066,E066-S05,E066-STS40-STS58,bp_mean_arterial,PRE erect,launch,-2,1,,1,90,mmHg,,,manual_device,0,MAP,90,mmHg
+lsda_e066,E066-S05,E066-STS40-STS58,cardiac_output,PRE erect,launch,-2,1,,1,5.6,L/min,,,manual_device,0,Q,5.6,l/m
+lsda_e066,E066-S05,E066-STS40-STS58,stroke_volume,PRE erect,launch,-2,1,,1,73,mL,,,manual_device,0,SV,73,ml
+lsda_e066,E066-S06,E066-STS40-STS58,heart_rate_resting,PRE erect,launch,-2,1,,1,63,bpm,,,manual_device,0,HR,63,beats/min
+lsda_e066,E066-S06,E066-STS40-STS58,bp_systolic,PRE erect,launch,-2,1,,1,90,mmHg,,,manual_device,0,BP (systolic part),90/76,mmHg
+lsda_e066,E066-S06,E066-STS40-STS58,bp_diastolic,PRE erect,launch,-2,1,,1,76,mmHg,,,manual_device,0,BP (diastolic part),90/76,mmHg
+lsda_e066,E066-S06,E066-STS40-STS58,bp_mean_arterial,PRE erect,launch,-2,1,,1,81,mmHg,,,manual_device,0,MAP,81,mmHg
+lsda_e066,E066-S06,E066-STS40-STS58,cardiac_output,PRE erect,launch,-2,1,,1,5.5,L/min,,,manual_device,0,Q,5.5,l/m
+lsda_e066,E066-S06,E066-STS40-STS58,stroke_volume,PRE erect,launch,-2,1,,1,85,mL,,,manual_device,0,SV,85,ml
+lsda_e066,E066-S01,E066-STS40-STS58,heart_rate_resting,IN flight (day n/a),launch,5,1,,1,66,bpm,,,manual_device,0,HR,66,beats/min
+lsda_e066,E066-S01,E066-STS40-STS58,bp_systolic,IN flight (day n/a),launch,5,1,,1,127,mmHg,,,manual_device,0,BP (systolic part),127/74,mmHg
+lsda_e066,E066-S01,E066-STS40-STS58,bp_diastolic,IN flight (day n/a),launch,5,1,,1,74,mmHg,,,manual_device,0,BP (diastolic part),127/74,mmHg
+lsda_e066,E066-S01,E066-STS40-STS58,bp_mean_arterial,IN flight (day n/a),launch,5,1,,1,91,mmHg,,,manual_device,0,MAP,91,mmHg
+lsda_e066,E066-S01,E066-STS40-STS58,cardiac_output,IN flight (day n/a),launch,5,1,,1,7.8,L/min,,,manual_device,0,Q,7.8,l/m
+lsda_e066,E066-S01,E066-STS40-STS58,stroke_volume,IN flight (day n/a),launch,5,1,,1,117,mL,,,manual_device,0,SV,117,ml
+lsda_e066,E066-S02,E066-STS40-STS58,heart_rate_resting,IN flight (day n/a),launch,5,1,,1,52,bpm,,,manual_device,0,HR,52,beats/min
+lsda_e066,E066-S02,E066-STS40-STS58,bp_systolic,IN flight (day n/a),launch,5,1,,1,106,mmHg,,,manual_device,0,BP (systolic part),106/56,mmHg
+lsda_e066,E066-S02,E066-STS40-STS58,bp_diastolic,IN flight (day n/a),launch,5,1,,1,56,mmHg,,,manual_device,0,BP (diastolic part),106/56,mmHg
+lsda_e066,E066-S02,E066-STS40-STS58,bp_mean_arterial,IN flight (day n/a),launch,5,1,,1,73,mmHg,,,manual_device,0,MAP,73,mmHg
+lsda_e066,E066-S02,E066-STS40-STS58,cardiac_output,IN flight (day n/a),launch,5,1,,1,8.2,L/min,,,manual_device,0,Q,8.2,l/m
+lsda_e066,E066-S02,E066-STS40-STS58,stroke_volume,IN flight (day n/a),launch,5,1,,1,154,mL,,,manual_device,0,SV,154,ml
+lsda_e066,E066-S03,E066-STS40-STS58,heart_rate_resting,IN flight (day n/a),launch,5,1,,1,58,bpm,,,manual_device,0,HR,58,beats/min
+lsda_e066,E066-S03,E066-STS40-STS58,bp_systolic,IN flight (day n/a),launch,5,1,,1,112,mmHg,,,manual_device,0,BP (systolic part),112/61,mmHg
+lsda_e066,E066-S03,E066-STS40-STS58,bp_diastolic,IN flight (day n/a),launch,5,1,,1,61,mmHg,,,manual_device,0,BP (diastolic part),112/61,mmHg
+lsda_e066,E066-S03,E066-STS40-STS58,bp_mean_arterial,IN flight (day n/a),launch,5,1,,1,78,mmHg,,,manual_device,0,MAP,78,mmHg
+lsda_e066,E066-S03,E066-STS40-STS58,cardiac_output,IN flight (day n/a),launch,5,1,,1,7.7,L/min,,,manual_device,0,Q,7.7,l/m
+lsda_e066,E066-S03,E066-STS40-STS58,stroke_volume,IN flight (day n/a),launch,5,1,,1,135,mL,,,manual_device,0,SV,135,ml
+lsda_e066,E066-S04,E066-STS40-STS58,heart_rate_resting,IN flight (day n/a),launch,5,1,,1,57,bpm,,,manual_device,0,HR,57,beats/min
+lsda_e066,E066-S04,E066-STS40-STS58,bp_systolic,IN flight (day n/a),launch,5,1,,1,117,mmHg,,,manual_device,0,BP (systolic part),117/74,mmHg
+lsda_e066,E066-S04,E066-STS40-STS58,bp_diastolic,IN flight (day n/a),launch,5,1,,1,74,mmHg,,,manual_device,0,BP (diastolic part),117/74,mmHg
+lsda_e066,E066-S04,E066-STS40-STS58,bp_mean_arterial,IN flight (day n/a),launch,5,1,,1,88,mmHg,,,manual_device,0,MAP,88,mmHg
+lsda_e066,E066-S04,E066-STS40-STS58,cardiac_output,IN flight (day n/a),launch,5,1,,1,7.1,L/min,,,manual_device,0,Q,7.1,l/m
+lsda_e066,E066-S04,E066-STS40-STS58,stroke_volume,IN flight (day n/a),launch,5,1,,1,124,mL,,,manual_device,0,SV,124,ml
+lsda_e066,E066-S05,E066-STS40-STS58,heart_rate_resting,IN flight (day n/a),launch,5,1,,1,54,bpm,,,manual_device,0,HR,54,beats/min
+lsda_e066,E066-S05,E066-STS40-STS58,bp_systolic,IN flight (day n/a),launch,5,1,,1,108,mmHg,,,manual_device,0,BP (systolic part),108/72,mmHg
+lsda_e066,E066-S05,E066-STS40-STS58,bp_diastolic,IN flight (day n/a),launch,5,1,,1,72,mmHg,,,manual_device,0,BP (diastolic part),108/72,mmHg
+lsda_e066,E066-S05,E066-STS40-STS58,bp_mean_arterial,IN flight (day n/a),launch,5,1,,1,81,mmHg,,,manual_device,0,MAP,81,mmHg
+lsda_e066,E066-S05,E066-STS40-STS58,cardiac_output,IN flight (day n/a),launch,5,1,,1,7.7,L/min,,,manual_device,0,Q,7.7,l/m
+lsda_e066,E066-S05,E066-STS40-STS58,stroke_volume,IN flight (day n/a),launch,5,1,,1,142,mL,,,manual_device,0,SV,142,ml
+lsda_e066,E066-S06,E066-STS40-STS58,heart_rate_resting,IN flight (day n/a),launch,5,1,,1,59,bpm,,,manual_device,0,HR,59,beats/min
+lsda_e066,E066-S06,E066-STS40-STS58,bp_systolic,IN flight (day n/a),launch,5,1,,1,108,mmHg,,,manual_device,0,BP (systolic part),108/66,mmHg
+lsda_e066,E066-S06,E066-STS40-STS58,bp_diastolic,IN flight (day n/a),launch,5,1,,1,66,mmHg,,,manual_device,0,BP (diastolic part),108/66,mmHg
+lsda_e066,E066-S06,E066-STS40-STS58,bp_mean_arterial,IN flight (day n/a),launch,5,1,,1,80,mmHg,,,manual_device,0,MAP,80,mmHg
+lsda_e066,E066-S06,E066-STS40-STS58,cardiac_output,IN flight (day n/a),launch,5,1,,1,5.9,L/min,,,manual_device,0,Q,5.9,l/m
+lsda_e066,E066-S06,E066-STS40-STS58,stroke_volume,IN flight (day n/a),launch,5,1,,1,101,mL,,,manual_device,0,SV,101,ml
+lsda_e066,E066-S01,E066-STS40-STS58,heart_rate_resting,PRE supine,launch,-1,1,,1,69,bpm,,,manual_device,0,HR,69,beats/min
+lsda_e066,E066-S01,E066-STS40-STS58,bp_systolic,PRE supine,launch,-1,1,,1,113,mmHg,,,manual_device,0,BP (systolic part),113/82,mmHg
+lsda_e066,E066-S01,E066-STS40-STS58,bp_diastolic,PRE supine,launch,-1,1,,1,82,mmHg,,,manual_device,0,BP (diastolic part),113/82,mmHg
+lsda_e066,E066-S01,E066-STS40-STS58,bp_mean_arterial,PRE supine,launch,-1,1,,1,92,mmHg,,,manual_device,0,MAP,92,mmHg
+lsda_e066,E066-S01,E066-STS40-STS58,cardiac_output,PRE supine,launch,-1,1,,1,8.4,L/min,,,manual_device,0,Q,8.4,l/m
+lsda_e066,E066-S01,E066-STS40-STS58,stroke_volume,PRE supine,launch,-1,1,,1,121,mL,,,manual_device,0,SV,121,ml
+lsda_e066,E066-S02,E066-STS40-STS58,heart_rate_resting,PRE supine,launch,-1,1,,1,62,bpm,,,manual_device,0,HR,62,beats/min
+lsda_e066,E066-S02,E066-STS40-STS58,bp_systolic,PRE supine,launch,-1,1,,1,120,mmHg,,,manual_device,0,BP (systolic part),120/72,mmHg
+lsda_e066,E066-S02,E066-STS40-STS58,bp_diastolic,PRE supine,launch,-1,1,,1,72,mmHg,,,manual_device,0,BP (diastolic part),120/72,mmHg
+lsda_e066,E066-S02,E066-STS40-STS58,bp_mean_arterial,PRE supine,launch,-1,1,,1,80,mmHg,,,manual_device,0,MAP,80,mmHg
+lsda_e066,E066-S02,E066-STS40-STS58,cardiac_output,PRE supine,launch,-1,1,,1,8.3,L/min,,,manual_device,0,Q,8.3,l/m
+lsda_e066,E066-S02,E066-STS40-STS58,stroke_volume,PRE supine,launch,-1,1,,1,134,mL,,,manual_device,0,SV,134,ml
+lsda_e066,E066-S03,E066-STS40-STS58,heart_rate_resting,PRE supine,launch,-1,1,,1,58,bpm,,,manual_device,0,HR,58,beats/min
+lsda_e066,E066-S03,E066-STS40-STS58,bp_systolic,PRE supine,launch,-1,1,,1,105,mmHg,,,manual_device,0,BP (systolic part),105/78,mmHg
+lsda_e066,E066-S03,E066-STS40-STS58,bp_diastolic,PRE supine,launch,-1,1,,1,78,mmHg,,,manual_device,0,BP (diastolic part),105/78,mmHg
+lsda_e066,E066-S03,E066-STS40-STS58,bp_mean_arterial,PRE supine,launch,-1,1,,1,87,mmHg,,,manual_device,0,MAP,87,mmHg
+lsda_e066,E066-S03,E066-STS40-STS58,cardiac_output,PRE supine,launch,-1,1,,1,6.6,L/min,,,manual_device,0,Q,6.6,l/m
+lsda_e066,E066-S03,E066-STS40-STS58,stroke_volume,PRE supine,launch,-1,1,,1,115,mL,,,manual_device,0,SV,115,ml
+lsda_e066,E066-S04,E066-STS40-STS58,heart_rate_resting,PRE supine,launch,-1,1,,1,69,bpm,,,manual_device,0,HR,69,beats/min
+lsda_e066,E066-S04,E066-STS40-STS58,bp_systolic,PRE supine,launch,-1,1,,1,118,mmHg,,,manual_device,0,BP (systolic part),118/75,mmHg
+lsda_e066,E066-S04,E066-STS40-STS58,bp_diastolic,PRE supine,launch,-1,1,,1,75,mmHg,,,manual_device,0,BP (diastolic part),118/75,mmHg
+lsda_e066,E066-S04,E066-STS40-STS58,bp_mean_arterial,PRE supine,launch,-1,1,,1,89,mmHg,,,manual_device,0,MAP,89,mmHg
+lsda_e066,E066-S04,E066-STS40-STS58,cardiac_output,PRE supine,launch,-1,1,,1,7.2,L/min,,,manual_device,0,Q,7.2,l/m
+lsda_e066,E066-S04,E066-STS40-STS58,stroke_volume,PRE supine,launch,-1,1,,1,105,mL,,,manual_device,0,SV,105,ml
+lsda_e066,E066-S05,E066-STS40-STS58,heart_rate_resting,PRE supine,launch,-1,1,,1,63,bpm,,,manual_device,0,HR,63,beats/min
+lsda_e066,E066-S05,E066-STS40-STS58,bp_systolic,PRE supine,launch,-1,1,,1,112,mmHg,,,manual_device,0,BP (systolic part),112/62,mmHg
+lsda_e066,E066-S05,E066-STS40-STS58,bp_diastolic,PRE supine,launch,-1,1,,1,62,mmHg,,,manual_device,0,BP (diastolic part),112/62,mmHg
+lsda_e066,E066-S05,E066-STS40-STS58,bp_mean_arterial,PRE supine,launch,-1,1,,1,82,mmHg,,,manual_device,0,MAP,82,mmHg
+lsda_e066,E066-S05,E066-STS40-STS58,cardiac_output,PRE supine,launch,-1,1,,1,8,L/min,,,manual_device,0,Q,8,l/m
+lsda_e066,E066-S05,E066-STS40-STS58,stroke_volume,PRE supine,launch,-1,1,,1,128,mL,,,manual_device,0,SV,128,ml
+lsda_e066,E066-S06,E066-STS40-STS58,heart_rate_resting,PRE supine,launch,-1,1,,1,57,bpm,,,manual_device,0,HR,57,beats/min
+lsda_e066,E066-S06,E066-STS40-STS58,bp_systolic,PRE supine,launch,-1,1,,1,99,mmHg,,,manual_device,0,BP (systolic part),99/60,mmHg
+lsda_e066,E066-S06,E066-STS40-STS58,bp_diastolic,PRE supine,launch,-1,1,,1,60,mmHg,,,manual_device,0,BP (diastolic part),99/60,mmHg
+lsda_e066,E066-S06,E066-STS40-STS58,bp_mean_arterial,PRE supine,launch,-1,1,,1,73,mmHg,,,manual_device,0,MAP,73,mmHg
+lsda_e066,E066-S06,E066-STS40-STS58,cardiac_output,PRE supine,launch,-1,1,,1,5.9,L/min,,,manual_device,0,Q,5.9,l/m
+lsda_e066,E066-S06,E066-STS40-STS58,stroke_volume,PRE supine,launch,-1,1,,1,104,mL,,,manual_device,0,SV,104,ml
