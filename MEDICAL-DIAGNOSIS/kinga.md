@@ -35,6 +35,8 @@ Testy siły np ucisku dłoni, pomagają monitorować siłę ludzi, pozwala spraw
 
 Testy ostrości wzroku i badanie dna oka - czy cisnienie w oku jest git
 
+Badanie objętości płuc 
+
 Więc w danych będzie
     tętno
     ilosć O2
@@ -50,4 +52,6 @@ Więc w danych będzie
     Sprawność mięśni 
     Aktywność mózgu podczas snu i jakość snu
     ilość promieniowania, sprawdzane razem z morfologią pozwala wykryć chorobę popromienną
+    Cisnienie krwi
 
+Dane z bazy jakie trzeba badać
