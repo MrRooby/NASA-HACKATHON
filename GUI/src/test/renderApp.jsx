@@ -1,59 +1,60 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
+import App from '../App.jsx';
+import Providers from '../Providers.jsx';
+import { fixtures } from './mother.js';
 
-// main.jsx exports nothing and calls createRoot(...).render(<App />) on import.
-// Test files mock react-dom/client (see mockReactDomClient) so that import only
-// captures the <App /> element; each test then renders it with RTL, which gives
-// fresh state per test and automatic cleanup.
-export function mockReactDomClient() {
-  return {
-    createRoot: () => ({
-      render: element => { globalThis.__capturedApp = element; },
-      unmount: () => {},
-    }),
-  };
+/** Render any element inside the app providers (language + settings / theme). */
+export function renderWithProviders(ui, { lang } = {}) {
+  return render(<Providers initialLang={lang}>{ui}</Providers>);
 }
 
-let appElement;
-
-export async function loadApp() {
-  if (!appElement) {
-    document.body.innerHTML = '<div id="root"></div>';
-    await import('../main.jsx');
-    appElement = globalThis.__capturedApp;
-    document.body.innerHTML = '';
-  }
-  return appElement;
+/** Open a session from the login screen (the crew row of the given code). */
+export function logIn(code = 'HAB-C1') {
+  fireEvent.click(document.querySelector(`.login-row[data-code="${code}"]`));
 }
 
-export async function renderApp({ signIn = true } = {}) {
-  const utils = render(await loadApp());
-  if (signIn) {
-    fireEvent.click(screen.getByRole('button', { name: /continue with demo profile/i }));
-  }
+/**
+ * Render the whole app. `login` = crew code to open a session with (default HAB-C1),
+ * or null to stay on the login screen. fetch is stubbed by src/test/setup.js (offline)
+ * unless the test calls stubMother() first.
+ */
+export function renderApp({ login = 'HAB-C1', lang } = {}) {
+  const utils = renderWithProviders(<App />, { lang });
+  if (login) logIn(login);
   return utils;
 }
 
-/** Row of the dashboard biometric table for a given label. */
-export function bioRow(label) {
-  return screen.getAllByRole('row').find(row => row.querySelector('.bio-id')?.textContent === label);
-}
+/** Top-bar navigation button of a screen id ('home', 'profile', 'base', 'crew', 'tests', 'settings'). */
+export const navButton = id => document.querySelector(`.topbar-nav [data-nav="${id}"]`);
 
-export function rowStatus(label) {
-  const cls = [...bioRow(label).classList].find(c => c.startsWith('bio-row-'));
-  return cls.replace('bio-row-', '');
-}
+/** Screen currently shown, read from <main data-screen>. */
+export const currentScreen = () => screen.getByRole('main').getAttribute('data-screen');
 
-/** Check-in input next to a given (upper-case) label. */
-export function intakeInput(label) {
-  const field = screen.getByText(label, { selector: 'label' }).closest('.intake-field');
-  return field.querySelector('input, select');
-}
-
-/** Open check-in, set fields, commit, and land back on the dashboard. */
-export function submitCheckIn(values) {
-  fireEvent.click(screen.getByRole('button', { name: /start daily check-in/i }));
-  for (const [label, value] of Object.entries(values)) {
-    fireEvent.change(intakeInput(label), { target: { value: String(value) } });
-  }
-  fireEvent.click(screen.getByRole('button', { name: /commit log entry/i }));
+/**
+ * A fake useMother() state for screen tests: online with the recorded HAB-C1 report by
+ * default. Pass overrides, e.g. makeMother({ mode: 'offline', online: false, report: null }).
+ */
+export function makeMother(overrides = {}) {
+  const report = overrides.report === undefined ? fixtures.habC1 : overrides.report;
+  const selectedCode = overrides.selectedCode ?? report?.subject?.code ?? 'HAB-C1';
+  return {
+    mode: 'online',
+    online: true,
+    error: null,
+    status: fixtures.status,
+    subjects: fixtures.subjects,
+    subject: fixtures.subjects.find(item => item.code === selectedCode) || null,
+    selectedCode,
+    selectSubject: vi.fn(),
+    period: null,
+    setPeriod: vi.fn(),
+    report,
+    reportError: null,
+    loadingReport: false,
+    overview: fixtures.overview,
+    lastUpdated: new Date('2026-11-14T12:00:00Z'),
+    reconnect: vi.fn(),
+    ...overrides,
+  };
 }
