@@ -1,0 +1,25 @@
+device_code,state_ts_utc,state,battery_pct,location_code,detail
+W-C1-left_arm,2040-09-08 11:52:25,connected,80,module_M1,nominal
+W-C1-right_arm,2040-09-08 11:52:25,connected,80,module_M1,nominal
+W-C1-left_leg,2040-09-08 11:52:25,connected,80,module_M1,nominal
+W-C1-right_leg,2040-09-08 11:52:25,connected,80,module_M1,nominal
+W-C1-head_eeg,2040-09-08 11:52:25,connected,80,module_M1,nominal
+W-C2-left_arm,2040-09-08 11:52:25,connected,80,module_M2,nominal
+W-C2-right_arm,2040-09-08 11:52:25,connected,80,module_M2,nominal
+W-C2-left_leg,2040-09-08 11:52:25,connected,80,module_M2,nominal
+W-C2-right_leg,2040-09-08 11:52:25,connected,80,module_M2,nominal
+W-C2-head_eeg,2040-09-08 11:52:25,connected,80,module_M2,nominal
+W-C3-left_arm,2040-09-08 11:52:25,connected,80,module_M1,nominal
+W-C3-right_arm,2040-09-08 11:52:25,connected,80,module_M1,nominal
+W-C3-left_leg,2040-09-08 11:52:25,connected,80,module_M1,nominal
+W-C3-right_leg,2040-09-08 11:52:25,connected,80,module_M1,nominal
+W-C3-head_eeg,2040-09-08 11:52:25,connected,80,module_M1,nominal
+W-C4-left_arm,2040-09-08 11:52:25,connected,80,module_M2,nominal
+W-C4-right_arm,2040-09-08 11:52:25,connected,80,module_M2,nominal
+W-C4-left_leg,2040-09-08 11:52:25,connected,80,module_M2,nominal
+W-C4-right_leg,2040-09-08 11:52:25,connected,80,module_M2,nominal
+W-C4-head_eeg,2040-09-08 11:52:25,connected,80,module_M2,nominal
+W-C2-right_arm,2039-09-14 20:56:51,low_battery,12,module_M2,W2
+W-C2-right_arm,2039-09-14 21:06:51,disconnected,11,module_M2,W2
+W-C1-head_eeg,2040-04-27 22:06:04,buffering,84,airlock_A,W3 EVA link loss
+W-C3-right_leg,2040-07-24 06:11:00,sensor_fault,82,module_M1,W4 fault

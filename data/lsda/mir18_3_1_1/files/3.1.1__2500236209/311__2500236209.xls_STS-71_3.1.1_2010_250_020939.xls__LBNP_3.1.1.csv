@@ -1,0 +1,76 @@
+NASA Life Sciences Data Archive (http://lsda.jsc.nasa.gov),,,,
+Investigator Name:  John B. Charles,,,,
+Mission (Payload): STS-71 (SL-M),,,,
+Experiment Name (ID):  Studies of Orthostatic Intolerance with the use of LBNP (3.1.1),,,,
+"File Name/Inventory ID:  3.1.1__2500236209
+",,,,
+,,,,
+,,,,
+SESSION RECORD,,,,
+Session Name,,,,
+Lower Body Negative Pressure Ramp Test and EOM Countermeasure,,,,
+LSDA Exp ID,Experiment Title,,,
+3.1.1,Studies of Orthostatic Intolerance with the use of LBNP,,,
+Protocol,,,,
+"This investigation used periodic repetitions of the standard U.S. Shuttle lower body negative pressure (LBNP) protocol to determine the time-course and mechanisms of the changes in the autonomic nervous control of the cardiovascular system associated with extended exposure to a weightless environment.  Three subjects first underwent preflight presyncope-limited tests to determine their maximum LBNP tolerance.  Baseline, inflight, and postflight data were collected using the Ramp LBNP test.  This test consisted of 10 minutes of data collection at baseline, followed immediately by stepwise decreases in pressure of 10 mmHg increments down to -50 mmHg.  Each stage was 5 minutes.  The test was completed with a five minute recovery period after returning to 0 mm Hg.
+
+An Echocardiograph and a Continuous Blood Pressure Devcie (CBPD) were used to collect data throughout the test, a manual arm cuff was also used once per minute to measure arterial blood pressure.  Ultrasonographic measurements of cardiac left ventricular dimensions and blood flow velocity through the mitral and aortic valves were made during the pre-test resting control period; measurements of aortic blood flow velocity continued throughout the LBNP decompression and recovery periods.  From the ultrasound measurements, cardiac output and total peripheral resistance were calculated.  These Ramp tests were performed on three occasions preflight, several times inflight on both Mir and Shuttle, and at least once postflight.  Heart rate and blood pressure data was also acquired during LBNP treatment sessions on each of the last two full days in orbit before Shuttle landing.",,,,
+Session Constraints,,,,
+"1.  Data and video downlink is highly desired during this session.
+2.  It is highly desirable that no exercise occur within the 24 hours preceding each session for each subject.
+3.  No nicotine, alcohol, or caffeine within 12 hours before each session.
+4.  No medication within 24 hours before testing
+5.  No heavy meals 4 hours before testing.
+6.  No food for 2 hours before testing.
+7.  Session is required to be scheduled immediately following performance of Baroreflex testing (CP:I:6).
+8.  This session can replace the LBNP countermeasure session on either FD9 or FD10.
+9.  The first and last steps of the science flow must be performed once each data collection day. ",,,,
+Parameters Measured,,,,
+"Blood pressure
+Echocardiograph (ECG)
+LBNP Pressure",,,,
+Hardware Items,,,,Hardware ID
+American Echocardiograph Research Imaging System (AERIS),,,,657
+Automated Blood Pressure (ABP)/Finapres,,,,803
+Automatic Blood Pressure Monitoring (ABPM) System,,,,658
+Cardiovascular Monitoring Prep Kit,,,,659
+Chibis Low Pressure Transducer,,,,851
+Chibis Lower Body Negative Pressure (LBNP) Device,,,,736
+Collapsible Lower Body Negative Pressure (LBNP) Device,,,,738
+Continuous Blood Pressure Device (CBPD),,,,664
+Data Acquisition System (DAS),,,,721
+Extended Data Tape Recorder (EDTR)/TEAC) ,,,,850
+Gamma-1 Medical Monitoring Device,,,,662
+Skylab Lower Body Negative Pressure (LBNP) Device,,,,737
+Payload ID,Scheduling Information,,,Subject Information
+,Scheduled Day,Actual Day,Calendar Date,
+Mir 18,L-120,L-147 - L-145,18-20 Oct 1994,5 subjects
+Mir 18,L-42,L-56 - 52,17-21 Jan 1995,5 subjects
+Mir 18,L-21,Not performed,Not performed,Not performed
+Mir 18,L-7,L-11 - 10,3-4 Mar 1995,2 subjects
+Mir 18,MD21,MD15,1995-03-28T00:00:00,1 subject
+Mir 18,MD16,MD21,1995-04-03T00:00:00,1 subject
+Mir 18,MD22,MD23,1995-04-05T00:00:00,1 subject
+Mir 18,MD27,Not performed,Not performed,Not performed
+Mir 18,MD47,MD47,1995-04-29T00:00:00,1 subject
+Mir 18,MD48,MD48,1995-04-30T00:00:00,1 subject
+Mir 18,MD49,Not performed,Not performed,Not performed
+Mir 18,Not scheduled,MD53,1995-05-05T00:00:00,1 subject
+Mir 18,MD84,MD85,1995-06-06T00:00:00,1 subject
+Mir 18,MD83,MD98,1995-06-19T00:00:00,1 subject
+Mir 18,,,,
+Mir 18,,,,
+Mir 18,,,,
+Mir 18,,,,
+Mir 18,,,,
+Mir 18,,,,
+Mir 18,MD85,MD102,1995-06-23T00:00:00,1 subject
+SL-M,FD6,FD6,1995-07-02T00:00:00,2 subjects
+SL-M,FD9,FD9,1995-07-05T00:00:00,1 subject
+SL-M,FD10,FD9,1995-07-05T00:00:00,1 subject
+SL-M,FD10,FD10,1995-07-05T00:00:00,2 subjects
+SL-M,R+1,R+1,1995-07-08T00:00:00,1 subject
+SL-M,R+1,R+1,1995-07-09T00:00:00,2 subjects
+SL-M,R+4,R+4,1995-07-11T00:00:00,1 subject
+SL-M,R+13,R+12,1995-07-19T00:00:00,1 subject
+SL-M,Make-up session,R+42,1995-08-18T00:00:00,1 subject

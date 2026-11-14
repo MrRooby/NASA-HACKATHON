@@ -1,0 +1,119 @@
+{
+ "source": {
+  "id": "lsda_e066",
+  "title": "NASA LSDA E066 (178066): Inflight Study of Cardiovascular Deconditioning, STS-40/STS-58 - resting data by subject (Shykoff et al. 1996, J Appl Physiol 81:26-32, Table 2)",
+  "publisher": "NASA LSDA",
+  "url": "https://nlsp.nasa.gov/explore/lsdahome",
+  "data_kind": "real_spaceflight",
+  "access_status": "files_public",
+  "notes": "Real astronaut data. Flight day and STS-40 vs STS-58 assignment not given; day offsets are conventional (approx). Posture erect/supine encoded in timepoint_label."
+ },
+ "missions": [
+  {
+   "code": "E066-STS40-STS58",
+   "name": "Spacelab Life Sciences SLS-1 (STS-40, 9 d) and SLS-2 (STS-58, 14 d)",
+   "environment_code": "leo_free_flyer",
+   "source_id": "lsda_e066",
+   "is_synthetic": false,
+   "description": "Space Shuttle; subjects pooled across both flights in the source table."
+  }
+ ],
+ "subjects": [
+  {
+   "code": "E066-S01",
+   "source_subject_code": "S01",
+   "source_id": "lsda_e066",
+   "sex": "U",
+   "age_band_code": null,
+   "is_synthetic": false
+  },
+  {
+   "code": "E066-S02",
+   "source_subject_code": "S02",
+   "source_id": "lsda_e066",
+   "sex": "U",
+   "age_band_code": null,
+   "is_synthetic": false
+  },
+  {
+   "code": "E066-S03",
+   "source_subject_code": "S03",
+   "source_id": "lsda_e066",
+   "sex": "U",
+   "age_band_code": null,
+   "is_synthetic": false
+  },
+  {
+   "code": "E066-S04",
+   "source_subject_code": "S04",
+   "source_id": "lsda_e066",
+   "sex": "U",
+   "age_band_code": null,
+   "is_synthetic": false
+  },
+  {
+   "code": "E066-S05",
+   "source_subject_code": "S05",
+   "source_id": "lsda_e066",
+   "sex": "U",
+   "age_band_code": null,
+   "is_synthetic": false
+  },
+  {
+   "code": "E066-S06",
+   "source_subject_code": "S06",
+   "source_id": "lsda_e066",
+   "sex": "U",
+   "age_band_code": null,
+   "is_synthetic": false
+  }
+ ],
+ "participations": [
+  {
+   "subject_code": "E066-S01",
+   "mission_code": "E066-STS40-STS58",
+   "role": "crew"
+  },
+  {
+   "subject_code": "E066-S02",
+   "mission_code": "E066-STS40-STS58",
+   "role": "crew"
+  },
+  {
+   "subject_code": "E066-S03",
+   "mission_code": "E066-STS40-STS58",
+   "role": "crew"
+  },
+  {
+   "subject_code": "E066-S04",
+   "mission_code": "E066-STS40-STS58",
+   "role": "crew"
+  },
+  {
+   "subject_code": "E066-S05",
+   "mission_code": "E066-STS40-STS58",
+   "role": "crew"
+  },
+  {
+   "subject_code": "E066-S06",
+   "mission_code": "E066-STS40-STS58",
+   "role": "crew"
+  }
+ ],
+ "indicators": [
+  {
+   "code": "cardiac_output",
+   "label": "Cardiac output (resting)",
+   "category": "vitals",
+   "body_system_code": "cardiovascular",
+   "canonical_unit": "L/min"
+  },
+  {
+   "code": "stroke_volume",
+   "label": "Stroke volume (resting)",
+   "category": "vitals",
+   "body_system_code": "cardiovascular",
+   "canonical_unit": "mL"
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+ "experiment_id": "LSAHNEWSV8_1_2",
+ "experiment_identifier": "LSAHNEWSV8_1_2",
+ "title": "Aging and Blood Pressure in Astronauts",
+ "doi": "10.83263/yefa-pj57",
+ "archive_status": "Data preservation is complete. All datasets are publicly available.",
+ "missions": [
+  [
+   [
+    "LSAH"
+   ]
+  ]
+ ],
+ "parameter_name": [
+  "Age",
+  "Diastolic blood pressure",
+  "Systolic blood pressure"
+ ],
+ "description": "OBJECTIVE:<BR>\r\nA decline in cardiovascular function is expected with aging in the general population.  Systolic and diastolic blood pressure measurements were examined to describe the effects of aging on the cardiovascular function of the LSAH population.\r\n<P>\r\nAPPROACH:<BR>\r\nAstronauts and comparison participants who were selected before 1992 were included in these analyses.  Blood pressures were taken while the participant was seated and were a part of routine physical examinations. Ages were divided into five-year groupings beginning with less than 30 and up to 69 years. Data for men and women are combined for these analyses. An individual is included once in each of the five-year age group for which he/she is eligible, using the first examination for the participant after he/she entered that age group. There are small numbers of participants in the age groups above 55 and the resulting statistics for the older groups may not be stable.\r\n<P>\r\nRESULTS:<BR>\r\nThe mean systolic and diastolic blood pressures are shown in the data.  Although the means for some of the age groups are not statistically different, overall the comparison participants have higher mean blood pressures than the astronauts. These differences may be due to differences in physical activity. The lower mean blood pressures are an indicator of better cardiac conditioning among the astronauts than among the comparison participants as a group. The ranges of individual measurements among the two groups do, however, overlap. These values also indicate that both the astronauts and the comparison participants may have experienced some decline in cardiac function with age. The rate of decline is similar in both groups even though the mean values for the astronauts are lower than the mean values for the comparison participants.\r\n<P>\r\nThese are crude analyses that have not been adjusted for any other variables.  Exercise, weight gain, other illnesses, life style activities, and use of medications to control hypertension all make an impact on cardiac function and might have been included as confounding variables.  However, the intention of this examination was to look at the simple association of age and cardiac function. The results indicate that this association is an inverse one, and that the rate of decline may be similar for a range of initial blood pressure values.<END>",
+ "publications": [
+  "National Aeronautics and Space Administration. Aging and Blood Pressure. In: <A HREF=\"/refs/LSAH/Vol_8_Issue_1_Feb_99.pdf\">Longitudinal Study of Astronaut Health Newsletter</A>. February 1999;8(1):3.<END>"
+ ],
+ "datasets": []
+}

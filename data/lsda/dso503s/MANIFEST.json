@@ -1,0 +1,188 @@
+{
+  "source_id": "lsda_dso503s",
+  "experiment_identifier": "DSO 503S",
+  "nlsp_experiment_id": "53b325c3-cacb-5828-82a9-8174ad72e556",
+  "lsda_guid": "cl62b05wocdk101o6ewwtcuth",
+  "title": "Midodrine as a Countermeasure Against Postflight Orthostatic Hypotension",
+  "doi": "10.83263/23qx-zr51",
+  "missions": [
+    [
+      [
+        "STS-108"
+      ]
+    ],
+    [
+      [
+        "STS-110"
+      ]
+    ],
+    [
+      [
+        "STS-112"
+      ]
+    ],
+    [
+      [
+        "Expedition 5"
+      ]
+    ],
+    [
+      [
+        "STS-111"
+      ]
+    ],
+    [
+      [
+        "STS-113"
+      ]
+    ],
+    [
+      [
+        "STS-114"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/53b325c3-cacb-5828-82a9-8174ad72e556/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/53b325c3-cacb-5828-82a9-8174ad72e556"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "No machine-readable data. Per-subject HR/SV/TPR exist only as figure images ('Cardiac Measures for Individual Control/Midodrine Subjects', TIF) - not downloaded (graphs; would need manual digitizing).",
+    "Downloaded: manuscript PDF (Platts et al., 'Midodrine as a Countermeasure to Orthostatic Hypotension Immediately after Space Shuttle Landing', 25 pp). Table I (p. 25) gives group mean ± SE, n=5 (HR, SBP, DBP) / n=3 (SV, CO, TPR) at L-10 and R+0, supine vs 80° head-up tilt.",
+    "Not importable to observation (no per-subject values)."
+  ],
+  "content": {
+    "files/DSO_503S__2180821577/DSO_503S__2180821577.pdf_STS-109_DSO_503S_2010_218_080839.pdf": {
+      "what": "Manuscript PDF with methods and Table I (group means)",
+      "granularity": "group mean ± SE",
+      "subjects": "5 midodrine-tested crewmembers (n=3 for SV/CO/TPR at R+0)",
+      "time_points": [
+        "L-10",
+        "R+0 (on the Crew Transport Vehicle)"
+      ],
+      "units": {
+        "HR": "beats/min",
+        "SBP/DBP": "mmHg",
+        "SV": "mL",
+        "CO": "L/min",
+        "TPR": "mmHg·L^-1·min"
+      },
+      "importable_to_observation": false
+    }
+  },
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 19282,
+      "sha256": "fbdcdc0e60a85959cda5bdaa2351002c1ac037996d6b188f3aaba1f133adb52e",
+      "note": "experiment record subset + dataset/file tree"
+    },
+    {
+      "path": "files/DSO_503S__2180821577/DSO_503S__2180821577.pdf_STS-109_DSO_503S_2010_218_080839.pdf",
+      "bytes": 866307,
+      "sha256": "441393858be64f7339ffc87a5c315afe97b4058f7afd1bba7494264283aa3c32",
+      "dataset_catalog": "DSO 503S__2180821577",
+      "dataset_name": "Midodrine as a Countermeasure to Orthostatic Hypotension Immediately after Space Shuttle Landing",
+      "dataset_description": "This report represents midodrine data as a preventative for post-space flight orthostatic intolerance when testing is conducted in\r\na controlled laboratory setting within 2-4 hours after Space Shuttle landing.<BR>\r\nFIGURE 1. The probability of completing a 10-minute 80° head-up tilt test in the laboratory before space flight (L-10, solid line) was not different (p=0.17) than the probability of completing a tilt test on landing day (R+0, dashed line) in the Crew Transport Vehicle in five astronauts.\r\n<BR>FIGURE 2. Change in heart rate (HR), systolic blood pressure (SBP), diastolic blood pressure (DBP), stroke volume (SV), cardiac output (CO), and total peripheral resistance (TPR) from last minute of supine rest to the last minute of tilt in the laboratory before flight (L-10) and on landing day (R+0) in the Crew Transport Vehicle. *Significantly\r\ndifferent than L-10 (p<0.05).\r\n<BR>\r\nTABLE I. Hemodynamic variables during the last minute of supine rest and at tilt test termination.\r\n<P>Source: Platts SH, Stenger MB, Ribeiro LC, Lee SMC.  Midodrine as a Countermeasure to Orthostatic Hypotension Immediately After Space Shuttle Landing. Johnson Space Center. Report JSC-CN-19685.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "DSO_503S__2180821577.pdf_STS-109_DSO_503S_2010_218_080839.pdf",
+      "file_key": "f9f42a89-35e5-57eb-9ad1-cb794826d2b0",
+      "url": "https://nlsp.nasa.gov/api/v1/files/f9f42a89-35e5-57eb-9ad1-cb794826d2b0/download"
+    }
+  ],
+  "skipped_files": [
+    {
+      "dataset_catalog": "DSO 503S__2250421792",
+      "dataset_name": "Cardiac Measures for Control Group",
+      "dataset_description": "This graph depicts mean preflight (black circles, n = 5) and landing day (white circles, n = 5) heart rate, stroke volume, and total peripheral resistance measurements during supine rest and 10 minutes of tilt/stand for the control flight group (A) during the DSO 503S study. Bars represent SEM; * p = 0.001; † p = 0.056. There were no statistically significant differences between BP or cardiac output. No subject experienced hypotension or presyncope during any test. Hemodynamic responses were very similar between flights. Of note, however, is that mean postflight upright heart rate was significantly higher than the preflight baseline for the control flight (p = 0.001), but was not after the Midodrine flight (p = 0.185) compared with their respective preflight upright heart rates. Importantly, Midodrine did not result in significantly increased supine or upright blood pressure. Additionally, supine stroke volume (p = 0.056) tended to be higher after Midodrine, compared with preflight.\r\n<p>\r\nSource: \r\nPlatts SH, Ziegler MG, Waters WW, and Meck JV. Hemodynamic effects of midodrine after spaceflight in astronauts without orthostatic hypotension. <i>Aviation, Space, and Environmental Medicine.</i> 2006;77:429-433.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "DSO_503S__2250421792.tif_STS-109_DSO_503S_2010_225_040854.tif",
+      "file_key": "6f3e509f-ee9d-5698-af59-f9e36dcd9b97",
+      "url": "https://nlsp.nasa.gov/api/v1/files/6f3e509f-ee9d-5698-af59-f9e36dcd9b97/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "DSO 503S__2250254712",
+      "dataset_name": "Plasma Concentrations of Midodrine and ST-1059 on Landing Day",
+      "dataset_description": "This graph depicts the plasma concentrations of Midodrine and ST-1059 on landing day. The peak plasma concentrations of Midodrine and ST-1059 occurred at about one hour, suggesting that the pharmacokinetics of Midodrine were not altered on landing day.\r\n<p>\r\nSource: Platts SH, Ziegler MG, Waters WW, Mitchell BM, D'Aunno D, and Meck JV. Midodrine prescribed to improve recurrent post-spaceflight orthostatic hypotension. <i>Aviation, Space, and Environmental Medicine.</i> 2004;75:554-556.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "DSO_503S__2250254712.tif_STS-109_DSO_503S_2010_225_030810.tif",
+      "file_key": "e7b7bcdc-6013-5bc3-8b1d-09c0fd8efefc",
+      "url": "https://nlsp.nasa.gov/api/v1/files/e7b7bcdc-6013-5bc3-8b1d-09c0fd8efefc/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "DSO 503S__2250444774",
+      "dataset_name": "Cardiac Measures for Individual Control Subjects",
+      "dataset_description": "This graph depicts individual preflight and landing day heart rate, stroke volume, and total peripheral resistance measurements at supine rest and 10 minutes of tilt/stand for measurements during supine rest and tilt for the control flight subjects (A) during the DSO 503S study. \r\n<p>\r\nSource: \r\nPlatts SH, Ziegler MG, Waters WW, and Meck JV. Hemodynamic effects of midodrine after spaceflight in astronauts without orthostatic hypotension. <i>Aviation, Space, and Environmental Medicine.</i> 2006;77:429-433.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "DSO_503S__2250444774.tif_STS-109_DSO_503S_2010_225_040826.tif",
+      "file_key": "6d4467a9-2a58-5c47-9c9d-a96a2271e8e0",
+      "url": "https://nlsp.nasa.gov/api/v1/files/6d4467a9-2a58-5c47-9c9d-a96a2271e8e0/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "DSO 503S__2250451387",
+      "dataset_name": "Cardiac Measures for Individual Midodrine Subjects",
+      "dataset_description": "This graph depicts individual preflight and landing day heart rate, stroke volume, and total peripheral resistance measurements at supine rest and 10 minutes of tilt/stand for measurements during supine rest and tilt for the Midodrine flight subjects (B) during the DSO 503S study. \r\n<p>\r\nSource: \r\nPlatts SH, Ziegler MG, Waters WW, and Meck JV. Hemodynamic effects of midodrine after spaceflight in astronauts without orthostatic hypotension. <i>Aviation, Space, and Environmental Medicine.</i> 2006;77:429-433.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "DSO_503S__2250451387.tif_STS-109_DSO_503S_2010_225_040822.tif",
+      "file_key": "e503b60c-3701-5eb7-9ccf-d1baec3d4408",
+      "url": "https://nlsp.nasa.gov/api/v1/files/e503b60c-3701-5eb7-9ccf-d1baec3d4408/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "DSO 503S__2250437452",
+      "dataset_name": "Cardiac Measures for Midodrine Group",
+      "dataset_description": "This graph depicts mean preflight (black circles, n = 5) and landing day (white circles, n = 5) heart rate, stroke volume, and total peripheral resistance measurements during supine rest and 10 minutes of tilt/stand for the Midodrine flight group (B) during the DSO 503S study. Bars represent SEM; * p = 0.001; † p = 0.056. There were no statistically significant differences between BP or cardiac output. No subject experienced hypotension or presyncope during any test. Hemodynamic responses were very similar between flights. . Of note, however, is that mean postflight upright heart rate was significantly higher than the preflight baseline for the control flight (p = 0.001), but was not after the Midodrine flight (p = 0.185) compared with their respective preflight upright heart rates. Importantly, Midodrine did not result in significantly increased supine or upright blood pressure. Additionally, supine stroke volume (p = 0.056) tended to be higher after Midodrine, compared with preflight.\r\n<p>\r\nSource: \r\nPlatts SH, Ziegler MG, Waters WW, and Meck JV. Hemodynamic effects of midodrine after spaceflight in astronauts without orthostatic hypotension. <i>Aviation, Space, and Environmental Medicine.</i> 2006;77:429-433.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "DSO_503S__2250437452.tif_STS-109_DSO_503S_2010_225_040813.tif",
+      "file_key": "69af9c6b-e885-50fe-b5cb-04d1263aca20",
+      "url": "https://nlsp.nasa.gov/api/v1/files/69af9c6b-e885-50fe-b5cb-04d1263aca20/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "DSO 503S__2250332830",
+      "dataset_name": "Hemodynamic Measurements",
+      "dataset_description": "This graph depicts hemodynamic measurements from both flights. Open circles are preflight measurements, closed circles are postflight measurements. Hemodynamic measurements made before each flight were very similar (open circles). However, postflight, some supine and most upright measurements were substantially different between flights (closed circles).\r\n<p>\r\nSource: Platts SH, Ziegler MG, Waters WW, Mitchell BM, D'Aunno D, and Meck JV. Midodrine prescribed to improve recurrent post-spaceflight orthostatic hypotension. <i>Aviation, Space, and Environmental Medicine.</i> 2004;75:554-556.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "DSO_503S__2250332830.tif_STS-109_DSO_503S_2010_225_040858.tif",
+      "file_key": "8a156669-511d-56ce-a2f6-d74c326a076a",
+      "url": "https://nlsp.nasa.gov/api/v1/files/8a156669-511d-56ce-a2f6-d74c326a076a/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "DSO 503S__2180806530",
+      "dataset_name": "Hemodynamic Responses to Midodrine Ingestion Before and After Space Flight",
+      "dataset_description": "The graphs show hemodynamic responses to midodrine ingestion before and after space flight.  Orthostatic landing occurred approximately 1 hour after midodrine ingestion.  Midodrine was given 2 hours after landing.  Phase 1 data represents 5 male non-presyncopal subjects.  Phase 2 data is preliminary and represents 4 of 10 subjects completed to date.  Two subjects developed presyncopal symptoms on landing day.<P>Source: Stenger MB, Stein SP, Meck JV, Platts SH.  Midodrine as a Countermeasure for Post-Spaceflight Orthostatic Hypotension. Human Research Program Investigators' Workshop, 4-6 Feb. 2008, League City, TX, United States.<A HREF=\"http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20080010875_2008009736.pdf\">[NTRS].</A>",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "DSO_503S_2180806530.TIF_STS-109_DSO_503S_2010_230_020817.TIF",
+      "file_key": "325da4cb-962a-5fd7-9aeb-da556a0d9e6b",
+      "url": "https://nlsp.nasa.gov/api/v1/files/325da4cb-962a-5fd7-9aeb-da556a0d9e6b/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T14:21:46Z",
+  "generated_by": "scripts/fetch_data.py"
+}

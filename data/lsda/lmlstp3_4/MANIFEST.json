@@ -1,0 +1,207 @@
+{
+  "source_id": "lsda_lmlstp3_4",
+  "experiment_identifier": "LMLSTP3.4",
+  "nlsp_experiment_id": "caf12d45-8bd3-5e0e-badd-e9473dd7cb21",
+  "lsda_guid": "cl62axwahcd1001o621v1073s",
+  "title": "Assessment of Sleep Dynamics in a Simulated Space Station Environment",
+  "doi": "10.83263/vye7-fv52",
+  "missions": [
+    [
+      [
+        "LMLSTP"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/caf12d45-8bd3-5e0e-badd-e9473dd7cb21/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/caf12d45-8bd3-5e0e-badd-e9473dd7cb21"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "Ground analog (Lunar-Mars Life Support Test Project, chamber Phase II 30 d and Phase III 91 d, 4 crew each = 8 subjects).",
+    "Only group means ± SEM (n=8) of sleep variables; no per-subject data. Melatonin/light/rhythm results only as graph images (TIF, not downloaded).",
+    "Not importable to observation; usable as cohort reference values for sleep."
+  ],
+  "content": {
+    "files/JMGROUNDLMLSTP34_115/JMGROUNDLMLSTP34_115.xls": {
+      "csv": "files/JMGROUNDLMLSTP34_115/JMGROUNDLMLSTP34_115.xls__Integration_Standards.csv",
+      "what": "Sleep variables in chamber crewmembers: objective (Actillume actigraphy) and subjective (AIRLOG sleep log), baseline vs chamber",
+      "granularity": "group mean ± SEM, n=8",
+      "time_points": [
+        "Baseline (pre-chamber)",
+        "Chamber"
+      ],
+      "rows": [
+        {
+          "name": "Duration",
+          "unit": "h"
+        },
+        {
+          "name": "Efficiency",
+          "unit": "%"
+        },
+        {
+          "name": "Latency",
+          "unit": "h"
+        },
+        {
+          "name": "WASO (wake after sleep onset)",
+          "unit": "h (not stated; same scale as latency)"
+        },
+        {
+          "name": "Quality",
+          "unit": "subjective score (scale not stated)"
+        },
+        {
+          "name": "Number of awakenings",
+          "unit": "count"
+        }
+      ],
+      "pitfalls": [
+        "Values are text 'mean±SEM' (no spaces); 'N/A' cells.",
+        "Sheet is named 'Integration Standards' (template name), not a data label."
+      ],
+      "importable_to_observation": false
+    },
+    "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls": {
+      "csv": [
+        "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Actilume_246.csv",
+        "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Sleep_log_245.csv",
+        "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Saliva_Collection_243.csv",
+        "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Urine_Collection_244.csv"
+      ],
+      "what": "Data collection timetables (one sheet per session type: Actillume 48 h, AIRLOG sleep log, saliva melatonin every 2 h, void-by-void urine). Schedule only: Phase II/III pre-/in-/post-chamber, dates 'not available'.",
+      "importable_to_observation": false
+    }
+  },
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 16475,
+      "sha256": "a5edcfa42ce10c24f603adf62e117280ae3e27c3e37cb8f523c3bf01ec6d7325",
+      "note": "experiment record subset + dataset/file tree"
+    },
+    {
+      "path": "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls",
+      "bytes": 50688,
+      "sha256": "304d95dcc0c6571786a0ec0c7aa5bf31038e7637ab311dd341c2cd94b24cec4c",
+      "dataset_catalog": "JMGROUNDLMLSTP34_1",
+      "dataset_name": "Data Collection Timetables for LMLSTP3.4",
+      "dataset_description": "This spreadsheet represents the data collection timetables for data collection sessions for this experiment.  Information in this spreadsheet may include information on the test protocol, data collection constraints, parameters measured, hardware used, sheduled versus actual days of data collection and subject information.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMGROUNDLMLSTP341.xls",
+      "file_key": "7b963fac-9e2d-571f-b500-a806f4ca2b2d",
+      "url": "https://nlsp.nasa.gov/api/v1/files/7b963fac-9e2d-571f-b500-a806f4ca2b2d/download",
+      "sheets_csv": [
+        {
+          "sheet": "Saliva Collection 243",
+          "path": "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Saliva_Collection_243.csv",
+          "rows": 39,
+          "cols": 5,
+          "sha256": "117968ffcf9ea262bf8265b6c215fbb324bfe5488f82432c8b8c8bbbe183bfff"
+        },
+        {
+          "sheet": "Urine Collection 244",
+          "path": "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Urine_Collection_244.csv",
+          "rows": 39,
+          "cols": 5,
+          "sha256": "493e2484fd836e2a8e5866a00a27ca15645e024030e8a5857b22032e9809b7d6"
+        },
+        {
+          "sheet": "Sleep log 245",
+          "path": "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Sleep_log_245.csv",
+          "rows": 57,
+          "cols": 5,
+          "sha256": "da42c6b40acacac4815aadb50c7baeebb550059dc075782db27bba9fffcaa73f"
+        },
+        {
+          "sheet": "Actilume 246",
+          "path": "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Actilume_246.csv",
+          "rows": 57,
+          "cols": 5,
+          "sha256": "dd8575e33c080940cf061837ca10550ecb0a1feece66d1f12d01b177fbba2f81"
+        }
+      ]
+    },
+    {
+      "path": "files/JMGROUNDLMLSTP34_115/JMGROUNDLMLSTP34_115.xls",
+      "bytes": 15872,
+      "sha256": "904f5902b81f332d7e3365860e9c3c7d383fbd8f7ca76a1be37d0d69fb0e9bc6",
+      "dataset_catalog": "JMGROUNDLMLSTP34_115",
+      "dataset_name": "Measurement of Sleep Variables by Chamber Crewmembers",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMGROUNDLMLSTP34_115.xls",
+      "file_key": "14ddfb62-3115-531b-9baf-83cd4993b829",
+      "url": "https://nlsp.nasa.gov/api/v1/files/14ddfb62-3115-531b-9baf-83cd4993b829/download",
+      "sheets_csv": [
+        {
+          "sheet": "Integration Standards",
+          "path": "files/JMGROUNDLMLSTP34_115/JMGROUNDLMLSTP34_115.xls__Integration_Standards.csv",
+          "rows": 26,
+          "cols": 5,
+          "sha256": "13ea2ca226b7c9fbcdf86fb4e676f93ceb2d7e343591133e51d7ace0a8fcd95d"
+        }
+      ]
+    }
+  ],
+  "skipped_files": [
+    {
+      "dataset_catalog": "JMGROUNDLMLSTP34_118",
+      "dataset_name": "Correlation between Urinary MTS and Salivary Melatonin Acrophases",
+      "dataset_description": "A sumary plot showing the regression equation and correlation between urinary 6-alpha MTS acrophase and salivary melatonin acrophase. Source: Putcha L, Nimmagudda R, Rivera C. Assessment of sleep dynamics in a simulated space station environment. In: Lane HW, Sauer RL, Feeback DL, eds. Isolation: NASA Experiments in Closed-Environment Living: Advanced Human Life Support Enclosed System Final Report. San Diego: Univelt, Incorporated. 2002;104:131-139.<end>",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMGROUNDLMLSTP34_118.tif",
+      "file_key": "d1ee43d0-1202-5f61-bef6-1697a9b281c5",
+      "url": "https://nlsp.nasa.gov/api/v1/files/d1ee43d0-1202-5f61-bef6-1697a9b281c5/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMGROUNDLMLSTP34_117",
+      "dataset_name": "Comparative Estimates of Circadian Rhythm Changes",
+      "dataset_description": "A summary plot is shown in this figure comparing baseline to in-chamber acrophases for saliva and urine samples from eight subjects.  Data were collected during two periods of confinement. Source: Putcha L, Nimmagudda R, Rivera C. Assessment of sleep dynamics in a simulated space station environment. In: Lane HW, Sauer RL, Feeback DL, eds. Isolation: NASA Experiments in Closed-Environment Living: Advanced Human Life Support Enclosed System Final Report. San Diego: Univelt, Incorporated. 2002;104:131-139.<end>",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMGROUNDLMLSTP34_117.tif",
+      "file_key": "5f14be95-a62f-5123-91ca-4ee872bc4515",
+      "url": "https://nlsp.nasa.gov/api/v1/files/5f14be95-a62f-5123-91ca-4ee872bc4515/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMGROUNDLMLSTP34_116",
+      "dataset_name": "Light Exposure during Wake Period",
+      "dataset_description": "Illumination data was collected from eight subjects during the waking period using the Actillume&#153; wrist watch and presented as a summary plot. Source: Putcha L, Nimmagudda R, Rivera C. Assessment of sleep dynamics in a simulated space station environment. In: Lane HW, Sauer RL, Feeback DL, eds. Isolation: NASA Experiments in Closed-Environment Living: Advanced Human Life Support Enclosed System Final Report. San Diego: Univelt, Incorporated. 2002;104:131-139.<end>",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMGROUNDLMLSTP34_116.tif",
+      "file_key": "3948dd73-11af-5be8-a9ba-76d4de816523",
+      "url": "https://nlsp.nasa.gov/api/v1/files/3948dd73-11af-5be8-a9ba-76d4de816523/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMGROUNDLMLSTP34_119",
+      "dataset_name": "Correlation of Rhythm Markers (Salivary Melatonin Acrophase) with Subjective Measurement of Sleep Duration",
+      "dataset_description": "A summary plot showing the correlation between salivary melatonin acrophase and subjective sleep duration is shown in this figure. Source: Putcha L, Nimmagudda R, Rivera C. Assessment of sleep dynamics in a simulated space station environment. In: Lane HW, Sauer RL, Feeback DL, eds. Isolation: NASA Experiments in Closed-Environment Living: Advanced Human Life Support Enclosed System Final Report. San Diego: Univelt, Incorporated. 2002;104:131-139.<end>",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMGROUNDLMLSTP34_119.tif",
+      "file_key": "95a48dc2-b52c-5e64-8d0f-b9c908d6214e",
+      "url": "https://nlsp.nasa.gov/api/v1/files/95a48dc2-b52c-5e64-8d0f-b9c908d6214e/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T14:22:01Z",
+  "generated_by": "scripts/fetch_data.py"
+}

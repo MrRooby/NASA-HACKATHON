@@ -1,0 +1,121 @@
+{
+ "experiment_id": "LSAHNEWSV7_2_2",
+ "experiment_identifier": "LSAHNEWSV7_2_2",
+ "title": "Association Between Aging and Specific Physiological Measurements",
+ "doi": "10.83263/0e0b-nn59",
+ "archive_status": "Data preservation is complete. All datasets are publicly available.",
+ "missions": [
+  [
+   [
+    "LSAH"
+   ]
+  ]
+ ],
+ "parameter_name": [
+  "Blood pressure",
+  "Hearing",
+  "Cholesterol, low-density lipoprotein (LDL)"
+ ],
+ "description": "OBJECTIVES:<BR>\r\nAs part of the process of examining data to separate the effects of space flight from the background effects of aging, a comparison is made of the age-specific values for certain physiological measurements among both the astronauts and the comparison participants.   In the general population, aging is associated with weight gain and increased serum lipids, increased blood pressure, and hearing loss.  Similar associations were found among the LSAH population and the differences between the astronauts and the comparison participants, in general, were not dramatic.\r\n<P>\r\nAPPROACH:<BR>\r\nThe current mean age of the study population is slightly lower for the females (41 years) than for the males (49 years).  The age range is from the late 20s to the middle 70s.  The cumulative follow-up time is 4,057 person years for the astronauts and 12,874 person years for the comparison participants.\r\n<P>\r\nFor the purposes of looking at the association of aging, cross-sectional data for specific age groups were examined.  The data were organized by age of examination for all annual examinations for all study participants.  The first examination was selected for each participant when he/she entered a new age group.  An individual is included in every age group that he/she has achieved but is represented only once in any age group.   \r\n<P>\r\nRESULTS:<BR>\r\nLow-density-lipoprotein (LDL) cholesterol is the component of cholesterol that is most closely associated with risk of heart disease.  The ratio of LDL to high-density-lipoprotein (HDL) cholesterol appears to be more important than the raw values of either type of cholesterol.  The trend frequently observed in the general population is an increase in LDL and a decrease in HDL as aging occurs.  The trend among the LSAH population for LDL is also an increase with age.  However, the trend for HDL is relatively flat.  HDL is associated with exercise and it can be speculated that the LSAH population is more active than the general population.  As the numbers of individuals in the upper age groups increase, this flat trend for HDL may or may not continue.  The values for both of these variables are noticeably different for the females compared to the males.  This difference is consistent with the lower risk of heart disease for women during pre-menopausal years than for men of the same ages.  The sharp increase seen in LDL for women at age 40-44 is associated with an increase in risk that is more like the risk men have for heart disease.\r\n<P>\r\nRelatively small increases in blood pressure result in increased risk of circulatory diseases such as stroke and heart disease.  Analyses show an upward trend in blood pressure with age for both the comparison participants and the astronauts.  Again, the number of females included in 40 and above age groups is small and results in somewhat erratic trend lines.\r\n<P>\r\nHearing loss is associated with aging as well as with occupational exposures to noise.  It would not be unexpected to see greater hearing loss among the astronauts than among the comparison participants.  However, that is not evident in the current data.  The results of one of the high frequency (6000 Hertz) tests completed in the standard audiometric test are shown.  The patterns were similar for all frequencies from 500 through 8000 Hertz.  A hearing loss is seen in association with age, especially for males, but the difference between the comparison participants and the astronauts is negligible.\r\n<P>\r\nThere are some differences between the astronauts and the comparison participants in the many physiological measures recently examined but the patterns seem to be very much alike for the two groups.  The astronauts started this study from a point of selection based on a high standard of well being, whereas the comparison participants started from a point of being a generally healthy working population.  The occupational exposures of the astronauts have some high risks and are different from the comparison participants.  However, the current data suggests that both groups are affected by age in the same ways.  <END>",
+ "publications": [
+  "National Aeronautics and Space Administration. Association between aging and specific physiological measurements. In: <A HREF=\"/refs/LSAH/Vol_7_Issue_2_Oct_98.pdf\">Longitudinal Study of Astronaut Health Newsletter</A>. October 1998;7(2).<END>"
+ ],
+ "datasets": [
+  {
+   "key": "IDP-LSDA_DATASET-0000000000001812",
+   "label": "JMLSAHNEWSV722_152",
+   "type": "folder",
+   "dataset_info": {
+    "dataset_name": "Blood Pressure-Mean Values by Age in the Longitudinal Study for Astronaut Health (LSAH)  Population",
+    "dataset_catalog": "JMLSAHNEWSV722_152",
+    "dataset_description": [
+     "The graph shows mean values by age for sitting diastolic and systolic blood pressure in the Longitudinal Study of Astronaut Health (LSAH) population: female and male astronauts, and female and male comparison subjects.<P>\r\nSource: National Aeronautics and Space Administration. Association between aging and specific physiological measurements. In: Longitudinal Study of Astronaut Health Newsletter. October 1998;7(2)."
+    ],
+    "processing_level": [
+     "Summarized"
+    ],
+    "experiment_id": [
+     "LSAHNEWSV7_2_2"
+    ]
+   },
+   "meta": "1 file · 91.0 KB",
+   "date": "2022-07-28",
+   "children": [
+    {
+     "key": "27674820-da9c-5d20-a71c-d0179593aafb",
+     "label": "JMLSAHNEWSV722_152.xls",
+     "type": "file",
+     "ext": "xls",
+     "file_size": 93184,
+     "meta": "91.0 KB",
+     "date": "2022-07-28",
+     "dataset_file_info": {}
+    }
+   ]
+  },
+  {
+   "key": "IDP-LSDA_DATASET-0000000000001813",
+   "label": "JMLSAHNEWSV722_153",
+   "type": "folder",
+   "dataset_info": {
+    "dataset_name": "Hearing-Mean Values by Age in the Longitudinal Study for Astronaut Health (LSAH)  Population",
+    "dataset_catalog": "JMLSAHNEWSV722_153",
+    "dataset_description": [
+     "The graph shows mean values by age for hearing in the Longitudinal Study of Astronaut Health (LSAH) population: female and male astronauts, and female and male comparison subjects.  Hearing was measured in the right ear at 6000 Hz.<P>\r\nSource: National Aeronautics and Space Administration. Association between aging and specific physiological measurements. In: Longitudinal Study of Astronaut Health Newsletter. October 1998;7(2)."
+    ],
+    "processing_level": [
+     "Summarized"
+    ],
+    "experiment_id": [
+     "LSAHNEWSV7_2_2"
+    ]
+   },
+   "meta": "1 file · 77.0 KB",
+   "date": "2022-07-28",
+   "children": [
+    {
+     "key": "7c3f557e-7cc9-52cf-bc90-42e8bbb66f43",
+     "label": "JMLSAHNEWSV722_153.xls",
+     "type": "file",
+     "ext": "xls",
+     "file_size": 78848,
+     "meta": "77.0 KB",
+     "date": "2022-07-28",
+     "dataset_file_info": {}
+    }
+   ]
+  },
+  {
+   "key": "IDP-LSDA_DATASET-0000000000001526",
+   "label": "JMLSAHNEWSV722_151",
+   "type": "folder",
+   "dataset_info": {
+    "dataset_name": "LDL Cholesterol-Mean Values by Age in the Longitudinal Study for Astronaut Health (LSAH)  Population",
+    "dataset_catalog": "JMLSAHNEWSV722_151",
+    "dataset_description": [
+     "The graph shows mean values by age for LDL Cholesterol in the Longitudinal Study of Astronaut Health (LSAH) population: female and male astronauts, and female and male comparison subjects.<P>\r\nSource: National Aeronautics and Space Administration. Association between aging and specific physiological measurements. In: Longitudinal Study of Astronaut Health Newsletter. October 1998;7(2)."
+    ],
+    "processing_level": [
+     "Summarized"
+    ],
+    "experiment_id": [
+     "LSAHNEWSV7_2_2"
+    ]
+   },
+   "meta": "1 file · 77.0 KB",
+   "date": "2022-07-28",
+   "children": [
+    {
+     "key": "590e46f7-08f9-5faa-a2ea-203df3123372",
+     "label": "JMLSAHNEWSV722_151.xls",
+     "type": "file",
+     "ext": "xls",
+     "file_size": 78848,
+     "meta": "77.0 KB",
+     "date": "2022-07-28",
+     "dataset_file_info": {}
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+  "source_id": "lsda_lsah_v8_1_2",
+  "experiment_identifier": "LSAHNEWSV8_1_2",
+  "nlsp_experiment_id": "d9389707-a840-5812-9746-9cda98923235",
+  "lsda_guid": "cl62axaydccw001o61dcnbigb",
+  "title": "Aging and Blood Pressure in Astronauts",
+  "doi": "10.83263/yefa-pj57",
+  "missions": [
+    [
+      [
+        "LSAH"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/d9389707-a840-5812-9746-9cda98923235/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/d9389707-a840-5812-9746-9cda98923235"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "NOT DOWNLOADED: 'Aging and Blood Pressure in Astronauts' has 0 datasets in the NLSP record (only 1 publication citation). Metadata saved."
+  ],
+  "content": {},
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 3059,
+      "sha256": "bd41c41227e1322c6f9b37208f27817623e0aa6f69ff1017221778215e6500e6",
+      "note": "experiment record subset + dataset/file tree"
+    }
+  ],
+  "skipped_files": [],
+  "fetched_at_utc": "2026-11-14T14:22:08Z",
+  "generated_by": "scripts/fetch_data.py"
+}

@@ -1,0 +1,9 @@
+# mariadb.cnf | ustawienia serwera, na których polegają schemat i kontrakt astro_api (wersja 0.2)
+# Docker: zamontować jako /etc/mysql/conf.d/astro.cnf
+[mysqld]
+character-set-server = utf8mb4
+collation-server     = utf8mb4_unicode_ci
+# wszystkie czasy w bazie są w UTC
+default-time-zone    = '+00:00'
+# kolumny z listami w widokach (timepoints, categories, sources) nie mogą być obcinane
+group_concat_max_len = 65536

@@ -1,0 +1,720 @@
+{
+  "source_id": "lsda_dso467",
+  "experiment_identifier": "DSO 467",
+  "nlsp_experiment_id": "c01c5fbf-97e4-5a9d-b404-3bfb19ef237c",
+  "lsda_guid": "cl62aym26cd7401o6bka8ejpr",
+  "title": "Influence of Weightlessness on Baroreflex Function",
+  "doi": "10.83263/r7km-ze25",
+  "missions": [
+    [
+      [
+        "STS-27"
+      ]
+    ],
+    [
+      [
+        "STS-28"
+      ]
+    ],
+    [
+      [
+        "STS-29"
+      ]
+    ],
+    [
+      [
+        "STS-30"
+      ]
+    ],
+    [
+      [
+        "STS-31"
+      ]
+    ],
+    [
+      [
+        "STS-32"
+      ]
+    ],
+    [
+      [
+        "STS-33"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/c01c5fbf-97e4-5a9d-b404-3bfb19ef237c/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/c01c5fbf-97e4-5a9d-b404-3bfb19ef237c"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "Only group-level summaries (mean +/- SE). No per-subject data. Not importable to observation; usable as reference/cohort statistics.",
+    "The archive lists every file 7 times (one copy per mission dataset, different file keys, identical bytes) - only one copy stored, others listed in skipped_files as duplicates.",
+    "Missions: see 'missions' field; 'Detailed Supplementary Objectives', EDOMP Final Report 1989-1995."
+  ],
+  "content": {
+    "files/JMDSO_467_5/JMDSO_467_5.xls": {
+      "csv": "files/JMDSO_467_5/JMDSO_467_5.xls__Sheet1.csv",
+      "what": "Measurements from all subjects on all test days (stand test + carotid baroreflex)",
+      "granularity": "group mean ± SE (single text cell like '116 ± 2' or '1,123 ± 42*')",
+      "subjects": "11-12 (footnote: LD vs preflight n=11; LD vs R+8-10 n=12)",
+      "time_points": [
+        "Preflight",
+        "Landing day (R+0)",
+        "R+2",
+        "R+3",
+        "R+8..10"
+      ],
+      "rows": [
+        {
+          "name": "Systolic pressure",
+          "unit": "mmHg"
+        },
+        {
+          "name": "Diastolic pressure",
+          "unit": "mmHg"
+        },
+        {
+          "name": "R-R interval",
+          "unit": "ms"
+        },
+        {
+          "name": "Standard deviation of R-R",
+          "unit": "ms"
+        },
+        {
+          "name": "Body weight",
+          "unit": "kg"
+        },
+        {
+          "name": "Baroreflex maximum slope",
+          "unit": "ms/mmHg"
+        },
+        {
+          "name": "Operational point",
+          "unit": "%"
+        },
+        {
+          "name": "R-R interval range/minimum/maximum",
+          "unit": "ms"
+        },
+        {
+          "name": "Carotid distending pressure at min/max R-R",
+          "unit": "mmHg"
+        }
+      ],
+      "pitfalls": [
+        "Values are text 'mean ± SE' with significance markers (*, †) and thousands separators ('1,123').",
+        "SOURCE ERROR: the 'Maximum slope, ms/mmHg' row repeats the 'Body weight, kg' row verbatim (75.6 ± 4.0 ...) - do not use it.",
+        "Transposed layout: variables in rows, time points in columns."
+      ],
+      "importable_to_observation": false
+    },
+    "files/JMDSO_467_6/JMDSO_467_6.xls": {
+      "csv": "files/JMDSO_467_6/JMDSO_467_6.xls__Sheet1.csv",
+      "what": "Subjects grouped (cluster analysis) into 'more resistant' vs 'less resistant' to orthostatic stress; supine and standing BP, HR, R-R, baroreflex",
+      "granularity": "group mean ± SE per resistance group",
+      "subjects": 11,
+      "time_points": [
+        "L-10 days",
+        "Landing day (R+0)"
+      ],
+      "rows": [
+        {
+          "name": "Weight",
+          "unit": "kg"
+        },
+        {
+          "name": "Age",
+          "unit": "yr"
+        },
+        {
+          "name": "Systolic pressure supine/standing",
+          "unit": "mmHg"
+        },
+        {
+          "name": "Diastolic pressure supine/standing",
+          "unit": "mmHg"
+        },
+        {
+          "name": "Heart rate supine/standing",
+          "unit": "beats/min"
+        },
+        {
+          "name": "R-R interval supine/standing",
+          "unit": "ms (header says 'm', a typo)"
+        },
+        {
+          "name": "Baroreflex maximum slope",
+          "unit": "ms/mmHg"
+        },
+        {
+          "name": "R-R range",
+          "unit": "ms"
+        },
+        {
+          "name": "Operational point",
+          "unit": "%"
+        }
+      ],
+      "pitfalls": [
+        "Text 'mean ± SE' cells; '931 ±10' without space; empty spacer column between L-10 and R+0 blocks."
+      ],
+      "importable_to_observation": false
+    }
+  },
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 19691,
+      "sha256": "f69d12ccb9878bf285072fd980e5fc2257f58fd1d1c9a273bc76d97d70fd0701",
+      "note": "experiment record subset + dataset/file tree"
+    },
+    {
+      "path": "files/JMDSO_467_6/JMDSO_467_6.xls",
+      "bytes": 26624,
+      "sha256": "5fbc2678d8227bd99299fb634b350106dfe9f13c140ac8b839f383aaa46ca47f",
+      "dataset_catalog": "JMDSO_467_6",
+      "dataset_name": "Cardiovascular Parameters",
+      "dataset_description": "This Excel file contains cardiovascular parameters from all subjects for the DSO 467 study.  Variables include blood pressure (supine and standing), heart rate (supine and standing), R-R interval (supine and standing), body weight, age, maximum slope, and operational point.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_6.xls",
+      "file_key": "8501311c-6f56-58e8-bb16-e12019f80760",
+      "url": "https://nlsp.nasa.gov/api/v1/files/8501311c-6f56-58e8-bb16-e12019f80760/download",
+      "sheets_csv": [
+        {
+          "sheet": "Sheet1",
+          "path": "files/JMDSO_467_6/JMDSO_467_6.xls__Sheet1.csv",
+          "rows": 32,
+          "cols": 6,
+          "sha256": "034f8a7849df03fdbc99731018ed95ab642eba7270753f4231bc43a72388ec51"
+        }
+      ]
+    },
+    {
+      "path": "files/JMDSO_467_5/JMDSO_467_5.xls",
+      "bytes": 26624,
+      "sha256": "4c81a300ae9770874b0283278ba7cee3c9d54334a3069beb61f2dbc7c2eb4fdd",
+      "dataset_catalog": "JMDSO_467_5",
+      "dataset_name": "Measurements from All Subjects",
+      "dataset_description": "This Excel file contains measurements from all subjects for the DSO 467 study.  Variables include blood pressure, R-R interval, body weight, maximum slope, operational point, and carotid distending pressure.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_5.xls",
+      "file_key": "6dcd85c9-7cc9-5cac-bc95-6a626c2d2025",
+      "url": "https://nlsp.nasa.gov/api/v1/files/6dcd85c9-7cc9-5cac-bc95-6a626c2d2025/download",
+      "sheets_csv": [
+        {
+          "sheet": "Sheet1",
+          "path": "files/JMDSO_467_5/JMDSO_467_5.xls__Sheet1.csv",
+          "rows": 32,
+          "cols": 6,
+          "sha256": "9b5a8450c5d2bbd94449e283bbe836ecbe86102fc0e00e0f2abf67de25e977cb"
+        }
+      ]
+    }
+  ],
+  "skipped_files": [
+    {
+      "dataset_catalog": "JMDSO_467_4",
+      "dataset_name": "Blood Pressure, Heart Rate, and Body Weight Changes",
+      "dataset_description": "This is a graph depicting comparisons of preflight to landing day changes between two groups identified by cluster analysis for subjects in the DSO 467 study. Variables include blood pressure, heart rate, and body weight. *P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_4.tif",
+      "file_key": "4fd055b1-d414-5a8a-9d87-72c675202f46",
+      "url": "https://nlsp.nasa.gov/api/v1/files/4fd055b1-d414-5a8a-9d87-72c675202f46/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_4",
+      "dataset_name": "Blood Pressure, Heart Rate, and Body Weight Changes",
+      "dataset_description": "This is a graph depicting comparisons of preflight to landing day changes between two groups identified by cluster analysis for subjects in the DSO 467 study. Variables include blood pressure, heart rate, and body weight. *P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_4.tif",
+      "file_key": "4197edfc-9bdf-5237-abf5-9c33c2d1fa8a",
+      "url": "https://nlsp.nasa.gov/api/v1/files/4197edfc-9bdf-5237-abf5-9c33c2d1fa8a/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_4",
+      "dataset_name": "Blood Pressure, Heart Rate, and Body Weight Changes",
+      "dataset_description": "This is a graph depicting comparisons of preflight to landing day changes between two groups identified by cluster analysis for subjects in the DSO 467 study. Variables include blood pressure, heart rate, and body weight. *P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_4.tif",
+      "file_key": "74d18825-ed61-52d1-ad54-7d98a1a8e8fb",
+      "url": "https://nlsp.nasa.gov/api/v1/files/74d18825-ed61-52d1-ad54-7d98a1a8e8fb/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_4",
+      "dataset_name": "Blood Pressure, Heart Rate, and Body Weight Changes",
+      "dataset_description": "This is a graph depicting comparisons of preflight to landing day changes between two groups identified by cluster analysis for subjects in the DSO 467 study. Variables include blood pressure, heart rate, and body weight. *P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_4.tif",
+      "file_key": "fd94aabe-4cca-51e5-9591-b9b6e106e15e",
+      "url": "https://nlsp.nasa.gov/api/v1/files/fd94aabe-4cca-51e5-9591-b9b6e106e15e/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_4",
+      "dataset_name": "Blood Pressure, Heart Rate, and Body Weight Changes",
+      "dataset_description": "This is a graph depicting comparisons of preflight to landing day changes between two groups identified by cluster analysis for subjects in the DSO 467 study. Variables include blood pressure, heart rate, and body weight. *P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_4.tif",
+      "file_key": "fd1a6cc6-9b21-50af-bb35-0ed61a0f69c6",
+      "url": "https://nlsp.nasa.gov/api/v1/files/fd1a6cc6-9b21-50af-bb35-0ed61a0f69c6/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_4",
+      "dataset_name": "Blood Pressure, Heart Rate, and Body Weight Changes",
+      "dataset_description": "This is a graph depicting comparisons of preflight to landing day changes between two groups identified by cluster analysis for subjects in the DSO 467 study. Variables include blood pressure, heart rate, and body weight. *P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_4.tif",
+      "file_key": "47f6c3b7-008f-557c-acb4-b344d64aeadf",
+      "url": "https://nlsp.nasa.gov/api/v1/files/47f6c3b7-008f-557c-acb4-b344d64aeadf/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_4",
+      "dataset_name": "Blood Pressure, Heart Rate, and Body Weight Changes",
+      "dataset_description": "This is a graph depicting comparisons of preflight to landing day changes between two groups identified by cluster analysis for subjects in the DSO 467 study. Variables include blood pressure, heart rate, and body weight. *P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_4.tif",
+      "file_key": "38f770ed-2ac8-55ee-942d-57508c2d3205",
+      "url": "https://nlsp.nasa.gov/api/v1/files/38f770ed-2ac8-55ee-942d-57508c2d3205/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_1",
+      "dataset_name": "Carotid Baroreceptor Vagal-Cardiac Reflex Responses",
+      "dataset_description": "This is a graph depicting carotid baroreceptor vagal-cardiac reflex responses for subjects in the DSO 467 study before flight and on landing day. The closed symbols are positions of operational points. \r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_1.tif",
+      "file_key": "497df12e-1b2f-538f-b1f6-734f36424b0b",
+      "url": "https://nlsp.nasa.gov/api/v1/files/497df12e-1b2f-538f-b1f6-734f36424b0b/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_1",
+      "dataset_name": "Carotid Baroreceptor Vagal-Cardiac Reflex Responses",
+      "dataset_description": "This is a graph depicting carotid baroreceptor vagal-cardiac reflex responses for subjects in the DSO 467 study before flight and on landing day. The closed symbols are positions of operational points. \r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_1.tif",
+      "file_key": "d739eaca-0bb9-5825-8aa8-98c5243e1515",
+      "url": "https://nlsp.nasa.gov/api/v1/files/d739eaca-0bb9-5825-8aa8-98c5243e1515/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_1",
+      "dataset_name": "Carotid Baroreceptor Vagal-Cardiac Reflex Responses",
+      "dataset_description": "This is a graph depicting carotid baroreceptor vagal-cardiac reflex responses for subjects in the DSO 467 study before flight and on landing day. The closed symbols are positions of operational points. \r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_1.tif",
+      "file_key": "bb22a7be-34de-5466-8058-5d09c94e55a8",
+      "url": "https://nlsp.nasa.gov/api/v1/files/bb22a7be-34de-5466-8058-5d09c94e55a8/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_1",
+      "dataset_name": "Carotid Baroreceptor Vagal-Cardiac Reflex Responses",
+      "dataset_description": "This is a graph depicting carotid baroreceptor vagal-cardiac reflex responses for subjects in the DSO 467 study before flight and on landing day. The closed symbols are positions of operational points. \r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_1.tif",
+      "file_key": "2521729e-c8ad-5b0c-b997-9c30092cc263",
+      "url": "https://nlsp.nasa.gov/api/v1/files/2521729e-c8ad-5b0c-b997-9c30092cc263/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_1",
+      "dataset_name": "Carotid Baroreceptor Vagal-Cardiac Reflex Responses",
+      "dataset_description": "This is a graph depicting carotid baroreceptor vagal-cardiac reflex responses for subjects in the DSO 467 study before flight and on landing day. The closed symbols are positions of operational points. \r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_1.tif",
+      "file_key": "08942c6d-244a-580e-8b90-edf151aa5cec",
+      "url": "https://nlsp.nasa.gov/api/v1/files/08942c6d-244a-580e-8b90-edf151aa5cec/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_1",
+      "dataset_name": "Carotid Baroreceptor Vagal-Cardiac Reflex Responses",
+      "dataset_description": "This is a graph depicting carotid baroreceptor vagal-cardiac reflex responses for subjects in the DSO 467 study before flight and on landing day. The closed symbols are positions of operational points. \r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_1.tif",
+      "file_key": "e44b1a08-57c6-5afc-ab24-4cdc7084c601",
+      "url": "https://nlsp.nasa.gov/api/v1/files/e44b1a08-57c6-5afc-ab24-4cdc7084c601/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_1",
+      "dataset_name": "Carotid Baroreceptor Vagal-Cardiac Reflex Responses",
+      "dataset_description": "This is a graph depicting carotid baroreceptor vagal-cardiac reflex responses for subjects in the DSO 467 study before flight and on landing day. The closed symbols are positions of operational points. \r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_1.tif",
+      "file_key": "82223de2-880f-5557-a8a8-ebe4ff138a34",
+      "url": "https://nlsp.nasa.gov/api/v1/files/82223de2-880f-5557-a8a8-ebe4ff138a34/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_3",
+      "dataset_name": "Operational Points and Systolic Pressure",
+      "dataset_description": "This is a graph depicting preflight-to-postflight (landing day) changes of operational points and systolic pressure responses to standing for subjects in the DSO 467 study. Linear regression correlation coefficients are for all data. Cluster analysis of these data identified two distinct groups, which have been termed less and more resistant to postural change. The hatched area indicates a more resistant group.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_3.tif",
+      "file_key": "31aa7d99-8abf-5170-95c6-1b09ff9aa652",
+      "url": "https://nlsp.nasa.gov/api/v1/files/31aa7d99-8abf-5170-95c6-1b09ff9aa652/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_3",
+      "dataset_name": "Operational Points and Systolic Pressure",
+      "dataset_description": "This is a graph depicting preflight-to-postflight (landing day) changes of operational points and systolic pressure responses to standing for subjects in the DSO 467 study. Linear regression correlation coefficients are for all data. Cluster analysis of these data identified two distinct groups, which have been termed less and more resistant to postural change. The hatched area indicates a more resistant group.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_3.tif",
+      "file_key": "e78d5304-ac9a-52e4-8d17-bcf6cce51e72",
+      "url": "https://nlsp.nasa.gov/api/v1/files/e78d5304-ac9a-52e4-8d17-bcf6cce51e72/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_3",
+      "dataset_name": "Operational Points and Systolic Pressure",
+      "dataset_description": "This is a graph depicting preflight-to-postflight (landing day) changes of operational points and systolic pressure responses to standing for subjects in the DSO 467 study. Linear regression correlation coefficients are for all data. Cluster analysis of these data identified two distinct groups, which have been termed less and more resistant to postural change. The hatched area indicates a more resistant group.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_3.tif",
+      "file_key": "aaa5075a-22b7-5152-a589-013b4a520726",
+      "url": "https://nlsp.nasa.gov/api/v1/files/aaa5075a-22b7-5152-a589-013b4a520726/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_3",
+      "dataset_name": "Operational Points and Systolic Pressure",
+      "dataset_description": "This is a graph depicting preflight-to-postflight (landing day) changes of operational points and systolic pressure responses to standing for subjects in the DSO 467 study. Linear regression correlation coefficients are for all data. Cluster analysis of these data identified two distinct groups, which have been termed less and more resistant to postural change. The hatched area indicates a more resistant group.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_3.tif",
+      "file_key": "40e91d53-a237-5a26-b603-926bc5c0bd81",
+      "url": "https://nlsp.nasa.gov/api/v1/files/40e91d53-a237-5a26-b603-926bc5c0bd81/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_3",
+      "dataset_name": "Operational Points and Systolic Pressure",
+      "dataset_description": "This is a graph depicting preflight-to-postflight (landing day) changes of operational points and systolic pressure responses to standing for subjects in the DSO 467 study. Linear regression correlation coefficients are for all data. Cluster analysis of these data identified two distinct groups, which have been termed less and more resistant to postural change. The hatched area indicates a more resistant group.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_3.tif",
+      "file_key": "633b0dd2-1723-59a5-89e4-5a8a0c31b7eb",
+      "url": "https://nlsp.nasa.gov/api/v1/files/633b0dd2-1723-59a5-89e4-5a8a0c31b7eb/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_3",
+      "dataset_name": "Operational Points and Systolic Pressure",
+      "dataset_description": "This is a graph depicting preflight-to-postflight (landing day) changes of operational points and systolic pressure responses to standing for subjects in the DSO 467 study. Linear regression correlation coefficients are for all data. Cluster analysis of these data identified two distinct groups, which have been termed less and more resistant to postural change. The hatched area indicates a more resistant group.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_3.tif",
+      "file_key": "c9bff40b-e6c0-5680-b3c3-51677135530c",
+      "url": "https://nlsp.nasa.gov/api/v1/files/c9bff40b-e6c0-5680-b3c3-51677135530c/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_3",
+      "dataset_name": "Operational Points and Systolic Pressure",
+      "dataset_description": "This is a graph depicting preflight-to-postflight (landing day) changes of operational points and systolic pressure responses to standing for subjects in the DSO 467 study. Linear regression correlation coefficients are for all data. Cluster analysis of these data identified two distinct groups, which have been termed less and more resistant to postural change. The hatched area indicates a more resistant group.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_3.tif",
+      "file_key": "fbe787a9-af6f-56f3-b3c8-d6b818355da1",
+      "url": "https://nlsp.nasa.gov/api/v1/files/fbe787a9-af6f-56f3-b3c8-d6b818355da1/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_6",
+      "dataset_name": "Cardiovascular Parameters",
+      "dataset_description": "This Excel file contains cardiovascular parameters from all subjects for the DSO 467 study.  Variables include blood pressure (supine and standing), heart rate (supine and standing), R-R interval (supine and standing), body weight, age, maximum slope, and operational point.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_6.xls",
+      "file_key": "ec2b414b-af3b-536c-a1ba-ff994d802d9a",
+      "url": "https://nlsp.nasa.gov/api/v1/files/ec2b414b-af3b-536c-a1ba-ff994d802d9a/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_6/JMDSO_467_6.xls",
+      "sha256": "5fbc2678d8227bd99299fb634b350106dfe9f13c140ac8b839f383aaa46ca47f"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_6",
+      "dataset_name": "Cardiovascular Parameters",
+      "dataset_description": "This Excel file contains cardiovascular parameters from all subjects for the DSO 467 study.  Variables include blood pressure (supine and standing), heart rate (supine and standing), R-R interval (supine and standing), body weight, age, maximum slope, and operational point.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_6.xls",
+      "file_key": "fe211256-abff-5c96-83b5-1e422792a9b6",
+      "url": "https://nlsp.nasa.gov/api/v1/files/fe211256-abff-5c96-83b5-1e422792a9b6/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_6/JMDSO_467_6.xls",
+      "sha256": "5fbc2678d8227bd99299fb634b350106dfe9f13c140ac8b839f383aaa46ca47f"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_6",
+      "dataset_name": "Cardiovascular Parameters",
+      "dataset_description": "This Excel file contains cardiovascular parameters from all subjects for the DSO 467 study.  Variables include blood pressure (supine and standing), heart rate (supine and standing), R-R interval (supine and standing), body weight, age, maximum slope, and operational point.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_6.xls",
+      "file_key": "0c71162d-d84f-5e4c-a858-adbc4cbf0e60",
+      "url": "https://nlsp.nasa.gov/api/v1/files/0c71162d-d84f-5e4c-a858-adbc4cbf0e60/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_6/JMDSO_467_6.xls",
+      "sha256": "5fbc2678d8227bd99299fb634b350106dfe9f13c140ac8b839f383aaa46ca47f"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_6",
+      "dataset_name": "Cardiovascular Parameters",
+      "dataset_description": "This Excel file contains cardiovascular parameters from all subjects for the DSO 467 study.  Variables include blood pressure (supine and standing), heart rate (supine and standing), R-R interval (supine and standing), body weight, age, maximum slope, and operational point.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_6.xls",
+      "file_key": "cb9bf766-3558-5179-ad3e-4bffa2faee31",
+      "url": "https://nlsp.nasa.gov/api/v1/files/cb9bf766-3558-5179-ad3e-4bffa2faee31/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_6/JMDSO_467_6.xls",
+      "sha256": "5fbc2678d8227bd99299fb634b350106dfe9f13c140ac8b839f383aaa46ca47f"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_6",
+      "dataset_name": "Cardiovascular Parameters",
+      "dataset_description": "This Excel file contains cardiovascular parameters from all subjects for the DSO 467 study.  Variables include blood pressure (supine and standing), heart rate (supine and standing), R-R interval (supine and standing), body weight, age, maximum slope, and operational point.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_6.xls",
+      "file_key": "63f1a369-785a-53a7-a496-40192d550443",
+      "url": "https://nlsp.nasa.gov/api/v1/files/63f1a369-785a-53a7-a496-40192d550443/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_6/JMDSO_467_6.xls",
+      "sha256": "5fbc2678d8227bd99299fb634b350106dfe9f13c140ac8b839f383aaa46ca47f"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_6",
+      "dataset_name": "Cardiovascular Parameters",
+      "dataset_description": "This Excel file contains cardiovascular parameters from all subjects for the DSO 467 study.  Variables include blood pressure (supine and standing), heart rate (supine and standing), R-R interval (supine and standing), body weight, age, maximum slope, and operational point.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_6.xls",
+      "file_key": "06a2b7c5-f11d-5bfe-8664-cd3e666c6577",
+      "url": "https://nlsp.nasa.gov/api/v1/files/06a2b7c5-f11d-5bfe-8664-cd3e666c6577/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_6/JMDSO_467_6.xls",
+      "sha256": "5fbc2678d8227bd99299fb634b350106dfe9f13c140ac8b839f383aaa46ca47f"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_5",
+      "dataset_name": "Measurements from All Subjects",
+      "dataset_description": "This Excel file contains measurements from all subjects for the DSO 467 study.  Variables include blood pressure, R-R interval, body weight, maximum slope, operational point, and carotid distending pressure.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_5.xls",
+      "file_key": "2cf1450e-c2d0-5c2c-bdab-a56e1af77eaa",
+      "url": "https://nlsp.nasa.gov/api/v1/files/2cf1450e-c2d0-5c2c-bdab-a56e1af77eaa/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_5/JMDSO_467_5.xls",
+      "sha256": "4c81a300ae9770874b0283278ba7cee3c9d54334a3069beb61f2dbc7c2eb4fdd"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_5",
+      "dataset_name": "Measurements from All Subjects",
+      "dataset_description": "This Excel file contains measurements from all subjects for the DSO 467 study.  Variables include blood pressure, R-R interval, body weight, maximum slope, operational point, and carotid distending pressure.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_5.xls",
+      "file_key": "c9a9469d-89fa-59ae-b9d7-7b14a164c66d",
+      "url": "https://nlsp.nasa.gov/api/v1/files/c9a9469d-89fa-59ae-b9d7-7b14a164c66d/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_5/JMDSO_467_5.xls",
+      "sha256": "4c81a300ae9770874b0283278ba7cee3c9d54334a3069beb61f2dbc7c2eb4fdd"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_5",
+      "dataset_name": "Measurements from All Subjects",
+      "dataset_description": "This Excel file contains measurements from all subjects for the DSO 467 study.  Variables include blood pressure, R-R interval, body weight, maximum slope, operational point, and carotid distending pressure.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_5.xls",
+      "file_key": "1c104216-8fc7-5c2c-870f-84110661f183",
+      "url": "https://nlsp.nasa.gov/api/v1/files/1c104216-8fc7-5c2c-870f-84110661f183/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_5/JMDSO_467_5.xls",
+      "sha256": "4c81a300ae9770874b0283278ba7cee3c9d54334a3069beb61f2dbc7c2eb4fdd"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_5",
+      "dataset_name": "Measurements from All Subjects",
+      "dataset_description": "This Excel file contains measurements from all subjects for the DSO 467 study.  Variables include blood pressure, R-R interval, body weight, maximum slope, operational point, and carotid distending pressure.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_5.xls",
+      "file_key": "9556ab85-2adf-536a-bddc-ebd7d6695582",
+      "url": "https://nlsp.nasa.gov/api/v1/files/9556ab85-2adf-536a-bddc-ebd7d6695582/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_5/JMDSO_467_5.xls",
+      "sha256": "4c81a300ae9770874b0283278ba7cee3c9d54334a3069beb61f2dbc7c2eb4fdd"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_5",
+      "dataset_name": "Measurements from All Subjects",
+      "dataset_description": "This Excel file contains measurements from all subjects for the DSO 467 study.  Variables include blood pressure, R-R interval, body weight, maximum slope, operational point, and carotid distending pressure.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_5.xls",
+      "file_key": "dc54fecc-1ad4-5aff-b60e-774aced7ce31",
+      "url": "https://nlsp.nasa.gov/api/v1/files/dc54fecc-1ad4-5aff-b60e-774aced7ce31/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_5/JMDSO_467_5.xls",
+      "sha256": "4c81a300ae9770874b0283278ba7cee3c9d54334a3069beb61f2dbc7c2eb4fdd"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_5",
+      "dataset_name": "Measurements from All Subjects",
+      "dataset_description": "This Excel file contains measurements from all subjects for the DSO 467 study.  Variables include blood pressure, R-R interval, body weight, maximum slope, operational point, and carotid distending pressure.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Analyzed"
+      ],
+      "file_label": "JMDSO_467_5.xls",
+      "file_key": "681fc8b5-e2b6-54fd-baab-0a1043e17705",
+      "url": "https://nlsp.nasa.gov/api/v1/files/681fc8b5-e2b6-54fd-baab-0a1043e17705/download",
+      "reason": "byte-identical duplicate of files/JMDSO_467_5/JMDSO_467_5.xls",
+      "sha256": "4c81a300ae9770874b0283278ba7cee3c9d54334a3069beb61f2dbc7c2eb4fdd"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_2",
+      "dataset_name": "Standing and Supine Differences",
+      "dataset_description": "This is a graph depicting preflight and landing day differences between standing and supine systolic and diastolic pressures and heart rate for subjects in the DSO 467 study. Significant difference between groups: *P < 0.05; **P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_2.tif",
+      "file_key": "756baef3-d223-5d25-99b2-6668fcb7b58f",
+      "url": "https://nlsp.nasa.gov/api/v1/files/756baef3-d223-5d25-99b2-6668fcb7b58f/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_2",
+      "dataset_name": "Standing and Supine Differences",
+      "dataset_description": "This is a graph depicting preflight and landing day differences between standing and supine systolic and diastolic pressures and heart rate for subjects in the DSO 467 study. Significant difference between groups: *P < 0.05; **P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_2.tif",
+      "file_key": "216eb394-2520-543d-aa1f-f3d037003e8c",
+      "url": "https://nlsp.nasa.gov/api/v1/files/216eb394-2520-543d-aa1f-f3d037003e8c/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_2",
+      "dataset_name": "Standing and Supine Differences",
+      "dataset_description": "This is a graph depicting preflight and landing day differences between standing and supine systolic and diastolic pressures and heart rate for subjects in the DSO 467 study. Significant difference between groups: *P < 0.05; **P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_2.tif",
+      "file_key": "1e329beb-f3dc-5487-abfd-0986e589ab61",
+      "url": "https://nlsp.nasa.gov/api/v1/files/1e329beb-f3dc-5487-abfd-0986e589ab61/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_2",
+      "dataset_name": "Standing and Supine Differences",
+      "dataset_description": "This is a graph depicting preflight and landing day differences between standing and supine systolic and diastolic pressures and heart rate for subjects in the DSO 467 study. Significant difference between groups: *P < 0.05; **P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_2.tif",
+      "file_key": "b9063153-1ca7-5bf7-99f2-1329449465cb",
+      "url": "https://nlsp.nasa.gov/api/v1/files/b9063153-1ca7-5bf7-99f2-1329449465cb/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_2",
+      "dataset_name": "Standing and Supine Differences",
+      "dataset_description": "This is a graph depicting preflight and landing day differences between standing and supine systolic and diastolic pressures and heart rate for subjects in the DSO 467 study. Significant difference between groups: *P < 0.05; **P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_2.tif",
+      "file_key": "533ed4c2-bc8c-5f58-90bd-2c5e2de4bcf2",
+      "url": "https://nlsp.nasa.gov/api/v1/files/533ed4c2-bc8c-5f58-90bd-2c5e2de4bcf2/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_2",
+      "dataset_name": "Standing and Supine Differences",
+      "dataset_description": "This is a graph depicting preflight and landing day differences between standing and supine systolic and diastolic pressures and heart rate for subjects in the DSO 467 study. Significant difference between groups: *P < 0.05; **P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_2.tif",
+      "file_key": "ba0b7a65-6281-517f-b7d3-a69238dce894",
+      "url": "https://nlsp.nasa.gov/api/v1/files/ba0b7a65-6281-517f-b7d3-a69238dce894/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "JMDSO_467_2",
+      "dataset_name": "Standing and Supine Differences",
+      "dataset_description": "This is a graph depicting preflight and landing day differences between standing and supine systolic and diastolic pressures and heart rate for subjects in the DSO 467 study. Significant difference between groups: *P < 0.05; **P < 0.01.\r\n<p>\r\nSource: Extended Duration Orbiter Medical Project (EDOMP) Final Report 1989-1995.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMDSO_467_2.tif",
+      "file_key": "4d6e6040-ff44-53be-9c87-68e9442d4e2d",
+      "url": "https://nlsp.nasa.gov/api/v1/files/4d6e6040-ff44-53be-9c87-68e9442d4e2d/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T14:21:43Z",
+  "generated_by": "scripts/fetch_data.py"
+}

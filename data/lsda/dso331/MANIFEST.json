@@ -1,0 +1,94 @@
+{
+  "source_id": "lsda_dso331",
+  "experiment_identifier": "DSO 331",
+  "nlsp_experiment_id": "6867ff72-b080-5d65-ae5a-ab0a5f2d4fc1",
+  "lsda_guid": "cl62b08qicdkp01o6d5fh8pd6",
+  "title": "Interaction of the Space Shuttle Launch and Entry Suit and Sustained Weightlessness on Egress Locomotion",
+  "doi": "10.83263/tf03-5764",
+  "missions": [
+    [
+      [
+        "STS-82"
+      ]
+    ],
+    [
+      [
+        "STS-83"
+      ]
+    ],
+    [
+      [
+        "STS-88"
+      ]
+    ],
+    [
+      [
+        "STS-76"
+      ]
+    ],
+    [
+      [
+        "STS-77"
+      ]
+    ],
+    [
+      [
+        "STS-84"
+      ]
+    ],
+    [
+      [
+        "STS-87"
+      ]
+    ],
+    [
+      [
+        "STS-85"
+      ]
+    ],
+    [
+      [
+        "STS-93"
+      ]
+    ],
+    [
+      [
+        "STS-75"
+      ]
+    ],
+    [
+      [
+        "STS-94"
+      ]
+    ],
+    [
+      [
+        "STS-90"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/6867ff72-b080-5d65-ae5a-ab0a5f2d4fc1/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/6867ff72-b080-5d65-ae5a-ab0a5f2d4fc1"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "NOTHING DOWNLOADED: the only dataset ('Final Report: Skin Temperatures During Unaided Egress...', NASA/TM-2000-209761) has 0 files in the archive. No HR data are published in LSDA for this DSO. Metadata saved in experiment_metadata.json."
+  ],
+  "content": {},
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 9234,
+      "sha256": "1239c0f14edbb1ae62e545d8c7833fc8c172f8ce122c8b8b8a0254a4ddf9b723",
+      "note": "experiment record subset + dataset/file tree"
+    }
+  ],
+  "skipped_files": [],
+  "fetched_at_utc": "2026-11-14T14:21:58Z",
+  "generated_by": "scripts/fetch_data.py"
+}

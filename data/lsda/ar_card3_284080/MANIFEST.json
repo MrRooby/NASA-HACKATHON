@@ -1,0 +1,40 @@
+{
+  "source_id": "lsda_ar_card3_284080",
+  "experiment_identifier": "284080",
+  "nlsp_experiment_id": "d3644feb-1719-5a42-96ff-685fc72fade6",
+  "lsda_guid": "cl62atwlwcanl01o6d4ce5cxo",
+  "title": "Cardiovascular Regulation in Microgravity",
+  "doi": "10.83263/k62w-rr90",
+  "missions": [
+    [
+      [
+        "STS-55"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/d3644feb-1719-5a42-96ff-685fc72fade6/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/d3644feb-1719-5a42-96ff-685fc72fade6"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "NOT DOWNLOADED: the NLSP record lists 0 datasets (related.datasets is empty) despite archive_status 'All datasets are publicly available'. Only metadata (experiment_metadata.json, incl. publications) saved.",
+    "The record has 5 hardware images and 4 publications (see experiment_metadata.json -> publications)."
+  ],
+  "content": {},
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 6531,
+      "sha256": "251c3fd376b5eb55752c957a5943012cfec0b654deff6596c1ee1e6208d446f8",
+      "note": "experiment record subset + dataset/file tree"
+    }
+  ],
+  "skipped_files": [],
+  "fetched_at_utc": "2026-11-14T14:21:49Z",
+  "generated_by": "scripts/fetch_data.py"
+}

@@ -1,0 +1,38 @@
+{
+  "W1": {
+    "code": "W1",
+    "name": "C4 left-leg circulation issue",
+    "subject_code": "SYN-04",
+    "limb": "left_leg",
+    "start_sol": 142,
+    "end_sol": 143,
+    "expected_reaction": "flag limb perfusion discrepancy and inspect C4"
+  },
+  "W2": {
+    "code": "W2",
+    "name": "low battery and disconnect",
+    "subject_code": "SYN-01",
+    "limb": "right_arm",
+    "start_sol": 250,
+    "end_sol": 251,
+    "expected_reaction": "replace battery and reconnect device"
+  },
+  "W3": {
+    "code": "W3",
+    "name": "EVA link loss and buffering",
+    "subject_code": "SYN-02",
+    "limb": "head_eeg",
+    "start_sol": 470,
+    "end_sol": 471,
+    "expected_reaction": "retain buffered samples and restore EVA link"
+  },
+  "W4": {
+    "code": "W4",
+    "name": "sensor fault",
+    "subject_code": "SYN-03",
+    "limb": "right_leg",
+    "start_sol": 555,
+    "end_sol": 556,
+    "expected_reaction": "quarantine faulty sensor"
+  }
+}

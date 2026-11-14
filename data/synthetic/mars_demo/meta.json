@@ -1,0 +1,508 @@
+{
+ "generator": "synthetic_v1",
+ "dataset": "mars",
+ "seed": 42,
+ "source": {
+  "id": "synthetic_v1",
+  "title": "Synthetic Mars health data generator v1",
+  "publisher": "NASA-HACKATHON team",
+  "data_kind": "synthetic",
+  "access_status": "generated"
+ },
+ "missions": [
+  {
+   "code": "SYN-MARS-HAB-600",
+   "name": "Synthetic Mars habitat mission (600 sols)",
+   "environment_code": "mars_surface",
+   "start_date": "2039-01-01",
+   "duration_days": 600,
+   "end_date": "2040-08-22",
+   "source_id": "synthetic_v1",
+   "is_synthetic": true
+  }
+ ],
+ "subjects": [
+  {
+   "code": "SYN-02",
+   "source_subject_code": "SYN-02",
+   "source_id": "synthetic_v1",
+   "sex": "M",
+   "age_band_code": "40-49",
+   "is_synthetic": true
+  },
+  {
+   "code": "SYN-01",
+   "source_subject_code": "SYN-01",
+   "source_id": "synthetic_v1",
+   "sex": "F",
+   "age_band_code": "30-39",
+   "is_synthetic": true
+  },
+  {
+   "code": "SYN-03",
+   "source_subject_code": "SYN-03",
+   "source_id": "synthetic_v1",
+   "sex": "M",
+   "age_band_code": "50-59",
+   "is_synthetic": true
+  },
+  {
+   "code": "SYN-04",
+   "source_subject_code": "SYN-04",
+   "source_id": "synthetic_v1",
+   "sex": "F",
+   "age_band_code": "40-49",
+   "is_synthetic": true
+  }
+ ],
+ "participations": [
+  {
+   "subject_code": "SYN-02",
+   "mission_code": "SYN-MARS-HAB-600",
+   "role": "synthetic_crew",
+   "group_label": "C1"
+  },
+  {
+   "subject_code": "SYN-01",
+   "mission_code": "SYN-MARS-HAB-600",
+   "role": "synthetic_crew",
+   "group_label": "C2"
+  },
+  {
+   "subject_code": "SYN-03",
+   "mission_code": "SYN-MARS-HAB-600",
+   "role": "synthetic_crew",
+   "group_label": "C3"
+  },
+  {
+   "subject_code": "SYN-04",
+   "mission_code": "SYN-MARS-HAB-600",
+   "role": "synthetic_crew",
+   "group_label": "C4"
+  }
+ ],
+ "indicators": [
+  {
+   "code": "body_mass",
+   "label": "Body mass",
+   "category": "nutrition",
+   "body_system_code": "nutrition",
+   "canonical_unit": "kg",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "vitamin_d_25oh",
+   "label": "Vitamin D, 25-OH",
+   "category": "lab_cmp",
+   "body_system_code": "metabolic",
+   "canonical_unit": "ng/mL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "vitamin_b12",
+   "label": "Vitamin B12",
+   "category": "lab_cmp",
+   "body_system_code": "metabolic",
+   "canonical_unit": "pg/mL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "cortisol_am",
+   "label": "Morning cortisol",
+   "category": "lab_cmp",
+   "body_system_code": "metabolic",
+   "canonical_unit": "µg/dL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "handgrip_strength",
+   "label": "Hand grip strength",
+   "category": "fitness",
+   "body_system_code": "musculoskeletal",
+   "canonical_unit": "kg",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "visual_acuity_logmar",
+   "label": "Visual acuity",
+   "category": "vitals",
+   "body_system_code": "cardiovascular",
+   "canonical_unit": "logMAR",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "intraocular_pressure",
+   "label": "Intraocular pressure",
+   "category": "vitals",
+   "body_system_code": "cardiovascular",
+   "canonical_unit": "mmHg",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "fvc",
+   "label": "Forced vital capacity",
+   "category": "fitness",
+   "body_system_code": "respiratory",
+   "canonical_unit": "L",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "fev1",
+   "label": "Forced expiratory volume in 1 second",
+   "category": "fitness",
+   "body_system_code": "respiratory",
+   "canonical_unit": "L",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "muscle_pct",
+   "label": "Muscle mass",
+   "category": "body_composition",
+   "body_system_code": "musculoskeletal",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "fat_pct",
+   "label": "Body fat",
+   "category": "body_composition",
+   "body_system_code": "nutrition",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "body_water_pct",
+   "label": "Body water",
+   "category": "body_composition",
+   "body_system_code": "nutrition",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "bone_mass",
+   "label": "Bone mass",
+   "category": "body_composition",
+   "body_system_code": "musculoskeletal",
+   "canonical_unit": "kg",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "bmr",
+   "label": "Basal metabolic rate",
+   "category": "nutrition",
+   "body_system_code": "nutrition",
+   "canonical_unit": "kcal/d",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "sleep_efficiency",
+   "label": "Sleep efficiency",
+   "category": "sleep",
+   "body_system_code": "sleep",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "deep_sleep_pct",
+   "label": "Deep sleep",
+   "category": "sleep",
+   "body_system_code": "sleep",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "rem_sleep_pct",
+   "label": "REM sleep",
+   "category": "sleep",
+   "body_system_code": "sleep",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "headache_score",
+   "label": "Headache score",
+   "category": "mood",
+   "body_system_code": "behavioral",
+   "canonical_unit": "score 0-10",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "nausea_score",
+   "label": "Nausea score",
+   "category": "mood",
+   "body_system_code": "behavioral",
+   "canonical_unit": "score 0-10",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "vision_change",
+   "label": "Reported vision change",
+   "category": "mood",
+   "body_system_code": "behavioral",
+   "canonical_unit": "boolean",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "fatigue_score",
+   "label": "Fatigue score",
+   "category": "mood",
+   "body_system_code": "behavioral",
+   "canonical_unit": "score 1-5",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "pvt_reaction_ms",
+   "label": "PVT reaction time",
+   "category": "fitness",
+   "body_system_code": "behavioral",
+   "canonical_unit": "ms",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "rbc",
+   "label": "Rbc",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "Million/uL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "hemoglobin",
+   "label": "Hemoglobin",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "g/dL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "hematocrit",
+   "label": "Hematocrit",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "mcv",
+   "label": "Mcv",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "fL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "mch",
+   "label": "Mch",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "pg",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "mchc",
+   "label": "Mchc",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "g/dL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "rdw",
+   "label": "Rdw",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "wbc",
+   "label": "Wbc",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "Thousand/uL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "platelets",
+   "label": "Platelets",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "Thousand/uL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "neutrophils_pct",
+   "label": "Neutrophils Pct",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "lymphocytes_pct",
+   "label": "Lymphocytes Pct",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "monocytes_pct",
+   "label": "Monocytes Pct",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "eosinophils_pct",
+   "label": "Eosinophils Pct",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "basophils_pct",
+   "label": "Basophils Pct",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "%",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "glucose",
+   "label": "Glucose",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "mg/dL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "sodium",
+   "label": "Sodium",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "mmol/L",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "potassium",
+   "label": "Potassium",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "mmol/L",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "chloride",
+   "label": "Chloride",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "mmol/L",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "bicarbonate",
+   "label": "Bicarbonate",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "mmol/L",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "calcium",
+   "label": "Calcium",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "mg/dL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "bun",
+   "label": "Bun",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "mg/dL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "creatinine",
+   "label": "Creatinine",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "mg/dL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "albumin",
+   "label": "Albumin",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "g/dL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "total_protein",
+   "label": "Total Protein",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "g/dL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "bilirubin_total",
+   "label": "Bilirubin Total",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "mg/dL",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "alt",
+   "label": "Alt",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "U/L",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "ast",
+   "label": "Ast",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "U/L",
+   "clinical_use": "diagnostic"
+  },
+  {
+   "code": "alp",
+   "label": "Alp",
+   "category": "lab_cbc",
+   "body_system_code": "hematologic",
+   "canonical_unit": "U/L",
+   "clinical_use": "diagnostic"
+  }
+ ],
+ "clinical_schedule": {
+  "daily": [
+   "CBC core",
+   "glucose",
+   "electrolytes",
+   "sleep",
+   "symptoms"
+  ],
+  "weekly": [
+   "CMP",
+   "cortisol",
+   "PVT"
+  ],
+  "sol_30": [
+   "vitamins",
+   "vision",
+   "IOP",
+   "spirometry",
+   "grip",
+   "BIA"
+  ]
+ }
+}

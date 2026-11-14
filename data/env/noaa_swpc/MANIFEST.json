@@ -1,0 +1,74 @@
+{
+  "source_id": "noaa_swpc",
+  "title": "NOAA SWPC GOES integral protons, NOAA space weather scales, alerts",
+  "urls": [
+    "https://services.swpc.noaa.gov/json/goes/primary/integral-protons-6-hour.json",
+    "https://services.swpc.noaa.gov/json/goes/primary/integral-protons-7-day.json",
+    "https://services.swpc.noaa.gov/products/noaa-scales.json",
+    "https://services.swpc.noaa.gov/products/alerts.json"
+  ],
+  "license": "US Government work (NOAA), public domain",
+  "notes": [
+    "Live products: each run stores a timestamped raw copy in raw/ and merges protons into goes_integral_protons.csv.",
+    "noaa-scales.json: keys '-1' (yesterday), '0' (current), '1'..'3' (forecast days); R/S/G scale 0-5.",
+    "S-scale thresholds on >=10 MeV flux: S1>=10, S2>=100, S3>=1e3, S4>=1e4, S5>=1e5 pfu.",
+    "alerts.json: list of {product_id, issue_datetime (UTC), message} free-text alerts."
+  ],
+  "files": [
+    {
+      "path": "goes_integral_protons.csv",
+      "bytes": 861102,
+      "sha256": "1c30f0dfc1d3e52a2a0ffdd644a172ec8daeadea933f6e9acb9f6ca72f90f4ee",
+      "rows": 16096,
+      "columns": [
+        {
+          "name": "time_tag_utc",
+          "unit": "ISO 8601 UTC",
+          "description": "start of 5-min interval"
+        },
+        {
+          "name": "satellite",
+          "unit": "-",
+          "description": "GOES satellite number (primary)"
+        },
+        {
+          "name": "energy",
+          "unit": "-",
+          "description": "integral energy threshold, e.g. '>=10 MeV' (S-scale uses >=10 MeV)"
+        },
+        {
+          "name": "flux_pfu",
+          "unit": "pfu = particles cm^-2 s^-1 sr^-1",
+          "description": "integral proton flux"
+        }
+      ],
+      "note": "merged 6-hour + 7-day products, deduplicated; covers 2026-11-07T13:45:00Z .. 2026-11-14T13:30:00Z; accumulates across runs"
+    },
+    {
+      "path": "raw/integral-protons-6-hour_20261114T1342Z.json",
+      "bytes": 59121,
+      "sha256": "04190a28b2ab0f099862e90a0cc0319ace0279f7356d89caeec5c6a569277ad8",
+      "rows": 560
+    },
+    {
+      "path": "raw/integral-protons-7-day_20261114T1342Z.json",
+      "bytes": 1698054,
+      "sha256": "e1f555e20f3d6042453f9cb779f02f44b1c2527484b167b71ffa8737eee891f7",
+      "rows": 16096
+    },
+    {
+      "path": "raw/noaa-scales_20261114T1342Z.json",
+      "bytes": 1099,
+      "sha256": "0a014784ea2c930617459b500d5bdda8919be47bd7242fa2b6c30e7ba05ce24e",
+      "rows": 5
+    },
+    {
+      "path": "raw/alerts_20261114T1342Z.json",
+      "bytes": 43080,
+      "sha256": "613790213d660ae5b3dfb779f936903aa9b54d5efb30f56692e39967c8737a40",
+      "rows": 69
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T13:42:55Z",
+  "generated_by": "scripts/fetch_data.py"
+}

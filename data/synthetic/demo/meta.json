@@ -1,0 +1,251 @@
+{
+ "generator": "synthetic_v1",
+ "dataset": "demo",
+ "seed": 42,
+ "until": null,
+ "source": {
+  "id": "synthetic_v1",
+  "title": "Synthetic astronaut data generator v1 (seeded, calibrated on published means)",
+  "publisher": "NASA-HACKATHON team",
+  "data_kind": "synthetic",
+  "access_status": "generated",
+  "notes": "DATABASE/synthetic/generate.py; DATABASE_PLAN §10. NOT real astronaut data."
+ },
+ "missions": [
+  {
+   "code": "SYN-ISS-180",
+   "name": "Synthetic ISS increment (180 days)",
+   "environment_code": "iss",
+   "start_date": "2030-01-01",
+   "duration_days": 180,
+   "end_date": "2030-06-30",
+   "source_id": "synthetic_v1",
+   "is_synthetic": true,
+   "description": "Fictional dates. Scenarios S1-S12 injected (DATABASE_PLAN §10.5)."
+  }
+ ],
+ "subjects": [
+  {
+   "code": "SYN-01",
+   "source_subject_code": "SYN-01",
+   "source_id": "synthetic_v1",
+   "sex": "F",
+   "age_band_code": "30-39",
+   "is_synthetic": true,
+   "note": "podatna na deficyt snu (S2, S9)"
+  },
+  {
+   "code": "SYN-02",
+   "source_subject_code": "SYN-02",
+   "source_id": "synthetic_v1",
+   "sex": "M",
+   "age_band_code": "40-49",
+   "is_synthetic": true,
+   "note": "ryzyko sercowo-naczyniowe (S1, S8, S11, S12)"
+  },
+  {
+   "code": "SYN-03",
+   "source_subject_code": "SYN-03",
+   "source_id": "synthetic_v1",
+   "sex": "M",
+   "age_band_code": "50-59",
+   "is_synthetic": true,
+   "note": "osoba kontrolna; infekcja (S4), utrata masy (S7)"
+  },
+  {
+   "code": "SYN-04",
+   "source_subject_code": "SYN-04",
+   "source_id": "synthetic_v1",
+   "sex": "F",
+   "age_band_code": "40-49",
+   "is_synthetic": true,
+   "note": "zdrowie behawioralne (S3), przerwa w danych (S10)"
+  }
+ ],
+ "participations": [
+  {
+   "subject_code": "SYN-01",
+   "mission_code": "SYN-ISS-180",
+   "role": "synthetic_crew",
+   "group_label": null
+  },
+  {
+   "subject_code": "SYN-02",
+   "mission_code": "SYN-ISS-180",
+   "role": "synthetic_crew",
+   "group_label": null
+  },
+  {
+   "subject_code": "SYN-03",
+   "mission_code": "SYN-ISS-180",
+   "role": "synthetic_crew",
+   "group_label": null
+  },
+  {
+   "subject_code": "SYN-04",
+   "mission_code": "SYN-ISS-180",
+   "role": "synthetic_crew",
+   "group_label": null
+  }
+ ],
+ "indicators": [
+  {
+   "code": "body_mass",
+   "label": "Body mass",
+   "category": "nutrition",
+   "body_system_code": "nutrition",
+   "canonical_unit": "kg",
+   "baseline_threshold_id": "body_mass_change_pct"
+  },
+  {
+   "code": "vo2max",
+   "label": "VO2max (estimated, cycle ergometer)",
+   "category": "fitness",
+   "body_system_code": "musculoskeletal",
+   "canonical_unit": "ml/kg/min",
+   "baseline_threshold_id": "vo2max_pct_baseline"
+  },
+  {
+   "code": "strength_knee_extension",
+   "label": "Knee extension peak torque",
+   "category": "fitness",
+   "body_system_code": "musculoskeletal",
+   "canonical_unit": "N·m",
+   "baseline_threshold_id": "strength_pct_baseline"
+  }
+ ],
+ "model": {
+  "heart_rate_resting": {
+   "freq": "daily",
+   "baseline": [
+    55,
+    70
+   ],
+   "sd": 3,
+   "inflight": "no change",
+   "source": "norsk_2015"
+  },
+  "bp_systolic": {
+   "freq": "daily",
+   "baseline": [
+    110,
+    118
+   ],
+   "sd": 5,
+   "inflight": "-8..10 mmHg over ~14 d",
+   "source": "norsk_2015"
+  },
+  "bp_diastolic": {
+   "freq": "daily",
+   "baseline": [
+    70,
+    77
+   ],
+   "sd": 4,
+   "inflight": "-5 mmHg over ~14 d",
+   "source": "norsk_2015"
+  },
+  "body_temperature": {
+   "freq": "daily",
+   "baseline": [
+    36.4,
+    36.8
+   ],
+   "sd": 0.15,
+   "inflight": "no change",
+   "source": "stahn_2017"
+  },
+  "spo2": {
+   "freq": "daily",
+   "baseline": [
+    96,
+    99
+   ],
+   "sd": 0.7,
+   "inflight": "no change",
+   "source": "medlineplus_spo2"
+  },
+  "glucose_fasting": {
+   "freq": "weekly",
+   "baseline": [
+    80,
+    95
+   ],
+   "sd": 5,
+   "inflight": "no change",
+   "source": "ada_diagnosis"
+  },
+  "sleep_hours": {
+   "freq": "daily",
+   "baseline": [
+    7.5,
+    8.0
+   ],
+   "sd": 0.5,
+   "inflight": "mean ~6 h (SD 0.8)",
+   "source": "ochmo_tb_sleep"
+  },
+  "mood": {
+   "freq": "daily",
+   "baseline": [
+    4,
+    4
+   ],
+   "sd": 1,
+   "inflight": "no trend",
+   "source": "team_assumption"
+  },
+  "exercise_minutes_daily": {
+   "freq": "daily (in flight)",
+   "inflight": "90-120 min, 6 d/week, 7th day 0",
+   "source": "scott_2023"
+  },
+  "energy_intake_pct_target": {
+   "freq": "daily (in flight)",
+   "inflight": "88-105 % of 3035 kcal",
+   "source": "nasa_std_3001_v2"
+  },
+  "body_mass": {
+   "freq": "weekly",
+   "inflight": "-2..5 % in first 30 d, then plateau",
+   "source": "zwart_2014"
+  },
+  "vo2max": {
+   "freq": "L-90, FD15, then every 30 d, R+7",
+   "inflight": "-17 % by FD14, partial recovery",
+   "source": "hrp_risk_fitness"
+  },
+  "strength_knee_extension": {
+   "freq": "L-90, every 30 d, R+7",
+   "inflight": "-3..6 % with ARED",
+   "source": "hrp_risk_fitness"
+  },
+  "bmd_total_hip_left": {
+   "freq": "L-180, R+30 (DXA on Earth)",
+   "inflight": "-0.64 %/month",
+   "source": "hrr_er_bone"
+  },
+  "bmd_lumbar_spine": {
+   "freq": "L-180, R+30 (DXA on Earth)",
+   "inflight": "-0.47 %/month",
+   "source": "hrr_er_bone"
+  },
+  "labs": {
+   "freq": "L-180, L-45, FD30, R-30, R+0",
+   "inflight": "small",
+   "source": "osdr_osd575",
+   "note": "mean/SD from Inspiration4 pre-flight values per sex"
+  },
+  "cabin": {
+   "freq": "hourly",
+   "baseline": "CO2 2.3 mmHg, 22.6 degC, 43 %RH",
+   "source": "team_assumption",
+   "note": "calibrated on OSDR EDA RR missions in this DB (CO2 ~2.2 mmHg, 22.3 degC)"
+  },
+  "radiation": {
+   "freq": "daily",
+   "baseline": "0.3 mGy/d +-20 %",
+   "source": "artemis1_nature2024"
+  }
+ }
+}

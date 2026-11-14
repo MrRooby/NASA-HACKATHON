@@ -1,0 +1,21 @@
+device_code,crew_code,subject_code,limb,serial_no,location_code,installed_at
+W-C1-left_arm,C1,SYN-02,left_arm,SN-0001,module_M1,2039-01-01 00:00:00
+W-C1-right_arm,C1,SYN-02,right_arm,SN-0002,module_M1,2039-01-01 00:00:00
+W-C1-left_leg,C1,SYN-02,left_leg,SN-0003,module_M1,2039-01-01 00:00:00
+W-C1-right_leg,C1,SYN-02,right_leg,SN-0004,module_M1,2039-01-01 00:00:00
+W-C1-head_eeg,C1,SYN-02,head_eeg,SN-0005,module_M1,2039-01-01 00:00:00
+W-C2-left_arm,C2,SYN-01,left_arm,SN-0006,module_M2,2039-01-01 00:00:00
+W-C2-right_arm,C2,SYN-01,right_arm,SN-0007,module_M2,2039-01-01 00:00:00
+W-C2-left_leg,C2,SYN-01,left_leg,SN-0008,module_M2,2039-01-01 00:00:00
+W-C2-right_leg,C2,SYN-01,right_leg,SN-0009,module_M2,2039-01-01 00:00:00
+W-C2-head_eeg,C2,SYN-01,head_eeg,SN-0010,module_M2,2039-01-01 00:00:00
+W-C3-left_arm,C3,SYN-03,left_arm,SN-0011,module_M1,2039-01-01 00:00:00
+W-C3-right_arm,C3,SYN-03,right_arm,SN-0012,module_M1,2039-01-01 00:00:00
+W-C3-left_leg,C3,SYN-03,left_leg,SN-0013,module_M1,2039-01-01 00:00:00
+W-C3-right_leg,C3,SYN-03,right_leg,SN-0014,module_M1,2039-01-01 00:00:00
+W-C3-head_eeg,C3,SYN-03,head_eeg,SN-0015,module_M1,2039-01-01 00:00:00
+W-C4-left_arm,C4,SYN-04,left_arm,SN-0016,module_M2,2039-01-01 00:00:00
+W-C4-right_arm,C4,SYN-04,right_arm,SN-0017,module_M2,2039-01-01 00:00:00
+W-C4-left_leg,C4,SYN-04,left_leg,SN-0018,module_M2,2039-01-01 00:00:00
+W-C4-right_leg,C4,SYN-04,right_leg,SN-0019,module_M2,2039-01-01 00:00:00
+W-C4-head_eeg,C4,SYN-04,head_eeg,SN-0020,module_M2,2039-01-01 00:00:00

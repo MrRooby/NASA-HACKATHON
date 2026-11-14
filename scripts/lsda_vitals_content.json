@@ -1,0 +1,245 @@
+{
+  "e066_178066": {
+    "_notes": [
+      "IMPORTABLE (observation): files/178066__3141149154/...xlsx__Sheet1.csv - per-subject resting HR/BP/MAP/Q/SV/FRC, 6 subjects x 3 conditions.",
+      "No subject names; only 'Subject No' 1..6 (pooled STS-40 + STS-58 crews; the file does not say which subject flew on which mission). The header cell names the PI (Farhi, Leon), not a subject.",
+      "7 graph images (HR, MAP, Q, TPR, a-v O2 diff, triple product vs VO2) not downloaded - see skipped_files."
+    ],
+    "files/178066__3141149154/178066__3141149154.xlsx_STS-40_178066_2012_314_121122.xlsx__Sheet1.csv": {
+      "what": "Table 2 of Shykoff et al. J Appl Physiol 1996;81:26-32: average RESTING data by subject",
+      "granularity": "per subject (Subject No 1..6), one value per subject per condition",
+      "subjects": 6,
+      "time_points": ["Preflight erect (seated/upright, 1 g)", "In flight (day not stated; STS-40 9 d, STS-58 14 d missions)", "Preflight supine (1 g)"],
+      "columns": [
+        {"name": "Subject No", "unit": "", "note": "1..6"},
+        {"name": "Q", "unit": "L/min", "description": "cardiac output"},
+        {"name": "HR", "unit": "beats/min"},
+        {"name": "BP", "unit": "mmHg", "description": "text 'systolic/diastolic', e.g. '112/87' - split on '/'"},
+        {"name": "MAP", "unit": "mmHg", "description": "mean arterial pressure"},
+        {"name": "SV", "unit": "mL", "description": "stroke volume"},
+        {"name": "FRC", "unit": "L", "description": "functional residual capacity"}
+      ],
+      "layout": "Rows 1-6 are title/legend; header split over 2 rows (units in the 2nd row: 'beats/min', 'BP, mmHg', 'mmHg', 'SV, ml', 'liters'); condition label rows ('Preflight erect' / 'In flight' / 'Preflight supine') with 6 subject rows under each; footer with abbreviations and source.",
+      "pitfalls": [
+        "Header is split across two rows and cells contain commas/units - map by column position, not header text.",
+        "BP is a string 'SBP/DBP'.",
+        "No dates or flight days; condition is the time point (pre vs in-flight). No postflight session.",
+        "Erect vs supine preflight are two different postures - store posture as an attribute, not as different time points."
+      ],
+      "importable_to_observation": true
+    },
+    "files/178066__3141213517/178066__3141213517.xlsx_STS-40_178066_2012_314_121147.xlsx__Sheet1.csv": {
+      "what": "Table 3: regression slopes (mean +/- SE) of Q, MAP, RQ, HR, VE, VT vs VO2, normalized by resting value, for erect / flight / supine",
+      "granularity": "group summary (all subjects)",
+      "subjects": "6 (pooled)",
+      "pitfalls": ["Values, '±' and SE are in separate cells (value, '±', SE triples).", "Normalized slopes, dimensionless; not a vital-sign value."],
+      "importable_to_observation": false
+    }
+  },
+  "dso467": {
+    "_notes": [
+      "Only group-level summaries (mean +/- SE). No per-subject data. Not importable to observation; usable as reference/cohort statistics.",
+      "The archive lists every file 7 times (one copy per mission dataset, different file keys, identical bytes) - only one copy stored, others listed in skipped_files as duplicates.",
+      "Missions: see 'missions' field; 'Detailed Supplementary Objectives', EDOMP Final Report 1989-1995."
+    ],
+    "files/JMDSO_467_5/JMDSO_467_5.xls": {
+      "csv": "files/JMDSO_467_5/JMDSO_467_5.xls__Sheet1.csv",
+      "what": "Measurements from all subjects on all test days (stand test + carotid baroreflex)",
+      "granularity": "group mean ± SE (single text cell like '116 ± 2' or '1,123 ± 42*')",
+      "subjects": "11-12 (footnote: LD vs preflight n=11; LD vs R+8-10 n=12)",
+      "time_points": ["Preflight", "Landing day (R+0)", "R+2", "R+3", "R+8..10"],
+      "rows": [
+        {"name": "Systolic pressure", "unit": "mmHg"},
+        {"name": "Diastolic pressure", "unit": "mmHg"},
+        {"name": "R-R interval", "unit": "ms"},
+        {"name": "Standard deviation of R-R", "unit": "ms"},
+        {"name": "Body weight", "unit": "kg"},
+        {"name": "Baroreflex maximum slope", "unit": "ms/mmHg"},
+        {"name": "Operational point", "unit": "%"},
+        {"name": "R-R interval range/minimum/maximum", "unit": "ms"},
+        {"name": "Carotid distending pressure at min/max R-R", "unit": "mmHg"}
+      ],
+      "pitfalls": [
+        "Values are text 'mean ± SE' with significance markers (*, †) and thousands separators ('1,123').",
+        "SOURCE ERROR: the 'Maximum slope, ms/mmHg' row repeats the 'Body weight, kg' row verbatim (75.6 ± 4.0 ...) - do not use it.",
+        "Transposed layout: variables in rows, time points in columns."
+      ],
+      "importable_to_observation": false
+    },
+    "files/JMDSO_467_6/JMDSO_467_6.xls": {
+      "csv": "files/JMDSO_467_6/JMDSO_467_6.xls__Sheet1.csv",
+      "what": "Subjects grouped (cluster analysis) into 'more resistant' vs 'less resistant' to orthostatic stress; supine and standing BP, HR, R-R, baroreflex",
+      "granularity": "group mean ± SE per resistance group",
+      "subjects": 11,
+      "time_points": ["L-10 days", "Landing day (R+0)"],
+      "rows": [
+        {"name": "Weight", "unit": "kg"}, {"name": "Age", "unit": "yr"},
+        {"name": "Systolic pressure supine/standing", "unit": "mmHg"},
+        {"name": "Diastolic pressure supine/standing", "unit": "mmHg"},
+        {"name": "Heart rate supine/standing", "unit": "beats/min"},
+        {"name": "R-R interval supine/standing", "unit": "ms (header says 'm', a typo)"},
+        {"name": "Baroreflex maximum slope", "unit": "ms/mmHg"},
+        {"name": "R-R range", "unit": "ms"}, {"name": "Operational point", "unit": "%"}
+      ],
+      "pitfalls": ["Text 'mean ± SE' cells; '931 ±10' without space; empty spacer column between L-10 and R+0 blocks."],
+      "importable_to_observation": false
+    }
+  },
+  "dso503s": {
+    "_notes": [
+      "No machine-readable data. Per-subject HR/SV/TPR exist only as figure images ('Cardiac Measures for Individual Control/Midodrine Subjects', TIF) - not downloaded (graphs; would need manual digitizing).",
+      "Downloaded: manuscript PDF (Platts et al., 'Midodrine as a Countermeasure to Orthostatic Hypotension Immediately after Space Shuttle Landing', 25 pp). Table I (p. 25) gives group mean ± SE, n=5 (HR, SBP, DBP) / n=3 (SV, CO, TPR) at L-10 and R+0, supine vs 80° head-up tilt.",
+      "Not importable to observation (no per-subject values)."
+    ],
+    "files/DSO_503S__2180821577/DSO_503S__2180821577.pdf_STS-109_DSO_503S_2010_218_080839.pdf": {
+      "what": "Manuscript PDF with methods and Table I (group means)",
+      "granularity": "group mean ± SE",
+      "subjects": "5 midodrine-tested crewmembers (n=3 for SV/CO/TPR at R+0)",
+      "time_points": ["L-10", "R+0 (on the Crew Transport Vehicle)"],
+      "units": {"HR": "beats/min", "SBP/DBP": "mmHg", "SV": "mL", "CO": "L/min", "TPR": "mmHg·L^-1·min"},
+      "importable_to_observation": false
+    }
+  },
+  "ar_card3_284080": {
+    "_notes": [
+      "NOT DOWNLOADED: the NLSP record lists 0 datasets (related.datasets is empty) despite archive_status 'All datasets are publicly available'. Only metadata (experiment_metadata.json, incl. publications) saved.",
+      "The record has 5 hardware images and 4 publications (see experiment_metadata.json -> publications)."
+    ]
+  },
+  "mir18_3_1_1": {
+    "_notes": [
+      "No per-subject numeric data. Files = session timetable (xls) + 7 report PDFs (Mir 18 / STS-71 final, 180-day and 1-year science reports, 30-day operational report, MSRD, Chibis vs Skylab LBNP device comparison - the last one is a scanned image PDF without text layer).",
+      "Reports give HR/SV/TPR responses to LBNP mostly as averaged figures (e.g. 1-year report Fig. 1 'Averaged Heart Rate'), with crew referred to by role (18-CDR, 18-FE, 18-CR, 19-CDR ...) - no personal data needed; PI/co-investigator names appear in report headers only.",
+      "3 graph TIFs (HR response to LBNP, LBNP tolerance, hemodynamics at max decompression) not downloaded.",
+      "Not importable to observation; the timetable could seed session/time-point metadata (L-120 ... R+42)."
+    ],
+    "files/3.1.1__2500236209/311__2500236209.xls_STS-71_3.1.1_2010_250_020939.xls": {
+      "csv": "files/3.1.1__2500236209/311__2500236209.xls_STS-71_3.1.1_2010_250_020939.xls__LBNP_3.1.1.csv",
+      "what": "LSDA 'Session record': protocol text, hardware list and table of sessions performed (Payload, Scheduled Day, Actual Day, Calendar Date, number of subjects)",
+      "granularity": "session schedule, no measurements",
+      "subjects": "up to 5 (Mir 18 + STS-71 crews; 1-2 subjects per in-flight session)",
+      "time_points": ["Mir 18: L-147..L-145 (Oct 1994), L-56..52 (Jan 1995), L-11..10 (Mar 1995), MD15, MD21, MD23, MD47, MD48, MD53, MD85, MD98, MD102", "SL-M (STS-71): FD6, FD9, FD10, R+1, R+2, R+4, R+12, R+42"],
+      "pitfalls": ["Calendar dates are mixed: ISO datetime strings for single days, free text ranges ('18-20 Oct 1994') for preflight.", "Several empty 'Mir 18' rows.", "'Not performed' entries."],
+      "importable_to_observation": false
+    }
+  },
+  "dso465": {
+    "_notes": [
+      "NOTHING DOWNLOADED: the only dataset file is a graph image (TIF, 'Effect of Space Flight on LVDI' - left-ventricular volume index, echocardiography, STS-61C). Not HR/BP and not machine-readable. URL in skipped_files."
+    ]
+  },
+  "dso470": {
+    "_notes": [
+      "Downloaded the only file (PDF, 1 page) - it contains just the LSDA header (PI, missions STS-29/34/42, title); NO data. Middle cerebral artery Doppler velocity is not HR/BP anyway.",
+      "Not importable."
+    ],
+    "files/DSO_470__2720518404/DSO_470__2720518404.pdf_STS-29_DSO_470_2012_272_050948.pdf": {
+      "what": "LSDA cover page only (no table)",
+      "importable_to_observation": false
+    }
+  },
+  "dso331": {
+    "_notes": [
+      "NOTHING DOWNLOADED: the only dataset ('Final Report: Skin Temperatures During Unaided Egress...', NASA/TM-2000-209761) has 0 files in the archive. No HR data are published in LSDA for this DSO. Metadata saved in experiment_metadata.json."
+    ]
+  },
+  "neemo_actiwatch": {
+    "_notes": [
+      "Sleep results (latency, duration, efficiency, illumination; n=4, pre-mission vs in-mission) exist ONLY as graph images (TIF) - not downloaded, see skipped_files.",
+      "The downloaded xls is the data-collection timetable, not measurements. Not importable to observation; could seed time-point metadata (NEEMO 5, 2003-06-16..2003-06-29, MD1..MD14)."
+    ],
+    "files/NEEMO_ACTIWATCH__1400547290/NEEMO_ACTIWATCH__1400547290.xls_NEEMO_5_NEEMO-ACTIWATCH_2010_182_080723.xls": {
+      "csv": "files/NEEMO_ACTIWATCH__1400547290/NEEMO_ACTIWATCH__1400547290.xls_NEEMO_5_NEEMO-ACTIWATCH_2010_182_080723.xls__Actiwatch.csv",
+      "what": "Session record: protocol (Actiwatch on non-dominant wrist + activity log), parameters (illumination, movement, sleep duration/latency/efficiency), table of sessions",
+      "granularity": "schedule only",
+      "subjects": 4,
+      "time_points": ["L-2 weeks (6 rows)", "MD1..MD14 = 2003-06-16..2003-06-29 (3-4 subjects per day)"],
+      "importable_to_observation": false
+    }
+  },
+  "lmlstp3_4": {
+    "_notes": [
+      "Ground analog (Lunar-Mars Life Support Test Project, chamber Phase II 30 d and Phase III 91 d, 4 crew each = 8 subjects).",
+      "Only group means ± SEM (n=8) of sleep variables; no per-subject data. Melatonin/light/rhythm results only as graph images (TIF, not downloaded).",
+      "Not importable to observation; usable as cohort reference values for sleep."
+    ],
+    "files/JMGROUNDLMLSTP34_115/JMGROUNDLMLSTP34_115.xls": {
+      "csv": "files/JMGROUNDLMLSTP34_115/JMGROUNDLMLSTP34_115.xls__Integration_Standards.csv",
+      "what": "Sleep variables in chamber crewmembers: objective (Actillume actigraphy) and subjective (AIRLOG sleep log), baseline vs chamber",
+      "granularity": "group mean ± SEM, n=8",
+      "time_points": ["Baseline (pre-chamber)", "Chamber"],
+      "rows": [
+        {"name": "Duration", "unit": "h"}, {"name": "Efficiency", "unit": "%"}, {"name": "Latency", "unit": "h"},
+        {"name": "WASO (wake after sleep onset)", "unit": "h (not stated; same scale as latency)"},
+        {"name": "Quality", "unit": "subjective score (scale not stated)"},
+        {"name": "Number of awakenings", "unit": "count"}
+      ],
+      "pitfalls": ["Values are text 'mean±SEM' (no spaces); 'N/A' cells.", "Sheet is named 'Integration Standards' (template name), not a data label."],
+      "importable_to_observation": false
+    },
+    "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls": {
+      "csv": ["files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Actilume_246.csv", "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Sleep_log_245.csv", "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Saliva_Collection_243.csv", "files/JMGROUNDLMLSTP34_1/JMGROUNDLMLSTP341.xls__Urine_Collection_244.csv"],
+      "what": "Data collection timetables (one sheet per session type: Actillume 48 h, AIRLOG sleep log, saliva melatonin every 2 h, void-by-void urine). Schedule only: Phase II/III pre-/in-/post-chamber, dates 'not available'.",
+      "importable_to_observation": false
+    }
+  },
+  "lsah_v11_1": {
+    "_notes": [
+      "LSAH newsletter tables: cohort aggregates by age group only (BMI, % body fat, VO2max, max heart rate). No per-person data, no time points relative to flight. Not importable to observation.",
+      "1 jpg (top 5 physical activities) not downloaded."
+    ],
+    "files/JMLSAHNEWSV111_174/JMLSAHNEWSV111_174.xls": {
+      "csv": "files/JMLSAHNEWSV111_174/JMLSAHNEWSV111_174.xls__Vol_11_I1.csv",
+      "what": "Age and gender distribution (%) of crewmembers (N=519) vs EVA astronauts (N=79)",
+      "granularity": "cohort percentages",
+      "pitfalls": ["Row labels look garbled in the source ('32-37', 'Male', '38-49', '44+'); age groups elsewhere are 32-37 / 38-43 / 44+."],
+      "importable_to_observation": false
+    },
+    "files/JMLSAHNEWSV111_175/JMLSAHNEWSV111_175.xls": {
+      "csv": "files/JMLSAHNEWSV111_175/JMLSAHNEWSV111_175.xls__Sheet1.csv",
+      "what": "Select physical exam parameters for non-EVA Shuttle astronauts by age group at exam (32-37, 38-43, 44+)",
+      "granularity": "age-group means with N per variable",
+      "columns": [
+        {"name": "BMI", "unit": "kg/m^2"}, {"name": "% Body Fat", "unit": "%"},
+        {"name": "VO2 max ('VO, max' in source)", "unit": "mL/kg/min (not stated)"},
+        {"name": "MHR", "unit": "beats/min (max heart rate in exercise test; not stated)"}
+      ],
+      "pitfalls": ["Each value column is preceded by its own N column.", "Units not given in the file."],
+      "importable_to_observation": false
+    },
+    "files/JMLSAHNEWSV111_176/JMLSAHNEWSV111_176.xls": {
+      "csv": "files/JMLSAHNEWSV111_176/JMLSAHNEWSV111_176.xls__Sheet1.csv",
+      "what": "Same as _175 for Shuttle astronauts performing EVA (plus 'N of age group at launch')",
+      "granularity": "age-group means",
+      "importable_to_observation": false
+    }
+  },
+  "lsah_v7_2_2": {
+    "_notes": [
+      "LSAH newsletter (Oct 1998, vol 7(2)) tables: mean values by 5-year age band for female/male astronauts vs female/male comparison group. No per-person data, no flight-relative time points. Not importable to observation; usable as population reference curves."
+    ],
+    "files/JMLSAHNEWSV722_152/JMLSAHNEWSV722_152.xls": {
+      "csv": "files/JMLSAHNEWSV722_152/JMLSAHNEWSV722_152.xls__Vol_7_I2_d.csv",
+      "what": "Blood pressure - mean values by age",
+      "granularity": "group means by age band (<35, 35-39, 40-44, 45-49, 50-54, 55-59, 60+) x group (Female/Male Astronauts, Female/Male Comparisons)",
+      "columns": [{"name": "first 4 data rows", "unit": "mmHg", "description": "DIASTOLIC (values 65-82) - not labelled in the file"}, {"name": "last 4 data rows", "unit": "mmHg", "description": "SYSTOLIC (values 101-131) - not labelled in the file"}],
+      "pitfalls": ["Systolic/diastolic blocks are NOT labelled; identified by value range only.", "Females 40+ pooled into 40-44 (footnote in sister file)."],
+      "importable_to_observation": false
+    },
+    "files/JMLSAHNEWSV722_151/JMLSAHNEWSV722_151.xls": {
+      "csv": "files/JMLSAHNEWSV722_151/JMLSAHNEWSV722_151.xls__Vol_7_I2_c.csv",
+      "what": "LDL cholesterol - mean values by age (dataset name; values 96-156, mg/dL presumed, unit not stated)",
+      "importable_to_observation": false
+    },
+    "files/JMLSAHNEWSV722_153/JMLSAHNEWSV722_153.xls": {
+      "csv": "files/JMLSAHNEWSV722_153/JMLSAHNEWSV722_153.xls__Vol_7_I2_e.csv",
+      "what": "Hearing - mean values by age (dataset name; values 8-49, presumably hearing threshold in dB HL; unit/frequency not stated)",
+      "importable_to_observation": false
+    }
+  },
+  "lsah_v8_1_2": {
+    "_notes": [
+      "NOT DOWNLOADED: 'Aging and Blood Pressure in Astronauts' has 0 datasets in the NLSP record (only 1 publication citation). Metadata saved."
+    ]
+  }
+}

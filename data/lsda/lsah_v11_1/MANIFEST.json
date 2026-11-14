@@ -1,0 +1,166 @@
+{
+  "source_id": "lsda_lsah_v11_1",
+  "experiment_identifier": "LSAHNEWSV11_1",
+  "nlsp_experiment_id": "401485a6-47e2-5a23-a965-17bc23a3e8b3",
+  "lsda_guid": "cl62az9h7cdco01o6hmkz6y92",
+  "title": "Physiological Variables of EVA Participants--An Update",
+  "doi": "10.83263/vg56-gw75",
+  "missions": [
+    [
+      [
+        "LSAH"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/401485a6-47e2-5a23-a965-17bc23a3e8b3/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/401485a6-47e2-5a23-a965-17bc23a3e8b3"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "LSAH newsletter tables: cohort aggregates by age group only (BMI, % body fat, VO2max, max heart rate). No per-person data, no time points relative to flight. Not importable to observation.",
+    "1 jpg (top 5 physical activities) not downloaded."
+  ],
+  "content": {
+    "files/JMLSAHNEWSV111_174/JMLSAHNEWSV111_174.xls": {
+      "csv": "files/JMLSAHNEWSV111_174/JMLSAHNEWSV111_174.xls__Vol_11_I1.csv",
+      "what": "Age and gender distribution (%) of crewmembers (N=519) vs EVA astronauts (N=79)",
+      "granularity": "cohort percentages",
+      "pitfalls": [
+        "Row labels look garbled in the source ('32-37', 'Male', '38-49', '44+'); age groups elsewhere are 32-37 / 38-43 / 44+."
+      ],
+      "importable_to_observation": false
+    },
+    "files/JMLSAHNEWSV111_175/JMLSAHNEWSV111_175.xls": {
+      "csv": "files/JMLSAHNEWSV111_175/JMLSAHNEWSV111_175.xls__Sheet1.csv",
+      "what": "Select physical exam parameters for non-EVA Shuttle astronauts by age group at exam (32-37, 38-43, 44+)",
+      "granularity": "age-group means with N per variable",
+      "columns": [
+        {
+          "name": "BMI",
+          "unit": "kg/m^2"
+        },
+        {
+          "name": "% Body Fat",
+          "unit": "%"
+        },
+        {
+          "name": "VO2 max ('VO, max' in source)",
+          "unit": "mL/kg/min (not stated)"
+        },
+        {
+          "name": "MHR",
+          "unit": "beats/min (max heart rate in exercise test; not stated)"
+        }
+      ],
+      "pitfalls": [
+        "Each value column is preceded by its own N column.",
+        "Units not given in the file."
+      ],
+      "importable_to_observation": false
+    },
+    "files/JMLSAHNEWSV111_176/JMLSAHNEWSV111_176.xls": {
+      "csv": "files/JMLSAHNEWSV111_176/JMLSAHNEWSV111_176.xls__Sheet1.csv",
+      "what": "Same as _175 for Shuttle astronauts performing EVA (plus 'N of age group at launch')",
+      "granularity": "age-group means",
+      "importable_to_observation": false
+    }
+  },
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 10907,
+      "sha256": "93f22bf54fb7340640a37b443aa5d6b4ddd8cd8d5994bdc95b4f97934debcc4a",
+      "note": "experiment record subset + dataset/file tree"
+    },
+    {
+      "path": "files/JMLSAHNEWSV111_174/JMLSAHNEWSV111_174.xls",
+      "bytes": 16384,
+      "sha256": "3d66e8ab1e4b6953721e5324440912ec2d246aca2843886c684a3171a08ec5fb",
+      "dataset_catalog": "JMLSAHNEWSV111_174",
+      "dataset_name": "Age and Gender Distribution of Astronaut Groups at Time of Examination",
+      "dataset_description": "This graph depicts the age and gender distribution of Shuttle and EVA astronaut groups at the time of examination.<P>Reference: National Aeronautics and Space Administration. Physical Activity for a Healthy Lifestyle. In: Longitudinal Study of Astronaut Health Newsletter.  November 2000;9(2):1-2.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMLSAHNEWSV111_174.xls",
+      "file_key": "782ea28e-7493-511d-a660-b0b2e0fe737e",
+      "url": "https://nlsp.nasa.gov/api/v1/files/782ea28e-7493-511d-a660-b0b2e0fe737e/download",
+      "sheets_csv": [
+        {
+          "sheet": "Vol 11 I1",
+          "path": "files/JMLSAHNEWSV111_174/JMLSAHNEWSV111_174.xls__Vol_11_I1.csv",
+          "rows": 12,
+          "cols": 4,
+          "sha256": "ab65c8820021e84adb1a02416db5ace5d32d8635b61afb3046ed938e6b110212"
+        }
+      ]
+    },
+    {
+      "path": "files/JMLSAHNEWSV111_175/JMLSAHNEWSV111_175.xls",
+      "bytes": 14848,
+      "sha256": "7f587a9dda439b784e7c0269b204f84b994b0e25aedacc832da5f7576bacfc5e",
+      "dataset_catalog": "JMLSAHNEWSV111_175",
+      "dataset_name": "Select Physical Exam Parameters for non-EVA Shuttle Astronauts",
+      "dataset_description": "This graph depicts body mass index (BMI), percent body fat, VO2 max, and maximum heart rate for 174 Shuttle astronauts who did not perform extravehicular activities (EVAs).<P>Reference: National Aeronautics and Space Administration. Physical Activity for a Healthy Lifestyle. In: Longitudinal Study of Astronaut Health Newsletter.  November 2000;9(2):1-2.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMLSAHNEWSV111_175.xls",
+      "file_key": "0c0ec559-e826-5105-871b-29c458180386",
+      "url": "https://nlsp.nasa.gov/api/v1/files/0c0ec559-e826-5105-871b-29c458180386/download",
+      "sheets_csv": [
+        {
+          "sheet": "Sheet1",
+          "path": "files/JMLSAHNEWSV111_175/JMLSAHNEWSV111_175.xls__Sheet1.csv",
+          "rows": 18,
+          "cols": 10,
+          "sha256": "d08901655644916aa3adbc4edd2ee21ef8eb3b844a6f95a4c5ff1196c05144bc"
+        }
+      ]
+    },
+    {
+      "path": "files/JMLSAHNEWSV111_176/JMLSAHNEWSV111_176.xls",
+      "bytes": 13824,
+      "sha256": "52f6b2c5cd0d8c3ce719102c6a53f07d3484147b46584e94149955e90c050ab8",
+      "dataset_catalog": "JMLSAHNEWSV111_176",
+      "dataset_name": "Select Physical Exam Parameters for Shuttle Astronauts Performing EVA",
+      "dataset_description": "This graph depicts body mass index (BMI), percent body fat, VO2 max, and maximum heart rate for 51 Shuttle astronauts who performed extravehicular activities (EVAs).<P>Reference: National Aeronautics and Space Administration. Physical Activity for a Healthy Lifestyle. In: Longitudinal Study of Astronaut Health Newsletter.  November 2000;9(2):1-2.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMLSAHNEWSV111_176.xls",
+      "file_key": "da82dd57-f39c-5fba-85d3-7f12423038cc",
+      "url": "https://nlsp.nasa.gov/api/v1/files/da82dd57-f39c-5fba-85d3-7f12423038cc/download",
+      "sheets_csv": [
+        {
+          "sheet": "Sheet1",
+          "path": "files/JMLSAHNEWSV111_176/JMLSAHNEWSV111_176.xls__Sheet1.csv",
+          "rows": 19,
+          "cols": 12,
+          "sha256": "40d1eb36268a62401c5745895dc5f5ea5b866d3481af57503a9860b01a9372ed"
+        }
+      ]
+    }
+  ],
+  "skipped_files": [
+    {
+      "dataset_catalog": "JMLSAHNEWSV111_172",
+      "dataset_name": "Astronaut Top 5 Reported Physical Activities",
+      "dataset_description": "According to the Longitudinal Study of Astronaut Health (LSAH) Lifestyle Questionnaire (LSQ), 72.3% of the responding 220 NASA astronauts and 38.2% of the responding 781 LSAH comparison participants list jogging/running among their various physical activities. Of the responding 32,440 National Health Interview Survey 1998 (NHIS) participants, 10.6% choose jogging/running among their various physical activities. In addition, 24.5%, 49.2%, and 43.2%, respectively, choose walking among their various physical activities. <P>Reference: National Aeronautics and Space Administration. Physical Activity for a Healthy Lifestyle. In: Longitudinal Study of Astronaut Health Newsletter.  November 2000;9(2):1-2.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "JMLSAHNEWSV111_172.jpg",
+      "file_key": "125eb9ad-7deb-5d3d-8836-24e34cac008d",
+      "url": "https://nlsp.nasa.gov/api/v1/files/125eb9ad-7deb-5d3d-8836-24e34cac008d/download",
+      "reason": "figure/image (jpg) - a rendered graph, not machine-readable data"
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T14:22:04Z",
+  "generated_by": "scripts/fetch_data.py"
+}

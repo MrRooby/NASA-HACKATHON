@@ -1,0 +1,74 @@
+{
+  "alerts": [
+    {
+      "alert_code": "ALT-H1-C1",
+      "severity": "alert",
+      "title": "H1 CO2 exposure",
+      "message": "C1 exposure linked to habitat scrubber fault.",
+      "crew_code": "C1",
+      "source_kind": "habitat_event",
+      "habitat_event_code": "evt-H1-scrubber-fault",
+      "medical_event_code": "H1-CO2-ESC"
+    },
+    {
+      "alert_code": "ALT-H4-C2",
+      "severity": "alert",
+      "title": "H4 dehydration",
+      "message": "C2 low urine volume linked to habitat hydration reading.",
+      "crew_code": "C2",
+      "source_kind": "habitat_reading",
+      "medical_event_code": "H4-DEHYDRATION-C2",
+      "habitat_reading": {
+        "channel_code": "urine_volume_24h",
+        "sol": 252,
+        "crew_code": "C2"
+      }
+    },
+    {
+      "alert_code": "ALT-H5-C3",
+      "severity": "alert",
+      "title": "H5 hypercalciuria",
+      "message": "C3 calcium trend linked to urine reading.",
+      "crew_code": "C3",
+      "source_kind": "habitat_reading",
+      "medical_event_code": "H5-HYPERCALCIURIA-C3",
+      "habitat_reading": {
+        "channel_code": "urine_calcium_24h",
+        "sol": 390,
+        "crew_code": "C3"
+      }
+    },
+    {
+      "alert_code": "ALT-H8-SPE",
+      "severity": "critical",
+      "title": "H8 SPE during EVA",
+      "message": "SPE event linked to C1/C4 EVA and shelter response.",
+      "crew_code": "C1",
+      "source_kind": "habitat_event",
+      "habitat_event_code": "evt-H8-spe",
+      "medical_event_code": "H8-SPE-ALERT"
+    }
+  ],
+  "escalations": [
+    {
+      "alert_code": "ALT-H1-C1",
+      "escalation_code": "ESC-ALT-H1-C1",
+      "level": "flight_surgeon"
+    },
+    {
+      "alert_code": "ALT-H4-C2",
+      "escalation_code": "ESC-ALT-H4-C2",
+      "level": "flight_surgeon"
+    },
+    {
+      "alert_code": "ALT-H5-C3",
+      "escalation_code": "ESC-ALT-H5-C3",
+      "level": "flight_surgeon"
+    },
+    {
+      "alert_code": "ALT-H8-SPE",
+      "escalation_code": "ESC-ALT-H8-SPE",
+      "level": "emergency"
+    }
+  ]
+}

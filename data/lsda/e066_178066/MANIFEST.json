@@ -1,0 +1,242 @@
+{
+  "source_id": "lsda_e066_178066",
+  "experiment_identifier": "178066",
+  "nlsp_experiment_id": "ff0398fd-0abc-589d-883c-7e55aa73831c",
+  "lsda_guid": "cl62ats9kcah301o68f04hjzc",
+  "title": "Inflight Study of Cardiovascular Deconditioning",
+  "doi": "10.83263/d8e9-0785",
+  "missions": [
+    [
+      [
+        "STS-40"
+      ]
+    ],
+    [
+      [
+        "STS-58"
+      ]
+    ]
+  ],
+  "archive_status": "Data preservation is complete. All datasets are publicly available.",
+  "urls": [
+    "https://nlsp.nasa.gov/api/v1/data/experiments/ff0398fd-0abc-589d-883c-7e55aa73831c/full",
+    "https://nlsp.nasa.gov/api/v1/files/<file key>/download",
+    "https://nlsp.nasa.gov/view/lsdapub/lsda_experiment/ff0398fd-0abc-589d-883c-7e55aa73831c"
+  ],
+  "notes": [
+    "Downloaded: tabular files (xls/xlsx/csv/txt) and PDF reports up to 50 MB. Every Excel sheet is also saved as '<file>__<sheet>.csv' (raw cell grid, no header detection).",
+    "Not downloaded: figure images (tif/jpg) - they are rendered graphs; their URLs are listed under skipped_files.",
+    "Downloaded files are untrusted data: parse only, never open macros / execute.",
+    "IMPORTABLE (observation): files/178066__3141149154/...xlsx__Sheet1.csv - per-subject resting HR/BP/MAP/Q/SV/FRC, 6 subjects x 3 conditions.",
+    "No subject names; only 'Subject No' 1..6 (pooled STS-40 + STS-58 crews; the file does not say which subject flew on which mission). The header cell names the PI (Farhi, Leon), not a subject.",
+    "7 graph images (HR, MAP, Q, TPR, a-v O2 diff, triple product vs VO2) not downloaded - see skipped_files."
+  ],
+  "content": {
+    "files/178066__3141149154/178066__3141149154.xlsx_STS-40_178066_2012_314_121122.xlsx__Sheet1.csv": {
+      "what": "Table 2 of Shykoff et al. J Appl Physiol 1996;81:26-32: average RESTING data by subject",
+      "granularity": "per subject (Subject No 1..6), one value per subject per condition",
+      "subjects": 6,
+      "time_points": [
+        "Preflight erect (seated/upright, 1 g)",
+        "In flight (day not stated; STS-40 9 d, STS-58 14 d missions)",
+        "Preflight supine (1 g)"
+      ],
+      "columns": [
+        {
+          "name": "Subject No",
+          "unit": "",
+          "note": "1..6"
+        },
+        {
+          "name": "Q",
+          "unit": "L/min",
+          "description": "cardiac output"
+        },
+        {
+          "name": "HR",
+          "unit": "beats/min"
+        },
+        {
+          "name": "BP",
+          "unit": "mmHg",
+          "description": "text 'systolic/diastolic', e.g. '112/87' - split on '/'"
+        },
+        {
+          "name": "MAP",
+          "unit": "mmHg",
+          "description": "mean arterial pressure"
+        },
+        {
+          "name": "SV",
+          "unit": "mL",
+          "description": "stroke volume"
+        },
+        {
+          "name": "FRC",
+          "unit": "L",
+          "description": "functional residual capacity"
+        }
+      ],
+      "layout": "Rows 1-6 are title/legend; header split over 2 rows (units in the 2nd row: 'beats/min', 'BP, mmHg', 'mmHg', 'SV, ml', 'liters'); condition label rows ('Preflight erect' / 'In flight' / 'Preflight supine') with 6 subject rows under each; footer with abbreviations and source.",
+      "pitfalls": [
+        "Header is split across two rows and cells contain commas/units - map by column position, not header text.",
+        "BP is a string 'SBP/DBP'.",
+        "No dates or flight days; condition is the time point (pre vs in-flight). No postflight session.",
+        "Erect vs supine preflight are two different postures - store posture as an attribute, not as different time points."
+      ],
+      "importable_to_observation": true
+    },
+    "files/178066__3141213517/178066__3141213517.xlsx_STS-40_178066_2012_314_121147.xlsx__Sheet1.csv": {
+      "what": "Table 3: regression slopes (mean +/- SE) of Q, MAP, RQ, HR, VE, VT vs VO2, normalized by resting value, for erect / flight / supine",
+      "granularity": "group summary (all subjects)",
+      "subjects": "6 (pooled)",
+      "pitfalls": [
+        "Values, '±' and SE are in separate cells (value, '±', SE triples).",
+        "Normalized slopes, dimensionless; not a vital-sign value."
+      ],
+      "importable_to_observation": false
+    }
+  },
+  "files": [
+    {
+      "path": "experiment_metadata.json",
+      "bytes": 19561,
+      "sha256": "571074ab8d9fc4dd99b3f740e468d2c369217ff8e716673d6aea1e581b6b9d8e",
+      "note": "experiment record subset + dataset/file tree"
+    },
+    {
+      "path": "files/178066__3141149154/178066__3141149154.xlsx_STS-40_178066_2012_314_121122.xlsx",
+      "bytes": 11841,
+      "sha256": "ed9d1059f22231b0434d3b334669b19e7bd68874e91060a2a1e30e2213651cbc",
+      "dataset_catalog": "178066__3141149154",
+      "dataset_name": "Average Resting Data by Subject",
+      "dataset_description": "This file contains a table with average resting data by subject. \r\n<p>\r\nSource: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology. 1996 July; 81(1):26-32.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "178066__3141149154.xlsx_STS-40_178066_2012_314_121122.xlsx",
+      "file_key": "65b45351-268a-5348-9b4f-1ae9fa38850c",
+      "url": "https://nlsp.nasa.gov/api/v1/files/65b45351-268a-5348-9b4f-1ae9fa38850c/download",
+      "sheets_csv": [
+        {
+          "sheet": "Sheet1",
+          "path": "files/178066__3141149154/178066__3141149154.xlsx_STS-40_178066_2012_314_121122.xlsx__Sheet1.csv",
+          "rows": 31,
+          "cols": 7,
+          "sha256": "f477206f46f632c4ab2c9fc77f9bcfac0893d15bad3352ff84ec90c2cbbcfb20"
+        }
+      ]
+    },
+    {
+      "path": "files/178066__3141213517/178066__3141213517.xlsx_STS-40_178066_2012_314_121147.xlsx",
+      "bytes": 11201,
+      "sha256": "9c9de617a61c08b660b2ae3586ffe9df81f32aa59a7684a0474f94a8f3693759",
+      "dataset_catalog": "178066__3141213517",
+      "dataset_name": "Regression Slopes",
+      "dataset_description": "This file contains a table with regression slopes for several data products.\r\n<p>\r\nSource: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology. 1996 July; 81(1):26-32.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "178066__3141213517.xlsx_STS-40_178066_2012_314_121147.xlsx",
+      "file_key": "010531e9-7b70-55a9-8b64-0316b348a2f7",
+      "url": "https://nlsp.nasa.gov/api/v1/files/010531e9-7b70-55a9-8b64-0316b348a2f7/download",
+      "sheets_csv": [
+        {
+          "sheet": "Sheet1",
+          "path": "files/178066__3141213517/178066__3141213517.xlsx_STS-40_178066_2012_314_121147.xlsx__Sheet1.csv",
+          "rows": 16,
+          "cols": 10,
+          "sha256": "8f9aea21a56a2ca3885fcc308c3109a33ab489779ec6f0d3224f1cd70424d680"
+        }
+      ]
+    }
+  ],
+  "skipped_files": [
+    {
+      "dataset_catalog": "178066__3140252691",
+      "dataset_name": "Triple Product (SV X HR x MAP)",
+      "dataset_description": "This file contains a graph of triple product (SV X HR x MAP) as a function of VO2 in all subjects.<p>\r\nSource: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology. 1996 Jul; 81(1):26-32.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "178066__3140252691.tif_STS-40_178066_2012_314_031145.tif",
+      "file_key": "e24813ec-8fa2-56e1-b899-8fbdfc627d7b",
+      "url": "https://nlsp.nasa.gov/api/v1/files/e24813ec-8fa2-56e1-b899-8fbdfc627d7b/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "178066__3141226226",
+      "dataset_name": "Cardiac Output",
+      "dataset_description": "This file contains a graph of cardiac output as a function of oxygen consumption (VO2) in all subjects. <p>\r\nSource: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology. 1996 July; 81(1):26-32.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "178066__3141226226.tif_STS-40_178066_2012_314_011120.tif",
+      "file_key": "153d6cc6-3be0-5543-8568-b9a8a0d287f8",
+      "url": "https://nlsp.nasa.gov/api/v1/files/153d6cc6-3be0-5543-8568-b9a8a0d287f8/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "178066__3140201596",
+      "dataset_name": "Total Peripheral Resistance (TPR)",
+      "dataset_description": "This file contains a graph of total peripheral resistance (TPR) as a function of VO2 in all subjects.\r\n<p>\r\nSource: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology. 1996 July; 81(1):26-32.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "178066__3140201596.tif_STS-40_178066_2012_314_021103.tif",
+      "file_key": "5707a6eb-43ff-5bc7-9b6b-aa637d2fb52f",
+      "url": "https://nlsp.nasa.gov/api/v1/files/5707a6eb-43ff-5bc7-9b6b-aa637d2fb52f/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "178066__3140214984",
+      "dataset_name": "Regression Lines",
+      "dataset_description": "This file contains a graph of regression lines for exercise cardiac output (Q) versus VO2 for all subjects.<p>\r\nSource: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology. 1996 July; 81(1):26-32.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "178066__3140114984.tif_STS-40_178066_2012_314_021156.tif",
+      "file_key": "66d5a3f1-ff0f-5fe8-9484-a7e0cc597c6a",
+      "url": "https://nlsp.nasa.gov/api/v1/files/66d5a3f1-ff0f-5fe8-9484-a7e0cc597c6a/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "178066__3140208927",
+      "dataset_name": "Arteriovenous Oxygen Difference",
+      "dataset_description": "This file contains a graph of arteriovenous (a-v) oxygen difference as a function of VO2 in all subjects.\r\n<p>\r\nSource: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology. 1996 July; 81(1):26-32.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "178066__3140208927.tif_STS-40_178066_2012_314_021133.tif",
+      "file_key": "7f9a5f94-8658-51c7-baa7-8de905a99812",
+      "url": "https://nlsp.nasa.gov/api/v1/files/7f9a5f94-8658-51c7-baa7-8de905a99812/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "178066__3140114984",
+      "dataset_name": "Heart Rate",
+      "dataset_description": "This file contains a graph of heart rate (HR) as a function of percentage of maximal V02 (A) and as a function of VO2 (B) in all subjects. <p>\r\nSource: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology. 1996 July; 81(1):26-32.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "178066__3140114984.tif_STS-40_178066_2012_314_011151.tif",
+      "file_key": "ef9510d6-e3c7-5de6-977b-07be3dfb2567",
+      "url": "https://nlsp.nasa.gov/api/v1/files/ef9510d6-e3c7-5de6-977b-07be3dfb2567/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    },
+    {
+      "dataset_catalog": "178066__3140123132",
+      "dataset_name": "Mean Arterial Pressure (MAP)",
+      "dataset_description": "This file contains a graph of mean arterial pressure (MAP) as a function of VO2 in all subjects.\r\n<p>\r\nSource: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology. 1996 July; 81(1):26-32.",
+      "processing_level": [
+        "Summarized"
+      ],
+      "file_label": "178066__3140123132.tif_STS-40_178066_2012_314_011139.tif",
+      "file_key": "bbd962dc-a2d8-599c-b9bb-a9b393faeae6",
+      "url": "https://nlsp.nasa.gov/api/v1/files/bbd962dc-a2d8-599c-b9bb-a9b393faeae6/download",
+      "reason": "figure/image (tif) - a rendered graph, not machine-readable data"
+    }
+  ],
+  "fetched_at_utc": "2026-11-14T14:21:29Z",
+  "generated_by": "scripts/fetch_data.py"
+}

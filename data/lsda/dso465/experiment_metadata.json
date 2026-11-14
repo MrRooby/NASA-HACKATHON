@@ -1,0 +1,61 @@
+{
+ "experiment_id": "DSO 465",
+ "experiment_identifier": "DSO 465",
+ "title": "Pre- and Postflight Echocardiography",
+ "doi": "10.83263/dbpg-dg91",
+ "archive_status": "Data preservation is complete. All datasets are publicly available.",
+ "missions": [
+  [
+   [
+    "STS-61C"
+   ]
+  ]
+ ],
+ "parameter_name": [
+  "Ejection fraction",
+  "Heart rate",
+  "Mean arterial pressure",
+  "Systolic volume index",
+  "Total peripheral vascular resistance index",
+  "Blood pressure",
+  "Left ventricular end-diastolic volume index (EDVI)",
+  "Left ventricular end-systolic volume index (ESVI)",
+  "Left ventricular mass index (LVMI)"
+ ],
+ "description": "OBJECTIVES:<br>\r\nThe headward fluid shift of space flight involves the redistribution of body fluids from the legs and abdomen into the thorax and head. This fluid shift is believed to initiate the cardiovascular readaptation syndrome (CRAS) of responses to space flight factors by stimulating arterial and cardiopulmonary sensors. The physiological responses to this stimulation include the reduction of plasma volume through increased urination, decreased thirst, and perhaps even vomiting, and the resetting of cardiovascular reflexes controlling arteriolar tone, venous capacity, and vascular responsiveness to postflight orthostatic stress. A complete understanding of CRAS will require the thorough documentation of the fluid shift and its effects. This understanding can be provided in part by the use of ultrasound echocardiography to determine the dimensions of cardiac and major vascular structures and to measure their normal functioning.\r\n<p>\r\nCardiac ultrasound measurements on the crew of the 84 day Skylab flight revealed a significant decrease in left ventricular volume which persisted for over a week postflight. Subsequent measurements on STS crewmembers confirmed that the loss of volume occurs during flights as short as a week or less, and may require a week or more to be completely reversed postflight. The large contribution of individual variability, due to such factors as age and physical fitness, was documented in those data. This study was proposed to continue the data collection, and to include, for the first time, measurements made while the subjects were standing upright. This additional data would have revealed the effects of space flight on the cardiovascular system's response to gravitational stress. The aim of DSO 465 was the determination of cardiovascular adaptations to space flight factors based on the echocardiographic measurement of cardiac functioning in the supine and standing positions.\r\n<p>\r\nAPPROACH:<br>\r\nCardiac images were made using an ATL/ADR 4000 S/LC real-time two-dimensional ultrasound imaging system. Images were made with the subject resting on a couch or cot in the left lateral decubitus position and during passive standing with his back flat against a wall and his feet nine inches out from the wall with his heels six inches apart. The sector-scanning end-fire transducer was positioned to acquire para-sternal long-axis, para-sternal short-axis and apical four-chamber views. A two-dimensional view was used to select appropriate scan lines for M-mode images at the aortic root for aortic and left atrial dimensions and at the level of the maximum excursion of the mitral valve for left ventricular dimensions. Ventricular dimensions were measured at end-diastole and end-systole; other dimensions were measured at end-systole. Data were collected on a tota1 of two crewmembers preflight, according to the following schedule :<br>\r\nCrewman A: L-38, -33, -31, -30, -13, -10 and -9 days<br>\r\nCrewman B: L-13, -12, -10 and -9 days<br>\r\n<p>\r\nPostflight data were not collected immediately after landing on these crewmembers because a late in-flight change in landing site to NASA-Dryden Research Facility in California left inadequate time to transport the equipment and operator from the planned landing site, NASA Kennedy Space Center in Florida. Uncertainties in the crewmembers’ schedule for returning to NASA-Johnson Space Center prohibited data collection on the days after landing.\r\n<p>\r\nRESULTS:<br>\r\nThe late change in landing site precluded postflight data collection. Therefore, DSO 465 produced no results.  DSO 465 was supplemented by DSO 466.  Please refer to DSO 466 for results.\r\n<p>",
+ "publications": [],
+ "datasets": [
+  {
+   "key": "IDP-LSDA_DATASET-0000000000002262",
+   "label": "DSO 465__610810660",
+   "type": "folder",
+   "dataset_info": {
+    "dataset_name": "Effect of Space Flight on LVDI",
+    "dataset_catalog": "DSO 465__610810660",
+    "dataset_description": [
+     "This graph depicts the relationship between the crewmembers’ preflight left ventricular volume and their relative loss of volume during their flights.\r\n<p>\r\nSource: Space Shuttle Medical Detailed Supplementary Objectives: An Interim Report compiled by the Space Research Institute (SBRI) for NASA.  June 1986."
+    ],
+    "processing_level": [
+     "Summarized"
+    ],
+    "experiment_id": [
+     "DSO 465"
+    ]
+   },
+   "meta": "1 file",
+   "date": "2022-07-28",
+   "children": [
+    {
+     "key": "31ed581f-24f0-5343-8322-2d369b947f40",
+     "label": "DSO_465__610810660.TIF_STS-61C_DSO_465_2011_64_030307.TIF",
+     "type": "file",
+     "ext": "tif",
+     "file_size": 0,
+     "meta": "",
+     "date": "2022-07-28",
+     "dataset_file_info": {}
+    }
+   ]
+  }
+ ]
+}

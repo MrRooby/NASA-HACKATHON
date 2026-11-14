@@ -1,0 +1,36 @@
+"NASA’s Life Sciences Data Archive (http://lsda.jsc.nasa.gov)
+Investigator Name: Farhi, Leon
+Mission (Payload): STS-40 and STS-58
+Experiment title (ID): Inflight Study of Cardiovascular Deconditioning (178066)
+File Name/Inventory ID: 178066__3141149154.xlsx 
+",,,,,,
+,,,,,,
+Table 2. Average resting data by subject,,,,,,
+,,,,,,
+,,"HR,",,"MAP,",,"FRC,"
+Subject No,"Q, l/m",beats/min,"BP, mmHg",mmHg,"SV, ml",liters
+,,        Preflight erect,,,,
+1,5.7,80,112/87,95,73,2.9
+2,6.9,74,112/73,86,94,2.7
+3,5.3,65,115/78,90,82,2.7
+4,6.7,74,111/74,87,91,3.3
+5,5.6,78,112/79,90,73,3.2
+6,5.5,63,90/76,81,85,2
+,,             In flight,,,,
+1,7.8,66,127/74,91,117,3.3
+2,8.2,52,106/56,73,154,2.8
+3,7.7,58,112/61,78,135,2.8
+4,7.1,57,117/74,88,124,3.1
+5,7.7,54,108/72,81,142,3.4
+6,5.9,59,108/66,80,101,2.1
+,,        Preflight supine,,,,
+1,8.4,69,113/82,92,121,2.1
+2,8.3,62,120/72,80,134,2.4
+3,6.6,58,105/78,87,115,2.1
+4,7.2,69,118/75,89,105,2.1
+5,8,63,112/62,82,128,2.2
+6,5.9,57,99/60,73,104,1.5
+"   Q, cardiac output; HR, heart rate; BP, blood pressure; MAP, mean arterial",,,,,,
+"pressure; SV, Stroke volume; FRC, functional residual capacity.",,,,,,
+,,,,,,
+"Source: Shykoff BE, Farhi LE, Olszowka AJ, Pendergast DR, Rokitka MA, Eisenhardt CG, and Morin RA.  Cardiovascular response to submaximal exercise in sustained microgravity.  Journal of Applied Physiology 1996 Jul; 81(1):26-32.",,,,,,
