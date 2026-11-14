@@ -1,0 +1,133 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  IMAGE_PREFIX: ghcr.io/mrrooby/nasa-hackathon
+
+jobs:
+  checks:
+    name: CI checks
+    uses: ./.github/workflows/ci.yml
+
+  package:
+    name: Package artifacts
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from tag
+        id: v
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Download GUI build from CI
+        uses: actions/download-artifact@v4
+        with:
+          name: gui-dist
+          path: GUI/dist
+
+      - name: Build release bundles
+        env:
+          VERSION: ${{ steps.v.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p release
+
+          # GUI static build
+          (cd GUI/dist && zip -qr "../../release/awernasa-gui-dist-${VERSION}.zip" .)
+
+          # MOTHER server (no tests, no local secrets, no venv/caches) + the shared config it reads
+          zip -qr "release/mother-${VERSION}.zip" MOTHER config data/nasa \
+            -x "MOTHER/tests/*" "MOTHER/.env" "*/.env" "MOTHER/.venv/*" "*/__pycache__/*" "*.pyc" \
+               "MOTHER/.pytest_cache/*" "MOTHER/exports/*" "MOTHER/Dockerfile" \
+               "MOTHER/pytest.ini" "MOTHER/requirements-dev.txt"
+
+          # DATABASE: schema + standalone compose + server config + ETL
+          tar -czf "release/database-${VERSION}.tar.gz" \
+            --exclude="DATABASE/.env" --exclude="__pycache__" --exclude="DATABASE/tests" \
+            DATABASE/schema DATABASE/etl DATABASE/docker-compose.yml DATABASE/mariadb.cnf \
+            DATABASE/.env.example DATABASE/README.md
+
+          # Full-stack deployment (compose references ../DATABASE for schema mounts)
+          tar -czf "release/deploy-${VERSION}.tar.gz" \
+            --exclude="deploy/.env" \
+            deploy DATABASE/schema DATABASE/mariadb.cnf
+
+          (cd release && sha256sum -- * > SHA256SUMS.txt)
+          ls -la release
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-bundles
+          path: release/
+          if-no-files-found: error
+
+  images:
+    name: Docker image (${{ matrix.name }})
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: mother
+            context: .
+            dockerfile: MOTHER/Dockerfile
+          - name: gui
+            context: .
+            dockerfile: GUI/Dockerfile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_PREFIX }}-${{ matrix.name }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+
+  github-release:
+    name: GitHub Release
+    needs: [package, images]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-bundles
+          path: release
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}

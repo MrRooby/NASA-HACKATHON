@@ -248,7 +248,8 @@ def main():
     threading.Thread(target=DASHBOARD.ensure, daemon=True).start()   # start the long analysis right away
     if not args.no_browser:
         threading.Timer(1.5, lambda: webbrowser.open(url)).start()
-    uvicorn.run(create_app(), host="127.0.0.1", port=port, log_level="warning")
+    # MOTHER_HOST lets the Docker image listen on 0.0.0.0 inside the container; default stays local-only.
+    uvicorn.run(create_app(), host=os.environ.get("MOTHER_HOST", "127.0.0.1"), port=port, log_level="warning")
 
 
 if __name__ == "__main__":

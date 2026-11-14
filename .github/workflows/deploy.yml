@@ -1,0 +1,107 @@
+name: Deploy
+
+# Deploys deploy/docker-compose.yml on the team server over Tailscale + SSH.
+# Manual run (Actions -> Deploy -> Run workflow) or automatically after a successful Release.
+# Without the required secrets the job finishes with a notice instead of failing.
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Image tag to run (e.g. 0.1.0 or latest). Empty = value of IMAGE_TAG in deploy/.env on the server"
+        required: false
+        default: ""
+  workflow_run:
+    workflows: [Release]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to team server
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      TS_OAUTH_CLIENT_ID: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+      TS_OAUTH_SECRET: ${{ secrets.TS_OAUTH_SECRET }}
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+      DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+      INPUT_TAG: ${{ github.event.inputs.image_tag || '' }}
+      RUN_TAG: ${{ github.event.workflow_run.head_branch || '' }}
+    steps:
+      - name: Check deploy secrets
+        id: check
+        run: |
+          missing=""
+          for s in TS_OAUTH_CLIENT_ID TS_OAUTH_SECRET DEPLOY_HOST DEPLOY_USER DEPLOY_SSH_KEY DEPLOY_PATH; do
+            [ -n "${!s}" ] || missing="$missing $s"
+          done
+          if [ -n "$missing" ]; then
+            echo "::notice title=Deploy skipped::Missing repository secrets:$missing. See deploy/README.md."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve image tag
+        id: tag
+        if: steps.check.outputs.ready == 'true'
+        run: |
+          tag="$INPUT_TAG"
+          # after a Release run, head_branch is the pushed tag (vX.Y.Z) -> image tag X.Y.Z
+          if [ -z "$tag" ] && [ "${{ github.event_name }}" = "workflow_run" ]; then tag="${RUN_TAG#v}"; fi
+          if [ -n "$tag" ] && ! [[ "$tag" =~ ^[A-Za-z0-9._-]+$ ]]; then
+            echo "::error::Invalid image tag: $tag"; exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Connect to Tailscale
+        if: steps.check.outputs.ready == 'true'
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Configure SSH
+        if: steps.check.outputs.ready == 'true'
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          if [ -n "$DEPLOY_KNOWN_HOSTS" ]; then
+            printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            echo "::warning::DEPLOY_KNOWN_HOSTS not set - trusting the host key seen over Tailscale now (TOFU)."
+            ssh-keyscan -T 15 "$DEPLOY_HOST" > ~/.ssh/known_hosts
+          fi
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Pull and restart stack
+        if: steps.check.outputs.ready == 'true'
+        env:
+          IMAGE_TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" bash -s -- "$DEPLOY_PATH" "$IMAGE_TAG" <<'REMOTE'
+          set -euo pipefail
+          cd "$1"
+          if [ -n "${2:-}" ]; then export IMAGE_TAG="$2"; fi
+          git pull --ff-only
+          docker compose -f deploy/docker-compose.yml pull mother gui
+          docker compose -f deploy/docker-compose.yml up -d
+          docker compose -f deploy/docker-compose.yml ps
+          REMOTE
+
+      - name: Clean up SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

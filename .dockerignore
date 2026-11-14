@@ -1,0 +1,17 @@
+# Build context for MOTHER/Dockerfile and GUI/Dockerfile is the repository root.
+# Whitelist only what the images need; everything else (data/, .env files, tests, venvs, node_modules) stays out.
+*
+!MOTHER/requirements.txt
+!MOTHER/mother/
+!MOTHER/config/
+!MOTHER/web/
+!config/
+!data/nasa/
+!GUI/
+GUI/node_modules
+GUI/dist
+GUI/Dockerfile
+**/__pycache__
+**/*.pyc
+**/.env
+**/.env.*

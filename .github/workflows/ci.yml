@@ -1,0 +1,138 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_call:   # reused by release.yml so a tag is only released after the same checks pass
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  config:
+    name: Validate config/*.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/validate_config.py
+
+  mother:
+    name: MOTHER tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: MOTHER
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            MOTHER/requirements.txt
+            MOTHER/requirements-dev.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; else pip install pytest; fi
+      - name: Run pytest
+        run: |
+          if [ ! -d tests ]; then
+            echo "::notice title=MOTHER::MOTHER/tests not found - skipping pytest"
+            exit 0
+          fi
+          python -m pytest -q
+
+  database-unit:
+    name: DATABASE unit tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: DATABASE
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; else pip install pytest pymysql; fi
+      - name: Run unit tests
+        run: |
+          if [ ! -d tests/unit ]; then
+            echo "::notice title=DATABASE::DATABASE/tests/unit not found - skipping"
+            exit 0
+          fi
+          python -m pytest -q tests/unit
+
+  database-integration:
+    name: DATABASE integration tests (MariaDB 11.4)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: DATABASE
+    services:
+      mariadb:
+        image: mariadb:11.4
+        env:
+          MARIADB_ROOT_PASSWORD: ci-root-password   # throwaway CI container, not a real secret
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=30
+    env:
+      ASTRO_TEST_DB_HOST: 127.0.0.1
+      ASTRO_TEST_DB_PORT: "3306"
+      ASTRO_TEST_DB_USER: root
+      ASTRO_TEST_DB_ROOT_PASSWORD: ci-root-password
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; else pip install pytest pymysql; fi
+      - name: Run integration tests
+        run: |
+          if [ ! -d tests/integration ]; then
+            echo "::notice title=DATABASE::DATABASE/tests/integration not found - skipping"
+            exit 0
+          fi
+          python -m pytest -q tests/integration
+
+  gui:
+    name: GUI build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: GUI
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: GUI/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm test --if-present
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gui-dist
+          path: GUI/dist
+          if-no-files-found: error
+          retention-days: 14

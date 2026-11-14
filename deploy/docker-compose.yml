@@ -1,0 +1,79 @@
+# deploy/docker-compose.yml | full stack on the team server: MariaDB + MOTHER (API + pages) + GUI (nginx).
+# Run from the repository root:
+#   cp deploy/.env.example deploy/.env   # fill in passwords and BIND_IP
+#   docker compose -f deploy/docker-compose.yml pull
+#   docker compose -f deploy/docker-compose.yml up -d
+# Variables are read from deploy/.env (compose project dir = deploy/).
+# Images come from GHCR (built by .github/workflows/release.yml). `--build` builds them locally instead.
+# Ports are published only on BIND_IP (the server's Tailscale IP, `tailscale ip -4`), never 0.0.0.0 by default.
+# DATABASE/docker-compose.yml stays the standalone database stack; this file reuses its schema and config.
+name: astro
+
+services:
+  mariadb:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?set in deploy/.env}
+      ASTRO_ETL_PASSWORD: ${ASTRO_ETL_PASSWORD:?set in deploy/.env}
+      ASTRO_READER_PASSWORD: ${ASTRO_READER_PASSWORD:?set in deploy/.env}
+      ASTRO_ADMIN_PASSWORD: ${ASTRO_ADMIN_PASSWORD:?set in deploy/.env}
+      HABITAT_WRITER_PASSWORD: ${HABITAT_WRITER_PASSWORD:?set in deploy/.env}
+    ports:
+      - "${BIND_IP:-127.0.0.1}:${DB_PUBLISH_PORT:-3306}:3306"
+    volumes:
+      - astro_db_data:/var/lib/mysql
+      - ../DATABASE/mariadb.cnf:/etc/mysql/conf.d/astro.cnf:ro
+      - ../DATABASE/schema/001_core.sql:/docker-entrypoint-initdb.d/001_core.sql:ro
+      - ../DATABASE/schema/002_api_views.sql:/docker-entrypoint-initdb.d/002_api_views.sql:ro
+      - ../DATABASE/schema/003_users.sh:/docker-entrypoint-initdb.d/003_users.sh:ro
+      - ../DATABASE/schema/004_habitat_core.sql:/docker-entrypoint-initdb.d/004_habitat_core.sql:ro
+      - ../DATABASE/schema/005_habitat_seed.sql:/docker-entrypoint-initdb.d/005_habitat_seed.sql:ro
+      - ../DATABASE/schema/006_habitat_api_views.sql:/docker-entrypoint-initdb.d/006_habitat_api_views.sql:ro
+      - ../DATABASE/schema/007_mars_crew_link.sql:/docker-entrypoint-initdb.d/007_mars_crew_link.sql:ro
+      - ../DATABASE/schema/008_wearables_core.sql:/docker-entrypoint-initdb.d/008_wearables_core.sql:ro
+      - ../DATABASE/schema/009_wearables_api_views.sql:/docker-entrypoint-initdb.d/009_wearables_api_views.sql:ro
+      - ../DATABASE/schema/010_medical_core.sql:/docker-entrypoint-initdb.d/010_medical_core.sql:ro
+      - ../DATABASE/schema/011_medical_api_views.sql:/docker-entrypoint-initdb.d/011_medical_api_views.sql:ro
+      - ../DATABASE/schema/012_users_extra.sql:/docker-entrypoint-initdb.d/012_users_extra.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mother:
+    image: ghcr.io/mrrooby/nasa-hackathon-mother:${IMAGE_TAG:-latest}
+    build:
+      context: ..
+      dockerfile: MOTHER/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      # read-only account on the astro_api views
+      DB_HOST: ${MOTHER_DB_HOST:-mariadb}
+      DB_PORT: ${MOTHER_DB_PORT:-3306}
+      DB_NAME: astro_api
+      DB_USER: astro_reader
+      DB_PASSWORD: ${ASTRO_READER_PASSWORD:?set in deploy/.env}
+      MOTHER_MISSION: ${MOTHER_MISSION:-}
+    ports:
+      - "${BIND_IP:-127.0.0.1}:${MOTHER_PUBLISH_PORT:-8000}:8000"
+
+  gui:
+    image: ghcr.io/mrrooby/nasa-hackathon-gui:${IMAGE_TAG:-latest}
+    build:
+      context: ..
+      dockerfile: GUI/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - mother
+    environment:
+      MOTHER_UPSTREAM: mother:8000
+    ports:
+      - "${BIND_IP:-127.0.0.1}:${GUI_PUBLISH_PORT:-8081}:80"
+
+volumes:
+  astro_db_data:
