@@ -5,12 +5,17 @@ Wszystko poniżej MOTHER już umie liczyć. Brakuje tylko danych. Kolejność = 
 ## Już zrobione, dzięki! ✅
 - `astro_habitat.crew.subject_id` jest połączone z SYN-01…04 → MOTHER łączy mocz i dawkę z krwią i parametrami życiowymi tej samej osoby.
 
-## 1. Opaski na 4 kończynach (najważniejsze dla scenariusza z filmu)
+## 1. Opaski na 4 kończynach: ✅ ZROBIONE (`astro_wearables`), MOTHER już je czyta
+
+<details><summary>pierwotna prośba</summary>
+
 Pomysł z MEDICAL-DIAGNOSIS: 4 opaski (2 ręce, 2 nogi), odczyt co ~10 s: tętno, SpO2, temperatura skóry, ruch.
 - Proponowany kanał w `astro_habitat.channel` (per_crew = 1): `limb_hr`, `limb_spo2`, `limb_skin_temp`, `limb_motion`.
 - W `reading` potrzebna jest informacja, która to kończyna: wystarczy kolumna `sensor` z wartością `left_arm` / `right_arm` / `left_leg` / `right_leg` (kolumna już istnieje).
 - Metadane opaski (bateria, łączność): kanały `band_battery_pct`, `band_link` (ok/lost).
 - MOTHER porównuje każdą kończynę z pozostałymi. Brak tętna w jednej kończynie przy normalnych pozostałych oznacza utratę krążenia (ucisk, zmiażdżenie).
+
+</details>
 
 ## 2. Zdarzenia medyczne: AED, leki, procedury
 **Co to jest AED:** automatyczny defibrylator zewnętrzny, czyli urządzenie, które ratuje przy zatrzymaniu krążenia (migotanie komór).

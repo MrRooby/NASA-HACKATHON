@@ -1,4 +1,4 @@
-# MOTHER → UI: karty narządów (kontrakt v1.0)
+# MOTHER → UI: karty narządów (kontrakt v1.1)
 
 **Jedno zdanie:** dla każdej osoby MOTHER zwraca **10 kart**. Każda karta ma **1 kolor, 1 zdanie i maks. 3 liczby**. UI nie musi znać bazy danych ani żadnych wzorów.
 
@@ -16,9 +16,12 @@ Podgląd na żywo: uruchom MOTHER (`start.bat`) i otwórz **http://localhost:800
 
 ```json
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "subject": { "code": "HAB-C2", "label": "Habitat crew C2", "data_kind": "synthetic" },
   "as_of": { "sol": 253 },
+  "devices": [
+    { "limb": "right_arm", "state": "disconnected", "battery_pct": 3, "status": "alert", "message": "right arm band: disconnected" }
+  ],
   "overall_status": "caution",
   "top_message": "Stone risk: urine volume 0.58 L/d (< 2.5).",
   "organs": [
@@ -51,12 +54,13 @@ Tablica `organs` ma **zawsze 10 elementów w tej samej kolejności**, nawet gdy 
 | `action` | przycisk lub tekst „co zrobić” (tylko gdy status ≠ ok) |
 | `why` | po kliknięciu „Dlaczego?” (wzór + źródło) |
 | `overall_status`, `top_message` | pasek u góry ekranu osoby |
+| `devices` | mała lista opasek z problemem (bateria, rozłączona, awaria). To nie narząd: nie zmienia koloru sylwetki |
 
 ## 10 kodów narządów → region sylwetki
 
 | `organ` | Na sylwetce | Co MOTHER tam liczy (prawdziwe wzory) |
 |---|---|---|
-| `brain` | głowa | średni sen z 7 dni, nastrój |
+| `brain` | głowa | jakość snu z opaski EEG (sprawność snu, 7 nocy), nastrój |
 | `eyes` | oczy | *brak danych (potrzeba: ostrość wzroku, dno oka, ciśnienie w oku)* |
 | `heart` | serce | potas (ryzyko arytmii, ERC 2021), wskaźnik wstrząsu HR/SBP, średnie ciśnienie tętnicze |
 | `lungs` | płuca | SpO2 |
@@ -64,7 +68,7 @@ Tablica `organs` ma **zawsze 10 elementów w tej samej kolejności**, nawet gdy 
 | `kidneys` | nerki | eGFR (CKD-EPI 2021), ostre uszkodzenie nerek (KDIGO), BUN/kreatynina, ryzyko kamieni z moczu dobowego (AUA), nawodnienie, albumina w moczu, infekcja z paska |
 | `gut` | brzuch | glukoza, enzymy wątrobowe, ketony i glukoza w moczu, skala Bristol |
 | `musculoskeletal` | nogi / kości | VO2max i siła jako % wartości sprzed lotu (NASA ≥80%) |
-| `limbs` | 4 kończyny | krążenie w każdej kończynie z 4 opasek, zespół zmiażdżenia *(gotowe w MOTHER, czeka na dane opasek)* |
+| `limbs` | 4 kończyny | krążenie w każdej kończynie: perfuzja, tętno i SpO2 z 4 opasek porównane z pozostałymi kończynami (dane `astro_wearables`); zespół zmiażdżenia |
 | `exposure` | ikona otoczenia | dawka osobista vs limit NASA 600 mSv, CO2 w strefie, w której ta osoba mieszka |
 
 ## Minimalna integracja (pseudokod)
@@ -80,6 +84,7 @@ topBar.text = card.top_message;
 
 ## Zasady
 
-- Kontrakt się nie zmienia: nowe badania w bazie pojawią się jako kolejne `metrics`/`checks`, a nie nowe pola.
+- Kontrakt się nie zmienia: nowe badania w bazie pojawią się jako kolejne `metrics`/`checks`, a nie nowe pola. Wersja 1.1 dodała tylko listę `devices`.
+- Przykład z bazy: `GET /api/organs/HAB-C4?sol=142` daje kartę `limbs` = `alert` („Left leg: blood flow 25% of the other limbs”), scenariusz W1.
 - `data_kind: "synthetic"` oznacza dane syntetyczne i trzeba je tak oznaczyć na ekranie.
 - To demo edukacyjne, nie porada medyczna.

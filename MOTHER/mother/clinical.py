@@ -314,30 +314,58 @@ def check_spo2(spo2: float) -> Check:
 
 # ------------------------------------------------------------------ limbs (4 wearable bands)
 def check_limb_perfusion(limbs: dict[str, dict[str, float | None]]) -> list[Check]:
-    """Compare each limb band with the median of the others: a limb with no pulse, or SpO2 ≥6 points below the
-    others, while the body is otherwise oxygenated, means local loss of circulation (compression, crush, tourniquet)."""
+    """Compare each limb band with the median of the other limbs. Local loss of circulation (compression, crush,
+    tourniquet, clot) shows as a perfusion index far below the other limbs, a missing pulse, or a lower SpO2,
+    while the rest of the body is normal."""
     out = []
     names = [n for n, v in limbs.items() if v]
     for n in names:
         others = [limbs[o] for o in names if o != n]
         if not others:
             continue
-        o_spo2 = sorted(x["spo2"] for x in others if x.get("spo2") is not None)
-        o_hr = sorted(x["hr"] for x in others if x.get("hr") is not None)
-        med_spo2 = o_spo2[len(o_spo2) // 2] if o_spo2 else None
-        med_hr = o_hr[len(o_hr) // 2] if o_hr else None
+
+        def med(key):
+            vals = sorted(x[key] for x in others if x.get(key) is not None)
+            return vals[len(vals) // 2] if vals else None
+        m_spo2, m_hr, m_pi = med("spo2"), med("hr"), med("pi")
         me = limbs[n]
-        no_pulse = (me.get("hr") in (None, 0)) and med_hr and med_hr > 30
-        drop = (me.get("spo2") is not None and med_spo2 is not None and med_spo2 - me["spo2"] >= 6)
-        st = ALERT if no_pulse else CAUTION if drop else OK
-        out.append(Check("limbs", f"perfusion_{n}", f"Circulation: {n.replace('_', ' ')}", me.get("spo2"), "% SpO2", st,
-                         f"{n.replace('_', ' ').capitalize()}: no pulse while other limbs are normal - circulation lost." if no_pulse else
-                         f"{n.replace('_', ' ').capitalize()}: SpO2 {me['spo2']:.0f}% vs {med_spo2:.0f}% elsewhere." if drop else
-                         f"{n.replace('_', ' ').capitalize()}: circulation normal.",
-                         "Find the person, free the limb; if compressed >1 h start IV fluids BEFORE release (crush risk)." if st != OK else None,
-                         "limb vs median of other limbs: no pulse, or SpO2 drop ≥6 points", "Team rule built on peripheral perfusion monitoring",
-                         basis="team_assumption", inputs={"limb": me, "others_median": {"spo2": med_spo2, "hr": med_hr}}))
+        no_pulse = me.get("hr") in (None, 0) and bool(m_hr and m_hr > 30)
+        pi_ratio = (me["pi"] / m_pi) if me.get("pi") is not None and m_pi else None
+        spo2_drop = me.get("spo2") is not None and m_spo2 is not None and m_spo2 - me["spo2"] >= 6
+        if no_pulse or (pi_ratio is not None and pi_ratio < 0.3):
+            st = ALERT
+        elif spo2_drop or (pi_ratio is not None and pi_ratio < 0.5):
+            st = CAUTION
+        else:
+            st = OK
+        name = n.replace("_", " ")
+        if no_pulse:
+            msg = f"{name.capitalize()}: no pulse while the other limbs are normal - circulation lost."
+        elif pi_ratio is not None and pi_ratio < 0.5:
+            msg = f"{name.capitalize()}: blood flow (perfusion) {pi_ratio:.0%} of the other limbs - check this limb now."
+        elif spo2_drop:
+            msg = f"{name.capitalize()}: SpO2 {me['spo2']:.0f}% vs {m_spo2:.0f}% in the other limbs."
+        else:
+            msg = f"{name.capitalize()}: circulation normal."
+        out.append(Check("limbs", f"perfusion_{n}", f"Circulation: {name}",
+                         round(pi_ratio * 100) if pi_ratio is not None else me.get("spo2"),
+                         "% of other limbs" if pi_ratio is not None else "% SpO2", st, msg,
+                         "Inspect the limb (pressure, swelling, colour, cold); free it; if compressed >1 h start IV fluids BEFORE release."
+                         if st != OK else None,
+                         "limb vs median of the other limbs: perfusion index <50% caution, <30% or no pulse alert; SpO2 drop >=6 points caution",
+                         "Peripheral perfusion index monitoring (pulse oximetry); team rule", basis="team_assumption",
+                         inputs={"limb": me, "others_median": {"spo2": m_spo2, "hr": m_hr, "pi": m_pi}}))
     return out
+
+
+def check_sleep_eeg(efficiency_pct: float, hours: float | None, deep_pct: float | None, nights: int) -> Check:
+    st = ALERT if efficiency_pct < 75 else CAUTION if efficiency_pct < 85 else OK
+    extra = f", {hours:.1f} h a night" if hours is not None else ""
+    return Check("brain", "sleep_eeg", f"Sleep quality (EEG, {nights} nights)", efficiency_pct, "% efficiency", st,
+                 f"Sleep efficiency {efficiency_pct:.0f}%{extra}" + (" - poor sleep." if st != OK else " - good."),
+                 None if st == OK else "Check noise, light, CO2 and workload in the sleep period.",
+                 "time asleep / time in bed (normal >=85%)", "AASM sleep scoring conventions",
+                 inputs={"hours": hours, "deep_sleep_pct": deep_pct, "nights": nights})
 
 
 def check_crush_syndrome(limb_lost: bool, k: float | None, urine_blood_pos: bool, aki_stage: int) -> Check | None:

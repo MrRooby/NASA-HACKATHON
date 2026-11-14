@@ -14,7 +14,7 @@ from typing import Any
 from . import clinical as C
 from .db_source import TeamDatabase
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"
 ORGANS = [
     ("brain", "Brain & sleep"), ("eyes", "Eyes"), ("heart", "Heart & circulation"), ("lungs", "Lungs & oxygen"),
     ("blood", "Blood"), ("kidneys", "Kidneys & urine"), ("gut", "Digestion & metabolism"),
@@ -109,6 +109,63 @@ def _habitat(db: TeamDatabase, crew: str, sol: int | None) -> dict[str, Any]:
         series[r["c"]].append(r)
     return {"series": series, "dose": dose[0] if dose else None, "co2": co2[0]["v"] if co2 else None, "zone": zone,
             "as_of": {"sol": sol}, "synthetic": True, "data_kind": "synthetic", "mission": "Mars lava-tube habitat"}
+
+
+# ------------------------------------------------------------------ wearables (astro_wearables)
+LIMBS = ("left_arm", "right_arm", "left_leg", "right_leg")
+MARS_SOL_S = 88775.244
+
+
+def _wearables(db: TeamDatabase, crew: str, sol: int | None) -> dict[str, Any] | None:
+    """Latest minute from each limb band, device health and the last 7 EEG sleep sessions, as of the end of `sol`."""
+    from datetime import timedelta
+    devs = db._q("SELECT id, limb FROM astro_wearables.device WHERE crew_code = %s AND retired_at IS NULL", (crew,))
+    if not devs:
+        return None
+    anchor = db._q("SELECT minute_utc t, sol FROM astro_wearables.sample_minute WHERE device_id = %s ORDER BY minute_utc LIMIT 1",
+                   (devs[0]["id"],))
+    if not anchor:
+        return None
+    if sol is None:
+        sol = db._q("SELECT sol FROM astro_wearables.sample_minute WHERE device_id = %s ORDER BY minute_utc DESC LIMIT 1",
+                    (devs[0]["id"],))[0]["sol"]
+    # sol -> time window, so every query uses the (device_id, minute_utc) primary key instead of scanning
+    est = anchor[0]["t"] + timedelta(seconds=(sol - anchor[0]["sol"] + 1) * MARS_SOL_S)
+    lo, hi = est - timedelta(days=3), est + timedelta(days=1)
+    limbs, devices = {}, []
+    for d in devs:
+        row = db._q("SELECT minute_utc, heart_rate_mean hr, spo2_mean spo2, perfusion_index_mean pi, skin_temperature_mean skin, "
+                    "battery_min FROM astro_wearables.sample_minute WHERE device_id = %s AND minute_utc BETWEEN %s AND %s "
+                    "AND sol <= %s ORDER BY minute_utc DESC LIMIT 1", (d["id"], lo, hi, sol))
+        if row and d["limb"] in LIMBS:
+            r = row[0]
+            limbs[d["limb"]] = {"hr": r["hr"], "spo2": r["spo2"], "pi": r["pi"], "skin": r["skin"]}
+        st = db._q("SELECT state, battery_pct, detail FROM astro_wearables.device_state WHERE device_id = %s AND state_ts_utc <= %s "
+                   "ORDER BY state_ts_utc DESC LIMIT 1", (d["id"], hi))
+        state = st[0] if st else {"state": "connected", "battery_pct": row[0]["battery_min"] if row else None, "detail": None}
+        status = "ok" if state["state"] == "connected" else "alert" if state["state"] in ("sensor_fault", "disconnected") else "caution"
+        devices.append({"limb": d["limb"], "state": state["state"], "battery_pct": state["battery_pct"], "status": status,
+                        "message": None if status == "ok" else f"{d['limb'].replace('_', ' ')} band: {state['state'].replace('_', ' ')}"
+                        + (f" ({state['detail']})" if state.get("detail") else "")})
+    eeg = next((d["id"] for d in devs if d["limb"] == "head_eeg"), None)
+    sleep = db._q("SELECT duration_min, sleep_efficiency_pct eff, deep_sleep_pct deep FROM astro_wearables.sleep_session "
+                  "WHERE device_id = %s AND start_utc <= %s AND sol <= %s ORDER BY start_utc DESC LIMIT 7",
+                  (eeg, hi, sol)) if eeg else []
+    return {"limbs": limbs, "devices": devices, "sleep": sleep, "sol": sol}
+
+
+def wearable_checks(w: dict[str, Any] | None) -> list[C.Check]:
+    if not w:
+        return []
+    out: list[C.Check] = []
+    sl = [r for r in w["sleep"] if r["eff"] is not None]
+    if sl:
+        eff = statistics.fmean(float(r["eff"]) for r in sl)
+        durs = [float(r["duration_min"]) / 60 for r in sl if r["duration_min"]]
+        deeps = [float(r["deep"]) for r in sl if r["deep"] is not None]
+        out.append(C.check_sleep_eeg(eff, statistics.fmean(durs) if durs else None,
+                                     statistics.fmean(deeps) if deeps else None, len(sl)))
+    return out
 
 
 # ------------------------------------------------------------------ helpers
@@ -232,6 +289,8 @@ def cross_checks(checks: list[C.Check], limbs: dict | None = None) -> list[C.Che
 
 # ------------------------------------------------------------------ cards
 def build_cards(checks: list[C.Check], meta: dict[str, Any]) -> dict[str, Any]:
+    if any(c.code == "sleep_eeg" for c in checks):  # one sleep metric on the brain card is enough
+        checks = [c for c in checks if c.code != "sleep_7d"]
     by_organ: dict[str, list[C.Check]] = defaultdict(list)
     for c in checks:
         by_organ[c.organ].append(c)
@@ -256,8 +315,10 @@ def build_cards(checks: list[C.Check], meta: dict[str, Any]) -> dict[str, Any]:
     statuses = [c["status"] for c in cards if c["status"] != "no_data"]
     overall = C.worst(statuses) if statuses else "no_data"
     worst_card = next((c for c in cards if c["status"] == overall), None)
+    meta = dict(meta)
+    devices = meta.pop("devices", [])  # device problems are listed separately: a flat battery never turns a limb red
     return {"schema_version": SCHEMA_VERSION, "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            **meta, "overall_status": overall, "top_message": worst_card["headline"] if worst_card and overall != C.OK else "All checks normal.",
+            **meta, "devices": devices, "overall_status": overall, "top_message": worst_card["headline"] if worst_card and overall != C.OK else "All checks normal.",
             "organs": cards}
 
 
@@ -273,14 +334,23 @@ def organ_report(db: TeamDatabase, subject: str, day: int | None = None, sol: in
         if link:  # the database links habitat crew to a health subject: both data sets merge into one person
             p = _person(db, link[0]["code"], h["as_of"]["sol"], link[0]["mission"])
             checks = habitat_checks(h, female=(link[0]["sex"] == "F") if link[0]["sex"] in ("F", "M") else None) + person_checks(p)
-        checks += cross_checks(checks)
-        meta = {"subject": {"code": subject, "label": f"Habitat crew {crew}", "home_zone": h["zone"], "mission": h["mission"],
+        w = _wearables(db, crew, h["as_of"]["sol"])
+        checks += wearable_checks(w)
+        checks += cross_checks(checks, w["limbs"] if w else None)
+        meta = {"devices": w["devices"] if w else [],
+                "subject": {"code": subject, "label": f"Habitat crew {crew}", "home_zone": h["zone"], "mission": h["mission"],
                             "linked_health_subject": link[0]["code"] if link else None, "data_kind": "synthetic"}, "as_of": h["as_of"]}
     else:
         p = _person(db, subject, day, mission)
         checks = person_checks(p)
-        checks += cross_checks(checks)
-        meta = {"subject": {"code": subject, "label": subject, "sex": p["sex"], "mission": p["mission"],
+        crew = db._q("SELECT d.crew_code FROM astro_wearables.device d JOIN astro_core.subject s ON s.id = d.subject_id "
+                     "JOIN astro_core.mission m ON m.id = d.mission_id WHERE s.code = %s AND m.code = %s LIMIT 1",
+                     (subject, p["mission_code"]))
+        w = _wearables(db, crew[0]["crew_code"], day) if crew else None   # bands only exist on their own mission
+        checks += wearable_checks(w)
+        checks += cross_checks(checks, w["limbs"] if w else None)
+        meta = {"devices": w["devices"] if w else [],
+                "subject": {"code": subject, "label": subject, "sex": p["sex"], "mission": p["mission"],
                             "mission_code": p["mission_code"], "data_kind": p["data_kind"]},
                 "as_of": p["as_of"]}
     return build_cards(checks, meta)
