@@ -1,12 +1,52 @@
-# AWERNASA: monitoring zdrowia załogi w habitacie na Marsie
+<div align="center">
 
-Projekt na **NASA Space Apps Challenge 2026**, wyzwanie *Create Health Monitoring Software for Astronauts on Space Missions* (zob. [CHALLENGE.md](CHALLENGE.md)).
+# 🚀 AWERNASA
 
-Scenariusz: 4-osobowa załoga żyje w uszczelnionym **tunelu lawowym** w rejonie Elysium Mons na Marsie. Dane z habitatu, opasek (wearables) i badań medycznych trafiają do bazy. Backend **MOTHER** je analizuje, a **GUI** pokazuje stan zdrowia na interaktywnym modelu 3D astronauty.
+**Monitoring zdrowia załogi w habitacie na Marsie**
 
+[![CI](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/ci.yml/badge.svg)](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/ci.yml)
+[![Build & Release](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/release.yml/badge.svg)](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/release.yml)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Node](https://img.shields.io/badge/Node-20%2B-339933?logo=node.js&logoColor=white)
+![MariaDB](https://img.shields.io/badge/MariaDB-11.4-003545?logo=mariadb&logoColor=white)
+
+*NASA Space Apps Challenge 2026: Create Health Monitoring Software for Astronauts on Space Missions*
+
+</div>
+
+---
+
+4-osobowa załoga żyje w uszczelnionym **tunelu lawowym** na zboczu Elysium Mons. Czujniki habitatu, opaski na ciele (wearables) i badania medyczne zapisują dane do bazy. Backend **MOTHER** analizuje je według norm NASA, a **GUI** pokazuje stan zdrowia każdej osoby na **interaktywnym modelu 3D**: zielony to OK, żółty to uwaga, czerwony to alarm.
+
+Pełny opis wyzwania: [CHALLENGE.md](CHALLENGE.md).
+
+## 🧭 Jak to działa
+
+```mermaid
+flowchart LR
+    subgraph SRC["Źródła danych"]
+        HAB["🏠 HABITAT<br/>czujniki: CO2, O2, promieniowanie, mocz"]
+        WEAR["⌚ WEARABLES<br/>opaski: tętno, SpO2, sen"]
+        MED["🩺 MEDICAL<br/>badania krwi, lekarz"]
+        PUB["🛰️ Dane publiczne<br/>NASA · NOAA · OSDR"]
+    end
+
+    DB[("🗄️ DATABASE<br/>MariaDB 11.4")]
+    CFG["📏 config/<br/>progi NASA-STD-3001"]
+    MOTHER["🧠 MOTHER<br/>FastAPI · /api/*"]
+    GUI["🧍 GUI<br/>React + ludzik 3D"]
+
+    HAB --> DB
+    WEAR --> DB
+    MED --> DB
+    PUB -- ETL --> DB
+    DB -- "widoki astro_api" --> MOTHER
+    CFG --> MOTHER
+    CFG --> GUI
+    MOTHER -- "JSON /api" --> GUI
 ```
-[HABITAT] [WEARABLES] [MEDICAL] ──► [DATABASE: MariaDB] ──► [MOTHER: API] ──► [GUI: React + ludzik 3D]
-```
+
+## 📁 Struktura repozytorium
 
 | Folder | Co to jest |
 |---|---|
@@ -19,9 +59,7 @@ Scenariusz: 4-osobowa załoga żyje w uszczelnionym **tunelu lawowym** w rejonie
 | `data/` | dane publiczne (NASA, NOAA, OSDR…), zob. [DATA_SOURCES.md](DATA_SOURCES.md) i `data/public/README.md` |
 | `deploy/` | uruchomienie całości w Dockerze i CI/CD, zob. [deploy/README.md](deploy/README.md) |
 
----
-
-## Szybki start: lokalnie (development)
+## ⚡ Szybki start: lokalnie (development)
 
 ### Wymagania
 - **Tailscale** zalogowany do sieci zespołu: baza działa pod `100.118.238.112:3306`, dostępna tylko w tailnecie.
@@ -51,16 +89,14 @@ MOTHER_URL=http://127.0.0.1:8000 npm run dev
 - Vite przekazuje `/api` do MOTHER (`GUI/vite.config.js`), więc nie ma problemów z CORS, a zmiany w GUI przeładowują się na żywo.
 - Przykład z alarmem: osoba **HAB-C4**, sol **142**. Lewa noga świeci na czerwono (perfuzja 25%).
 
----
-
-## Całość w Dockerze (serwer)
+## 🐳 Całość w Dockerze (serwer)
 ```bash
 cp deploy/.env.example deploy/.env      # uzupełnij hasła i BIND_IP (adres Tailscale serwera)
 docker compose -f deploy/docker-compose.yml up -d --build
 ```
 Wynik: GUI pod `http://<BIND_IP>:8081` (nginx przekazuje `/api/` do MOTHER), MOTHER pod `http://<BIND_IP>:8000/api/status` i MariaDB. Szczegóły, sekrety i rollback: [deploy/README.md](deploy/README.md).
 
-## Testy
+## 🧪 Testy
 ```bash
 python3 scripts/validate_config.py                          # spójność config/*.json
 cd MOTHER   && pip install -r requirements-dev.txt && python -m pytest -q
@@ -69,12 +105,12 @@ cd GUI      && npm test                                     # Node 20+
 ```
 Testy działają bez bazy i bez sieci. Test integracyjny bazy (`DATABASE/tests/integration`) uruchamia się tylko, gdy ustawiona jest zmienna `ASTRO_TEST_DB_HOST`; w CI działa na tymczasowej MariaDB.
 
-## CI/CD (GitHub Actions)
+## 🔁 CI/CD (GitHub Actions)
 - **`ci.yml`:** testy i build przy każdym pushu i pull requeście.
 - **`release.yml`:** przy pushu na `master` lub `release/**` pakuje wszystko (GUI, MOTHER, DATABASE, deploy) do artefaktu `release-bundles` i publikuje obrazy w GHCR. Tag `vX.Y.Z` dodatkowo tworzy **GitHub Release**.
 - **`deploy.yml`:** wdrożenie na serwer przez Tailscale i SSH (ręcznie albo po release; bez sekretów się pomija).
 
-## Dane i zasady konkursu
+## 📜 Dane i zasady konkursu
 - Wszystkie dane osób w bazie są **syntetyczne** albo pochodzą z publicznych zbiorów (Inspiration4/OSDR, LSDA). GUI oznacza dane syntetyczne etykietą **SYNTHETIC**.
 - Zasady Space Apps (licencje, cytowania, użycie narzędzi SI, ograniczenia dotyczące Chin) opisuje [RULES-NASA.md](RULES-NASA.md).
 - To demo edukacyjne, **nie porada medyczna**.
