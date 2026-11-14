@@ -1,0 +1,31 @@
+{
+ "generator": "habitat_sim_v1",
+ "habitat": "MARS-LT-ELYSIUM",
+ "seed": 7,
+ "sol_epoch_utc": "2039-01-01T00:00:00",
+ "sol_length_s": 88775.244,
+ "sols": [
+  -2,
+  600
+ ],
+ "crew_sex_assumption": {
+  "C1": "M",
+  "C2": "F",
+  "C3": "M",
+  "C4": "F"
+ },
+ "career_start_msv": {
+  "C1": 45.0,
+  "C2": 12.0,
+  "C3": 80.0,
+  "C4": 25.0
+ },
+ "counts": {
+  "readings": 401419,
+  "hourly": 1917934,
+  "events": 517,
+  "crew_location": 13128,
+  "series": 125
+ },
+ "note": "SIMULATED data (source_flag=simulated). Calibration: HABITAT/README.md sources; surface dose from Curiosity RAD in this DB."
+}

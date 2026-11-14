@@ -158,8 +158,10 @@ CREATE TABLE reading_hourly (
   n_suspect            INT UNSIGNED NOT NULL DEFAULT 0,
   n_fault              INT UNSIGNED NOT NULL DEFAULT 0,
   source_flag          ENUM('nasa','simulated','team_assumption') NOT NULL,
+  is_primary           BOOLEAN AS (sensor IN ('', 'A')) STORED,      -- seria główna (sensor A albo jedyny)
   PRIMARY KEY (habitat_id, channel_code, zone_code, crew_code, sensor, hour_utc),
   KEY ix_rh_time (habitat_id, hour_utc),
+  KEY ix_rh_primary (habitat_id, channel_code, zone_code, crew_code, is_primary, hour_utc),
   CONSTRAINT fk_rh_zone FOREIGN KEY (habitat_id, zone_code) REFERENCES zone(habitat_id, code),
   CONSTRAINT fk_rh_ch   FOREIGN KEY (channel_code) REFERENCES channel(code)
 ) ENGINE=InnoDB;

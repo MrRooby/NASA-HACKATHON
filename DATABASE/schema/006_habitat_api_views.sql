@@ -111,8 +111,9 @@ FROM (
   FROM astro_habitat.crew_location cl
   JOIN astro_habitat.reading_hourly rh
     ON rh.habitat_id = cl.habitat_id AND rh.zone_code = cl.zone_code AND rh.crew_code = ''
-   AND rh.sensor IN ('', 'A')
-   AND rh.hour_utc < COALESCE(cl.to_utc, rh.hour_utc + INTERVAL 1 HOUR)
+   AND rh.is_primary = 1
+   AND rh.hour_utc >= cl.from_utc - INTERVAL 1 HOUR          -- zakres indeksu ix_rh_primary dla każdego pobytu
+   AND rh.hour_utc <  COALESCE(cl.to_utc, '9999-12-31')
    AND rh.hour_utc + INTERVAL 1 HOUR > cl.from_utc
   WHERE rh.channel_code IN ('ppco2', 'ppo2_inspired', 'temperature_air', 'rh', 'noise_leq', 'illuminance',
                             'dose_rate', 'pm2_5', 'pm10')
