@@ -176,13 +176,6 @@
       "url": "https://www.osti.gov/pages/servlets/purl/2447574",
       "checked": "2026-11-14"
     },
-    "change4_2020": {
-      "title": "Zhang et al. 2020, Sci Adv — Chang'e-4 lunar surface dose 1369 µSv/day; ISS 731 µSv/day same period",
-      "publisher": "peer-reviewed (CNSA/Kiel)",
-      "type": "peer_reviewed",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7518862/",
-      "checked": "2026-11-14"
-    },
     "nasa_curiosity_dose": {
       "title": "NASA — Curiosity results: Mars surface 0.67 mSv/day",
       "publisher": "NASA",
