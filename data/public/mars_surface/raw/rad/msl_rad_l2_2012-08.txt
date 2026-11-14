@@ -1,0 +1,137 @@
+#              ************************************
+#              *****    GLOBAL ATTRIBUTES    ******
+#              ************************************
+#
+#     STANDARD_DATA_PRODUCT_ID        RAD_RDR
+#     PRODUCT_TYPE                    DATA
+#     PRODUCT_ID                      msl_rad_obs-l2_2012230
+#     INSTRUMENT_HOST_NAME            MARS SCIENCE LABORATORY
+#     INSTRUMENT_HOST_ID              MSL
+#     MISSION_NAME                    MARS SCIENCE LABORATORY
+#     TARGET_NAME                     MARS
+#     TARGET_TYPE                     PLANET
+#     INSTRUMENT_NAME                 RADIATION ASSESSMENT DETECTOR
+#     INSTRUMENT_ID                   RAD
+#     PRODUCER_ID                     GWEIGLE
+#     PRODUCER_FULL_NAME              GERALD WEIGLE
+#     GIT_COMMIT                      28c5b301fc70ab158eb42bec70e8abe3f40b6113
+#     SOFTWARE_VERSION                CDFwrite version:3.7.0
+#     RDR_VERSION                     02
+#     START_SOL                       11
+#     START_TIME                      20120817_10:20:37
+#     STOP_TIME                       20120817_11:50:55
+#     SPACECRAFT_CLOCK_START_COUNT    398470698
+#     SPACECRAFT_CLOCK_STOP_COUNT     398476116
+#     FILE_RECORDS                    17
+#     LINK_TEXT                       The RAD instrument is described in detail in
+#     LINK_TITLE                      Hassler et al (2014)
+#     HTTP_LINK                       https://link.springer.com/article/10.1007/s11214-012-9913-1
+#     NOTE                            This *cdf file contains observations taken from the Mars Science Laboratory                           
+#                                      Radiation Assessment Detector (RAD) for the mission elapsed. This file is in                          
+#                                      CDF form and the data have undergone calibration and decompression from the                           
+#                                      binary MSL RAD EDR data.                                                                              
+#     DESCRIPTION                     This file contains data from RAD_RDR: Radiation Assessment Detector on the Mars                       
+#                                      Science Laboratory (MSL). There is one sols worth of observations where each                          
+#                                      observation can have four types of data: (1) Counters, (2) Histograms, (3)                            
+#                                      Dosimetry, and (4) PHA data. These data are organized in a hierarchical fashion                       
+#                                      in which some observations may not have all four types. These are described                           
+#                                      in the data object sections. For additional information and details concerning                        
+#                                      data organization, science meaning, etc., please refer to the Data Set Catalog,                       
+#                                      MSLRAD_RDR_DS.CAT.1                                                                                   
+#     QUALITY_FLAG_NOTE               Dataset contains all data, however data is flagged (FLAGGED_DATA) if there are                        
+#                                      quality issues(cmds > 2, DAN firing, data corruption, &c.                                             
+#     DURATION_NOTE                   A RAD instrument observation is the 'sampling period', for each observation                           
+#                                      there are variables DURATION and ALIVE_TIME that both are indicators of the                           
+#                                      length of the observation.  Though similar, they have slightly different meanings,                    
+#                                      the DURATION (a coarse timer with 1 sec res) is the period from when RAD began                        
+#                                      acquiring data, until RAD stopped taking data.  The ALIVE_TIME (10us res) is                          
+#                                      based on how many seconds the hardware was able to accept incoming particles.                         
+#                                      ALIVE_TIME has a companion variable DEAD_TIME, which indicates how many seconds                       
+#                                      the hardware was 'busy' processing (and hence cannot accept an incoming particle).                    
+#                                       In most nominal cases, the most accurate what to determine the observations                          
+#                                      active period is ALIVE_TIME + DEAD_TIME.   There can be exceptions, if the                            
+#                                      ALIVE_TIME counter maxxed out.  In those cases the DURATION would be used.                            
+#     PI_AFFILIATION                  SwRI-Boulder
+#     PI_NAME                         D. Hassler
+#     PROJECT                         MSL>Mars Science Laboratory
+#     SOURCE_NAME                     MSL
+#     TEXT                            The Radiation Assessment Detector (RAD) and its data products are described                           
+#                                      in detail in the literature (Hassler et al., 2012). Each RAD observation contains                     
+#                                      the following: (1) Instrument counters, (2) Neutral particle count histograms                         
+#                                      in detectors D and E, (3) LET count histograms, (4) Absorbed dose rate in detectors                   
+#                                      B and E, (5) High-cadence dose rate in B and E (16 rates per observation).                            
+#     MISSION_GROUP                   Mars Science Laboratory (MSL)
+#     DATA_TYPE                       obs-l2
+#     DATA_VERSION                    02
+#     DESCRIPTOR                      RAD>Radiation Assessment Detector
+#     DISCIPLINE                      Space Physics>Interplanetary Studies
+#     GENERATED_BY                    Big Head Endian (BHE) for Southwest Research Institute
+#     GENERATION_DATE                 20260617_14:36:15
+#     INSTRUMENT_TYPE                 Particles (space)
+#     LOGICAL_FILE_ID                 msl_rad_obs-l2
+#     LOGICAL_SOURCE                  msl_rad_obs-l2
+#     ACKNOWLEDGEMENT                 Please acknowledge the RAD Principal Investigator Dr. Hassler of Southwest Research                   
+#                                      Institute Boulder.                                                                                    
+#     RULES_OF_USE                    The RAD data are archived as fully citable data. Please consult the RAD team                          
+#                                      for further details on processing and usage of these data.                                            
+#     TIME_RESOLUTION                 RAD accumulates nominally acquires data in a 16 min observational cadence. During                     
+#                                      times of high count rates this cadence switches to 8 min.                                             
+#     LOGICAL_SOURCE_DESCRIPTION      MSL/RAD Level 2 observational radiation data
+#     CDAWEB_PARENTS                  msl_rad_obs-l2_00000000_v01
+#                                     msl_rad_obs-l2_2012230_v02, msl_rad_obs-l2_2012231_v02
+#     CDFMAJOR                        COL_MAJOR
+#
+#              ************************************
+#              ****  RECORD VARYING VARIABLES  ****
+#              ************************************
+#
+#  1. Epoch time tag
+#  2. [Quality filtered] Radiation dose rate on Mars (recorded in Si, corrected for MMRTG contribution, and tissue-equivalent plastic)
+#
+EPOCH                                              TOTAL_DOSE_B            RTG_CORRECTED_DOSE_B                    TOTAL_DOSE_E
+dd-mm-yyyy hh:mm:ss.mil.mic.nan              uGray/day_(good_Q)              uGray/day_(good_Q)              uGray/day_(good_Q)
+17-08-2012 10:20:37.000.000.000                         0.00000                        -66.9764                         136.676
+17-08-2012 10:26:04.000.000.000                         0.00000                        -66.9764                         136.869
+17-08-2012 10:31:31.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+17-08-2012 10:36:58.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+17-08-2012 10:42:28.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+17-08-2012 10:47:56.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+17-08-2012 10:53:25.000.000.000                         0.00000                        -66.9764                         143.448
+17-08-2012 10:58:54.000.000.000                         0.00000                        -66.9764                         143.028
+17-08-2012 11:04:21.000.000.000                         0.00000                        -66.9764                         146.639
+17-08-2012 11:09:49.000.000.000                         0.00000                        -66.9764                         143.863
+17-08-2012 11:15:16.000.000.000                         0.00000                        -66.9764                         141.709
+17-08-2012 11:20:43.000.000.000                         0.00000                        -66.9764                         140.976
+17-08-2012 11:26:12.000.000.000                         0.00000                        -66.9764                         141.596
+17-08-2012 11:31:41.000.000.000                         0.00000                        -66.9764                         142.237
+17-08-2012 11:37:09.000.000.000                         0.00000                        -66.9764                         139.498
+17-08-2012 11:42:38.000.000.000                         0.00000                        -66.9764                         137.551
+17-08-2012 11:47:40.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 09:36:22.000.000.000                         0.00000                        -66.9742                         136.805
+18-08-2012 09:41:49.000.000.000                         0.00000                        -66.9742                         140.261
+18-08-2012 09:47:16.000.000.000                         0.00000                        -66.9742                         137.232
+18-08-2012 09:52:43.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 09:58:11.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:03:38.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:09:06.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:14:33.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:20:01.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:25:29.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:30:56.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:36:23.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:41:52.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:47:19.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:52:46.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+18-08-2012 10:58:13.000.000.000                         0.00000                        -66.9742                         144.862
+18-08-2012 11:03:40.000.000.000                         0.00000                        -66.9742                         148.664
+18-08-2012 11:09:07.000.000.000                         0.00000                        -66.9742                         142.087
+18-08-2012 11:14:35.000.000.000                         0.00000                        -66.9742                         140.820
+18-08-2012 11:20:02.000.000.000                         0.00000                        -66.9742                         156.223
+18-08-2012 11:25:29.000.000.000                         0.00000                        -66.9742                         139.008
+18-08-2012 11:30:56.000.000.000                         0.00000                        -66.9742                         147.075
+18-08-2012 11:36:23.000.000.000                         0.00000                        -66.9742                         148.463
+18-08-2012 11:41:51.000.000.000                         0.00000                        -66.9742                         142.074
+18-08-2012 11:46:43.000.000.000                    -1.00000E+31                    -1.00000E+31                    -1.00000E+31
+#  
+# Key Parameter and Survey data (labels K0,K1,K2) are preliminary browse data.
+# Generated by CDAWeb on: Sat Nov 14 09:07:21 2026

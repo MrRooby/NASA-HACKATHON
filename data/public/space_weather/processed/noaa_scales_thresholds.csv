@@ -1,0 +1,11 @@
+scale,level,description,physical_measure,threshold_value,threshold_unit,avg_frequency_per_11yr_cycle,biological_effect
+solar_radiation_storm,S1,Minor,GOES >=10 MeV integral proton flux (5-min avg),10,pfu,50 per cycle,None.
+solar_radiation_storm,S2,Moderate,GOES >=10 MeV integral proton flux (5-min avg),100,pfu,25 per cycle,Passengers and crew in high-flying aircraft at high latitudes may be exposed to elevated radiation risk.
+solar_radiation_storm,S3,Strong,GOES >=10 MeV integral proton flux (5-min avg),1000,pfu,10 per cycle,Radiation hazard avoidance recommended for astronauts on EVA; passengers and crew in high-flying aircraft at high latitudes may be exposed to radiation risk.
+solar_radiation_storm,S4,Severe,GOES >=10 MeV integral proton flux (5-min avg),10000,pfu,3 per cycle,Unavoidable radiation hazard to astronauts on EVA; passengers and crew in high-flying aircraft at high latitudes may be exposed to radiation risk.
+solar_radiation_storm,S5,Extreme,GOES >=10 MeV integral proton flux (5-min avg),100000,pfu,Fewer than 1 per cycle,Unavoidable high radiation hazard to astronauts on EVA (extra-vehicular activity); passengers and crew in high-flying aircraft at high latitudes may be exposed to radiation risk.
+radio_blackout,R1,Minor,GOES X-ray peak brightness 0.1-0.8 nm (class M1),1e-05,W/m^2,2000 per cycle (950 days per cycle),
+radio_blackout,R2,Moderate,GOES X-ray peak brightness 0.1-0.8 nm (class M5),5e-05,W/m^2,350 per cycle (300 days per cycle),
+radio_blackout,R3,Strong,GOES X-ray peak brightness 0.1-0.8 nm (class X1),0.0001,W/m^2,175 per cycle (140 days per cycle),
+radio_blackout,R4,Severe,GOES X-ray peak brightness 0.1-0.8 nm (class X10),0.001,W/m^2,8 per cycle (8 days per cycle),
+radio_blackout,R5,Extreme,GOES X-ray peak brightness 0.1-0.8 nm (class X20),0.002,W/m^2,Less than 1 per cycle,

@@ -1,0 +1,21 @@
+source,mission_type,in_sbp,in_sbp_sd,in_dbp,in_dbp_sd,in_map,in_map_sd,pre_sbp,pre_sbp_sd,pre_dbp,pre_dbp_sd,pre_map,premapsd,post_sbp,post_sbp_sd,post_dbp,post_dbp_sd,postmap,postmap_sd,bmi,bmi_sd,sex_male,sex_female,n,age,age_sd,countermeasure,countermeasures,posture_condition
+"Maximal exercise as a countermeasure to orthostatic intolerance after spaceflight (CONTRL, SUPINE)",ISS,,,,,,,114.0,2.0,65.0,4.0,81.0,3.0,118.0,5.0,82.0,4.0,94.0,4.0,23.4,1.7,4.0,0.0,4.0,43,5.0,,,"CONTRL, SUPINE"
+"Maximal exercise as a countermeasure to orthostatic intolerance after spaceflight (CONTROL, STANDING)",ISS,,,,,,,115.0,4.0,78.0,2.0,90.0,2.0,121.0,4.0,96.0,2.0,104.0,1.0,23.4,1.7,4.0,0.0,4.0,43,5.0,,,"CONTROL, STANDING"
+Effects of Mental Stress on Autonomic Cardiac Modulation During Weightlessness,ISS,130.0,5.0,73.0,3.0,,,129.0,3.0,67.0,4.0,,,130.0,4.0,76.0,4.0,,,23.5,3.26,5.0,0.0,5.0,40,,,n,
+Adaptation of heart rate and blood pressure to short and long duration space missions (supine),ISS,116.0,,69.0,,83.0,,122.0,,69.0,0.0,87.0,11.0,,,,,,,23.55,3.89,11.0,0.0,11.0,43.91,,,n,supine
+Adaptation of heart rate and blood pressure to short and long duration space missions (standing),ISS,,,,,,,125.0,,79.0,0.0,94.0,9.0,,,,,,,23.55,3.89,11.0,0.0,11.0,43.91,,,n,standing
+Impact of Prolonged Spaceflight on Orthostatic Tolerance During Ambulation and Blood Pressure Profiles in Astronauts,ISS,110.0,18.0,64.0,13.0,78.0,,123.5,18.0,68.0,13.0,86.0,,130.0,21.0,71.5,13.5,89.0,,24.0,2.6,9.0,4.0,13.0,48,5.0,,,
+Dysfunctional vestibular system causes a blood pressure drop in astronauts returning from space (Supine),ISS,,,,,,,,,,,92.0,2.0,88.5,,,,,,24.4,2.11,12.0,0.0,12.0,47,,,n,Supine
+Dysfunctional vestibular system causes a blood pressure drop in astronauts returning from space (Standing),ISS,,,,,,,,,,,101.0,2.5,96.0,,,,,,24.4,2.11,12.0,0.0,12.0,47,,,n,Standing
+"Fluid Shifts, Vasodilatation and Ambulatory Blood Pressure Reduction during Long Duration Spaceflight",ISS,115.0,4.23,73.76,2.47,90.92,2.52,128.25,3.18,83.25,2.44,104.0,2.25,127.25,2.47,81.67,2.18,101.67,2.2,25.9,1.7,8.0,0.0,8.0,49,1.0,,N,
+Efficacy of Gradient Compression Garments in the Hours After Long-Duration Spaceflight (Prone),ISS,,,,,,,,,,,91.0,,,,,,97.0,,26.0,3.3,9.0,2.0,11.0,50,6.0,,Y,Prone
+Efficacy of Gradient Compression Garments in the Hours After Long-Duration Spaceflight (Standing),ISS,,,,,,,,,,,96.0,,,,,,101.0,,26.0,3.3,9.0,2.0,11.0,50,6.0,,Y,Standing
+Orthostatic Intolerance After ISS and Space Shuttle Missions (ISS),ISS,,,,,,,130.0,5.0,78.0,4.0,96.0,3.0,120.0,6.0,74.0,5.0,92.0,4.0,26.4,3.5,17.0,3.0,20.0,46,5.0,,n,ISS
+Orthostatic Intolerance After ISS and Space Shuttle Missions (ISS),ISS,,,,,,,125.0,5.0,76.0,4.0,94.0,3.0,128.0,5.0,78.0,3.0,96.0,3.0,26.4,3.5,17.0,3.0,20.0,46,5.0,,n,ISS
+Inflight leg cuff test does not identify the risk for orthostatic hypotension after long-duration spaceflight (Supine),ISS,,,,,,,127.0,14.0,69.0,8.0,92.0,7.0,134.0,8.0,78.0,6.0,98.0,5.0,,,8.0,0.0,8.0,44,7.0,,,Supine
+Inflight leg cuff test does not identify the risk for orthostatic hypotension after long-duration spaceflight (Sitting),ISS,,,,,,,101.0,15.0,54.0,11.0,73.0,13.0,97.0,25.0,54.0,13.0,67.0,18.0,,,8.0,0.0,8.0,44,7.0,,,Sitting
+Inflight leg cuff test does not identify the risk for orthostatic hypotension after long-duration spaceflight (Stand),ISS,,,,,,,106.0,26.0,61.0,16.0,80.0,19.0,111.0,27.0,63.0,18.0,82.0,20.0,,,80.0,0.0,8.0,44,7.0,,,Stand
+Interrelationships between pulse arrival time and arterial blood pressure during postural transitions before and after spaceflight (Supine),ISS,,,,,,,129.0,11.0,69.0,7.0,,,134.0,8.0,77.0,6.0,,,,,9.0,0.0,9.0,45,7.0,,,Supine
+Interrelationships between pulse arrival time and arterial blood pressure during postural transitions before and after spaceflight (Stand),ISS,,,,,,,131.0,9.0,80.0,7.0,,,126.0,13.0,79.0,7.0,,,,,9.0,0.0,9.0,45,7.0,,,Stand
+"Maximal exercise as a countermeasure to orthostatic intolerance after spaceflight (EXERCISE, SUPINE)",ISS,,,,,,,105.0,4.0,63.0,3.0,77.0,3.0,113.0,3.0,78.0,2.0,89.0,2.0,,,4.0,0.0,4.0,,,,,"EXERCISE, SUPINE"
+"Maximal exercise as a countermeasure to orthostatic intolerance after spaceflight (EXERCISE, STANDING)",ISS,,,,,,,111.0,7.0,74.0,2.0,87.0,2.0,112.0,9.0,89.0,4.0,97.0,5.0,,,4.0,0.0,4.0,,,,,"EXERCISE, STANDING"

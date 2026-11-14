@@ -1,0 +1,25 @@
+HTTP/2 200 
+date: Sat, 14 Nov 2026 14:15:11 GMT
+content-type: application/json
+vary: Accept-Encoding
+access-control-allow-origin: *
+age: 0
+cache-control: no-cache, no-store, max-age=0, must-revalidate
+expires: 0
+pragma: no-cache
+strict-transport-security: max-age=31536000; includeSubDomains; preload
+vary: Accept-Encoding
+vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+via: https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+x-api-umbrella-request-id: d1r9kofcp6pjdfl1ahpg
+x-cache: MISS
+x-content-type-options: nosniff
+x-content-type-options: nosniff
+x-rate-limit-remaining: 119
+x-ratelimit-limit: 10
+x-ratelimit-remaining: 0
+x-vcap-request-id: 06df919d-901f-4d9f-7007-65a9c2acc311
+x-xss-protection: 1; mode=block
+x-xss-protection: 0
+x-frame-options: SAMEORIGIN
+

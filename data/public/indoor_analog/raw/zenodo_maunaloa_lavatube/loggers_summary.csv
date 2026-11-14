@@ -1,0 +1,20 @@
+"Loggers, Summary",,,,,,,,
+,,,,,,,,
+Logger Nr.,Model,Sensors,Location,Emplaced,Last data,Status,Interval,Notes
+,,,,,,,,
+Mauna Loa Icecave,,,,,,,,
+10031679,Hobo U23-002,RH/T,above ice,20-Nov-2011,14-Nov-2015,in field,30min,
+9941301,Hobo U12-008,Tx1,at fork,20-Nov-2011,12-Dec-2016,retrieved,30min,"Ch1 21cm above ground, Ch2 135cm above ground, near ceiling"
+9941300,Hobo U12-008,Tx2,at entrance,20-Nov-2011,14-Nov-2015,unknown,30min,"48.5ft from entrance, Ch on long cable is 0.76ft from floor, Ch on short cable is 8.8ft from floor"
+,,,,,,,,
+"Arsia Cave, Freezeway",,,,,,,,
+9981670,Hobo H21-002,RH/T,above ice lake,19-Nov-2011,30-Mar-2013,removed,10min,"23cm below rock tip, 34cm above ice, removed Nov 22, 2014"
+10299814,Hobo U23-002,RH/T,above ice lake,30-Mar-2013,14-Nov-2015,in field,30min,"at station F13,  17cm above ice"
+9941302,Hobo U12-008,Tx2,at entrance,19-Nov-2011,29-Oct-2014,removed,30min,"Ch3 near ceiling long cable, Ch4 at floor short cable, 3.2m height difference, data gap 2/7/2013-11/23/2013, removed 4/11/2015"
+,,,,,,,,
+"Arsia Cave, Icebat Hall",,,,,,,,
+10299815,Hobo U23-002,RH/T,above ice lake,30-Mar-2013,16-Jul-2015,in field,30min,~10 cm above ice
+10299816,Hobo U23-002,RH/T,after barrier,30-Mar-2013,2-Sep-2017,retrieved,30min,close to floor
+10290625,Hobo U12-008,Tx1,before barrier,24-Nov-2013,5-Oct-2016,retrieved,30min,floor
+10049184,Hobo U23-003,Tx2,station G4,22-Apr-2012,2-Sep-2017,retrieved,30min,"Ch1 at floor, Ch2 1.9m higher about half-height of lava tube"
+10290624,Hobo U12-008,Tx2,at entrance,24-Nov-2013,6-Jul-2016,retrieved,30min,"Ch1 ceiling 3.7m, Ch2 floor ~0.1m, 3.6m height difference"

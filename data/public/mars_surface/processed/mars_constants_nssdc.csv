@@ -1,0 +1,36 @@
+parameter,value,unit,basis,notes
+surface_gravity_mean,3.73,m/s2,source,NSSDC Mars Fact Sheet (Earth 9.82)
+gravity_ratio_mars_earth,0.380,ratio,source,NSSDC
+length_of_day_solar,24.6597,h,source,NSSDC (1 sol)
+sidereal_rotation_period,24.6229,h,source,NSSDC
+tropical_orbit_period,686.972,Earth days,source,NSSDC; ~668.6 sols = 1 Mars year
+obliquity,25.19,deg,source,NSSDC
+orbit_eccentricity,0.0935,-,source,NSSDC
+semimajor_axis,227.956,10^6 km,source,NSSDC
+perihelion,206.650,10^6 km,source,NSSDC
+aphelion,249.261,10^6 km,source,NSSDC
+distance_from_earth_min,54.6,10^6 km,source,NSSDC
+distance_from_earth_max,401.4,10^6 km,source,NSSDC
+one_way_light_time_min,3.04,min,derived,54.6e6 km / 299792.458 km/s
+one_way_light_time_max,22.3,min,derived,401.4e6 km / 299792.458 km/s
+synodic_period,779.94,Earth days,source,NSSDC
+solar_irradiance_top_of_atmosphere_mean,586.2,W/m2,source,NSSDC (Earth 1361.0)
+surface_pressure_mean_radius,636,Pa,source,NSSDC: 6.36 mb at mean radius; seasonal range 4.0-8.7 mb
+surface_pressure_range_min,400,Pa,source,NSSDC
+surface_pressure_range_max,870,Pa,source,NSSDC
+surface_density,0.016,kg/m3,source,NSSDC (+/- 0.006)
+scale_height,11.0,km,source,NSSDC
+average_temperature,-59,C,source,NSSDC (~214 K)
+diurnal_temperature_min_viking1,-89,C,source,NSSDC (Viking 1 Lander site)
+diurnal_temperature_max_viking1,-31,C,source,NSSDC (Viking 1 Lander site)
+wind_speed_summer,2-7,m/s,source,NSSDC (Viking Lander sites)
+wind_speed_fall,5-10,m/s,source,NSSDC
+wind_speed_dust_storm,17-30,m/s,source,NSSDC
+atm_co2,95.1,% vol,source,NSSDC
+atm_n2,2.59,% vol,source,NSSDC
+atm_ar,1.94,% vol,source,NSSDC
+atm_o2,0.16,% vol,source,NSSDC
+atm_co,0.06,% vol,source,NSSDC
+atm_h2o,210,ppm,source,NSSDC
+mean_molecular_weight,43.49,g/mol,source,NSSDC
+volumetric_mean_radius,3389.5,km,source,NSSDC

@@ -1,0 +1,332 @@
+{
+ "room_occupancy_estimation": {
+  "method": "1-min mean CO2 (sensor S5); dC/dt = centred difference over +-5 min, only windows where occupant count constant for 11 min; OLS fit dC/dt = a*n + b*(C - C_bg) + c with C_bg = 1st percentile CO2. a = per-occupant CO2 rise rate in THIS room (ppm/min/person); -b = first-order removal rate (1/min) = effective ventilation/infiltration rate.",
+  "C_bg_ppm": 345.0,
+  "a_ppm_per_min_per_occupant": 2.807,
+  "b_per_min": -0.00857,
+  "effective_air_change_per_hour": 0.514,
+  "c_ppm_per_min": -0.142,
+  "r2": 0.701,
+  "n_windows": 4960,
+  "mean_dCdt_ppm_per_min_by_occupant_count": {
+   "0": {
+    "mean": -0.61,
+    "median": 0.0,
+    "n": 4186
+   },
+   "1": {
+    "mean": 1.129,
+    "median": 1.0,
+    "n": 196
+   },
+   "2": {
+    "mean": 2.258,
+    "median": 2.5,
+    "n": 285
+   },
+   "3": {
+    "mean": 4.03,
+    "median": 4.25,
+    "n": 293
+   }
+  },
+  "co2_ppm_by_occupant_count": {
+   "0": {
+    "median": 355.0,
+    "p95": 750.0,
+    "max": 1255.0,
+    "n": 8228
+   },
+   "1": {
+    "median": 440.0,
+    "p95": 615.0,
+    "max": 630.0,
+    "n": 459
+   },
+   "2": {
+    "median": 685.0,
+    "p95": 1040.0,
+    "max": 1065.0,
+    "n": 748
+   },
+   "3": {
+    "median": 870.0,
+    "p95": 1220.0,
+    "max": 1270.0,
+    "n": 694
+   }
+  }
+ },
+ "occupancy_detection": {
+  "method": "Episodes of constant binary occupancy (gaps >5 min split episodes). Rise = (CO2 at +60 min - CO2 at start)/60 for occupied episodes >=60 min. Decay = OLS slope of ln(CO2 - C_bg) vs time over the first 3 h of unoccupied episodes (>=3 h) that follow occupancy; C_bg = 1st percentile of unoccupied CO2. Occupant COUNT is not in this dataset, so per-occupant rate is not derivable here.",
+  "C_bg_ppm": 423.0,
+  "co2_occupied": {
+   "median": 928.5833333333335,
+   "p95": 1528.275,
+   "max": 2028.5
+  },
+  "co2_unoccupied": {
+   "median": 511.0,
+   "p05": 432.0
+  },
+  "rise_episodes": [
+   {
+    "start_local": "2015-02-02T14:19:00",
+    "duration_min": 194,
+    "co2_start": 749.2,
+    "co2_after_60min": 1086.0,
+    "rise_ppm_per_min_first_60min": 5.613,
+    "co2_peak": 1176.16666666667
+   },
+   {
+    "start_local": "2015-02-03T07:43:00",
+    "duration_min": 86,
+    "co2_start": 470.8,
+    "co2_after_60min": 697.6,
+    "rise_ppm_per_min_first_60min": 3.78,
+    "co2_peak": 746.75
+   },
+   {
+    "start_local": "2015-02-03T09:11:59",
+    "duration_min": 155,
+    "co2_start": 752.666666666667,
+    "co2_after_60min": 1073.66666666667,
+    "rise_ppm_per_min_first_60min": 5.349,
+    "co2_peak": 1213.0
+   },
+   {
+    "start_local": "2015-02-03T13:38:59",
+    "duration_min": 273,
+    "co2_start": 899.75,
+    "co2_after_60min": 1116.0,
+    "rise_ppm_per_min_first_60min": 3.604,
+    "co2_peak": 1402.25
+   },
+   {
+    "start_local": "2015-02-04T09:29:59",
+    "duration_min": 73,
+    "co2_start": 937.333333333333,
+    "co2_after_60min": 1140.5,
+    "rise_ppm_per_min_first_60min": 3.385,
+    "co2_peak": 1213.75
+   },
+   {
+    "start_local": "2015-02-05T08:23:00",
+    "duration_min": 118,
+    "co2_start": 651.0,
+    "co2_after_60min": 942.75,
+    "rise_ppm_per_min_first_60min": 4.862,
+    "co2_peak": 1050.0
+   },
+   {
+    "start_local": "2015-02-05T10:25:59",
+    "duration_min": 126,
+    "co2_start": 1034.25,
+    "co2_after_60min": 1060.0,
+    "rise_ppm_per_min_first_60min": 0.429,
+    "co2_peak": 1139.0
+   },
+   {
+    "start_local": "2015-02-05T14:12:00",
+    "duration_min": 232,
+    "co2_start": 780.0,
+    "co2_after_60min": 1100.0,
+    "rise_ppm_per_min_first_60min": 5.246,
+    "co2_peak": 1114.0
+   },
+   {
+    "start_local": "2015-02-06T07:50:00",
+    "duration_min": 221,
+    "co2_start": 458.0,
+    "co2_after_60min": 635.75,
+    "rise_ppm_per_min_first_60min": 2.962,
+    "co2_peak": 865.0
+   },
+   {
+    "start_local": "2015-02-06T11:36:00",
+    "duration_min": 77,
+    "co2_start": 801.0,
+    "co2_after_60min": 813.0,
+    "rise_ppm_per_min_first_60min": 0.2,
+    "co2_peak": 821.5
+   },
+   {
+    "start_local": "2015-02-06T13:46:59",
+    "duration_min": 259,
+    "co2_start": 640.0,
+    "co2_after_60min": 826.0,
+    "rise_ppm_per_min_first_60min": 3.099,
+    "co2_peak": 964.25
+   },
+   {
+    "start_local": "2015-02-09T08:51:00",
+    "duration_min": 260,
+    "co2_start": 496.5,
+    "co2_after_60min": 968.0,
+    "rise_ppm_per_min_first_60min": 7.858,
+    "co2_peak": 1476.0
+   },
+   {
+    "start_local": "2015-02-09T13:34:59",
+    "duration_min": 269,
+    "co2_start": 1121.0,
+    "co2_after_60min": 1383.25,
+    "rise_ppm_per_min_first_60min": 4.37,
+    "co2_peak": 2028.5
+   },
+   {
+    "start_local": "2015-02-11T15:27:00",
+    "duration_min": 177,
+    "co2_start": 961.25,
+    "co2_after_60min": 766.75,
+    "rise_ppm_per_min_first_60min": -3.242,
+    "co2_peak": 961.25
+   },
+   {
+    "start_local": "2015-02-12T08:37:00",
+    "duration_min": 121,
+    "co2_start": 698.0,
+    "co2_after_60min": 1144.0,
+    "rise_ppm_per_min_first_60min": 7.311,
+    "co2_peak": 1215.5
+   },
+   {
+    "start_local": "2015-02-12T16:09:59",
+    "duration_min": 94,
+    "co2_start": 534.5,
+    "co2_after_60min": 623.5,
+    "rise_ppm_per_min_first_60min": 1.483,
+    "co2_peak": 645.5
+   },
+   {
+    "start_local": "2015-02-13T10:05:00",
+    "duration_min": 175,
+    "co2_start": 604.5,
+    "co2_after_60min": 698.5,
+    "rise_ppm_per_min_first_60min": 1.567,
+    "co2_peak": 720.0
+   },
+   {
+    "start_local": "2015-02-13T13:46:59",
+    "duration_min": 221,
+    "co2_start": 567.5,
+    "co2_after_60min": 549.5,
+    "rise_ppm_per_min_first_60min": -0.3,
+    "co2_peak": 633.25
+   },
+   {
+    "start_local": "2015-02-16T08:51:59",
+    "duration_min": 182,
+    "co2_start": 875.75,
+    "co2_after_60min": 1018.0,
+    "rise_ppm_per_min_first_60min": 2.37,
+    "co2_peak": 1061.0
+   },
+   {
+    "start_local": "2015-02-16T13:21:00",
+    "duration_min": 283,
+    "co2_start": 883.0,
+    "co2_after_60min": 908.5,
+    "rise_ppm_per_min_first_60min": 0.425,
+    "co2_peak": 997.0
+   },
+   {
+    "start_local": "2015-02-17T08:44:00",
+    "duration_min": 257,
+    "co2_start": 818.5,
+    "co2_after_60min": 951.25,
+    "rise_ppm_per_min_first_60min": 2.176,
+    "co2_peak": 1506.0
+   },
+   {
+    "start_local": "2015-02-17T13:30:00",
+    "duration_min": 275,
+    "co2_start": 1132.75,
+    "co2_after_60min": 1316.5,
+    "rise_ppm_per_min_first_60min": 3.062,
+    "co2_peak": 1842.75
+   }
+  ],
+  "rise_ppm_per_min_median": 3.0805,
+  "decay_episodes": [
+   {
+    "start_local": "2015-02-02T18:04:59",
+    "co2_start": 805.5,
+    "co2_after_3h": 495.5,
+    "decay_rate_per_h": 0.585,
+    "half_life_h": 1.18
+   },
+   {
+    "start_local": "2015-02-03T18:13:00",
+    "co2_start": 1205.25,
+    "co2_after_3h": 640.75,
+    "decay_rate_per_h": 0.429,
+    "half_life_h": 1.61
+   },
+   {
+    "start_local": "2015-02-04T18:07:00",
+    "co2_start": 681.5,
+    "co2_after_3h": 501.5,
+    "decay_rate_per_h": 0.429,
+    "half_life_h": 1.62
+   },
+   {
+    "start_local": "2015-02-05T18:04:59",
+    "co2_start": 844.0,
+    "co2_after_3h": 469.0,
+    "decay_rate_per_h": 0.795,
+    "half_life_h": 0.87
+   },
+   {
+    "start_local": "2015-02-06T18:07:00",
+    "co2_start": 778.5,
+    "co2_after_3h": 446.0,
+    "decay_rate_per_h": 0.937,
+    "half_life_h": 0.74
+   },
+   {
+    "start_local": "2015-02-09T18:04:59",
+    "co2_start": 1784.5,
+    "co2_after_3h": 752.0,
+    "decay_rate_per_h": 0.464,
+    "half_life_h": 1.49
+   },
+   {
+    "start_local": "2015-02-11T18:24:59",
+    "co2_start": 582.0,
+    "co2_after_3h": 486.0,
+    "decay_rate_per_h": 0.458,
+    "half_life_h": 1.51
+   },
+   {
+    "start_local": "2015-02-12T17:44:59",
+    "co2_start": 603.0,
+    "co2_after_3h": 559.0,
+    "decay_rate_per_h": 0.128,
+    "half_life_h": 5.4
+   },
+   {
+    "start_local": "2015-02-13T18:06:00",
+    "co2_start": 582.333333333333,
+    "co2_after_3h": 509.0,
+    "decay_rate_per_h": 0.169,
+    "half_life_h": 4.11
+   },
+   {
+    "start_local": "2015-02-16T18:04:59",
+    "co2_start": 974.0,
+    "co2_after_3h": 727.0,
+    "decay_rate_per_h": 0.202,
+    "half_life_h": 3.43
+   },
+   {
+    "start_local": "2015-02-17T18:06:00",
+    "co2_start": 1595.66666666667,
+    "co2_after_3h": 1517.66666666667,
+    "decay_rate_per_h": 0.003,
+    "half_life_h": 248.18
+   }
+  ],
+  "decay_rate_per_h_median": 0.429
+ }
+}

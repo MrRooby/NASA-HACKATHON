@@ -50,16 +50,16 @@ Architektura według **Romio 2022** (`data/mars-tunnels-F.R_Paper_IAC-22E5IP7x68
 - **Dlaczego tunel:** skała osłania przed promieniowaniem, temperatura jest stabilna, po uszczelnieniu nie ma pyłu, jest ochrona przed mikrometeorytami.
 - **Rozbudowa w 4 fazach:** 0–77 → 77–161 (ok. 10 lat) → 161–284 (ok. 15 lat) → 284–407 osób (ok. 20 lat).
 
-### 1.2 Lokalizacja: rejon Elysium Mons **[ZAŁ, na podstawie Zhu 2025]**
-Romio umieszcza tunel przy Arsia Mons (Tharsis). Analiza przydatności **Zhu et al. 2025** (`data/habitat-site.pdf`, Fig. 15) pokazuje jednak, że jaskinie w Tharsis wypadają najsłabiej:
+### 1.2 Lokalizacja: rejon Elysium **[ZAŁ]**
+Romio umieszcza tunel przy Arsia Mons (Tharsis). Przenosimy go w rejon **Elysium** z powodów, które uzasadniają źródła NASA i USA:
 
-- **Wysoko**, więc atmosfera jest cienka i słabo osłania przed promieniowaniem (indeks RSI niski).
-- **Mało płytkiego lodu** wodnego.
-- **Za wysoko, żeby wylądować obecną techniką** (EDL działa do ok. −1,4 km).
+- **Lądowanie.** Obecna technika EDL wymaga niskich i gładkich miejsc, bo potrzebna jest gruba atmosfera do hamowania. Wulkany Tharsis są bardzo wysoko. W rejonie Elysium wylądował już lądownik **NASA InSight** (Elysium Planitia, ok. −2,6 km), co pokazuje, że rejon jest osiągalny.
+- **Promieniowanie.** Im niżej, tym grubsza warstwa atmosfery nad habitatem i lepsza osłona. Na powierzchni Gale (ok. −4,5 km) dawka wynosi ok. 0,67 mSv/dzień (Hassler 2014, MSL RAD). **[ZAŁ]:** wyżej położone miejsca dostają więcej.
+- **Woda.** NASA/JPL **Subsurface Water Ice Mapping (SWIM)** wskazuje płytki lód na średnich szerokościach półkuli północnej (Morgan et al. 2021, Nature Astronomy, doi:10.1038/s41550-020-01290-z).
+- **Jaskinie.** Kandydatów na świetliki i jaskinie zbiera katalog **Mars Global Cave Candidate Catalog (MGC³)** z USGS/NASA (Cushing, PDS Cartography & Imaging Sciences Node).
+- **Dane z miejsca.** Pomiary pogody InSight z Elysium Planitia (PDS) mogą być lokalnym tłem dla kanałów zewnętrznych.
 
-Wyższy indeks SI mają jaskinie w rejonie **Elysium Mons**, na południowej stronie Tempe Terra i na północnym skraju Arabia Terra. Wybieramy **Elysium Mons**. Łączymy więc architekturę Romio z lokalizacją według Zhu, co jest argumentem do pitcha.
-
-> Do weryfikacji: konkretny kandydat z katalogu NASA **Mars Global Cave Candidate Catalog (MGC³)**, jego współrzędne i wysokość. Do tego czasu przyjmujemy rejon ok. 20–30°N, ok. 140–150°E jako **[ZAŁ]**.
+> Do weryfikacji: konkretny kandydat z MGC³ w rejonie Elysium (współrzędne, wysokość). Do tego czasu przyjmujemy rejon ok. 20–30°N, ok. 140–150°E jako **[ZAŁ]**.
 
 ### 1.3 Atmosfera: eksploracyjna NASA **[NASA]**
 | Parametr | Wartość | Źródło |
@@ -82,8 +82,8 @@ Wyższy indeks SI mają jaskinie w rejonie **Elysium Mons**, na południowej str
 - **Łączność:** opóźnienie 4–24 min w jedną stronę oraz **blackout ok. 13 dni** przy koniunkcji Słońca (NASA, Mars comm delay).
 
 ### 1.5 Zasilanie i otoczenie
-- **Zasilanie:** fission jako podstawa (decyzja NASA z 2024 r., jednostka klasy 40 kW). Solar uzupełniająco: ok. 44 % nasłonecznienia Ziemi, spada w burzach pyłowych.
-- **Na zewnątrz** (NSSDC, Zhu 2025, Sun 2024):
+- **Zasilanie:** fission jako podstawa (decyzja NASA z 2024 r., jednostka klasy 40 kW). Solar uzupełniająco; jego moc spada w burzach pyłowych (stąd decyzja NASA o fission).
+- **Na zewnątrz** (NSSDC Mars Fact Sheet, MSL REMS; zob. `data/public/mars_surface/`):
   - ciśnienie ok. 600–900 Pa;
   - temperatura ok. −90…+15 °C;
   - wiatr 2–30 m/s;
@@ -123,7 +123,7 @@ Kolumny: **kanał** (id w danych) | jednostka | instrument (heritage) | kadencja
 | `ppo2_inspired` | mmHg | MCA/SAM | ciągle | 1 min | ≈ 128 | < 127 (1 h) / < 122 | [NASA] ⚠ zob. §9 |
 | `o2_fraction` | % | MCA | ciągle | 1 min | 34 | > 34 → ryzyko pożaru | [NASA] |
 | `ppco2` | mmHg | MCA/SAM, CDM | ciągle | 1 min, **per moduł** | 1,5–2,5 | 7 d > 2,5; 1 h > 3; > 4,5 objawy | [NASA] `cabin_co2` |
-| `temperature_air` | °C | czujniki ECLSS | ciągle | 1 min | 20–25 (komfort 18–24 wg WHO) | < 18 / > 27 | [NASA] `cabin_temperature` |
+| `temperature_air` | °C | czujniki ECLSS | ciągle | 1 min | 20–25 (strefa wydajności NASA-STD-3001) | < 18 / > 27 | [NASA] `cabin_temperature` |
 | `rh` | % | jw. | ciągle | 1 min | 30–60 | < 25 / > 75 | [NASA] `cabin_humidity` |
 | `voc_formaldehyde` | ppm | AQM (ISS) | co 73 h | 6 h | 0,008–0,08 | SMAC 7 d: 0,1 | [NASA] |
 | `voc_benzene` | ppm | AQM | co 73 h | 6 h | ~0 | SMAC 180 d: 0,07 | [NASA] |
@@ -266,7 +266,7 @@ Strefy dawki: `surface` > `cupola_*` > `tunnel_common` (blisko skylightu) > `mod
 | Kanał | Jedn. | Realnie | Demo | Norma | Status |
 |---|---|---|---|---|---|
 | `noise_leq` | dBA | 24 h co 60 dni (dozymetr) | 1 min + podsumowanie dzienne | 24 h ≤ 70; NC-50 praca, NC-40 sen | [NASA] `noise_24h` |
-| `illuminance` | lux | — | 1 min per strefa | 150–500 (Ziemia), 200–750 (ISS) | [NASA/Sun 2024] |
+| `illuminance` | lux | — | 1 min per strefa | profil dnia z danych UCI Occupancy (biuro ok. 430–450 lux w dzień, 0 w nocy) | [ZAŁ] (dane: `data/public/indoor_analog/`) |
 | `cct` | K | SSLA (ISS) | 1 min per strefa | profil dobowy: rano/dzień chłodne światło, wieczór ciepłe | [NASA] (Brainard 2016, Rahman 2022) |
 
 Światło dzienne ze skylightów i Daylight Harvester (Romio) działa w cyklu sola. W module oświetlenie biodynamiczne **[ZAŁ]**. Łączy się to ze snem i nastrojem w MOTHER.
@@ -275,7 +275,7 @@ Strefy dawki: `surface` > `cupola_*` > `tunnel_common` (blisko skylightu) > `mod
 
 | Kanał | Jedn. | Demo | Po co |
 |---|---|---|---|
-| `zone_occupancy` | liczba osób | 1 min per strefa | wentylacja sterowana zapotrzebowaniem (Sun 2024) |
+| `zone_occupancy` | liczba osób | 1 min per strefa | wentylacja sterowana zapotrzebowaniem; model CO2 z danych UCI (ok. 2,8 ppm/min na osobę) [ZAŁ] |
 | `crew_location` | `crew_id → zone` | przy zmianie strefy | **przypisanie ekspozycji osobie** (CO2, hałas, dawka, światło) |
 
 ### 3.9 Szczelność, śluzy, ochrona planetarna
@@ -285,7 +285,7 @@ Strefy dawki: `surface` > `cupola_*` > `tunnel_common` (blisko skylightu) > `mod
 | `airlock_cycle` | zdarzenie | każdy cykl | [ZAŁ] |
 | `airlock_gas_loss` | kg/cykl | każdy cykl | [ZAŁ] (suitport zmniejsza stratę; Cohen 2015) |
 | `pressure_decay_rate` | kPa/h | 10 min, per segment | [ZAŁ] |
-| `leak_detector` per złącze (kopuła–skała, śluzy, przepusty) | ok / wyciek | 1 min | [ZAŁ] (Cai 2026: złącza i szwy zawodzą najczęściej) |
+| `leak_detector` per złącze (kopuła–skała, śluzy, przepusty) | ok / wyciek | 1 min | [ZAŁ] (złącza i przepusty to typowe miejsca wycieków; porty z kontrolą pyłu: Cohen 2015) |
 | `pp_barrier_status` (lab, śluzy) | ok / breach | zmiana stanu | [ZAŁ] (ochrona planetarna, Cohen 2015) |
 | `vent_event`, `waste_dump_event` | zdarzenie | zdarzenie | [ZAŁ] |
 
@@ -293,11 +293,11 @@ Strefy dawki: `surface` > `cupola_*` > `tunnel_common` (blisko skylightu) > `mod
 
 | Kanał | Jedn. | Demo | Status |
 |---|---|---|---|
-| `strain` (sklepienie, ściany, podstawa) | µε | 1 min | [ZAŁ] (Zhou 2025: 5 punktów pomiarowych; naprężenia ok. 150–203 kPa) |
+| `strain` (sklepienie, ściany, podstawa) | µε | 1 min | [ZAŁ] (ryzyko zawalenia jaskiń: Boston 2004; uszczelnianie tuneli: Blamont 2014) |
 | `wall_convergence` | mm | 10 min | [ZAŁ] |
 | `seismic_event` | magnituda / zdarzenie | zdarzenie | [ZAŁ] (marsotrzęsienia; ryzyko zawalenia, Boston 2004) |
 | `wall_temperature` | °C | 10 min | [ZAŁ] (stabilna w jaskiniach: Cushing 2007, Horvath 2022) |
-| `heating_power` per moduł | W | 1 min | [ZAŁ] (Zhou 2025: szczyt strat ok. 04:00 czasu lokalnego, zimą wyżej) |
+| `heating_power` per moduł | W | 1 min | [ZAŁ] (szczyt przed świtem, gdy na zewnątrz jest najzimniej: profil z MSL REMS, `data/public/mars_surface/`; zimą wyżej) |
 
 ### 3.11 Systemy i zasilanie
 
@@ -305,7 +305,7 @@ Strefy dawki: `surface` > `cupola_*` > `tunnel_common` (blisko skylightu) > `mod
 |---|---|---|---|---|
 | `power_fission` | kW | 1 min | ok. 40 (stałe) | [NASA] |
 | `power_solar` | kW | 1 min | cykl dzienny, spada w burzy | [ZAŁ] |
-| `power_by_subsystem` (HVAC, ECLSS, oświetlenie, farma) | kW | 1 min | — | [ZAŁ] (Sun 2024) |
+| `power_by_subsystem` (HVAC, ECLSS, oświetlenie, farma) | kW | 1 min | — | [ZAŁ] |
 | `moxie_o2_rate` | g/h | 1 min | ok. 12 g/h na jednostkę (peak MOXIE) × N | [NASA] |
 | `subsystem_status` | ok / degraded / fault | zmiana stanu | — | [ZAŁ] |
 | `habitat_mode` | `pre_crew_checkout` / `nominal` / `shelter` / `contingency` | zmiana stanu | — | [ZAŁ] (Cohen 2015) |
@@ -349,12 +349,12 @@ Każdy scenariusz to skrypt w generatorze: które kanały się zmieniają, jakie
 |---|---|---|---|
 | 1 | **Awaria scrubbera CO2 w M1** | `ppco2[M1]` rośnie przez godziny do > 3, potem 5–8 | alert; C1 i C2 według `crew_location`; powiązanie z bólem głowy w self-assessmencie |
 | 2 | **Awaria generatora O2** | `ppo2_inspired` < 127 | alert; mały margines atmosfery 8,2 psi |
-| 3 | **Powolny spadek O2 (lekcja z Biosphere 2)** | `ppo2_inspired` spada o ułamki mmHg dziennie przez tygodnie | wykrycie trendu **przed** przekroczeniem progu |
+| 3 | **Powolny spadek O2 (lekcja z Biosphere 2: Severinghaus et al. 1994, Eos, doi:10.1029/94eo00285)** | `ppo2_inspired` spada o ułamki mmHg dziennie przez tygodnie | wykrycie trendu **przed** przekroczeniem progu |
 | 4 | **Odwodnienie C2** | `urine_volume_24h` < 0,8 L kilka dni, `urine_specific_gravity` rośnie | rekomendacja nawodnienia, ryzyko kamieni |
 | 5 | **Wapń w moczu rośnie** przy pominiętych ćwiczeniach | `urine_calcium` rośnie | powiązanie z prognozą BMD |
 | 6 | **Pył po EVA** | `pm10`, `ultrafine_count` w śluzie i tunelu | alert, procedura czyszczenia |
 | 7 | **TOC w wodzie** (DMSD) | `water_toc` rośnie do 1–2 przez tygodnie | ostrzeżenie przed limitem 3 |
-| 8 | **SPE podczas EVA** | `solar_proton_flux_10MeV` ≥ 1000, `dose_rate` skok, `quality=suspect` na wrażliwej elektronice (Zhou 2025) | koniec EVA, schron do ok. 36 h, dawka osobista |
+| 8 | **SPE podczas EVA** | `solar_proton_flux_10MeV` ≥ 1000, `dose_rate` skok, `quality=suspect` na wrażliwej elektronice [ZAŁ] | koniec EVA, schron do ok. 36 h, dawka osobista |
 | 9 | **Globalna burza pyłowa** (tygodnie) | `dust_opacity_tau` 5–11, `power_solar` spada, fission bez zmian, UV spada | ograniczenie EVA, bilans mocy |
 | 10 | **Wyciek NH3 / pożar** | `nh3` > 30 lub `co` > 425 i skok PM | emergency |
 | 11 | **Wyciek na złączu kopuła–skała** | `leak_detector[cupola_2]`, `pressure_decay_rate` | lokalizacja wycieku |
@@ -415,15 +415,14 @@ Osobny plik (do utworzenia, np. `HABITAT/channels.json`). Zawartość: `channel`
 
 ## 7. Artykuły bazowe (data/)
 
+> **Zasady Space Apps (RULES-NASA.md §8):** NASA nie może współpracować z podmiotami chińskimi i sprawdza zespoły przed Global Judging. Dlatego rozwiązanie **nie opiera się na pracach z chińską afiliacją ani na danych chińskiej agencji kosmicznej**. Wcześniej przeglądane prace tego typu (o wyborze lokalizacji, środowisku wewnętrznym, analogach, morfologii i habitatach jaskiniowych) usunęliśmy z podstaw projektu; ich wnioski zastąpiliśmy źródłami NASA, USA i ESA albo oznaczyliśmy jako **[ZAŁ]**.
+> **PDF-ów z zastrzeżonymi prawami autorskimi nie trzymamy w publicznym repo**, tylko je cytujemy.
+
 | Plik | Cytowanie | Co z niego bierzemy |
 |---|---|---|
 | `mars-tunnels-F.R_Paper_IAC-22E5IP7x68266.pdf` | Romio F.A.P., *Mars Underground: a Landscape Strategy for Long Term Human Colonies on the Red Planet*, IAC-22-E5.IP.7.x68266 (2022) | **architektura**: tunel, kopuły z MOXIE, moduły 49 m² z ECLSS, farmy, fazy rozbudowy |
-| `habitat-site.pdf` | Zhu S., Zhao B., Yan Y., Shi X., *Habitat site selection on Mars: Suitability analysis and mapping*, Acta Astronautica 226 (2025) 1–22, doi:10.1016/j.actaastro.2024.11.019 | **lokalizacja** (Elysium zamiast Tharsis), indeksy TSI/RSI/DASI/WISI, osłona atmosferyczna D = P/g (śr. 16,68 g/cm²), dawka 0,64 mSv/d, komfort 18–24 °C |
-| `sustainability.pdf` | Sun H. et al., *Designing sustainable built environments for Mars habitation…*, Nexus 1 (2024) 100030, doi:10.1016/j.ynexs.2024.100030 (OA) | **środowisko wewnętrzne a zdrowie**: normy T/RH/lux, światło biodynamiczne, obecność załogi, lokalne CO2, szczelność, energia |
+| `siki.pdf` | NASA OCHMO, *Urinary Health*, OCHMO-MTB-003 Rev A (2026) | **mocz**: profil ryzyka kamieni, nawodnienie, zatrzymanie moczu |
 | `FirstMarsHabitatArchitecture.pdf` | Cohen M.M., *First Mars Habitat Architecture*, AIAA-2015-4517 (2015) | **misja 500–600 dni**, 0,38 g nie chroni kości, redundancja, pre-crew checkout, ochrona planetarna, suitporty |
-| `aerospace-12-00510.pdf` | Zhong Y. et al., *Advancements in Mars Habitation Technologies and Terrestrial Simulation Projects: A Comprehensive Review*, Aerospace 12 (2025) 510, doi:10.3390/aerospace12060510 (OA) | **analogi**: Biosphere 2 (spadek O2), Lunar Palace 1 (SCL-90 i POMS co tydzień), SAM (symulowane tunele lawowe), MaMBA, CHAPEA, Mars-500, HI-SEAS, Concordia (hipoksja jak na ok. 3800 m) |
-| `earth-analogs.pdf` | Cai G. et al., *Earth analog priors for deployable Mars habitats*, npj Space Exploration 2 (2026) 24, doi:10.1038/s44453-026-00034-z | utrzymanie > budowa; **złącza i szwy zawodzą**; brak długoterminowych danych z habitatów (argument do pitcha); TRL platform |
-| `cave-dwellers.pdf` | Zhou C. et al., *Zhuque Base for Martian Habitation…*, Research 8 (2025) 0849, doi:10.34133/research.0849 (CC BY) | **monitoring konstrukcji** (5 punktów, GPR/LiDAR/tensometry), **bilans cieplny** (szczyt strat ok. 04:00 LT), **zakłócenia EM** |
 
 ---
 
@@ -445,6 +444,11 @@ Zweryfikowane przez Crossref, NTRS i Europe PMC. OA = open access.
 - Horvath T., Hayne P.O., Paige D.A. (2022) *Thermal and Illumination Environments of Lunar Pits and Caves.* GRL. doi:10.1029/2022gl099710 (OA)
 - Sauro F. et al. (2023) *Training astronauts for scientific exploration…: The ESA PANGAEA programme.* Acta Astronaut. doi:10.1016/j.actaastro.2022.12.034 (OA)
 - Hidding A.J. … Romio F.A.P. et al. (2026) *Robotic lava tube mapping and multimodal data collection using quadruped and LiDAR.* Front. Robot. AI. doi:10.3389/frobt.2026.1855443 (OA)
+
+### 8.1b Analogi i lekcje historyczne
+- Severinghaus J.P., Broecker W.S., Dempster W.F., MacCallum T. et al. (1994) *Oxygen loss in Biosphere 2.* Eos. doi:10.1029/94eo00285: powolny, długo niewykryty spadek O2 w zamkniętym habitacie.
+- Morgan G.A. et al. (2021) *Availability of subsurface water-ice resources in the northern mid-latitudes of Mars.* Nature Astronomy. doi:10.1038/s41550-020-01290-z (NASA SWIM).
+- Cushing G.E., *Mars Global Cave Candidate Catalog (MGC³)*, PDS Cartography & Imaging Sciences Node (USGS/NASA).
 
 ### 8.2 ECLSS, monitoring środowiska, toksykologia
 - Ewert M.K. et al. (2022) *Life Support Baseline Values and Assumptions Document (BVAD) Rev 2.* NASA/TP, NTRS 20210024855 (OA)
@@ -473,7 +477,7 @@ Zweryfikowane przez Crossref, NTRS i Europe PMC. OA = open access.
 - Claeys (2024) *HI-SEAS… EMMIHS 2023/2024 Missions.* IAF. doi:10.52202/078364-0042
 - Leese et al. (2025) *Outlook on Research on Life Support Systems Together with Digital Twin Modelling.* IAF/IAA. doi:10.52202/083074-0038
 
-> **Luka do pitcha:** nie znaleźliśmy recenzowanych publikacji z danymi sensorów z HI-SEAS, MDRS ani CHAPEA, ani o wykrywaniu anomalii w telemetrii ECLSS. Cai 2026 też zwraca uwagę na brak długoterminowych danych z habitatów. Nasz producent danych z oznaczonymi źródłami trafia właśnie w tę lukę.
+> **Luka do pitcha:** nie znaleźliśmy recenzowanych publikacji z danymi sensorów z HI-SEAS, MDRS ani CHAPEA, ani o wykrywaniu anomalii w telemetrii ECLSS. NASA (AHS gap overview, NTRS 20230013441) wymienia brak autonomicznego monitoringu bez odsyłania próbek na Ziemię jako lukę na drodze na Marsa. Nasz producent danych z oznaczonymi źródłami trafia właśnie w tę lukę.
 
 ### 8.4 Środowisko a zdrowie załogi
 - Basner M. et al. (2013) *Mars 520-d mission simulation reveals protracted crew hypokinesis and alterations of sleep duration and timing.* PNAS. doi:10.1073/pnas.1212646110 (OA)
@@ -526,5 +530,4 @@ Zweryfikowane przez Crossref, NTRS i Europe PMC. OA = open access.
 - Aktualność tabeli SMAC z 2008 r.
 - Normy moczu uzupełnione 2026-11-14: MedlinePlus i NASA Renal ER 2024, zob. §3.3. Do decyzji zespołu zostają progi [ZAŁ]: pH < 5,5; odwodnienie przy objętości < 0,8 L przez ≥ 2 doby; spadek cytrynianu. Wynik albumina/kreatynina wymaga jeszcze źródła klinicznego.
 - Lista sensorów CHAPEA nie została opublikowana.
-- Liczby z Mars-500 o spadku spójności grupy pochodzą z przeglądu Zhong 2025, a nie z pracy źródłowej.
 - Romio 2022 nie ma DOI w Crossref; cytujemy jako paper IAC.
