@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MOTHER</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap">
+<style>
+/* Layout: a single centred column with two large page links and a live status line. */
+:root{--bg:#f4f6f9;--surface:#fff;--ink:#0f1a2b;--muted:#5a6a80;--line:#d5dce7;--accent:#2b62d9;--ok:#0e8f6f;--bad:#c93a3a;
+  --display:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;--text:"Inter",ui-sans-serif,system-ui,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0b111b;--surface:#121a27;--ink:#e5ecf6;--muted:#94a3b9;--line:#27354c;--accent:#74a7ff;--ok:#38d1a6;--bad:#ff6b6b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b111b;--surface:#121a27;--ink:#e5ecf6;--muted:#94a3b9;--line:#27354c;--accent:#74a7ff;--ok:#38d1a6;--bad:#ff6b6b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--text)}
+main{max-width:760px;margin:0 auto;padding-block:48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:24px}
+h1{font:700 40px/1.1 var(--display);letter-spacing:.2em;margin:0}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+a.card{display:flex;flex-direction:column;gap:6px;padding:20px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:inherit;text-decoration:none}
+a.card:hover,a.card:focus-visible{border-color:var(--accent);outline:none}
+a.card b{font:600 20px var(--display)}
+a.card span{color:var(--muted);font-size:14px}
+#status{font-size:14px;color:var(--muted)}
+.ok{color:var(--ok)} .bad{color:var(--bad)}
+</style>
+</head>
+<body>
+<main>
+  <div><h1>MOTHER</h1><p style="color:var(--muted);margin:6px 0 0">Crew health reasoning on the team database. Both pages read the database live through this local server.</p></div>
+  <div class="links">
+    <a class="card" href="/dashboard"><b>Crew health dashboard</b><span>Body status, indicators, MOTHER findings with "Why?", EVA GO/NO-GO, forecasts, labs, replayed day by day.</span></a>
+    <a class="card" href="/organs"><b>Organ cards (for the UI)</b><span>Ten simple cards per person: one status, one sentence, up to three numbers. The contract the UI plugs into.</span></a>
+    <a class="card" href="/data-map"><b>Data map</b><span>What the database contains by body system and sensor, and how everything connects to NASA risks.</span></a>
+  </div>
+  <div id="status">Checking the database connection…</div>
+</main>
+<script>
+fetch("/api/status").then(r => r.json()).then(s => {
+  const el = document.getElementById("status");
+  if (!s.database.reachable) { el.innerHTML = '<b class="bad">Database not reachable.</b> ' + s.database.hint; return; }
+  const d = s.dashboard;
+  el.innerHTML = '<b class="ok">Database connected.</b> Last import: ' + (s.database.version || "").split("|")[0] + '. Dashboard: ' +
+    (d.ready ? "ready" : d.computing ? "analysing (" + Math.round(d.progress * 100) + "%)" : "starting");
+}).catch(() => { document.getElementById("status").textContent = "MOTHER server is not running."; });
+</script>
+</body>
+</html>

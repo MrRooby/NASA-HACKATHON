@@ -1,0 +1,237 @@
+{
+  "_about": "MOTHER knowledge graph: NASA HRP hazards -> risks -> body regions -> indicators -> countermeasures. Used to route findings to risks, colour the body figure in the GUI and explain conclusions. Source ids resolve in config/sources.json; 'links' are extra URLs from DATA_SOURCES.md. DEMO / EDUCATIONAL ONLY - not medical advice.",
+  "version": "2026-11-14",
+
+  "hazards": [
+    { "id": "radiation", "label": "Space radiation", "link": "https://www.nasa.gov/hrp/hazards/" },
+    { "id": "isolation_confinement", "label": "Isolation and confinement", "link": "https://www.nasa.gov/hrp/hazards/" },
+    { "id": "distance_from_earth", "label": "Distance from Earth", "link": "https://www.nasa.gov/hrp/hazards/" },
+    { "id": "gravity_fields", "label": "Altered gravity fields", "link": "https://www.nasa.gov/hrp/hazard-gravity-fields/" },
+    { "id": "hostile_closed_environment", "label": "Hostile and closed environment", "link": "https://www.nasa.gov/hrp/hazards/" }
+  ],
+
+  "body_regions": [
+    { "id": "brain", "label": "Brain & behaviour" },
+    { "id": "eyes", "label": "Eyes" },
+    { "id": "ears", "label": "Ears / hearing" },
+    { "id": "heart", "label": "Heart & circulation" },
+    { "id": "lungs", "label": "Lungs & breathing" },
+    { "id": "blood_immune", "label": "Blood & immune system" },
+    { "id": "gut_metabolic", "label": "Digestion & metabolism" },
+    { "id": "kidneys", "label": "Kidneys" },
+    { "id": "skeleton", "label": "Bones" },
+    { "id": "muscles", "label": "Muscles" },
+    { "id": "skin", "label": "Skin & thermal comfort" }
+  ],
+
+  "risks": [
+    {
+      "id": "cardiovascular",
+      "label": "Cardiovascular adaptations",
+      "hazards": ["gravity_fields", "radiation"],
+      "body_regions": ["heart"],
+      "indicators": ["bp_systolic", "bp_diastolic", "heart_rate_resting"],
+      "countermeasures": ["Hydration", "Aerobic exercise", "Compression garments before return", "Compare with personal in-flight baseline"],
+      "sources": ["norsk_2015"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=179"]
+    },
+    {
+      "id": "bone_loss",
+      "label": "Bone loss / fracture risk",
+      "hazards": ["gravity_fields"],
+      "body_regions": ["skeleton"],
+      "indicators": ["bmd_hip_spine_pct_baseline", "bmd_femoral_neck_pct_baseline", "exercise_minutes_daily"],
+      "countermeasures": ["Daily resistive exercise (ARED)", "Adequate calcium and vitamin D", "Energy balance"],
+      "sources": ["hrr_er_bone", "ochmo_mtb_bone", "hrp_hazard_gravity"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=77"]
+    },
+    {
+      "id": "muscle_aerobic",
+      "label": "Reduced muscle strength & aerobic capacity",
+      "hazards": ["gravity_fields"],
+      "body_regions": ["muscles", "heart"],
+      "indicators": ["vo2max_pct_baseline", "strength_pct_baseline", "exercise_minutes_daily"],
+      "countermeasures": ["~1.5 h/day exercise, 6 days/week", "Adjust prescription after each fitness evaluation"],
+      "sources": ["hrp_risk_fitness", "scott_2023", "nasa_std_3001_v1"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=180"]
+    },
+    {
+      "id": "sans",
+      "label": "Spaceflight Associated Neuro-ocular Syndrome (SANS)",
+      "hazards": ["gravity_fields", "hostile_closed_environment"],
+      "body_regions": ["eyes", "brain"],
+      "indicators": ["symptom_vision_change", "symptom_headache", "cabin_co2"],
+      "countermeasures": ["Scheduled eye exams (FD30, FD90, R-30)", "Keep cabin CO2 low", "Report any vision change"],
+      "sources": ["hrr_er_sans", "eye_2026_sans"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=105"]
+    },
+    {
+      "id": "behavioral",
+      "label": "Behavioural health & cognition",
+      "hazards": ["isolation_confinement", "distance_from_earth"],
+      "body_regions": ["brain"],
+      "indicators": ["mood", "fatigue", "reaction_time_pct_change"],
+      "countermeasures": ["Private psychological conference", "Family contact", "Leisure time", "Workload review"],
+      "sources": ["ntrs_bhp_ops", "ntrs_space_psych"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=99"]
+    },
+    {
+      "id": "sleep_circadian",
+      "label": "Sleep loss & circadian desynchrony",
+      "hazards": ["isolation_confinement", "hostile_closed_environment"],
+      "body_regions": ["brain"],
+      "indicators": ["sleep_hours"],
+      "countermeasures": ["No caffeine 6-12 h before sleep", "Light management", "Check sleep-station airflow (CO2 pocket)"],
+      "sources": ["hrr_er_sleep", "ochmo_tb_sleep", "nasa_std_3001_v1"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=100"]
+    },
+    {
+      "id": "immune",
+      "label": "Immune system & blood changes",
+      "hazards": ["radiation", "isolation_confinement", "hostile_closed_environment"],
+      "body_regions": ["blood_immune"],
+      "indicators": ["body_temperature", "spo2"],
+      "countermeasures": ["Hygiene", "Symptom log", "Isolation if infectious"],
+      "sources": ["stahn_2017", "osdr_osd569"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=85"]
+    },
+    {
+      "id": "nutrition",
+      "label": "Inadequate nutrition & metabolic change",
+      "hazards": ["distance_from_earth", "hostile_closed_environment"],
+      "body_regions": ["gut_metabolic"],
+      "indicators": ["body_mass_change_pct", "energy_intake_pct_target", "glucose_fasting"],
+      "countermeasures": ["Meet individual kcal target (+200 kcal per EVA hour)", "Weekly mass trend review"],
+      "sources": ["hrr_er_nutrition", "zwart_2014", "nasa_std_3001_v2"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=176"]
+    },
+    {
+      "id": "renal",
+      "label": "Renal stone formation",
+      "hazards": ["gravity_fields"],
+      "body_regions": ["kidneys"],
+      "indicators": [],
+      "countermeasures": ["Hydration", "Bone-loss countermeasures (less urinary calcium)"],
+      "sources": ["osdr_osd575"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=81"]
+    },
+    {
+      "id": "radiation",
+      "label": "Radiation exposure (cancer, CNS, cardiovascular, acute)",
+      "hazards": ["radiation"],
+      "body_regions": ["blood_immune", "brain", "heart", "eyes", "skin"],
+      "indicators": ["radiation_career_mSv", "radiation_daily_vs_environment", "solar_proton_flux_10MeV"],
+      "countermeasures": ["ALARA", "Storm shelter during solar particle events", "Postpone EVA at S3+"],
+      "sources": ["nasa_std_3001_v1", "ochmo_tb_radiation", "csa_radiation", "noaa_scales"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=96"]
+    },
+    {
+      "id": "atmosphere",
+      "label": "Cabin atmosphere (CO2, O2)",
+      "hazards": ["hostile_closed_environment"],
+      "body_regions": ["lungs", "brain"],
+      "indicators": ["cabin_co2", "cabin_ppo2", "spo2"],
+      "countermeasures": ["Ventilation / fans at sleep station", "Check CO2 scrubbing", "Check O2 partial pressure"],
+      "sources": ["ochmo_tb_co2", "law_2014", "nasa_std_3001_v2"],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=173"]
+    },
+    {
+      "id": "habitability",
+      "label": "Thermal comfort & habitability",
+      "hazards": ["hostile_closed_environment"],
+      "body_regions": ["skin"],
+      "indicators": ["cabin_temperature", "cabin_humidity"],
+      "countermeasures": ["Adjust thermal control", "Hydration in dry air"],
+      "sources": ["nasa_std_3001_v2"],
+      "links": []
+    },
+    {
+      "id": "hearing",
+      "label": "Noise-induced hearing loss",
+      "hazards": ["hostile_closed_environment"],
+      "body_regions": ["ears"],
+      "indicators": ["noise_24h"],
+      "countermeasures": ["Hearing protection", "Quiet sleep quarters"],
+      "sources": ["nasa_std_3001_v2", "ntrs_ooha_2012"],
+      "links": []
+    },
+    {
+      "id": "sensorimotor",
+      "label": "Sensorimotor / space adaptation sickness",
+      "hazards": ["gravity_fields"],
+      "body_regions": ["brain", "gut_metabolic"],
+      "indicators": ["symptom_nausea"],
+      "countermeasures": ["Anti-motion-sickness medication", "No EVA within 72 h of launch"],
+      "sources": [],
+      "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=88"]
+    }
+  ],
+
+  "lab_analyte_risks": {
+    "GLUCOSE": "nutrition",
+    "CREATININE": "renal",
+    "UREA NITROGEN (BUN)": "renal",
+    "EGFR": "renal",
+    "CALCIUM": "bone_loss",
+    "HEMOGLOBIN": "immune",
+    "HEMATOCRIT": "immune",
+    "RED BLOOD CELL COUNT": "immune",
+    "WHITE BLOOD CELL COUNT": "immune",
+    "PLATELET COUNT": "immune",
+    "ALT": "nutrition",
+    "AST": "nutrition",
+    "ALKALINE PHOSPHATASE": "bone_loss"
+  },
+
+  "auxiliary_indicators": [
+    {
+      "id": "symptom_headache", "label": "Headache (0 none - 3 severe)", "unit": "score 0-3", "category": "symptom", "evaluation": "absolute",
+      "bands": [
+        { "max": 1, "status": "ok", "basis": "team_assumption", "message": "No headache." },
+        { "min": 1, "max": 3, "status": "caution", "basis": "team_assumption", "message": "Headache reported.", "action": "Check cabin CO2 and hydration; log if it repeats." },
+        { "min": 3, "status": "alert", "basis": "team_assumption", "message": "Severe headache.", "action": "Report to crew medical officer; check vision.", "escalate": true }
+      ],
+      "sources": ["law_2014"]
+    },
+    {
+      "id": "symptom_vision_change", "label": "Vision change noticed (0 no / 1 yes)", "unit": "flag", "category": "symptom", "evaluation": "absolute",
+      "bands": [
+        { "max": 1, "status": "ok", "basis": "team_assumption", "message": "No vision change." },
+        { "min": 1, "status": "alert", "basis": "team_assumption", "message": "Vision change reported - possible SANS.", "action": "Escalate to flight surgeon; schedule ocular exam.", "escalate": true }
+      ],
+      "sources": ["eye_2026_sans", "hrr_er_sans"]
+    },
+    {
+      "id": "symptom_nausea", "label": "Nausea (0 none - 3 severe)", "unit": "score 0-3", "category": "symptom", "evaluation": "absolute",
+      "bands": [
+        { "max": 1, "status": "ok", "basis": "team_assumption", "message": "No nausea." },
+        { "min": 1, "status": "caution", "basis": "team_assumption", "message": "Nausea reported.", "action": "Typical in first days (space adaptation); report if > 72 h after launch." }
+      ],
+      "sources": []
+    },
+    {
+      "id": "fatigue", "label": "Fatigue self-rating (1 fresh - 5 exhausted)", "unit": "score 1-5", "category": "behavioral", "evaluation": "absolute",
+      "bands": [
+        { "max": 4, "status": "ok", "basis": "team_assumption", "message": "Fatigue OK." },
+        { "min": 4, "status": "caution", "basis": "team_assumption", "message": "High fatigue.", "action": "Review sleep and workload." }
+      ],
+      "sources": ["ntrs_bhp_ops"]
+    },
+    {
+      "id": "reaction_time_pct_change", "label": "Reaction time vs preflight (PVT-like)", "unit": "% slower", "category": "behavioral", "evaluation": "baseline_percent_change",
+      "bands": [
+        { "max": 10, "status": "ok", "basis": "team_assumption", "message": "Reaction time within 10% of preflight." },
+        { "min": 10, "max": 20, "status": "caution", "basis": "team_assumption", "message": "Reaction time 10-20% slower than preflight.", "action": "Check sleep, fatigue and CO2 exposure; retest tomorrow." },
+        { "min": 20, "status": "alert", "basis": "team_assumption", "message": "Reaction time >20% slower than preflight.", "action": "Avoid critical tasks until reviewed.", "escalate": true }
+      ],
+      "sources": ["basner_2024", "ntrs_space_psych"]
+    },
+    { "id": "body_mass_kg", "label": "Body mass", "unit": "kg", "category": "input", "evaluation": "input", "sources": ["zwart_2014"] },
+    { "id": "vo2max_ml_kg_min", "label": "Estimated VO2max", "unit": "ml/kg/min", "category": "input", "evaluation": "input", "sources": ["petersen_2016"] },
+    { "id": "strength_index", "label": "Strength index (e.g. ARED 1RM)", "unit": "kg", "category": "input", "evaluation": "input", "sources": [] },
+    { "id": "energy_intake_kcal", "label": "Energy intake", "unit": "kcal", "category": "input", "evaluation": "input", "sources": ["nasa_std_3001_v2"] },
+    { "id": "eva_hours", "label": "EVA duration", "unit": "h", "category": "input", "evaluation": "input", "sources": [] },
+    { "id": "radiation_dose_mSv", "label": "Daily dose equivalent", "unit": "mSv", "category": "input", "evaluation": "input", "sources": ["checs_catalog"] },
+    { "id": "reaction_time_ms", "label": "Mean reaction time", "unit": "ms", "category": "input", "evaluation": "input", "sources": ["basner_2024"] }
+  ]
+}
