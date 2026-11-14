@@ -5,7 +5,7 @@ Stos produkcyjny to trzy kontenery z `deploy/docker-compose.yml`:
 | Usługa | Obraz | Port (tylko na `BIND_IP`) |
 |---|---|---|
 | `mariadb` | `mariadb:11.4` + schemat z `DATABASE/schema/001…012` | `3306` |
-| `mother` | `ghcr.io/mrrooby/nasa-hackathon-mother` (FastAPI: strony + `/api/*`) | `8000` |
+| `mother` | `ghcr.io/mrrooby/nasa-hackathon-mother` (FastAPI: tylko API `/api/*`) | `8000` |
 | `gui` | `ghcr.io/mrrooby/nasa-hackathon-gui` (nginx z buildem Vite, `/api/` → `mother:8000`) | `8081` |
 
 `DATABASE/docker-compose.yml` zostaje bez zmian jako osobny stos samej bazy.
@@ -14,9 +14,9 @@ Stos produkcyjny to trzy kontenery z `deploy/docker-compose.yml`:
 
 | Plik | Kiedy | Co robi |
 |---|---|---|
-| `ci.yml` | każdy push i pull request | `validate_config.py`; testy MOTHER (`pytest`); testy jednostkowe DATABASE; testy integracyjne DATABASE na kontenerze MariaDB 11.4; GUI: `npm ci`, `npm test --if-present`, `npm run build`, artefakt `gui-dist`. Brak katalogu z testami = krok pominięty z komunikatem. |
-| `release.yml` | push taga `v*.*.*` | te same testy (wywołuje `ci.yml`), paczki: `awernasa-gui-dist-X.Y.Z.zip`, `mother-X.Y.Z.zip` (bez testów i `.env`), `database-X.Y.Z.tar.gz`, `deploy-X.Y.Z.tar.gz`, `SHA256SUMS.txt`; obrazy do GHCR z tagami `X.Y.Z` i `latest`; GitHub Release z automatycznymi notatkami. |
-| `deploy.yml` | ręcznie (Actions → Deploy → Run workflow) albo po udanym Release | łączy się z tailnetem (Tailscale OAuth, `tag:ci`), przez SSH na serwerze: `git pull --ff-only`, `docker compose pull mother gui`, `docker compose up -d`. Bez sekretów kończy się komunikatem „Deploy skipped” zamiast błędu. |
+| `ci.yml` | push (poza `master` i `release/**`, które buduje `release.yml`) i pull request | `validate_config.py`; testy MOTHER (`pytest`); testy jednostkowe DATABASE; testy integracyjne DATABASE na kontenerze MariaDB 11.4; GUI: `npm ci`, `npm test --if-present`, `npm run build`, artefakt `gui-dist`. Brak katalogu z testami = krok pominięty z komunikatem. |
+| `release.yml` | push na `master` / `release/**`, push taga `v*.*.*`, ręcznie | te same testy (wywołuje `ci.yml`), paczki (artefakt `release-bundles`; przy gałęzi wersja = `<gałąź>-<sha7>`): `awernasa-gui-dist-X.Y.Z.zip`, `mother-X.Y.Z.zip` (bez testów i `.env`), `database-X.Y.Z.tar.gz`, `deploy-X.Y.Z.tar.gz`, `SHA256SUMS.txt`; obrazy do GHCR (gałąź: tagi `<gałąź>` i `sha-<sha7>`; tag wersji: `X.Y.Z` i `latest`); GitHub Release z automatycznymi notatkami **tylko dla taga**. |
+| `deploy.yml` | ręcznie (Actions → Deploy → Run workflow) albo po udanym Release **dla taga `v*`** | łączy się z tailnetem (Tailscale OAuth, `tag:ci`), przez SSH na serwerze: `git pull --ff-only`, `docker compose pull mother gui`, `docker compose up -d`. Bez sekretów kończy się komunikatem „Deploy skipped” zamiast błędu. |
 
 Testy integracyjne DATABASE w CI dostają zmienne: `ASTRO_TEST_DB_HOST=127.0.0.1`, `ASTRO_TEST_DB_PORT=3306`, `ASTRO_TEST_DB_USER=root`, `ASTRO_TEST_DB_ROOT_PASSWORD` (jednorazowe hasło kontenera CI, nie sekret).
 
@@ -57,7 +57,7 @@ docker compose -f deploy/docker-compose.yml ps
 - Jeśli na tym samym serwerze działa już stos z `DATABASE/docker-compose.yml`, port 3306 będzie zajęty. Albo zmień `DB_PUBLISH_PORT`, albo podłącz MOTHER do istniejącej bazy (`MOTHER_DB_HOST=<Tailscale IP>` w `deploy/.env`) i uruchamiaj tylko `docker compose -f deploy/docker-compose.yml up -d --no-deps mother gui`.
 - Obrazy w GHCR są domyślnie prywatne. Albo ustaw je jako publiczne (GitHub → Packages → package settings → visibility), albo zaloguj serwer: `docker login ghcr.io` z tokenem `read:packages`.
 - Bez GHCR (np. przed pierwszym release) obrazy da się zbudować na serwerze: `docker compose -f deploy/docker-compose.yml up -d --build`.
-- Adresy: GUI `http://<BIND_IP>:8081`, MOTHER `http://<BIND_IP>:8000/dashboard`, stan `http://<BIND_IP>:8000/api/status`.
+- Adresy: GUI `http://<BIND_IP>:8081`, API MOTHER `http://<BIND_IP>:8000/api/status` (dokumentacja: `/api/docs`).
 
 ## Wydanie wersji (robi właściciel repo)
 
