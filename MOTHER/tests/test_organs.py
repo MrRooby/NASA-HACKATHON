@@ -8,7 +8,7 @@ import pytest
 from mother import clinical as C
 from mother import organs as O
 from mother.db_source import TeamDatabase
-from tests.fakes import PERSON_ROWS, person_db
+from tests.fakes import PERSON_ROWS, obs, person_db
 
 ORGAN_CODES = ["brain", "eyes", "heart", "lungs", "blood", "kidneys", "gut", "musculoskeletal", "limbs", "exposure"]
 TOP_KEYS = {"schema_version", "subject", "as_of", "devices", "overall_status", "top_message", "organs"}
@@ -127,3 +127,60 @@ def test_overview_lists_every_subject():
     rows = O.overview(TeamDatabase(conn=person_db(known=("CREW-1", "CREW-2"))))
     assert [r["subject"]["code"] for r in rows] == ["CREW-1", "CREW-2"]
     assert set(rows[0]["organs"]) == set(ORGAN_CODES)
+
+
+# ---------------------------------------------------------------- cognitive tests on the brain card
+def _cog_series(**codes):
+    """codes: indicator -> list of (value, phase)."""
+    series = {}
+    for code, vals in codes.items():
+        series[code] = [{"c": code, "v": v, "t": None, "phase": ph, "d": i, "o": i, "tp": f"FD{i}", "m": None}
+                        for i, (v, ph) in enumerate(vals)]
+    return series
+
+
+def _brain(series):
+    return {c.code: c for c in O.person_checks({"series": series, "sex": "F", "age": 35.0}) if c.organ == "brain"}
+
+
+def test_brain_card_unchanged_without_cognitive_data():
+    series = {}
+    for r in PERSON_ROWS:
+        series.setdefault(r["c"], []).append(r)
+    codes = set(_brain(series))
+    assert not codes & {"pvt_rt", "pvt_lapses", "gonogo_commission", "dsst_throughput"}
+    assert O.cognitive_checks({}) == []
+
+
+def test_brain_card_cognitive_checks_with_data():
+    series = _cog_series(
+        pvt_reaction_ms=[(v, "in") for v in (280, 282, 278, 280, 280, 350)],     # baseline 280 -> +25 %
+        pvt_lapses=[(1, "in"), (7, "in")], gonogo_commission_rate=[(0.2, "in")],
+        dsst_throughput_per_min=[(v, "in") for v in (30, 32, 31, 31, 31, 20)])
+    b = _brain(series)
+    assert b["pvt_rt"].status == C.ALERT and b["pvt_rt"].value == pytest.approx((350 / 280 - 1) * 100, abs=1.0)
+    assert b["pvt_rt"].basis == "team_assumption"
+    assert b["pvt_lapses"].status == C.ALERT and b["pvt_lapses"].value == 7
+    assert b["gonogo_commission"].status == C.CAUTION and b["gonogo_commission"].value == pytest.approx(20)
+    assert b["dsst_throughput"].status == C.ALERT and b["dsst_throughput"].value < -2
+    card = O.build_cards(list(_brain(series).values()), {"subject": {"code": "X"}, "as_of": {}})
+    assert_contract(card)                      # still at most 3 metrics, worst first
+    brain = card["organs"][0]
+    assert brain["status"] == "alert" and len(brain["metrics"]) == 3 and len(brain["checks"]) == 4
+    assert brain["action"]
+
+
+def test_pvt_baseline_prefers_preflight_and_needs_three_values():
+    b = _brain(_cog_series(pvt_reaction_ms=[(270, "pre"), (290, "pre"), (280, "pre"), (310, "in")]))
+    assert b["pvt_rt"].value == pytest.approx((310 / 280 - 1) * 100) and b["pvt_rt"].status == C.CAUTION
+    assert "pvt_rt" not in _brain(_cog_series(pvt_reaction_ms=[(280, "in"), (300, "in")]))
+    ok = _brain(_cog_series(pvt_reaction_ms=[(280, "in"), (280, "in"), (280, "in"), (283, "in")]))
+    assert ok["pvt_rt"].status == C.OK and ok["pvt_rt"].action is None
+
+
+def test_organ_report_with_cognitive_rows_against_fake_database():
+    rows = PERSON_ROWS + [obs("pvt_reaction_ms", v, "in", d) for d, v in [(1, 280), (2, 281), (3, 279), (9, 340)]]
+    card = O.organ_report(TeamDatabase(conn=person_db(rows)), "CREW-1")
+    assert_contract(card)
+    brain = card["organs"][0]
+    assert "pvt_rt" in [c["code"] for c in brain["checks"]]

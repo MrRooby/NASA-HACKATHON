@@ -65,8 +65,12 @@ def _derived(a: Astronaut, ind: str, ts: datetime, value: float, unit: str, flag
                        source="derived", quality_flags=tuple(flags))
 
 
-def _pct_of_preflight(repo, a, raw_ind, out_ind, now, mode) -> list[Measurement]:
+def _pct_of_preflight(repo, a, raw_ind, out_ind, now, mode, fallback_first_n: int = 0) -> list[Measurement]:
     pre = a.preflight.get(raw_ind)
+    if not pre and fallback_first_n:
+        # no preflight value (e.g. a Mars mission): the baseline is the mean of the first N in-mission values
+        first = [m.value for m in repo.series(a.id, raw_ind, end=now)[:fallback_first_n]]
+        pre = sum(first) / len(first) if len(first) >= fallback_first_n else None
     if not pre:
         return []
     out = []
@@ -149,7 +153,8 @@ def derive_all(repo: Repository, mission: Mission, cfg: Config, now: datetime) -
         derived.add_many(_pct_of_preflight(repo, a, "body_mass_kg", "body_mass_change_pct", now, "change"))
         derived.add_many(_pct_of_preflight(repo, a, "vo2max_ml_kg_min", "vo2max_pct_baseline", now, "percent"))
         derived.add_many(_pct_of_preflight(repo, a, "strength_index", "strength_pct_baseline", now, "percent"))
-        derived.add_many(_pct_of_preflight(repo, a, "reaction_time_ms", "reaction_time_pct_change", now, "change"))
+        derived.add_many(_pct_of_preflight(repo, a, "reaction_time_ms", "reaction_time_pct_change", now, "change",
+                                              fallback_first_n=3))
         derived.add_many(derive_energy(repo, a, now))
         derived.add_many(derive_radiation(repo, mission, a, cfg, now))
         derived.add_many(derive_bmd(repo, mission, a, now))

@@ -1,0 +1,81 @@
+{
+ "name": "baseline_z",
+ "cases": [
+  {
+   "metric": "pvt_median_rt_ms",
+   "baseline_values": [
+    270,
+    290,
+    280
+   ],
+   "x": 320,
+   "baseline": {
+    "mean": 280.0,
+    "sd": 10.0,
+    "n": 3
+   },
+   "z": -2.857142857142857,
+   "pct_change": 14.285714285714285
+  },
+  {
+   "metric": "pvt_median_rt_ms",
+   "baseline_values": [
+    280,
+    281,
+    279
+   ],
+   "x": 300,
+   "baseline": {
+    "mean": 280.0,
+    "sd": 1.0,
+    "n": 3
+   },
+   "z": -1.4285714285714286,
+   "pct_change": 7.142857142857142
+  },
+  {
+   "metric": "dsst_throughput_per_min",
+   "baseline_values": [
+    30,
+    32,
+    31,
+    33
+   ],
+   "x": 27,
+   "baseline": {
+    "mean": 31.5,
+    "sd": 1.2909944487358056,
+    "n": 4
+   },
+   "z": -3.3834586466165413,
+   "pct_change": -14.285714285714285
+  },
+  {
+   "metric": "gonogo_commission_rate",
+   "baseline_values": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "x": 0.2,
+   "baseline": {
+    "mean": 0.10000000000000002,
+    "sd": 1.6996749443881478e-17,
+    "n": 3
+   },
+   "z": -3.333333333333333,
+   "pct_change": 99.99999999999997
+  },
+  {
+   "metric": "pvt_median_rt_ms",
+   "baseline_values": [
+    280,
+    290
+   ],
+   "x": 300,
+   "baseline": null,
+   "z": null,
+   "pct_change": null
+  }
+ ]
+}

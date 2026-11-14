@@ -58,7 +58,7 @@
       "schedule": { "type": "every_n_days", "every_days": 30 },
       "self_performed": "yes",
       "related_risks": ["behavioral / cognitive"],
-      "app_role": "Monthly reminder + short in-app reaction-time / attention test compared with personal baseline.",
+      "app_role": "Monthly reminder; done in the app's Cognitive tests module (PVT-B reaction time, Go/No-Go, DSST), compared with your own baseline.",
       "app_inputs": ["reaction time ms", "accuracy %"],
       "sources": ["ntrs_bhp_ops", "ntrs_space_psych"]
     },
@@ -156,7 +156,7 @@
         "what": "Memory, attention, abstraction, spatial orientation, emotion recognition, risk decision-making, sensorimotor speed, vigilant attention.",
         "schedule": { "type": "mission_days", "days": ["FD30", "R-30"] },
         "self_performed": "yes",
-        "app_role": "In-app reaction-time (PVT-like) mini test."
+        "app_role": "In-app Cognitive tests module: PVT-B (psychomotor vigilance), Go/No-Go and DSST battery, compared with your own baseline."
       },
       {
         "id": "sm_blood_biochemistry",
@@ -181,6 +181,34 @@
         "schedule": { "type": "mission_days", "days": ["FD30", "R-30"] },
         "self_performed": "yes",
         "app_role": "Context only."
+      }
+    ]
+  },
+
+  "app_additions": {
+    "_about": "Measurements the MOTHER app adds on top of the confirmed NASA ones (not NASA schedules). Scheduled by MOTHER itself, not by scheduler.py items.",
+    "items": [
+      {
+        "id": "mother_quick_pvt",
+        "name": "Quick reaction test (PVT-B, 3 min)",
+        "category": "behavioral",
+        "what": "3-minute psychomotor vigilance test compared with the person's own baseline (first 3-5 sessions).",
+        "schedule": { "type": "weekly" },
+        "self_performed": "yes",
+        "app_role": "Cognitive tests module, PVT. Weekly task in MOTHER (weekly_pvt); also asked after a behavioural-strain finding.",
+        "app_inputs": ["pvt_median_rt_ms", "pvt_lapses"],
+        "sources": ["basner_2011_pvtb", "basner_2024"]
+      },
+      {
+        "id": "mother_full_battery",
+        "name": "Cognitive battery (PVT-B, Go/No-Go, DSST, about 8 min)",
+        "category": "behavioral",
+        "what": "Three short tests of vigilance, response inhibition and processing speed; stimulus sets rotate A-D to limit practice effects.",
+        "schedule": { "type": "every_n_days", "every_days": 14 },
+        "self_performed": "yes",
+        "app_role": "Cognitive tests module, full battery. Team assumption for the 14-day cadence; not an official NASA schedule.",
+        "app_inputs": ["pvt_median_rt_ms", "pvt_lapses", "gonogo_commission_rate", "dsst_throughput_per_min"],
+        "sources": ["basner_2015_ctb", "dev_2024_iss"]
       }
     ]
   },

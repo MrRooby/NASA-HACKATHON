@@ -1,0 +1,116 @@
+{
+ "name": "gonogo_perfect",
+ "test_id": "gonogo",
+ "duration_s": null,
+ "note": "100% hits, 0% commissions -> finite d' (log-linear correction)",
+ "trials": [
+  {
+   "idx": 0,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "go",
+   "event_type": "hit",
+   "rt_ms": 300
+  },
+  {
+   "idx": 1,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "go",
+   "event_type": "hit",
+   "rt_ms": 301
+  },
+  {
+   "idx": 2,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "go",
+   "event_type": "hit",
+   "rt_ms": 302
+  },
+  {
+   "idx": 3,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "go",
+   "event_type": "hit",
+   "rt_ms": 303
+  },
+  {
+   "idx": 4,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "go",
+   "event_type": "hit",
+   "rt_ms": 304
+  },
+  {
+   "idx": 5,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "go",
+   "event_type": "hit",
+   "rt_ms": 305
+  },
+  {
+   "idx": 6,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "go",
+   "event_type": "hit",
+   "rt_ms": 306
+  },
+  {
+   "idx": 7,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "go",
+   "event_type": "hit",
+   "rt_ms": 307
+  },
+  {
+   "idx": 8,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "go",
+   "event_type": "hit",
+   "rt_ms": 308
+  },
+  {
+   "idx": 9,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "nogo",
+   "event_type": "correct_rejection",
+   "rt_ms": null
+  },
+  {
+   "idx": 10,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "nogo",
+   "event_type": "correct_rejection",
+   "rt_ms": null
+  },
+  {
+   "idx": 11,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "nogo",
+   "event_type": "correct_rejection",
+   "rt_ms": null
+  }
+ ],
+ "expected": {
+  "metrics": {
+   "gonogo_commission_rate": 0.0,
+   "gonogo_omission_rate": 0.0,
+   "gonogo_mean_rt_go_ms": 304.0,
+   "gonogo_sd_rt_go_ms": 2.7386127875258306,
+   "gonogo_dprime": 2.7952030073274794
+  },
+  "quality": "ok",
+  "status": "complete",
+  "n_trials": 12
+ }
+}

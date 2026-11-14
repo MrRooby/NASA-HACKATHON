@@ -1,0 +1,111 @@
+{
+ "name": "dsst_random_answers",
+ "test_id": "dsst",
+ "duration_s": 90,
+ "note": "accuracy 0.3 -> status invalid",
+ "trials": [
+  {
+   "idx": 0,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "2",
+   "event_type": "error",
+   "rt_ms": 900
+  },
+  {
+   "idx": 1,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "2",
+   "event_type": "error",
+   "rt_ms": 900
+  },
+  {
+   "idx": 2,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "2",
+   "event_type": "error",
+   "rt_ms": 900
+  },
+  {
+   "idx": 3,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "2",
+   "event_type": "error",
+   "rt_ms": 900
+  },
+  {
+   "idx": 4,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "2",
+   "event_type": "error",
+   "rt_ms": 900
+  },
+  {
+   "idx": 5,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "2",
+   "event_type": "error",
+   "rt_ms": 900
+  },
+  {
+   "idx": 6,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "2",
+   "event_type": "error",
+   "rt_ms": 900
+  },
+  {
+   "idx": 7,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "1",
+   "event_type": "correct",
+   "rt_ms": 900
+  },
+  {
+   "idx": 8,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "1",
+   "event_type": "correct",
+   "rt_ms": 900
+  },
+  {
+   "idx": 9,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "1",
+   "event_type": "correct",
+   "rt_ms": 900
+  }
+ ],
+ "expected": {
+  "metrics": {
+   "dsst_correct": 3,
+   "dsst_errors": 7,
+   "dsst_attempts": 10,
+   "dsst_throughput_per_min": 2.0,
+   "dsst_accuracy": 0.3,
+   "dsst_median_rt_correct_ms": 900.0
+  },
+  "quality": "ok",
+  "status": "invalid",
+  "n_trials": 10
+ }
+}

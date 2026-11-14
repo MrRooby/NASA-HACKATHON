@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from . import clinical as C
+from . import cognitive_scoring as cog
 from .db_source import TeamDatabase
 
 SCHEMA_VERSION = "1.1"
@@ -22,7 +23,7 @@ ORGANS = [
 ]
 # What each organ needs when the database has nothing for it (from the MEDICAL-DIAGNOSIS device list)
 NEEDS = {
-    "brain": "sleep log or EEG headband, mood check-in", "eyes": "visual acuity, fundus photo, eye pressure (tonometer)",
+    "brain": "sleep log or EEG headband, mood check-in, cognitive tests (PVT, Go/No-Go, DSST)", "eyes": "visual acuity, fundus photo, eye pressure (tonometer)",
     "heart": "heart rate + blood pressure (wearable / cuff)", "lungs": "SpO2 (wearable), spirometry",
     "blood": "blood analyser (CBC + electrolytes)", "kidneys": "creatinine, urine analyser",
     "gut": "glucose, urine strip, stool log", "musculoskeletal": "grip strength, VO2 test, BIA / bone scan",
@@ -35,7 +36,8 @@ URINE_CHANNELS = ["urine_volume_24h", "urine_specific_gravity", "water_intake_24
 LAB_CODES = ["creatinine", "bun", "egfr", "potassium", "sodium", "chloride", "bicarbonate", "calcium", "albumin", "hemoglobin",
              "wbc", "lymphocytes_abs", "alt", "ast", "glucose", "glucose_fasting"]
 VITAL_CODES = ["heart_rate_resting", "bp_systolic", "bp_diastolic", "spo2", "body_temperature", "sleep_hours", "mood",
-               "vo2max", "strength_knee_extension", "body_mass"]
+               "vo2max", "strength_knee_extension", "body_mass",
+               "pvt_reaction_ms", "pvt_lapses", "gonogo_commission_rate", "dsst_throughput_per_min"]
 
 
 def _age_mid(band: str | None) -> float | None:
@@ -184,6 +186,68 @@ def _mean_last(series, code, n=7):
     return statistics.fmean(vals) if vals else None
 
 
+# ------------------------------------------------------------------ cognitive tests (brain card)
+COGNITIVE_REF = "Basner et al. 2011 (PVT-B); NASA ISS cognition battery (Basner 2024). Performance indicator, not a diagnosis."
+COG_ACTION = "Rest or sleep, then repeat the test in 24 h."
+COG_ALERT_ACTION = "Avoid critical tasks until reviewed; talk to the flight surgeon / private psychological conference."
+
+
+def _cog_values(rows: list[dict]) -> list[float]:
+    return [float(r["v"]) for r in rows if r["v"] is not None]
+
+
+def _cog_baseline(rows: list[dict]) -> dict[str, Any] | None:
+    """Preflight values when there are any, else the first 3-5 in-mission values (own baseline, as in the tests module)."""
+    pre = _cog_values([r for r in rows if r["phase"] == "pre"])
+    vals = pre if pre else _cog_values(rows)
+    return cog.baseline(vals)
+
+
+def cognitive_checks(s: dict[str, list[dict]]) -> list[C.Check]:
+    """Brain-card checks from the in-app cognitive tests (only when the database has the data)."""
+    out: list[C.Check] = []
+    rt = s.get("pvt_reaction_ms") or []
+    base = _cog_baseline(rt)
+    vals = _cog_values(rt)
+    if base and vals and rt[-1]["phase"] != "pre":
+        pct = cog.pct_change(vals[-1], base)
+        if pct is not None:
+            st = C.ALERT if pct >= 20 else C.CAUTION if pct >= 10 else C.OK
+            out.append(C.Check("brain", "pvt_rt", "Reaction time vs own baseline", pct, "%", st,
+                               f"Reaction time {pct:+.0f}% vs your baseline.",
+                               None if st == C.OK else (COG_ALERT_ACTION if st == C.ALERT else COG_ACTION),
+                               "latest PVT median RT vs own baseline (preflight, else first 3-5 tests); caution 10%, alert 20%",
+                               COGNITIVE_REF, basis="team_assumption"))
+    lap = _lastv(s, "pvt_lapses")
+    if lap is not None:
+        st = C.ALERT if lap >= 6 else C.CAUTION if lap >= 3 else C.OK
+        out.append(C.Check("brain", "pvt_lapses", "PVT lapses (>= 355 ms)", lap, "count", st,
+                           f"{lap:.0f} lapse{'' if lap == 1 else 's'} in the latest reaction test.",
+                           None if st == C.OK else (COG_ALERT_ACTION if st == C.ALERT else COG_ACTION),
+                           "lapses in a 3-minute PVT-B: caution from 3, alert from 6", COGNITIVE_REF, basis="team_assumption"))
+    cr = _lastv(s, "gonogo_commission_rate")
+    if cr is not None:
+        st = C.ALERT if cr >= 0.30 else C.CAUTION if cr >= 0.15 else C.OK
+        out.append(C.Check("brain", "gonogo_commission", "Go/No-Go false presses", cr * 100, "% of No-Go", st,
+                           f"Pressed on {cr * 100:.0f}% of No-Go trials.",
+                           None if st == C.OK else (COG_ALERT_ACTION if st == C.ALERT else COG_ACTION),
+                           "commission errors / No-Go trials: caution from 15%, alert from 30%", COGNITIVE_REF,
+                           basis="team_assumption"))
+    ds = s.get("dsst_throughput_per_min") or []
+    dbase = _cog_baseline(ds)
+    dvals = _cog_values(ds)
+    if dbase and dvals and ds[-1]["phase"] != "pre":
+        z = cog.performance_z("dsst_throughput_per_min", dvals[-1], dbase)
+        if z is not None:
+            st = C.ALERT if z <= -2 else C.CAUTION if z < -1 else C.OK
+            out.append(C.Check("brain", "dsst_throughput", "Processing speed (DSST) vs own baseline", z, "z", st,
+                               f"Processing speed z = {z:+.1f} vs your baseline.",
+                               None if st == C.OK else (COG_ALERT_ACTION if st == C.ALERT else COG_ACTION),
+                               "DSST correct per minute, performance z vs own baseline: caution below -1, alert at -2",
+                               COGNITIVE_REF, basis="team_assumption"))
+    return out
+
+
 # ------------------------------------------------------------------ checks per data source
 def person_checks(p: dict[str, Any]) -> list[C.Check]:
     s, female, age = p["series"], (p["sex"] == "F") if p["sex"] in ("F", "M") else None, p["age"]
@@ -235,6 +299,7 @@ def person_checks(p: dict[str, Any]) -> list[C.Check]:
         out.append(C.Check("brain", "mood_5d", "Mood (5-day average)", md, "1–5", st, f"Mood {md:.1f}/5.",
                            None if st == C.OK else "Offer a private psychological conference.", "mean of last 5 self-ratings",
                            "NASA behavioural health operations", basis="team_assumption"))
+    out += cognitive_checks(s)
     for code, label, unit in (("vo2max", "Aerobic capacity vs preflight", "% of preflight"), ("strength_knee_extension", "Leg strength vs preflight", "% of preflight")):
         rows = s.get(code) or []
         pre = [float(r["v"]) for r in rows if r["phase"] == "pre"]

@@ -39,7 +39,11 @@ export function isOfflineError(error) {
   return true;
 }
 
-export async function request(path, { timeoutMs = DEFAULT_TIMEOUT_MS, signal } = {}) {
+/**
+ * `method` / `body` (a JSON-serialisable value) are for the few write endpoints. Every write carries
+ * `X-Requested-With: awernasa`, which MOTHER requires (403 without it).
+ */
+export async function request(path, { timeoutMs = DEFAULT_TIMEOUT_MS, signal, method = 'GET', body } = {}) {
   const url = `${API_BASE}${path}`;
   const controller = new AbortController();
   let timedOut = false;
@@ -52,7 +56,13 @@ export async function request(path, { timeoutMs = DEFAULT_TIMEOUT_MS, signal } =
 
   let response;
   try {
-    response = await fetch(url, { headers: { Accept: 'application/json' }, signal: controller.signal });
+    const init = { headers: { Accept: 'application/json' }, signal: controller.signal };
+    if (method !== 'GET') {
+      init.method = method;
+      init.headers = { ...init.headers, 'Content-Type': 'application/json', 'X-Requested-With': 'awernasa' };
+      if (body !== undefined) init.body = JSON.stringify(body);
+    }
+    response = await fetch(url, init);
   } catch (cause) {
     if (timedOut) throw new ApiError(`MOTHER did not answer within ${Math.round(timeoutMs / 1000)} s`, { kind: 'timeout', url });
     if (controller.signal.aborted) throw new ApiError('Request cancelled', { kind: 'aborted', url });
@@ -62,20 +72,20 @@ export async function request(path, { timeoutMs = DEFAULT_TIMEOUT_MS, signal } =
     signal?.removeEventListener('abort', onOuterAbort);
   }
 
-  let body = null;
+  let data = null;
   let parseFailed = false;
   try {
-    body = await response.json();
+    data = await response.json();
   } catch {
     parseFailed = true;
   }
 
   if (!response.ok) {
-    const message = (body && typeof body.error === 'string' && body.error) || `HTTP ${response.status}`;
-    throw new ApiError(message, { kind: 'http', status: response.status, hint: body?.hint ?? null, url });
+    const message = (data && typeof data.error === 'string' && data.error) || `HTTP ${response.status}`;
+    throw new ApiError(message, { kind: 'http', status: response.status, hint: data?.hint ?? null, url });
   }
   if (parseFailed) throw new ApiError('MOTHER sent a response that is not JSON', { kind: 'parse', url });
-  return body;
+  return data;
 }
 
 /** GET /api/status -> { database: {reachable, version, error, hint}, dashboard: {...} } */

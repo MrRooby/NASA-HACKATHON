@@ -1,0 +1,28 @@
+{
+ "name": "gonogo_no_nogo",
+ "test_id": "gonogo",
+ "duration_s": null,
+ "note": "no NO-GO trials -> commission rate and d' null, status invalid",
+ "trials": [
+  {
+   "idx": 0,
+   "is_practice": false,
+   "valid": true,
+   "stimulus": "go",
+   "event_type": "hit",
+   "rt_ms": 310
+  }
+ ],
+ "expected": {
+  "metrics": {
+   "gonogo_commission_rate": null,
+   "gonogo_omission_rate": 0.0,
+   "gonogo_mean_rt_go_ms": 310.0,
+   "gonogo_sd_rt_go_ms": null,
+   "gonogo_dprime": null
+  },
+  "quality": "ok",
+  "status": "invalid",
+  "n_trials": 1
+ }
+}

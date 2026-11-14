@@ -44,3 +44,10 @@ Tabela `attachment` (id, crew_code, ts_utc, kind = `ultrasound`/`ecg_strip`, fil
 - `egfr_aa` (eGFR liczone z uwzględnieniem rasy) od 2021 roku nie jest zalecane w medycynie. MOTHER liczy eGFR sam (CKD-EPI 2021), więc ten kod można usunąć.
 - Każdy import jest zapisany w `import_log` dwa razy.
 - Konto tylko do odczytu `astro_reader` + zmiana hasła konta administratora bazy (gotowy SQL jest u Konrada).
+
+## 6. Testy poznawcze (zrealizowane przez właściciela bazy)
+MOTHER zapisuje sesje testów poznawczych (`POST /api/cognitive/sessions`) jako użytkownik `cognitive_writer` i czyta widoki `astro_api.cognitive_sessions` / `cognitive_metrics`. Wykorzystywane uprawnienia i kolumny:
+- `cognitive_writer`: SELECT, INSERT na `test_session` i `test_metric` (SELECT potrzebny do wyszukania duplikatu po `client_session_uuid` i odczytu zapisanych metryk), INSERT na `test_trial` i `test_event`, SELECT na `astro_core.subject`, `mission`, `participation`, `indicator`, INSERT na `astro_core.observation` i `import_batch`. Bez UPDATE i DELETE: idempotencja wyłącznie przez wyszukanie `client_session_uuid`.
+- Widoki: `cognitive_sessions(session_id, subject_code, test_id, session_no, stimulus_set, status, quality, is_practice, started_at, device_class)`, `cognitive_metrics(session_id, subject_code, metric_code, value)`; `astro_api.subjects(data_kind)`.
+- Mirror do `astro_core.observation` (kody `pvt_reaction_ms`, `pvt_lapses`, `gonogo_commission_rate`, `dsst_throughput_per_min`, źródło `mother_app_cognitive`) i jeden `import_batch` na sesję, dzięki czemu cache dashboardu MOTHER odświeża się po zapisie.
+- MOTHER mapuje `pvt_reaction_ms` na własne `reaction_time_ms` (naprawa błędu B1: wcześniej RT z bazy nie zasilał `reaction_time_pct_change`).

@@ -23,7 +23,7 @@ NAME_MAP = {
     "bmd_hip_spine_pct_baseline": "grp:bmd", "bmd_femoral_neck_pct_baseline": "grp:bmd",
     "radiation_career_mSv": "absorbed_dose_daily", "radiation_daily_vs_environment": "absorbed_dose_daily",
     "radiation_dose_mSv": "absorbed_dose_daily",
-    "reaction_time_pct_change": "reaction_time", "reaction_time_ms": "reaction_time",
+    "reaction_time_pct_change": "pvt_reaction_ms", "reaction_time_ms": "pvt_reaction_ms",   # in-app PVT mirrors to pvt_reaction_ms
 }
 # Indicators MOTHER uses that the database does not have yet
 MISSING = {
@@ -31,7 +31,6 @@ MISSING = {
     "symptom_vision_change": ("Vision change (self-report)", "yes/no"),
     "symptom_nausea": ("Nausea (self-report)", "score 0-3"),
     "fatigue": ("Fatigue (self-report)", "score 1-5"),
-    "reaction_time": ("Reaction time test (PVT-like)", "ms"),
     "eva_hours": ("EVA duration", "h"),
 }
 GROUPS = {  # collapse long lists into one readable node
@@ -48,7 +47,8 @@ GROUP_RISKS = {
     "grp:protons": ["radiation"], "cardiac_output": ["cardiovascular"], "stroke_volume": ["cardiovascular"],
     "bp_mean_arterial": ["cardiovascular"], "absorbed_dose_daily": ["radiation"], "iss_dose_gcr_daily": ["radiation"],
     "iss_dose_saa_daily": ["radiation"], "body_mass": ["nutrition"], "vo2max": ["muscle_aerobic"],
-    "strength_knee_extension": ["muscle_aerobic"], "reaction_time": ["behavioral"], "eva_hours": ["nutrition", "radiation"],
+    "strength_knee_extension": ["muscle_aerobic"], "pvt_reaction_ms": ["behavioral"],
+    "pvt_lapses": ["behavioral"], "gonogo_commission_rate": ["behavioral"], "dsst_throughput_per_min": ["behavioral"], "eva_hours": ["nutrition", "radiation"],
 }
 PSEUDO_SYSTEMS = {
     "habitat": ("Habitat & cabin sensors", "cabin"),
@@ -61,7 +61,7 @@ SYNDROMES = [
      ["cardiovascular", "immune", "sleep_circadian", "behavioral", "atmosphere"]),
     ("co2_headache", "CO2 + headache", ["cabin_co2", "symptom_headache"], ["atmosphere", "sans"]),
     ("sans_pattern", "SANS pattern (vision + headache + CO2)", ["symptom_vision_change", "symptom_headache", "cabin_co2"], ["sans"]),
-    ("behavioral_strain", "Behavioural strain (sleep, mood, fatigue, reaction)", ["sleep_hours", "mood", "fatigue", "reaction_time"],
+    ("behavioral_strain", "Behavioural strain (sleep, mood, fatigue, reaction)", ["sleep_hours", "mood", "fatigue", "pvt_reaction_ms", "pvt_lapses"],
      ["behavioral", "sleep_circadian"]),
     ("infection_pattern", "Infection pattern (temperature + heart rate)", ["body_temperature", "heart_rate_resting"], ["immune"]),
     ("hypoxia_source", "Hypoxia source (SpO2 vs cabin O2)", ["spo2", "cabin_ppo2"], ["atmosphere", "immune"]),
@@ -69,7 +69,7 @@ SYNDROMES = [
     ("bmd_forecast", "Bone density forecast (from exercise)", ["exercise_minutes_daily", "grp:bmd"], ["bone_loss"]),
     ("radiation_event", "Solar particle event / dose", ["solar_proton_flux_10MeV", "grp:protons", "absorbed_dose_daily"], ["radiation"]),
     ("motion_sickness", "Space adaptation sickness > 72 h", ["symptom_nausea"], ["sensorimotor"]),
-    ("eva_readiness", "EVA GO / NO-GO", ["solar_proton_flux_10MeV", "sleep_hours", "vo2max", "reaction_time"],
+    ("eva_readiness", "EVA GO / NO-GO", ["solar_proton_flux_10MeV", "sleep_hours", "vo2max", "pvt_reaction_ms"],
      ["radiation", "muscle_aerobic", "behavioral"]),
 ]
 

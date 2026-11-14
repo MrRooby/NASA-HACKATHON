@@ -1,0 +1,71 @@
+{
+ "name": "pvt_boundaries",
+ "test_id": "pvt",
+ "duration_s": null,
+ "note": "RT 99 -> false start, 100/354 -> response, 355 -> lapse",
+ "trials": [
+  {
+   "idx": 0,
+   "is_practice": false,
+   "valid": true,
+   "event_type": "response",
+   "rt_ms": 250,
+   "timeout": false
+  },
+  {
+   "idx": 1,
+   "is_practice": false,
+   "valid": true,
+   "event_type": "response",
+   "rt_ms": 300,
+   "timeout": false
+  },
+  {
+   "idx": 2,
+   "is_practice": false,
+   "valid": true,
+   "event_type": "response",
+   "rt_ms": 354,
+   "timeout": false
+  },
+  {
+   "idx": 3,
+   "is_practice": false,
+   "valid": true,
+   "event_type": "lapse",
+   "rt_ms": 355,
+   "timeout": false
+  },
+  {
+   "idx": 4,
+   "is_practice": false,
+   "valid": true,
+   "event_type": "false_start",
+   "rt_ms": 99,
+   "timeout": false
+  },
+  {
+   "idx": 5,
+   "is_practice": false,
+   "valid": true,
+   "event_type": "response",
+   "rt_ms": 100,
+   "timeout": false
+  }
+ ],
+ "expected": {
+  "metrics": {
+   "pvt_median_rt_ms": 300.0,
+   "pvt_mean_rt_ms": 271.8,
+   "pvt_mean_inv_rt": 4.595018699769237,
+   "pvt_slowest10_inv_rt": 2.816901408450704,
+   "pvt_fastest10_rt_ms": 100.0,
+   "pvt_lapses": 1,
+   "pvt_false_starts": 1,
+   "pvt_score": 66.66666666666666
+  },
+  "quality": "low",
+  "status": "complete",
+  "n_trials": 6
+ }
+}

@@ -63,6 +63,8 @@ MOTHER_DAILY = [
      "NASA-STD-3001: meet 100% of calculated energy needs."),
 ]
 MOTHER_WEEKLY = [
+    ("weekly_pvt", "3-minute reaction test (PVT) in the cognitive tests module", "behavioral", ["reaction_time_ms"],
+     "In-app PVT-B (Basner 2011); compared with your own baseline. A performance indicator, not a diagnosis."),
     ("weekly_body_mass", "Weekly body mass (SLAMMD)", "nutrition", ["body_mass_kg"],
      "Team assumption: in-flight weighing cadence is not public (see not_confirmed)."),
 ]
@@ -84,6 +86,11 @@ SYNDROME_TASKS = {
     "syndrome.energy_deficit": ("Log every meal for the next 7 days", "nutrition", timedelta(hours=12)),
     "syndrome.radiation_event": ("Go to storm shelter; confirm EVA postponed", "radiation", timedelta(minutes=0)),
     "syndrome.hypoxia_source": ("Re-measure SpO2 and check cabin O2", "environment", timedelta(minutes=5)),
+}
+# extra confirming measurement asked next to the main task: a quick PVT objectively checks the behavioural-strain signal
+SYNDROME_EXTRA_TASKS = {
+    "syndrome.behavioral_strain": ("Take a 3-minute reaction test (PVT) within 2 h", "behavioral", timedelta(hours=2),
+                                   ["reaction_time_ms"]),
 }
 
 
@@ -142,4 +149,11 @@ def follow_up_tasks(repo, a: Astronaut, findings: list[Finding], now: datetime) 
             title, cat, delay = SYNDROME_TASKS[f.rule_id]
             tasks.append(Task(a.id, f"follow_up:{f.rule_id}:{f.id}", title, f.ts + delay, "follow_up", cat,
                               priority=f.status, reason=f.title, points=30, sources=f.sources))
+            extra = SYNDROME_EXTRA_TASKS.get(f.rule_id)
+            if extra:
+                etitle, ecat, edelay, ecomp = extra
+                tasks.append(Task(a.id, f"follow_up:{f.rule_id}:pvt:{f.id}", etitle, f.ts + edelay, "follow_up", ecat,
+                                  priority=f.status, reason=f"Objective check: {f.title}", points=20, sources=f.sources,
+                                  completes_with=ecomp,
+                                  done=bool(repo.series(a.id, ecomp[0], start=f.ts + timedelta(seconds=1), end=now))))
     return sorted(tasks, key=lambda t: (-t.priority.severity, t.due))

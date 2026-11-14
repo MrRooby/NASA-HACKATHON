@@ -1,0 +1,20 @@
+{
+ "name": "dsst_empty",
+ "test_id": "dsst",
+ "duration_s": 90,
+ "note": "no answers -> invalid, accuracy null",
+ "trials": [],
+ "expected": {
+  "metrics": {
+   "dsst_correct": 0,
+   "dsst_errors": 0,
+   "dsst_attempts": 0,
+   "dsst_throughput_per_min": 0.0,
+   "dsst_accuracy": null,
+   "dsst_median_rt_correct_ms": null
+  },
+  "quality": "ok",
+  "status": "invalid",
+  "n_trials": 0
+ }
+}

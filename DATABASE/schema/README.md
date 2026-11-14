@@ -15,14 +15,15 @@ Wersja schematu i kontraktu **0.2** (2026-11-14). Co się zmieniło: sekcja „H
 | [`007_mars_crew_link.sql`](007_mars_crew_link.sql) | Powiązanie załogi habitatu z osobami misji Mars i widoki dawka–krew / nawodnienie–nerki | baza, backend |
 | [`008_wearables_core.sql`](008_wearables_core.sql), [`009_wearables_api_views.sql`](009_wearables_api_views.sql) | Urządzenia, próbki, agregaty i widoki opasek oraz snu | wearables, backend |
 | [`010_medical_core.sql`](010_medical_core.sql), [`011_medical_api_views.sql`](011_medical_api_views.sql) | Zdarzenia medyczne, załączniki, opinie, transmisje i eskalacje | medyczny, backend |
-| [`012_users_extra.sql`](012_users_extra.sql) | Uprawnienia ETL i administratora do nowych baz modułowych | wdrożenie |
-| [`003_users.sh`](003_users.sh) | Użytkownicy `astro_etl` (zapis) i `astro_reader` (odczyt); hasła ze zmiennych środowiskowych | wdrożenie |
+| [`012_users_extra.sql`](012_users_extra.sql) | Uprawnienia wymagające istniejących tabel: ETL i administrator dla baz modułowych, zapis `habitat_writer` do tabel habitatu, odczyt `astro_reader` dla tabel czytanych bezpośrednio przez MOTHER. Idempotentny: można go uruchomić ręcznie na działającej bazie | wdrożenie |
+| [`013_cognitive_core.sql`](013_cognitive_core.sql), [`014_cognitive_api_views.sql`](014_cognitive_api_views.sql), [`015_users_cognitive.sh`](015_users_cognitive.sh), [`016_cognitive_seed.sql`](016_cognitive_seed.sql) | Testy kognitywne (PVT-B, Go/No-Go, DSST): baza `astro_cognitive`, widoki `cognitive_*`, użytkownik `cognitive_writer`, seed wskaźników (opis: [`COGNITIVE.md`](COGNITIVE.md)) | MOTHER, GUI, baza |
+| [`003_users.sh`](003_users.sh) | Użytkownicy `astro_etl` (zapis), `astro_reader` (odczyt), `admin`, `habitat_writer`; hasła ze zmiennych środowiskowych. Tylko uprawnienia na poziomie bazy (`db.*`): uprawnienia do pojedynczych tabel są w `012`, bo tabele modułów powstają później | wdrożenie |
 | [`../mariadb.cnf`](../mariadb.cnf) | Ustawienia serwera, na których polega kontrakt (UTC, `group_concat_max_len`) | wdrożenie |
 | [`../.env.example`](../.env.example) | Wzór pliku `.env` z hasłami i danymi połączenia | backend, wdrożenie |
 
 ## Najważniejsze zasady
 
-1. **Backend czyta wyłącznie z bazy `astro_api`** jako użytkownik `astro_reader`, który ma tylko `SELECT` na widokach. Do `astro_core` nie ma dostępu i nie powinien go mieć: tabele mogą się zmieniać, a kontrakt widoków zostaje.
+1. **Backend czyta przede wszystkim z bazy `astro_api`** jako użytkownik `astro_reader`. Ma `SELECT` na widokach oraz **tylko do odczytu** na kilku tabelach, które MOTHER czyta bezpośrednio (`astro_core`: subject, mission, indicator, body_system, env_observation; `astro_habitat`: habitat, crew, reading; `astro_wearables`: device, device_state, sample_minute, sleep_session; lista w `012_users_extra.sql`). Nie ma zapisu, nie widzi `astro_core.observation` (tylko przez widoki) ani `astro_medical`. Nowe zapytanie MOTHER do tabeli spoza `astro_api` wymaga wpisu w `012`; pilnuje tego test `test_reader_can_read_every_table_mother_queries`.
 2. **Backend niczego nie zapisuje** w wersji 0.1. Dane trafiają do bazy tylko przez import (pliki CSV). Zapis danych z aplikacji (check-iny, wearables) to otwarta decyzja (patrz niżej).
 3. **Każda odpowiedź API musi przenosić `data_kind` / `is_synthetic`.** UI musi odróżniać dane z lotu, bed rest (analog naziemny) i dane symulacyjne.
 4. **Dane są pseudonimowe.** Nie łączymy kodów osób z prawdziwymi nazwiskami i nie dodajemy żadnych danych osobowych.
@@ -34,7 +35,7 @@ Wersja schematu i kontraktu **0.2** (2026-11-14). Co się zmieniło: sekcja „H
 | `DB_HOST` | `127.0.0.1` | |
 | `DB_PORT` | `3306` | |
 | `DB_NAME` | `astro_api` | |
-| `DB_USER` | `astro_reader` | tylko `SELECT` na `astro_api.*` |
+| `DB_USER` | `astro_reader` | tylko `SELECT`: `astro_api.*` + tabele z `012_users_extra.sql` |
 | `DB_PASSWORD` | z `DATABASE/.env` | plik poza gitem |
 
 Ustawienia serwera, na których polega kontrakt, są w [`../mariadb.cnf`](../mariadb.cnf): `default-time-zone = '+00:00'` (wszystkie czasy w UTC) oraz `group_concat_max_len = 65536` (kolumny z listami nie będą obcinane).

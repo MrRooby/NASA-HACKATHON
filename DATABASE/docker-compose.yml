@@ -16,6 +16,7 @@ services:
       ASTRO_READER_PASSWORD: ${ASTRO_READER_PASSWORD:?ustaw w .env}
       ASTRO_ADMIN_PASSWORD: ${ASTRO_ADMIN_PASSWORD:-admin}
       HABITAT_WRITER_PASSWORD: ${HABITAT_WRITER_PASSWORD:?ustaw w .env}
+      COGNITIVE_WRITER_PASSWORD: ${COGNITIVE_WRITER_PASSWORD:?ustaw w .env}
     ports:
       - "${DB_BIND_IP:-127.0.0.1}:${DB_PORT:-3306}:3306"
     volumes:
@@ -33,6 +34,10 @@ services:
       - ./schema/010_medical_core.sql:/docker-entrypoint-initdb.d/010_medical_core.sql:ro
       - ./schema/011_medical_api_views.sql:/docker-entrypoint-initdb.d/011_medical_api_views.sql:ro
       - ./schema/012_users_extra.sql:/docker-entrypoint-initdb.d/012_users_extra.sql:ro
+      - ./schema/013_cognitive_core.sql:/docker-entrypoint-initdb.d/013_cognitive_core.sql:ro
+      - ./schema/014_cognitive_api_views.sql:/docker-entrypoint-initdb.d/014_cognitive_api_views.sql:ro
+      - ./schema/015_users_cognitive.sh:/docker-entrypoint-initdb.d/015_users_cognitive.sh:ro
+      - ./schema/016_cognitive_seed.sql:/docker-entrypoint-initdb.d/016_cognitive_seed.sql:ro
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s

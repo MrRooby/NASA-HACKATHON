@@ -1,0 +1,66 @@
+{
+ "name": "pvt_practice_timeout_invalid",
+ "test_id": "pvt",
+ "duration_s": null,
+ "note": "practice and invalid trials ignored; timeout counts as lapse but not in RT",
+ "trials": [
+  {
+   "idx": 0,
+   "is_practice": true,
+   "valid": true,
+   "event_type": "response",
+   "rt_ms": 240
+  },
+  {
+   "idx": 1,
+   "is_practice": false,
+   "valid": true,
+   "event_type": "lapse",
+   "rt_ms": 30000,
+   "timeout": true
+  },
+  {
+   "idx": 2,
+   "is_practice": false,
+   "valid": true,
+   "event_type": "response",
+   "rt_ms": 260
+  },
+  {
+   "idx": 3,
+   "is_practice": false,
+   "valid": false,
+   "event_type": "response",
+   "rt_ms": 280
+  },
+  {
+   "idx": 4,
+   "is_practice": false,
+   "valid": true,
+   "event_type": "false_start",
+   "rt_ms": null
+  },
+  {
+   "idx": 5,
+   "is_practice": false,
+   "valid": true,
+   "event_type": "response",
+   "rt_ms": 270
+  }
+ ],
+ "expected": {
+  "metrics": {
+   "pvt_median_rt_ms": 265.0,
+   "pvt_mean_rt_ms": 265.0,
+   "pvt_mean_inv_rt": 3.774928774928775,
+   "pvt_slowest10_inv_rt": 3.7037037037037037,
+   "pvt_fastest10_rt_ms": 260.0,
+   "pvt_lapses": 1,
+   "pvt_false_starts": 1,
+   "pvt_score": 50.0
+  },
+  "quality": "low",
+  "status": "complete",
+  "n_trials": 4
+ }
+}

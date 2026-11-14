@@ -91,6 +91,33 @@ topBar.text = card.top_message;
 
 ---
 
+# Testy poznawcze: `/api/cognitive/*` (kontrakt v1.2)
+
+Pełna specyfikacja: `config/cognitive/CONTRACT.md`. Wynik to **wskaźnik wydajności względem własnego baseline'u, nie diagnoza** (stały `disclaimer` w odpowiedzi). Wszystkie odpowiedzi mają `Cache-Control: no-store`, a `NaN` jest zamieniane na `null`.
+
+| Adres | Opis | Kody |
+|---|---|---|
+| `GET /api/cognitive/protocols` | tabela protokołów (parametry, wersje, reguły statusów); GUI trzyma też kopię offline | 200 |
+| `GET /api/cognitive/{subject}` | raport: zawsze 3 testy w kolejności `pvt`, `gonogo`, `dsst` | 200, 404 nieznana osoba, 503 baza |
+| `POST /api/cognitive/sessions` | zapis jednej sesji (nagłówek `X-Requested-With: awernasa`, body do 1 MB) | 201 nowa, 200 ten sam `client_session_uuid`, 403, 413, 404, 422, 503 |
+
+Raport (`GET`): `{schema_version: "cog-1.0", subject, disclaimer, tests: [{test_id, label, status: ok|caution|alert|no_data, headline, baseline: {n, needed, ready}, latest: {session_id, started_at, session_no, quality, metrics, z, pct_change} | null, trend: [{started_at, value}] (ostatnie 12), next: {session_no, stimulus_set}}], composite_z}`.
+
+Zasady statusów (najgorsza reguła wygrywa; `no_data` i „Building your baseline (n/3).” do 3 sesji):
+
+| Test | Reguła | ok | caution | alert |
+|---|---|---|---|---|
+| PVT | % zmiany mediany RT vs baseline | <10 | 10–20 | ≥20 |
+| PVT | `pvt_lapses` | 0–2 | 3–5 | ≥6 |
+| Go/No-Go | `gonogo_commission_rate` | <0,15 | 0,15–0,30 | ≥0,30 |
+| DSST | z wydajności `dsst_throughput_per_min` | ≥ −1 | (−2, −1) | ≤ −2 |
+
+Baseline: pierwsze 3–5 sesji `is_practice=0`, `complete`, `quality=ok`, ten sam `device_class`. Pierwsza sesja osoby w danym teście jest zawsze treningowa (serwer wymusza `is_practice=1`). `composite_z` to średnia z z trzech testów, `null` dopóki wszystkie trzy nie mają baseline'u.
+
+`POST`: serwer sam liczy metryki z prób (`cognitive_scoring`), a metryki klienta tylko porównuje (rozbieżność >1% zapisuje jako zdarzenie `scoring_mismatch`). Walidacja 422: nieznany `test_id` / `protocol_version`, `event_type` spoza testu, `rt_ms` poza 0–30000, zdublowane `idx`, >400 prób, >500 zdarzeń, `started_at` >5 min w przyszłości lub >30 dni wstecz, skale kontekstu poza zakresem, `duration_s` poza zakresem (PVT 150–240, DSST 85–95). 404: nieznana osoba albo brak udziału w misji. 503: brak `COGNITIVE_DB_USER`/`PASSWORD` albo baza niedostępna (pole `hint`). Odpowiedź: `{session_id, client_session_uuid, duplicate, test_id, status, quality, is_practice, metrics, scoring_version}`.
+
+Wpływ na karty narządów: karta `brain` dostaje (gdy baza ma dane) sprawdzenia: czas reakcji vs własny baseline, `pvt_lapses`, błędne reakcje Go/No-Go, szybkość DSST. Kontrakt kart się nie zmienia (nadal maks. 3 liczby na kartę).
+
 # MOTHER → UI: habitat (kontrakt 1.0)
 
 `GET /api/habitat` zwraca wszystkie strefy habitatu z pomiarami z jednego sola. Opcjonalnie `?sol=142`; bez parametru jest to ostatni sol z danymi.
