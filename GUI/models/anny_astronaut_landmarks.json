@@ -1,0 +1,1059 @@
+{
+  "version": 1,
+  "topology": "anny",
+  "rig": "anny",
+  "coordinateSystem": {
+    "units": "model_units",
+    "source": "Anny rest_bone_heads"
+  },
+  "phenotype": {
+    "gender": 0.5,
+    "age": 0.5,
+    "muscle": 0.5,
+    "weight": 0.5,
+    "height": 0.5,
+    "proportions": 0.5
+  },
+  "points": {
+    "root": {
+      "boneIndex": 0,
+      "parentIndex": -1,
+      "region": "pelvis",
+      "position": [
+        -3.3881378474689535e-21,
+        -0.010822915472090244,
+        0.05041417479515076
+      ]
+    },
+    "pelvis.L": {
+      "boneIndex": 1,
+      "parentIndex": 0,
+      "region": "pelvis",
+      "position": [
+        -3.3881378474689535e-21,
+        -0.010822915472090244,
+        0.05041417479515076
+      ]
+    },
+    "upperleg01.L": {
+      "boneIndex": 2,
+      "parentIndex": 1,
+      "region": "left_thigh",
+      "position": [
+        0.10194208472967148,
+        -0.00793041568249464,
+        0.038940005004405975
+      ]
+    },
+    "upperleg02.L": {
+      "boneIndex": 3,
+      "parentIndex": 2,
+      "region": "left_thigh",
+      "position": [
+        0.1004912480711937,
+        -0.03225916251540184,
+        -0.05423250049352646
+      ]
+    },
+    "lowerleg01.L": {
+      "boneIndex": 4,
+      "parentIndex": 3,
+      "region": "left_lower_leg",
+      "position": [
+        0.13506396114826202,
+        -0.04017812758684158,
+        -0.35006165504455566
+      ]
+    },
+    "lowerleg02.L": {
+      "boneIndex": 5,
+      "parentIndex": 4,
+      "region": "left_lower_leg",
+      "position": [
+        0.15548250079154968,
+        -0.02261499874293804,
+        -0.551232099533081
+      ]
+    },
+    "foot.L": {
+      "boneIndex": 6,
+      "parentIndex": 5,
+      "region": "left_foot",
+      "position": [
+        0.17662417888641357,
+        -0.003872291650623083,
+        -0.7485818862915039
+      ]
+    },
+    "toe1-1.L": {
+      "boneIndex": 7,
+      "parentIndex": 6,
+      "region": "left_foot",
+      "position": [
+        0.14942499995231628,
+        -0.14036352932453156,
+        -0.7911706566810608
+      ]
+    },
+    "toe1-2.L": {
+      "boneIndex": 8,
+      "parentIndex": 7,
+      "region": "left_foot",
+      "position": [
+        0.15164104104042053,
+        -0.16570019721984863,
+        -0.7974002361297607
+      ]
+    },
+    "toe2-1.L": {
+      "boneIndex": 9,
+      "parentIndex": 6,
+      "region": "left_foot",
+      "position": [
+        0.1734079122543335,
+        -0.142554372549057,
+        -0.7938691973686218
+      ]
+    },
+    "toe2-2.L": {
+      "boneIndex": 10,
+      "parentIndex": 9,
+      "region": "left_foot",
+      "position": [
+        0.17504771053791046,
+        -0.16349291801452637,
+        -0.7968277335166931
+      ]
+    },
+    "toe2-3.L": {
+      "boneIndex": 11,
+      "parentIndex": 10,
+      "region": "left_foot",
+      "position": [
+        0.17557582259178162,
+        -0.17672665417194366,
+        -0.8009569048881531
+      ]
+    },
+    "toe3-1.L": {
+      "boneIndex": 12,
+      "parentIndex": 6,
+      "region": "left_foot",
+      "position": [
+        0.19029228389263153,
+        -0.13967479765415192,
+        -0.7956437468528748
+      ]
+    },
+    "toe3-2.L": {
+      "boneIndex": 13,
+      "parentIndex": 12,
+      "region": "left_foot",
+      "position": [
+        0.19149979948997498,
+        -0.15854479372501373,
+        -0.7980353832244873
+      ]
+    },
+    "toe3-3.L": {
+      "boneIndex": 14,
+      "parentIndex": 13,
+      "region": "left_foot",
+      "position": [
+        0.19156751036643982,
+        -0.1711016744375229,
+        -0.8019989728927612
+      ]
+    },
+    "toe4-1.L": {
+      "boneIndex": 15,
+      "parentIndex": 6,
+      "region": "left_foot",
+      "position": [
+        0.20585709810256958,
+        -0.13204416632652283,
+        -0.7960876822471619
+      ]
+    },
+    "toe4-2.L": {
+      "boneIndex": 16,
+      "parentIndex": 15,
+      "region": "left_foot",
+      "position": [
+        0.20710209012031555,
+        -0.14744874835014343,
+        -0.7986626625061035
+      ]
+    },
+    "toe4-3.L": {
+      "boneIndex": 17,
+      "parentIndex": 16,
+      "region": "left_foot",
+      "position": [
+        0.206431046128273,
+        -0.1593504101037979,
+        -0.8015166521072388
+      ]
+    },
+    "toe5-1.L": {
+      "boneIndex": 18,
+      "parentIndex": 6,
+      "region": "left_foot",
+      "position": [
+        0.22036081552505493,
+        -0.12583020329475403,
+        -0.7960494160652161
+      ]
+    },
+    "toe5-2.L": {
+      "boneIndex": 19,
+      "parentIndex": 18,
+      "region": "left_foot",
+      "position": [
+        0.22067877650260925,
+        -0.13651083409786224,
+        -0.7985222935676575
+      ]
+    },
+    "toe5-3.L": {
+      "boneIndex": 20,
+      "parentIndex": 19,
+      "region": "left_foot",
+      "position": [
+        0.21958708763122559,
+        -0.14488396048545837,
+        -0.8016766309738159
+      ]
+    },
+    "pelvis.R": {
+      "boneIndex": 21,
+      "parentIndex": 0,
+      "region": "pelvis",
+      "position": [
+        -3.3881378474689535e-21,
+        -0.010822915472090244,
+        0.05041417479515076
+      ]
+    },
+    "upperleg01.R": {
+      "boneIndex": 22,
+      "parentIndex": 21,
+      "region": "right_thigh",
+      "position": [
+        -0.10194208472967148,
+        -0.00793041568249464,
+        0.038940005004405975
+      ]
+    },
+    "upperleg02.R": {
+      "boneIndex": 23,
+      "parentIndex": 22,
+      "region": "right_thigh",
+      "position": [
+        -0.1004912480711937,
+        -0.03225916251540184,
+        -0.05423250049352646
+      ]
+    },
+    "lowerleg01.R": {
+      "boneIndex": 24,
+      "parentIndex": 23,
+      "region": "right_lower_leg",
+      "position": [
+        -0.13506396114826202,
+        -0.04017812758684158,
+        -0.35006165504455566
+      ]
+    },
+    "lowerleg02.R": {
+      "boneIndex": 25,
+      "parentIndex": 24,
+      "region": "right_lower_leg",
+      "position": [
+        -0.15548250079154968,
+        -0.02261499874293804,
+        -0.551232099533081
+      ]
+    },
+    "foot.R": {
+      "boneIndex": 26,
+      "parentIndex": 25,
+      "region": "right_foot",
+      "position": [
+        -0.17662417888641357,
+        -0.003872291650623083,
+        -0.7485818862915039
+      ]
+    },
+    "toe1-1.R": {
+      "boneIndex": 27,
+      "parentIndex": 26,
+      "region": "right_foot",
+      "position": [
+        -0.14942499995231628,
+        -0.14036352932453156,
+        -0.7911706566810608
+      ]
+    },
+    "toe1-2.R": {
+      "boneIndex": 28,
+      "parentIndex": 27,
+      "region": "right_foot",
+      "position": [
+        -0.15164104104042053,
+        -0.16570019721984863,
+        -0.7974002361297607
+      ]
+    },
+    "toe2-1.R": {
+      "boneIndex": 29,
+      "parentIndex": 26,
+      "region": "right_foot",
+      "position": [
+        -0.1734079122543335,
+        -0.142554372549057,
+        -0.7938691973686218
+      ]
+    },
+    "toe2-2.R": {
+      "boneIndex": 30,
+      "parentIndex": 29,
+      "region": "right_foot",
+      "position": [
+        -0.17504771053791046,
+        -0.16349291801452637,
+        -0.7968277335166931
+      ]
+    },
+    "toe2-3.R": {
+      "boneIndex": 31,
+      "parentIndex": 30,
+      "region": "right_foot",
+      "position": [
+        -0.17557582259178162,
+        -0.17672665417194366,
+        -0.8009569048881531
+      ]
+    },
+    "toe3-1.R": {
+      "boneIndex": 32,
+      "parentIndex": 26,
+      "region": "right_foot",
+      "position": [
+        -0.19029228389263153,
+        -0.13967479765415192,
+        -0.7956437468528748
+      ]
+    },
+    "toe3-2.R": {
+      "boneIndex": 33,
+      "parentIndex": 32,
+      "region": "right_foot",
+      "position": [
+        -0.19149979948997498,
+        -0.15854479372501373,
+        -0.7980353832244873
+      ]
+    },
+    "toe3-3.R": {
+      "boneIndex": 34,
+      "parentIndex": 33,
+      "region": "right_foot",
+      "position": [
+        -0.19156751036643982,
+        -0.1711016744375229,
+        -0.8019989728927612
+      ]
+    },
+    "toe4-1.R": {
+      "boneIndex": 35,
+      "parentIndex": 26,
+      "region": "right_foot",
+      "position": [
+        -0.20585709810256958,
+        -0.13204416632652283,
+        -0.7960876822471619
+      ]
+    },
+    "toe4-2.R": {
+      "boneIndex": 36,
+      "parentIndex": 35,
+      "region": "right_foot",
+      "position": [
+        -0.20710209012031555,
+        -0.14744874835014343,
+        -0.7986626625061035
+      ]
+    },
+    "toe4-3.R": {
+      "boneIndex": 37,
+      "parentIndex": 36,
+      "region": "right_foot",
+      "position": [
+        -0.206431046128273,
+        -0.1593504101037979,
+        -0.8015166521072388
+      ]
+    },
+    "toe5-1.R": {
+      "boneIndex": 38,
+      "parentIndex": 26,
+      "region": "right_foot",
+      "position": [
+        -0.22036081552505493,
+        -0.12583020329475403,
+        -0.7960494160652161
+      ]
+    },
+    "toe5-2.R": {
+      "boneIndex": 39,
+      "parentIndex": 38,
+      "region": "right_foot",
+      "position": [
+        -0.22067877650260925,
+        -0.13651083409786224,
+        -0.7985222935676575
+      ]
+    },
+    "toe5-3.R": {
+      "boneIndex": 40,
+      "parentIndex": 39,
+      "region": "right_foot",
+      "position": [
+        -0.21958708763122559,
+        -0.14488396048545837,
+        -0.8016766309738159
+      ]
+    },
+    "spine05": {
+      "boneIndex": 41,
+      "parentIndex": 0,
+      "region": "chest",
+      "position": [
+        -3.3881378474689535e-21,
+        -0.010822915472090244,
+        0.05041417479515076
+      ]
+    },
+    "spine04": {
+      "boneIndex": 42,
+      "parentIndex": 41,
+      "region": "chest",
+      "position": [
+        -1.4964248196296928e-20,
+        0.02226666547358036,
+        0.11775791645050049
+      ]
+    },
+    "spine03": {
+      "boneIndex": 43,
+      "parentIndex": 42,
+      "region": "chest",
+      "position": [
+        -1.6933507924431445e-27,
+        0.009830405004322529,
+        0.1861608326435089
+      ]
+    },
+    "spine02": {
+      "boneIndex": 44,
+      "parentIndex": 43,
+      "region": "abdomen",
+      "position": [
+        -1.2423149354534027e-20,
+        0.007632073014974594,
+        0.2611587345600128
+      ]
+    },
+    "spine01": {
+      "boneIndex": 45,
+      "parentIndex": 44,
+      "region": "abdomen",
+      "position": [
+        9.035023220071794e-21,
+        0.03192291781306267,
+        0.3938550055027008
+      ]
+    },
+    "clavicle.L": {
+      "boneIndex": 46,
+      "parentIndex": 45,
+      "region": "left_upper_arm",
+      "position": [
+        0.021996665745973587,
+        -0.02555834874510765,
+        0.4929620921611786
+      ]
+    },
+    "shoulder01.L": {
+      "boneIndex": 47,
+      "parentIndex": 46,
+      "region": "left_upper_arm",
+      "position": [
+        0.10148447751998901,
+        -0.02741166204214096,
+        0.5106346011161804
+      ]
+    },
+    "upperarm01.L": {
+      "boneIndex": 48,
+      "parentIndex": 47,
+      "region": "left_upper_arm",
+      "position": [
+        0.1615796834230423,
+        -0.01712583191692829,
+        0.4674888551235199
+      ]
+    },
+    "upperarm02.L": {
+      "boneIndex": 49,
+      "parentIndex": 48,
+      "region": "left_upper_arm",
+      "position": [
+        0.21351125836372375,
+        -0.01835249923169613,
+        0.41153374314308167
+      ]
+    },
+    "lowerarm01.L": {
+      "boneIndex": 50,
+      "parentIndex": 49,
+      "region": "left_forearm",
+      "position": [
+        0.32946959137916565,
+        -0.021215828135609627,
+        0.27890413999557495
+      ]
+    },
+    "lowerarm02.L": {
+      "boneIndex": 51,
+      "parentIndex": 50,
+      "region": "left_forearm",
+      "position": [
+        0.385518342256546,
+        -0.09919041395187378,
+        0.22330999374389648
+      ]
+    },
+    "wrist.L": {
+      "boneIndex": 52,
+      "parentIndex": 51,
+      "region": "left_hand",
+      "position": [
+        0.4456329345703125,
+        -0.1788175106048584,
+        0.16376562416553497
+      ]
+    },
+    "finger1-1.L": {
+      "boneIndex": 53,
+      "parentIndex": 52,
+      "region": "left_hand",
+      "position": [
+        0.4468960464000702,
+        -0.22270749509334564,
+        0.1568506360054016
+      ]
+    },
+    "finger1-2.L": {
+      "boneIndex": 54,
+      "parentIndex": 53,
+      "region": "left_hand",
+      "position": [
+        0.42643043398857117,
+        -0.24343353509902954,
+        0.14875730872154236
+      ]
+    },
+    "finger1-3.L": {
+      "boneIndex": 55,
+      "parentIndex": 54,
+      "region": "left_hand",
+      "position": [
+        0.41435977816581726,
+        -0.274346262216568,
+        0.13560143113136292
+      ]
+    },
+    "metacarpal1.L": {
+      "boneIndex": 56,
+      "parentIndex": 52,
+      "region": "left_hand",
+      "position": [
+        0.45629727840423584,
+        -0.2054683268070221,
+        0.1484687626361847
+      ]
+    },
+    "finger2-1.L": {
+      "boneIndex": 57,
+      "parentIndex": 56,
+      "region": "left_hand",
+      "position": [
+        0.4725266695022583,
+        -0.27280792593955994,
+        0.1254620999097824
+      ]
+    },
+    "finger2-2.L": {
+      "boneIndex": 58,
+      "parentIndex": 57,
+      "region": "left_hand",
+      "position": [
+        0.4758910536766052,
+        -0.2935631275177002,
+        0.11127209663391113
+      ]
+    },
+    "finger2-3.L": {
+      "boneIndex": 59,
+      "parentIndex": 58,
+      "region": "left_hand",
+      "position": [
+        0.4754470884799957,
+        -0.3100714385509491,
+        0.09568583220243454
+      ]
+    },
+    "metacarpal2.L": {
+      "boneIndex": 60,
+      "parentIndex": 52,
+      "region": "left_hand",
+      "position": [
+        0.45629727840423584,
+        -0.2054683268070221,
+        0.1484687626361847
+      ]
+    },
+    "finger3-1.L": {
+      "boneIndex": 61,
+      "parentIndex": 60,
+      "region": "left_hand",
+      "position": [
+        0.4880789518356323,
+        -0.25565582513809204,
+        0.11404832452535629
+      ]
+    },
+    "finger3-2.L": {
+      "boneIndex": 62,
+      "parentIndex": 61,
+      "region": "left_hand",
+      "position": [
+        0.49561062455177307,
+        -0.2764141857624054,
+        0.08945976942777634
+      ]
+    },
+    "finger3-3.L": {
+      "boneIndex": 63,
+      "parentIndex": 62,
+      "region": "left_hand",
+      "position": [
+        0.49826645851135254,
+        -0.2936376929283142,
+        0.0688851848244667
+      ]
+    },
+    "metacarpal3.L": {
+      "boneIndex": 64,
+      "parentIndex": 52,
+      "region": "left_hand",
+      "position": [
+        0.4677216708660126,
+        -0.19563791155815125,
+        0.1332952380180359
+      ]
+    },
+    "finger4-1.L": {
+      "boneIndex": 65,
+      "parentIndex": 64,
+      "region": "left_hand",
+      "position": [
+        0.49563729763031006,
+        -0.2389233261346817,
+        0.10631437599658966
+      ]
+    },
+    "finger4-2.L": {
+      "boneIndex": 66,
+      "parentIndex": 65,
+      "region": "left_hand",
+      "position": [
+        0.5051652193069458,
+        -0.25342896580696106,
+        0.08290774375200272
+      ]
+    },
+    "finger4-3.L": {
+      "boneIndex": 67,
+      "parentIndex": 66,
+      "region": "left_hand",
+      "position": [
+        0.5093808174133301,
+        -0.26628008484840393,
+        0.06269480288028717
+      ]
+    },
+    "metacarpal4.L": {
+      "boneIndex": 68,
+      "parentIndex": 52,
+      "region": "left_hand",
+      "position": [
+        0.4677216708660126,
+        -0.19563791155815125,
+        0.1332952380180359
+      ]
+    },
+    "finger5-1.L": {
+      "boneIndex": 69,
+      "parentIndex": 68,
+      "region": "left_hand",
+      "position": [
+        0.49744728207588196,
+        -0.2200995832681656,
+        0.09762152284383774
+      ]
+    },
+    "finger5-2.L": {
+      "boneIndex": 70,
+      "parentIndex": 69,
+      "region": "left_hand",
+      "position": [
+        0.5035079121589661,
+        -0.22815249860286713,
+        0.07916226983070374
+      ]
+    },
+    "finger5-3.L": {
+      "boneIndex": 71,
+      "parentIndex": 70,
+      "region": "left_hand",
+      "position": [
+        0.5051787495613098,
+        -0.2340470850467682,
+        0.06525374948978424
+      ]
+    },
+    "clavicle.R": {
+      "boneIndex": 72,
+      "parentIndex": 45,
+      "region": "right_upper_arm",
+      "position": [
+        -0.021996665745973587,
+        -0.02555834874510765,
+        0.4929620921611786
+      ]
+    },
+    "shoulder01.R": {
+      "boneIndex": 73,
+      "parentIndex": 72,
+      "region": "right_upper_arm",
+      "position": [
+        -0.10148447751998901,
+        -0.02741166204214096,
+        0.5106346011161804
+      ]
+    },
+    "upperarm01.R": {
+      "boneIndex": 74,
+      "parentIndex": 73,
+      "region": "right_upper_arm",
+      "position": [
+        -0.1615796834230423,
+        -0.01712583191692829,
+        0.4674888551235199
+      ]
+    },
+    "upperarm02.R": {
+      "boneIndex": 75,
+      "parentIndex": 74,
+      "region": "right_upper_arm",
+      "position": [
+        -0.21351125836372375,
+        -0.01835249923169613,
+        0.41153374314308167
+      ]
+    },
+    "lowerarm01.R": {
+      "boneIndex": 76,
+      "parentIndex": 75,
+      "region": "right_forearm",
+      "position": [
+        -0.32946959137916565,
+        -0.021215829998254776,
+        0.27890416979789734
+      ]
+    },
+    "lowerarm02.R": {
+      "boneIndex": 77,
+      "parentIndex": 76,
+      "region": "right_forearm",
+      "position": [
+        -0.385518342256546,
+        -0.09919041395187378,
+        0.22331002354621887
+      ]
+    },
+    "wrist.R": {
+      "boneIndex": 78,
+      "parentIndex": 77,
+      "region": "right_hand",
+      "position": [
+        -0.4456329345703125,
+        -0.1788175106048584,
+        0.16376562416553497
+      ]
+    },
+    "finger1-1.R": {
+      "boneIndex": 79,
+      "parentIndex": 78,
+      "region": "right_hand",
+      "position": [
+        -0.4468960464000702,
+        -0.22270749509334564,
+        0.1568506360054016
+      ]
+    },
+    "finger1-2.R": {
+      "boneIndex": 80,
+      "parentIndex": 79,
+      "region": "right_hand",
+      "position": [
+        -0.42643043398857117,
+        -0.24343353509902954,
+        0.14875730872154236
+      ]
+    },
+    "finger1-3.R": {
+      "boneIndex": 81,
+      "parentIndex": 80,
+      "region": "right_hand",
+      "position": [
+        -0.41435977816581726,
+        -0.274346262216568,
+        0.13560143113136292
+      ]
+    },
+    "metacarpal1.R": {
+      "boneIndex": 82,
+      "parentIndex": 78,
+      "region": "right_hand",
+      "position": [
+        -0.45629727840423584,
+        -0.2054683268070221,
+        0.1484687626361847
+      ]
+    },
+    "finger2-1.R": {
+      "boneIndex": 83,
+      "parentIndex": 82,
+      "region": "right_hand",
+      "position": [
+        -0.4725266695022583,
+        -0.27280792593955994,
+        0.1254620999097824
+      ]
+    },
+    "finger2-2.R": {
+      "boneIndex": 84,
+      "parentIndex": 83,
+      "region": "right_hand",
+      "position": [
+        -0.4758910536766052,
+        -0.2935631275177002,
+        0.11127209663391113
+      ]
+    },
+    "finger2-3.R": {
+      "boneIndex": 85,
+      "parentIndex": 84,
+      "region": "right_hand",
+      "position": [
+        -0.4754470884799957,
+        -0.3100714385509491,
+        0.09568583220243454
+      ]
+    },
+    "metacarpal2.R": {
+      "boneIndex": 86,
+      "parentIndex": 78,
+      "region": "right_hand",
+      "position": [
+        -0.45629727840423584,
+        -0.2054683268070221,
+        0.1484687626361847
+      ]
+    },
+    "finger3-1.R": {
+      "boneIndex": 87,
+      "parentIndex": 86,
+      "region": "right_hand",
+      "position": [
+        -0.4880789518356323,
+        -0.25565582513809204,
+        0.11404832452535629
+      ]
+    },
+    "finger3-2.R": {
+      "boneIndex": 88,
+      "parentIndex": 87,
+      "region": "right_hand",
+      "position": [
+        -0.49561062455177307,
+        -0.2764141857624054,
+        0.08945976942777634
+      ]
+    },
+    "finger3-3.R": {
+      "boneIndex": 89,
+      "parentIndex": 88,
+      "region": "right_hand",
+      "position": [
+        -0.49826645851135254,
+        -0.2936376929283142,
+        0.0688851848244667
+      ]
+    },
+    "metacarpal3.R": {
+      "boneIndex": 90,
+      "parentIndex": 78,
+      "region": "right_hand",
+      "position": [
+        -0.4677216708660126,
+        -0.19563791155815125,
+        0.1332952380180359
+      ]
+    },
+    "finger4-1.R": {
+      "boneIndex": 91,
+      "parentIndex": 90,
+      "region": "right_hand",
+      "position": [
+        -0.49563729763031006,
+        -0.2389233261346817,
+        0.10631437599658966
+      ]
+    },
+    "finger4-2.R": {
+      "boneIndex": 92,
+      "parentIndex": 91,
+      "region": "right_hand",
+      "position": [
+        -0.5051652193069458,
+        -0.25342896580696106,
+        0.08290774375200272
+      ]
+    },
+    "finger4-3.R": {
+      "boneIndex": 93,
+      "parentIndex": 92,
+      "region": "right_hand",
+      "position": [
+        -0.5093808174133301,
+        -0.26628008484840393,
+        0.06269480288028717
+      ]
+    },
+    "metacarpal4.R": {
+      "boneIndex": 94,
+      "parentIndex": 78,
+      "region": "right_hand",
+      "position": [
+        -0.4677216708660126,
+        -0.19563791155815125,
+        0.1332952380180359
+      ]
+    },
+    "finger5-1.R": {
+      "boneIndex": 95,
+      "parentIndex": 94,
+      "region": "right_hand",
+      "position": [
+        -0.49744728207588196,
+        -0.2200995832681656,
+        0.09762152284383774
+      ]
+    },
+    "finger5-2.R": {
+      "boneIndex": 96,
+      "parentIndex": 95,
+      "region": "right_hand",
+      "position": [
+        -0.5035079121589661,
+        -0.22815249860286713,
+        0.07916226983070374
+      ]
+    },
+    "finger5-3.R": {
+      "boneIndex": 97,
+      "parentIndex": 96,
+      "region": "right_hand",
+      "position": [
+        -0.5051787495613098,
+        -0.2340470850467682,
+        0.06525374948978424
+      ]
+    },
+    "neck01": {
+      "boneIndex": 98,
+      "parentIndex": 45,
+      "region": "neck",
+      "position": [
+        4.799854444832458e-21,
+        -0.007515416014939547,
+        0.5596874952316284
+      ]
+    },
+    "neck02": {
+      "boneIndex": 99,
+      "parentIndex": 98,
+      "region": "neck",
+      "position": [
+        0.0001566666760481894,
+        -0.016376666724681854,
+        0.5888883471488953
+      ]
+    },
+    "neck03": {
+      "boneIndex": 100,
+      "parentIndex": 99,
+      "region": "neck",
+      "position": [
+        0.00030499990680254996,
+        -0.028209581971168518,
+        0.6278458833694458
+      ]
+    },
+    "head": {
+      "boneIndex": 101,
+      "parentIndex": 100,
+      "region": "head",
+      "position": [
+        -5.646886988189975e-22,
+        -0.041881248354911804,
+        0.6567366123199463
+      ]
+    },
+    "eye.L": {
+      "boneIndex": 102,
+      "parentIndex": 101,
+      "region": "head",
+      "position": [
+        0.029493749141693115,
+        -0.11922458559274673,
+        0.6967816948890686
+      ]
+    },
+    "eye.R": {
+      "boneIndex": 103,
+      "parentIndex": 101,
+      "region": "head",
+      "position": [
+        -0.029493749141693115,
+        -0.11922458559274673,
+        0.6967816948890686
+      ]
+    }
+  }
+}
