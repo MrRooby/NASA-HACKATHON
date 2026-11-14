@@ -1,4 +1,4 @@
-## Orbit Health Monitor
+## Awernasa
 
 Offline-first React/Vite boilerplate for the NASA Space Apps health-monitoring challenge. The interface is intentionally self-contained so the demo can run without a backend: it includes deterministic synthetic metrics, a daily check-in, threshold/status cards, trend views, mission protocols, and an asynchronous Flight Surgeon report state.
 

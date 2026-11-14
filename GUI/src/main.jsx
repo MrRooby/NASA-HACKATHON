@@ -182,89 +182,20 @@ function App() {
       {/* ── TOP TELEMETRY BAR ── */}
       <header className="topbar">
         <div className="topbar-brand">
-          <span className="brand-sig">ORBIT HEALTH</span>
+          <span className="brand-sig">AWERNASA</span>
           <span className="brand-ver">CREW WELLNESS</span>
         </div>
 
         <div className="topbar-fields">
-          <div className="tfield">
-            <span className="tfield-key">MISSION</span>
-            <select className="tfield-val tfield-select" value={mission} onChange={e => setMission(e.target.value)}>
-              <option value="ISS-EXP74">ISS-EXP74</option>
-              <option value="ARTEMIS-II">ARTEMIS-II</option>
-              <option value="MARS-DEMO">MARS-DEMO</option>
-            </select>
-          </div>
-          <div className="tfield">
-            <span className="tfield-key">CREW_ID</span>
-            <span className="tfield-val">JC-74</span>
-          </div>
-          <div className="tfield">
-            <span className="tfield-key">FD</span>
-            <span className="tfield-val">142</span>
-          </div>
-          <div className="tfield">
-            <span className="tfield-key">MET</span>
-            <span className="tfield-val tfield-clock"><MET now={now} /></span>
-          </div>
-          <div className="tfield">
-            <span className="tfield-key">UTC</span>
-            <span className="tfield-val tfield-clock">{now.toISOString().slice(11,19)}</span>
-          </div>
-          <div className="tfield">
-            <span className="tfield-key">SYS</span>
-            <span className={`tfield-val stag stag-${cauCount > 0 ? 'caution' : 'ok'}`}>
-              [{cauCount > 0 ? `${cauCount} CAU` : 'NOMINAL'}]
-            </span>
-          </div>
-          <div className="tfield">
-            <span className="tfield-key">LINK</span>
-            <span className="tfield-val link-local">● LOCAL</span>
-          </div>
+          <button className="topbar-tab topbar-tab-active" onClick={() => setActivePage('dashboard')}>Base</button>
+          <button className="topbar-tab">John Doe</button>
+          <span className="topbar-status"><span className="status-dot" /> Online</span>
         </div>
 
         <button className="topbar-logout" onClick={() => setAuthenticated(false)}>SIGN OUT</button>
       </header>
 
       <div className="layout">
-        {/* ── LEFT NAV ── */}
-        <nav className="sidenav">
-          <div className="sidenav-label">YOUR HEALTH</div>
-          {navItems.map(([id, label, code]) => (
-            <button
-              key={id}
-              className={`snav-btn${activePage === id ? ' active' : ''}`}
-              onClick={() => setActivePage(id)}
-            >
-              <span className="snav-code">{code}</span>
-              <span className="snav-label">{label}</span>
-              {id === 'dashboard' && cauCount > 0 && <span className="snav-badge">{cauCount}</span>}
-            </button>
-          ))}
-
-          <div className="sidenav-divider" />
-          <div className="sidenav-label">CREW</div>
-          <div className="crew-block">
-            <div className="crew-row"><span className="crew-key">ID</span><span className="crew-val">JC-74</span></div>
-            <div className="crew-row"><span className="crew-key">NAME</span><span className="crew-val">J. CZUBA</span></div>
-            <div className="crew-row"><span className="crew-key">ROLE</span><span className="crew-val">MS</span></div>
-            <div className="crew-row"><span className="crew-key">LAST LOG</span><span className="crew-val">09:15 UTC</span></div>
-          </div>
-
-          <div className="sidenav-divider" />
-          <div className="sidenav-label">AT A GLANCE</div>
-          <div className="status-matrix">
-            {protocols.map(s => (
-              <div key={s.id} className={`sm-row sm-${s.status}`}>
-                <span className="sm-led" />
-                <span className="sm-id">{s.id}</span>
-                <span className="sm-status">{STATUS[s.status]}</span>
-              </div>
-            ))}
-          </div>
-        </nav>
-
-        {/* ── MAIN ── */}
         <main className="main">
           {activePage === 'dashboard' && (
             <Dashboard
@@ -286,7 +217,7 @@ function App() {
 
       <footer className="sysbar">
         <span>Demo data · calibrated to NASA research</span>
-        <span>Orbit Health · NASA Space Apps 2026</span>
+        <span>Awernasa · NASA Space Apps 2026</span>
         <span>For demonstration only</span>
       </footer>
     </div>
@@ -307,7 +238,7 @@ function AuthScreen({ onComplete }) {
       <div className="auth-scanlines" aria-hidden />
 
       <header className="auth-topbar">
-        <span className="brand-sig">ORBIT HEALTH</span>
+        <span className="brand-sig">AWERNASA</span>
         <div className="auth-topbar-fields">
           <span>UTC {now.toISOString().slice(11,19)}</span>
           <span className="link-local">● OFFLINE MODE</span>
@@ -320,7 +251,7 @@ function AuthScreen({ onComplete }) {
         <div className="auth-info">
           <div className="auth-info-block">
             <div className="eyebrow">SYSTEM IDENTIFICATION</div>
-            <h1 className="auth-title-h1">ORBIT<br/>HEALTH<br/>MONITOR</h1>
+            <h1 className="auth-title-h1">AWER<br/>NASA</h1>
             <div className="auth-spec-table">
               <div className="spec-row"><span>DESIGNATION</span><span>CREW HEALTH OPS v0.1</span></div>
               <div className="spec-row"><span>PROGRAM</span><span>NASA SPACE APPS 2026</span></div>
@@ -338,7 +269,7 @@ function AuthScreen({ onComplete }) {
               <div className="orbit-track t2">
                 <div className="orbit-dot d2" />
               </div>
-              <div className="orbit-core">HM</div>
+              <div className="orbit-core">AN</div>
             </div>
             <div className="orbit-labels">
               <div className="ol-item">◈ SELF-ASSESS</div>
@@ -467,34 +398,145 @@ function HumanBody({ biometrics }) {
   );
 }
 
+function ConnectorOverlay({ stageRef, modelRef, anchors }) {
+  const [lines, setLines] = useState([]);
+
+  useEffect(() => {
+    if (!anchors || !stageRef.current || !modelRef.current) return undefined;
+    const update = () => {
+      const stage = stageRef.current.getBoundingClientRect();
+      const model = modelRef.current.getBoundingClientRect();
+      const definitions = [
+        ['sensor-left-arm', 'leftArm', 'right'],
+        ['sensor-right-arm', 'rightArm', 'left'],
+        ['sensor-left-leg', 'leftLeg', 'right'],
+        ['sensor-right-leg', 'rightLeg', 'left'],
+      ];
+      setLines(definitions.map(([cardClass, anchor, side]) => {
+        const card = stageRef.current.querySelector(`.${cardClass}`).getBoundingClientRect();
+        return {
+          x1: (side === 'right' ? card.right : card.left) - stage.left,
+          y1: card.top + card.height / 2 - stage.top,
+          x2: model.left + model.width * anchors[anchor].x - stage.left,
+          y2: model.top + model.height * anchors[anchor].y - stage.top,
+        };
+      }));
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(stageRef.current);
+    observer.observe(modelRef.current);
+    return () => observer.disconnect();
+  }, [anchors, modelRef, stageRef]);
+
+  return (
+    <svg className="body-connectors" aria-hidden="true">
+      {lines.map((line, index) => <line key={index} {...line} />)}
+    </svg>
+  );
+}
+
+function HealthOverview({ biometrics }) {
+  const byId = Object.fromEntries(biometrics.map(item => [item.id, item]));
+  const stageRef = useRef(null);
+  const modelRef = useRef(null);
+  const [modelAnchors, setModelAnchors] = useState(null);
+  const lastAnchors = useRef('');
+  const sensorCards = [
+    { position: 'sensor-left-arm', title: 'Left arm sensor', ids: ['sbp', 'dbp'], value: `${byId.sbp.value}/${byId.dbp.value}`, unit: 'mmHg', label: 'Blood pressure' },
+    { position: 'sensor-right-arm', title: 'Right arm sensor', ids: ['hr'], value: byId.hr.value, unit: 'bpm', label: 'Heart rate' },
+    { position: 'sensor-left-leg', title: 'Left leg sensor', ids: ['sleep'], value: byId.sleep.value, unit: 'h', label: 'Recovery / sleep' },
+    { position: 'sensor-right-leg', title: 'Right leg sensor', ids: ['glucose', 'temperature'], value: byId.glucose.value, unit: 'mg/dL', label: 'Glucose · temp. stable' },
+  ];
+  const statusFor = ids => {
+    const statuses = ids.map(id => byId[id]?.status);
+    return statuses.includes('alert') ? 'alert' : statuses.includes('caution') ? 'caution' : 'ok';
+  };
+  const statusText = status => status === 'ok' ? 'Within range' : status === 'caution' ? 'Review recommended' : 'Attention required';
+
+  return (
+    <div className="health-overview">
+      <section className="hero-panel data-panel">
+        <div className="hero-copy">
+          <div className="eyebrow">ISS EXPEDITION 74 · FLIGHT DAY 142</div>
+          <h1 className="page-h1">Good morning, John Doe</h1>
+          <p>Here is your health status for today. Sensors are connected and your latest check-in is saved locally.</p>
+          <div className="hero-meta"><span className="status-dot" /> All systems connected <span>·</span> Last update 14:32 UTC</div>
+        </div>
+        <div className="hero-date"><span>MONDAY</span><strong>26</strong><small>JUL 2026</small></div>
+      </section>
+
+      <section className="body-dashboard data-panel">
+        <div className="panel-header">
+          <span className="panel-title">YOUR BODY TODAY</span>
+          <span className="panel-meta">LIVE SENSOR OVERVIEW</span>
+        </div>
+        <div className="body-stage" ref={stageRef}>
+          <div className="sensor-stack sensor-stack-left">
+            {[sensorCards[0], sensorCards[2]].map(card => <SensorCard key={card.title} card={card} status={statusFor(card.ids)} statusText={statusText(statusFor(card.ids))} byId={byId} />)}
+          </div>
+          <div className="front-body" ref={modelRef}>
+            <AstronautViewer frontView onModelFrame={anchors => {
+              const serialized = JSON.stringify(Object.values(anchors).map(point => [point.x.toFixed(4), point.y.toFixed(4)]));
+              if (serialized !== lastAnchors.current) {
+                lastAnchors.current = serialized;
+                setModelAnchors(anchors);
+              }
+            }} />
+          </div>
+          <div className="sensor-stack sensor-stack-right">
+            {[sensorCards[1], sensorCards[3]].map(card => <SensorCard key={card.title} card={card} status={statusFor(card.ids)} statusText={statusText(statusFor(card.ids))} byId={byId} />)}
+          </div>
+          <ConnectorOverlay stageRef={stageRef} modelRef={modelRef} anchors={modelAnchors} />
+        </div>
+        <div className="body-legend"><span><i className="legend-dot legend-ok" /> Within range</span><span><i className="legend-dot legend-caution" /> Review recommended</span><span>Data is for demonstration only</span></div>
+      </section>
+
+      <div className="overview-lower">
+        <section className="doctor-card data-panel">
+          <div className="panel-header"><span className="panel-title">MESSAGE FROM YOUR DOCTOR</span><span className="panel-meta">TODAY · 09:00 UTC</span></div>
+          <div className="doctor-content">
+            <div className="doctor-avatar">DR</div>
+            <div><h2>Dr. Maya Chen</h2><p>“Your readings look stable. Please aim for a full recovery window tonight and repeat your blood pressure after five minutes of rest.”</p><span className="doctor-role">FLIGHT SURGEON · MISSION CONTROL</span></div>
+          </div>
+        </section>
+        <section className="vitals-card data-panel">
+          <div className="panel-header"><span className="panel-title">VITAL SIGNS</span><span className="panel-meta">LATEST READINGS</span></div>
+          <div className="vitals-grid">
+            {['hr', 'sbp', 'temperature', 'mood'].map(id => {
+              const item = byId[id];
+              return <div className="vital-item" key={id}><span>{item.label}</span><strong>{item.value}</strong><small>{item.unit}</small><StatusTag status={item.status} /></div>;
+            })}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function SensorCard({ card, status, statusText, byId }) {
+  return (
+    <article className={`sensor-card ${card.position} sensor-${status}`}>
+      <div className="sensor-card-top"><span className="sensor-pulse" /><span>{card.title}</span><StatusTag status={status} /></div>
+      <strong>{card.value}<small>{card.unit}</small></strong>
+      <span className="sensor-label">{card.label}</span>
+      <p>{statusText}{status === 'caution' ? ` · ${byId[card.ids[0]]?.delta > 0 ? 'slightly above baseline' : 'keep monitoring'}` : ''}</p>
+    </article>
+  );
+}
+
 function Dashboard({ biometrics, cauCount, mission, onCheckIn, onReport, reportSent }) {
   const alerts = biometrics.filter(b => b.status !== 'ok');
   return (
     <div className="page-grid">
-      {/* PAGE HEADER */}
-      <div className="page-header" style={{gridColumn:'1/-1'}}>
-        <div>
-          <div className="eyebrow">TODAY · FLIGHT DAY 142 · {mission}</div>
-          <h1 className="page-h1">Your health overview</h1>
-        </div>
-        <div className="header-actions">
-          <button className="btn-primary" onClick={onCheckIn}>Start daily check-in</button>
-          <button className={`btn-secondary${reportSent ? ' sent' : ''}`} onClick={onReport}>
-            {reportSent ? 'Report queued' : 'Share with flight surgeon'}
-          </button>
-        </div>
+      <HealthOverview biometrics={biometrics} />
+
+      <div className="overview-actions">
+        <button className="btn-primary" onClick={onCheckIn}>Start daily check-in</button>
+        <button className={`btn-secondary${reportSent ? ' sent' : ''}`} onClick={onReport}>
+          {reportSent ? 'Report queued' : 'Share with flight surgeon'}
+        </button>
       </div>
-
-      {/* SYSTEM ALERT BANNER */}
-      {cauCount > 0 && (
-        <div className="alert-banner" style={{gridColumn:'1/-1'}}>
-          <span className="alert-banner-code">[CAUTION]</span>
-          <span>{cauCount} subsystem(s) require attention — review recommended actions below.</span>
-          <span className="alert-banner-time">LAST SYNC 14:32 UTC</span>
-        </div>
-      )}
-
-      <HumanBody biometrics={biometrics} />
 
       {/* BIOMETRIC TABLE */}
       <section className="data-panel bio-table-panel">
