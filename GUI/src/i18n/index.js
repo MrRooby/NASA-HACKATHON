@@ -1,44 +1,21 @@
 import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import enCommon from './locales/en/common.js';
-import enLogin from './locales/en/login.js';
-import enSettings from './locales/en/settings.js';
-import enHome from './locales/en/home.js';
-import enWearables from './locales/en/wearables.js';
-import enBase from './locales/en/base.js';
-import enProfile from './locales/en/profile.js';
-import enCrew from './locales/en/crew.js';
-import enTests from './locales/en/tests.js';
-
-import plCommon from './locales/pl/common.js';
-import plLogin from './locales/pl/login.js';
-import plSettings from './locales/pl/settings.js';
-import plHome from './locales/pl/home.js';
-import plWearables from './locales/pl/wearables.js';
-import plBase from './locales/pl/base.js';
-import plProfile from './locales/pl/profile.js';
-import plCrew from './locales/pl/crew.js';
-import plTests from './locales/pl/tests.js';
-
 // One file per namespace and language (src/i18n/locales/<lang>/<namespace>.js); keys are
 // addressed as '<namespace>.<key>'. Texts that come from the backend stay in English.
+// Every file under locales/ registers itself: adding a namespace needs no edit here.
+const files = import.meta.glob('./locales/*/*.js', { eager: true });
 
 export const DEFAULT_LANG = 'en';
 export const LANGS = ['en', 'pl'];
-export const NAMESPACES = ['common', 'login', 'settings', 'home', 'wearables', 'base', 'profile', 'crew', 'tests'];
 export const STORAGE_LANG = 'awernasa.lang';
 
 /** Raw dictionaries: locales[lang][namespace] = { key: 'Text' }. */
-export const locales = {
-  en: {
-    common: enCommon, login: enLogin, settings: enSettings, home: enHome,
-    wearables: enWearables, base: enBase, profile: enProfile, crew: enCrew, tests: enTests,
-  },
-  pl: {
-    common: plCommon, login: plLogin, settings: plSettings, home: plHome,
-    wearables: plWearables, base: plBase, profile: plProfile, crew: plCrew, tests: plTests,
-  },
-};
+export const locales = Object.fromEntries(LANGS.map(lang => [lang, {}]));
+for (const [path, mod] of Object.entries(files)) {
+  const [, lang, namespace] = path.match(/locales\/(\w+)\/(\w+)\.js$/);
+  if (locales[lang]) locales[lang][namespace] = mod.default;
+}
+export const NAMESPACES = Object.keys(locales[DEFAULT_LANG]).sort();
 
 const flatten = byNamespace => Object.fromEntries(
   Object.entries(byNamespace).flatMap(([namespace, dict]) =>
