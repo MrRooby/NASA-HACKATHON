@@ -1,11 +1,8 @@
-# MOTHER: jak uruchomić (5 minut)
+# MOTHER: backend (API) projektu
 
-MOTHER to „mózg” projektu. Czyta bazę danych zespołu, analizuje zdrowie załogi i pokazuje wynik na dwóch stronach:
+MOTHER to „mózg” projektu. Czyta bazę danych zespołu, analizuje zdrowie załogi i udostępnia wynik **wyłącznie jako API JSON**. Nie ma własnych stron. **Interfejs użytkownika to aplikacja `GUI/`** (React + ludzik 3D), która pobiera dane z MOTHER.
 
-- **Dashboard załogi:** sylwetka z kolorami, wskaźniki, wnioski z przyciskiem „Dlaczego?”, EVA GO / NO-GO, prognozy i wyniki krwi. Misję można przewijać dzień po dniu.
-- **Mapa danych:** co jest w bazie według części ciała i czujników oraz jak wszystko łączy się z ryzykami NASA. Jest tam przycisk **„Copy list as JSON for the GUI”**.
-
-Strony zawsze pokazują **aktualną zawartość bazy**. Gdy ktoś doda dane, wystarczy odświeżyć stronę (F5), niczego nie trzeba przebudowywać.
+API zawsze zwraca **aktualną zawartość bazy**. Gdy ktoś doda dane, MOTHER sam przelicza wynik, niczego nie trzeba przebudowywać.
 
 ## Co potrzebujesz (raz)
 
@@ -18,7 +15,8 @@ Strony zawsze pokazują **aktualną zawartość bazy**. Gdy ktoś doda dane, wys
 1. Pobierz folder `MOTHER` z brancha `konrad`. Najprościej: na GitHubie przełącz branch na `konrad` → **Code → Download ZIP**, rozpakuj i wejdź do folderu `MOTHER`.
 2. **Windows:** kliknij dwukrotnie `start.bat`. **Mac/Linux:** w terminalu w folderze `MOTHER` wpisz `./start.sh`.
 3. Za pierwszym razem program zapyta o dane bazy. Przy wartościach w [nawiasach] naciśnij Enter. Wpisz **użytkownika i hasło** od właściciela bazy (hasła nie będzie widać podczas pisania).
-4. Przeglądarka otworzy się sama na **http://localhost:8000**. Pierwsze otwarcie dashboardu trwa ~40 s, bo MOTHER analizuje całą misję. Kolejne są natychmiastowe.
+4. API działa pod **http://localhost:8000** (`/api/status`, dokumentacja: `/api/docs`). Pierwsze `/api/dashboard` trwa ~40 s, bo MOTHER analizuje całą misję. Kolejne są natychmiastowe.
+5. Interfejs: uruchom aplikację z folderu `GUI/` (`npm run dev`, zob. `GUI/README.md`). Łączy się z MOTHER przez `/api`.
 
 Zamknięcie: zamknij czarne okno albo naciśnij Ctrl+C.
 Zmiana hasła: `start.bat --setup` (albo `./start.sh --setup`).
@@ -29,11 +27,11 @@ Zmiana hasła: `start.bat --setup` (albo `./start.sh --setup`).
 |---|---|
 | „Database not reachable” / „Cannot reach the team database” | Włącz Tailscale i sprawdź, czy jesteś w sieci zespołu. Uruchom ponownie z `--setup` i wpisz hasło jeszcze raz. |
 | „Python 3.10 or newer is required” | Zainstaluj Pythona (krok 2 wyżej) i uruchom `start` jeszcze raz. |
-| „MOTHER server is not running” na stronie | Czarne okno zostało zamknięte. Uruchom `start` ponownie. |
+| GUI pokazuje „OFFLINE · demo data” | MOTHER nie działa albo nie widzi bazy. Uruchom `start` ponownie i sprawdź `http://localhost:8000/api/status`. |
 
-## Dla zespołu GUI
+## API (używa go GUI)
 
-Serwer udostępnia dane jako JSON, więc GUI może je czytać bezpośrednio:
+Kontrakt kart narządów: [`UI_CONTRACT.md`](UI_CONTRACT.md). Wszystkie adresy:
 
 | Adres | Co zwraca |
 |---|---|
@@ -47,7 +45,7 @@ Serwer udostępnia dane jako JSON, więc GUI może je czytać bezpośrednio:
 - Hasło zapisuje się tylko lokalnie w `MOTHER/.env`, a ten plik **nie trafia do gita**.
 - Serwer działa tylko na Twoim komputerze (`127.0.0.1`). Nikt z zewnątrz się do niego nie podłączy.
 - MOTHER **tylko czyta** bazę i niczego w niej nie zmienia.
-- Dane syntetyczne są zawsze tak oznaczone na stronach. To demo edukacyjne, nie porada medyczna.
+- Dane syntetyczne są w API oznaczone (`data_kind: "synthetic"`), a GUI musi je tak pokazywać. To demo edukacyjne, nie porada medyczna.
 
 ---
 
@@ -55,14 +53,13 @@ Serwer udostępnia dane jako JSON, więc GUI może je czytać bezpośrednio:
 
 | Moduł | Rola |
 |---|---|
-| `mother/server.py` | lokalny serwer (FastAPI): strony + `/api/*`, cache odświeżany po każdym imporcie do bazy (`import_log`) |
+| `mother/server.py` | serwer API (FastAPI): tylko `/api/*`, cache odświeżany po każdym imporcie do bazy (`import_log`) |
 | `mother/db_mission.py`, `db_source.py` | odczyt misji, środowiska, laboratoriów z widoków `astro_api` |
 | `mother/ingest.py` | bramka jakości: wartości niemożliwe fizycznie nie wywołują alarmów |
 | `mother/rules.py` | progi z `config/thresholds.json` (jedyne źródło statusu ALERT) |
 | `mother/analytics.py` | norma osobista (FD8–28), EWMA, CUSUM, obwiednia w stylu NASA IMS, trendy Theil–Sen |
 | `mother/knowledge.py` + `config/knowledge_graph.json` | zagrożenia → ryzyka → części ciała; syndromy (CO2+ból głowy, SANS, infekcja…), EVA GO/NO-GO |
 | `mother/forecast.py`, `scheduler.py` | prognozy (dawka, kości, masa) i zadania dla astronauty |
-| `web/` | strony: `index.html`, `dashboard.html`, `data_map.html` |
 
-Wersje offline (jeden plik HTML z danymi w środku, bez bazy): `python -m mother.export_demo` i `python -m mother.data_map`, wynik trafia do `exports/`.
+Migawki offline jako JSON (ten sam kształt co `/api/dashboard` i `/api/data-map`): `python -m mother.export_demo` (symulator, bez bazy) i `python -m mother.data_map` (z bazy). Wynik trafia do `exports/`.
 `config/shared/` to kopia wspólnego `config/` z repo, dzięki niej sam folder `MOTHER` działa samodzielnie. W pełnym repo używany jest oryginał z `config/`.

@@ -1,9 +1,10 @@
-"""MOTHER local server: serves the two pages and computes their data live from the team database.
+"""MOTHER backend: a JSON API (no web pages) computed live from the team database.
 
     python -m mother.server            (start.bat / start.sh do this for you)
 
-Only listens on this computer (127.0.0.1). Results are cached and recomputed automatically when the database
-owner imports new data (astro_api.import_log changes), so the HTML never has to be rebuilt.
+The user interface lives in GUI/ (React + 3D astronaut) and calls /api/*. By default MOTHER only listens on
+this computer (127.0.0.1; MOTHER_HOST changes that, e.g. inside Docker). Results are cached and recomputed
+automatically when the database owner imports new data (astro_api.import_log changes).
 """
 from __future__ import annotations
 
@@ -13,12 +14,10 @@ import socket
 import threading
 import time
 import traceback
-import webbrowser
 from datetime import datetime, timedelta, timezone
 
-from .config import MOTHER_DIR, load_config
+from .config import load_config
 
-WEB = MOTHER_DIR / "web"
 RECHECK_SECONDS = 30
 DB_HINT = ("Check that Tailscale is connected to the team network and that the password in MOTHER/.env is right "
            "(run start again with --setup to re-enter it).")
@@ -146,21 +145,16 @@ DATA_MAP = Live("data-map", compute_data_map)
 
 def create_app():
     from fastapi import FastAPI
-    from fastapi.responses import FileResponse, JSONResponse
+    from fastapi.responses import JSONResponse
 
     app = FastAPI(title="MOTHER", docs_url="/api/docs")
 
     @app.get("/")
     def index():
-        return FileResponse(WEB / "index.html")
-
-    @app.get("/dashboard")
-    def dashboard_page():
-        return FileResponse(WEB / "dashboard.html")
-
-    @app.get("/data-map")
-    def data_map_page():
-        return FileResponse(WEB / "data_map.html")
+        """MOTHER is API-only; the user interface is the GUI/ app."""
+        return {"service": "MOTHER", "ui": "GUI/ (React app)", "docs": "/api/docs",
+                "endpoints": ["/api/status", "/api/subjects", "/api/organs", "/api/organs/{code}",
+                              "/api/dashboard", "/api/data-map"]}
 
     @app.get("/api/dashboard")
     def api_dashboard():
@@ -206,10 +200,6 @@ def create_app():
         from .organs import organ_report
         return _db_call(lambda db: organ_report(db, subject, day=day, sol=sol, mission=mission))
 
-    @app.get("/organs")
-    def organs_page():
-        return FileResponse(WEB / "organs.html")
-
     @app.get("/api/status")
     def api_status():
         try:
@@ -233,9 +223,9 @@ def free_port(start: int) -> int:
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Run the MOTHER pages on this computer")
+    ap = argparse.ArgumentParser(description="Run the MOTHER API on this computer")
     ap.add_argument("--port", type=int, default=int(os.environ.get("MOTHER_PORT", 8000)))
-    ap.add_argument("--no-browser", action="store_true")
+    ap.add_argument("--no-browser", action="store_true", help="kept for compatibility; MOTHER no longer opens a browser")
     args = ap.parse_args()
 
     import uvicorn
@@ -243,11 +233,9 @@ def main():
     settings()  # fail early with a clear message if MOTHER/.env is missing
     port = free_port(args.port)
     url = f"http://localhost:{port}"
-    print(f"\n  MOTHER is running:  {url}\n  Dashboard:          {url}/dashboard\n  Data map:           {url}/data-map\n"
-          "  Stop with Ctrl+C.\n", flush=True)
+    print(f"\n  MOTHER API is running:  {url}/api/status\n  API docs:               {url}/api/docs\n"
+          "  User interface:         run the GUI app (GUI/README.md)\n  Stop with Ctrl+C.\n", flush=True)
     threading.Thread(target=DASHBOARD.ensure, daemon=True).start()   # start the long analysis right away
-    if not args.no_browser:
-        threading.Timer(1.5, lambda: webbrowser.open(url)).start()
     # MOTHER_HOST lets the Docker image listen on 0.0.0.0 inside the container; default stays local-only.
     uvicorn.run(create_app(), host=os.environ.get("MOTHER_HOST", "127.0.0.1"), port=port, log_level="warning")
 

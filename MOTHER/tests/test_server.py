@@ -70,10 +70,16 @@ def test_organs_endpoints_with_fake_database(client, fake_db):
     assert grid[0]["subject"]["code"] == "CREW-1" and len(grid[0]["organs"]) == 10
 
 
-@pytest.mark.parametrize("path", ["/", "/dashboard", "/data-map", "/organs"])
-def test_static_pages_are_served(client, path):
-    r = client.get(path)
-    assert r.status_code == 200 and "<html" in r.text.lower()
+def test_root_describes_the_api(client):
+    body = client.get("/").json()
+    assert body["service"] == "MOTHER" and body["docs"] == "/api/docs"
+    assert "/api/organs/{code}" in body["endpoints"]
+
+
+@pytest.mark.parametrize("path", ["/dashboard", "/data-map", "/organs"])
+def test_old_html_pages_are_gone(client, path):
+    """MOTHER is API-only; the UI lives in GUI/."""
+    assert client.get(path).status_code == 404
 
 
 def test_openapi_docs_available(client):

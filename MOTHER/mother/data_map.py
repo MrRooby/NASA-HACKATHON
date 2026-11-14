@@ -1,9 +1,9 @@
-"""Build the data map page: what the team database contains (by body system and sensor) and how
+"""Build the data map: what the team database contains (by body system and sensor) and how
 sources -> indicators -> MOTHER conclusions -> NASA HRP risks -> hazards connect.
 
-    python -m mother.data_map            (needs MOTHER/.env + Tailscale)
+Served live as GET /api/data-map. Offline snapshot:
 
-Writes MOTHER/demo/data_map.html (standalone) and MOTHER/demo/data_map.artifact.html (body-only, for publishing).
+    python -m mother.data_map            (needs MOTHER/.env + Tailscale) -> MOTHER/exports/data_map.json
 """
 from __future__ import annotations
 
@@ -242,15 +242,11 @@ def build() -> dict:
 
 
 def write(data: dict) -> None:
-    """Offline snapshot: exports/data_map.html (opens anywhere) + exports/data_map.artifact.html (body only)."""
-    doc = (MOTHER_DIR / "web" / "data_map.html").read_text(encoding="utf-8")
-    filled = doc.replace("/*__DATA__*/null", json.dumps(data, ensure_ascii=False, default=str, separators=(",", ":")))
+    """Offline snapshot: exports/data_map.json (same shape as GET /api/data-map)."""
     out = MOTHER_DIR / "exports"
     out.mkdir(parents=True, exist_ok=True)
-    (out / "data_map.html").write_text(filled, encoding="utf-8")
-    head = filled[filled.index("<title>"):filled.index("</head>")]
-    body = filled[filled.index("<body>") + len("<body>"):filled.rindex("</body>")]
-    (out / "data_map.artifact.html").write_text(head + body, encoding="utf-8")
+    (out / "data_map.json").write_text(json.dumps(data, ensure_ascii=False, default=str, separators=(",", ":")),
+                                       encoding="utf-8")
 
 
 if __name__ == "__main__":

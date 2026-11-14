@@ -2,7 +2,7 @@
 
 **Jedno zdanie:** dla każdej osoby MOTHER zwraca **10 kart**. Każda karta ma **1 kolor, 1 zdanie i maks. 3 liczby**. UI nie musi znać bazy danych ani żadnych wzorów.
 
-Podgląd na żywo: uruchom MOTHER (`start.bat`) i otwórz **http://localhost:8000/organs**.
+Podgląd na żywo: uruchom MOTHER (`start.bat`) i aplikację `GUI/`; surowy JSON: **http://localhost:8000/api/organs/HAB-C4?sol=142**.
 
 ## 3 adresy, więcej nie trzeba
 
@@ -74,7 +74,7 @@ Tablica `organs` ma **zawsze 10 elementów w tej samej kolejności**, nawet gdy 
 ## Minimalna integracja (pseudokod)
 
 ```js
-const card = await (await fetch(`http://localhost:8000/api/organs/${code}`)).json();
+const card = await (await fetch(`/api/organs/${code}`)).json();   // GUI: same origin (nginx/Vite proxy -> MOTHER)
 for (const o of card.organs) {
   bodyRegion(o.organ).color = {ok: "green", caution: "yellow", alert: "red", no_data: "grey"}[o.status];
   bodyRegion(o.organ).tooltip = o.headline;

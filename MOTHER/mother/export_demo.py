@@ -1,8 +1,9 @@
-"""Static, offline snapshot of the dashboard on MOTHER's own seeded simulator (no database needed).
+"""Offline snapshot of the dashboard payload on MOTHER's own seeded simulator (no database needed).
 
-    python -m mother.export_demo        -> MOTHER/exports/mother_dashboard.html (single file, opens anywhere)
+    python -m mother.export_demo        -> MOTHER/exports/mother_dashboard.json
 
-The live version of the same page is served by `python -m mother.server` and reads the team database.
+Same JSON shape as the live GET /api/dashboard served by `python -m mother.server` from the team database,
+so the GUI (or anything else) can use it as offline demo data.
 """
 from __future__ import annotations
 
@@ -37,11 +38,9 @@ def build(out_path: Path | None = None, days: int = 180) -> Path:
                          info={"label": "SIMULATED DATA · MOTHER seeded simulator · not medical advice"},
                          progress=lambda p, m: print(f"  {m}", file=sys.stderr) if int(p * 100) % 25 == 0 else None)
 
-    template = (MOTHER_DIR / "web" / "dashboard.html").read_text(encoding="utf-8")
-    html = template.replace("/*__MOTHER_DATA__*/null", json.dumps(data, separators=(",", ":"), ensure_ascii=False, default=str))
-    out = out_path or (MOTHER_DIR / "exports" / "mother_dashboard.html")
+    out = out_path or (MOTHER_DIR / "exports" / "mother_dashboard.json")
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(html, encoding="utf-8")
+    out.write_text(json.dumps(data, separators=(",", ":"), ensure_ascii=False, default=str), encoding="utf-8")
     print(f"wrote {out} ({out.stat().st_size / 1e6:.1f} MB)", file=sys.stderr)
     return out
 

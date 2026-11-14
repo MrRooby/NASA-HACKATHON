@@ -31,9 +31,9 @@ def test_real_data_report_with_fake_database(monkeypatch, cfg):
     assert conn.closed
 
 
-def test_export_demo_builds_offline_html(tmp_path):
+def test_export_demo_writes_dashboard_json(tmp_path):
+    import json
     from mother import export_demo
-    out = export_demo.build(tmp_path / "demo.html", days=10)
-    html = out.read_text(encoding="utf-8")
-    assert "/*__MOTHER_DATA__*/null" not in html, "data must be embedded"
-    assert "SIMULATED DATA" in html
+    out = export_demo.build(tmp_path / "demo.json", days=10)
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert "SIMULATED DATA" in json.dumps(data)

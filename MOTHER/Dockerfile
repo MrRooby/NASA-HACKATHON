@@ -22,7 +22,6 @@ COPY config/ /app/config/
 COPY data/nasa/ /app/data/nasa/
 COPY MOTHER/mother/ ./mother/
 COPY MOTHER/config/ ./config/
-COPY MOTHER/web/ ./web/
 
 RUN useradd --uid 10001 --no-create-home --home-dir /app --shell /usr/sbin/nologin mother \
     && chown -R mother:mother /app
