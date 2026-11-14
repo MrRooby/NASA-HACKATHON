@@ -35,7 +35,11 @@ export class ApiError extends Error {
 export function isOfflineError(error) {
   if (!(error instanceof ApiError)) return true;
   if (error.kind === 'aborted') return false;
-  if (error.kind === 'http') return error.status === 502 || error.status === 503 || error.status === 504;
+  if (error.kind === 'http') {
+    if (error.status === 502 || error.status === 503 || error.status === 504) return true;
+    // The Vite dev proxy answers a bare 500 (no JSON body) when MOTHER is not running.
+    return error.status === 500 && error.message === 'HTTP 500';
+  }
   return true;
 }
 
