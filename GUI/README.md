@@ -4,9 +4,11 @@ Offline-first React/Vite boilerplate for the NASA Space Apps health-monitoring c
 
 ### Run locally
 
+Requires **Node 20+** (Vite 6 / Vitest 4). With nvm: `nvm use` (reads `.nvmrc`).
+
 ```bash
-npm install
-npm run dev
+npm ci
+npm run dev          # live data: MOTHER_URL=http://127.0.0.1:8000 npm run dev
 ```
 
 Open the local URL printed by Vite. Build the production bundle with `npm run build`.
