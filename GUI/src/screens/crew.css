@@ -1,50 +1,191 @@
-/* Styles of CrewScreen.jsx (theme variables only). */
-.crew-screen { display: grid; gap: 12px; min-width: 0; }
+/* CREW start screen (src/screens/CrewScreen.jsx), DESIGN.md §4.1.
+   Four tiles in one row (2×2 on portrait / narrow), everything fits, nothing scrolls. */
 
-.crew-roster { display: grid; }
-.crew-member {
+.crew-screen { height: 100%; min-height: 0; }
+
+.crew-grid {
   display: grid;
-  grid-template-columns: auto minmax(0, 5fr) minmax(0, 6fr) auto;
-  gap: 4px 16px;
-  align-items: start;
-  padding: 8px 0 8px 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: var(--gap);
+  height: 100%;
+  min-height: 0;
+}
+
+.crew-tile {
+  --frame: var(--border);
+  --fill: var(--panel);
+  --tone: var(--ok);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 10px 12px 10px;
+  container-type: inline-size;
+}
+.crew-tile-caution { --frame: var(--caution); --tone: var(--caution); }
+.crew-tile-alert { --frame: var(--alert); --tone: var(--alert); }
+.crew-tile:hover { --frame: var(--accent-bright); }
+.crew-tile-caution:hover, .crew-tile-alert:hover { --fill: var(--raised); }
+.crew-tile:has(.crew-tile-hit:focus-visible) { --frame: var(--accent-bright); --fill: var(--raised); }
+
+/* The whole tile is one button (layer 1); content sits above and lets clicks through,
+   except the organ buttons. */
+.crew-tile-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.crew-tile-hit:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: -4px; }
+.crew-tile > :not(.crew-tile-hit) { position: relative; z-index: 2; flex: 0 0 auto; min-width: 0; pointer-events: none; }
+.crew-tile > .crew-model { flex: 1 1 0; }
+.crew-tile .crew-organ { pointer-events: auto; }
+
+/* Header: avatar, name, callsign · role, status */
+.crew-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin: -10px -12px 0;
+  padding: 10px 12px 8px;
   border-bottom: 1px solid var(--border);
-  border-left: 2px solid transparent;
 }
-.crew-member:last-child { border-bottom: 0; }
-.crew-member:hover { background: var(--raised); }
-.crew-member-you { border-left-color: var(--accent-bright); }
-@media (max-width: 1000px) {
-  .crew-member { grid-template-columns: auto minmax(0, 1fr); }
-  .crew-member-health, .crew-member-actions { grid-column: 2; }
+.crew-tile-caution .crew-head, .crew-tile-alert .crew-head {
+  background: color-mix(in srgb, var(--tone) 16%, transparent);
+  border-bottom-color: var(--tone);
+}
+.crew-avatar { display: block; width: clamp(36px, 15cqi, 56px); height: auto; image-rendering: pixelated; }
+.crew-id { min-width: 0; }
+.crew-name {
+  overflow: hidden;
+  color: var(--fg);
+  font-size: clamp(16px, 6cqi, 21px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.crew-role {
+  margin: 2px 0 0;
+  overflow: hidden;
+  color: var(--dim);
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.crew-callsign { color: var(--accent); font-weight: 600; }
+.crew-tile-ok .crew-status { opacity: 0.85; }
+
+.crew-msg {
+  margin: 6px 0 0;
+  overflow: hidden;
+  color: var(--tone);
+  font-size: 15px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.crew-member-id, .crew-member-health { display: grid; gap: 2px; min-width: 0; }
-.crew-member-name { color: var(--accent-bright); font-size: 14px; overflow-wrap: anywhere; }
-.crew-member-role, .crew-member-where, .crew-member-status { margin: 0; min-width: 0; overflow-wrap: anywhere; }
-.crew-member-role { text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; }
-.crew-member-callsign { color: var(--accent); font-weight: 700; }
-.crew-member-where { color: var(--fg); font-size: 12px; }
-.crew-member-message { color: var(--fg); }
-.crew-member[data-status='no_data'] .crew-member-message { color: var(--dim); }
-.crew-member-actions { display: grid; gap: 2px; justify-items: start; }
+/* 3D body */
+.crew-model { flex: 1 1 0; min-height: 0; margin: 4px -12px; }
 
-/* ten organs: code over status, text not colour alone */
-.crew-organs { display: flex; flex-wrap: wrap; gap: 2px 4px; }
+/* Ten organ icons, 2×5; each its own button with a status frame */
+.crew-organs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+}
+.crew-organs li { min-width: 0; }
 .crew-organ {
   display: grid;
-  justify-items: center;
-  min-width: 4ch;
-  padding: 0 2px;
-  color: var(--dim);
-  border: 1px solid var(--accent-dim);
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0.04em;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1.25;
+  max-height: 56px;
+  padding: 2px;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--ok) 35%, var(--border));
+  cursor: pointer;
 }
-.crew-organ-ok { color: var(--ok); }
-.crew-organ-caution { color: var(--caution); border-color: var(--caution); }
-.crew-organ-alert { color: var(--bg); background: var(--alert); border-color: var(--alert); }
+.crew-organ svg { width: min(36px, 70%); height: auto; max-height: 100%; }
+.crew-organ.is-caution { background: color-mix(in srgb, var(--caution) 20%, var(--bg)); border: 2px solid var(--caution); }
+.crew-organ.is-alert { background: color-mix(in srgb, var(--alert) 24%, var(--bg)); border: 2px solid var(--alert); animation: crew-alert 1.2s steps(1) infinite; }
+.crew-organ.is-no_data { border: 1px dashed var(--dim); }
+.crew-organ.is-no_data svg { opacity: 0.45; }
+.crew-organ:hover, .crew-organ:focus-visible { border-color: var(--accent-bright); outline: 0; background: var(--raised); }
+@keyframes crew-alert { 50% { background: var(--bg); } }
 
-.crew-legend { margin: 8px 0 0; color: var(--dim); font-size: 12px; }
+/* Vitals: icon + number */
+.crew-vitals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 8px;
+}
+.crew-vital {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 3px 2px;
+  border: 1px solid var(--border);
+}
+.crew-vital svg { flex: 0 0 auto; width: 22px; height: auto; }
+.crew-vital-value { color: var(--fg); font-size: clamp(16px, 6.5cqi, 22px); font-weight: 700; }
+.crew-vital-unit { color: var(--dim); font-size: 13px; }
+.crew-vital.is-caution { border-color: var(--caution); }
+.crew-vital.is-caution .crew-vital-value { color: var(--caution); }
+.crew-vital.is-alert { border-color: var(--alert); }
+.crew-vital.is-alert .crew-vital-value { color: var(--alert); }
+
+/* Location + provenance */
+.crew-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 15px;
+}
+.crew-where { min-width: 0; overflow: hidden; color: var(--fg); white-space: nowrap; text-overflow: ellipsis; text-transform: uppercase; }
+.crew-pin { margin-right: 4px; color: var(--accent); }
+
+/* Narrow tiles: smaller header */
+@container (max-width: 300px) {
+  .crew-status .ui-status__word { display: none; }
+}
+@container (max-width: 230px) {
+  .crew-head { gap: 6px; padding: 8px 8px 6px; margin: -10px -8px 0; }
+  .crew-role { font-size: 13px; }
+  .crew-vital-unit { display: none; }
+}
+
+/* Portrait / narrow: 2×2 and fewer elements */
+@media (max-width: 760px), (max-aspect-ratio: 4/5) {
+  .crew-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .crew-tile { padding: 8px; }
+  .crew-head { margin: -8px -8px 0; padding: 8px 8px 6px; }
+  .crew-model { margin: 2px -8px; }
+  .crew-vitals { display: none; }
+  .crew-msg { font-size: 14px; }
+  .crew-organs { gap: 3px; }
+}
+
+/* Short screens (phone landscape): no vitals, smaller header */
+@media (max-height: 560px) {
+  .crew-tile { padding: 6px 8px; }
+  .crew-head { margin: -6px -8px 0; padding: 6px 8px 4px; }
+  .crew-model { margin: 2px -8px; }
+  .crew-avatar { width: 32px; }
+  .crew-role, .crew-msg, .crew-vitals { display: none; }
+  .crew-foot { margin-top: 4px; font-size: 14px; }
+  .crew-organs { gap: 3px; }
+  .crew-organ { aspect-ratio: 1.6; }
+}

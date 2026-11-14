@@ -1,0 +1,53 @@
+/* Full-screen cognitive session (TestRunScreen.jsx). Theme variables only. */
+.testrun {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+.testrun-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.testrun-title {
+  margin: 0;
+  font-family: var(--font-pixel, 'Pixelify Sans', monospace);
+  font-size: 20px;
+  color: var(--accent-bright);
+  white-space: nowrap;
+}
+.testrun-mode, .testrun-note { color: var(--dim); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.testrun-note { color: var(--caution); }
+.testrun-who { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-pixel, 'Pixelify Sans', monospace); font-size: 16px; white-space: nowrap; min-width: 0; }
+.testrun-exit {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  background: var(--raised);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  font-family: var(--font-pixel, 'Pixelify Sans', monospace);
+  font-size: 16px;
+  cursor: pointer;
+}
+.testrun-exit:hover { border-color: var(--accent); color: var(--accent-bright); }
+.testrun-body { min-height: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 12px; }
+.testrun-body .cog-run { min-height: 0; height: 100%; width: 100%; }
+.testrun-body .cog-field { height: min(620px, calc(100vh - 120px)); }
+.testrun-body .cog-card { max-height: 100%; overflow: hidden; }
+.testrun-loading { margin: 0; }
+
+@media (max-width: 700px) {
+  .testrun-mode, .testrun-who span { display: none; }
+  .testrun-head { gap: 8px; padding: 6px 10px; }
+}

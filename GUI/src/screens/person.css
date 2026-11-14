@@ -1,0 +1,164 @@
+/* PERSON screen (PersonScreen.jsx, DESIGN.md §4.2). Theme variables only; nothing scrolls. */
+.person {
+  --pf: var(--font-pixel, 'Pixelify Sans', monospace);
+  --mf: var(--font-mono, 'JetBrains Mono', monospace);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 8px;
+}
+
+/* ── Header strip ─────────────────────────────────────────────────────────── */
+.person-head {
+  --tone: var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 6px 10px;
+  background: var(--panel);
+  border: 1px solid var(--tone);
+}
+.person-head[data-status='caution'] { --tone: var(--caution); }
+.person-head[data-status='alert'] { --tone: var(--alert); }
+.person-back, .person-report {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  min-height: 44px;
+  padding: 0 12px;
+  background: var(--raised);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  font-family: var(--pf);
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.person-back:hover, .person-report:hover { border-color: var(--accent); color: var(--accent-bright); }
+.person-report { margin-left: auto; }
+.person-report[aria-pressed='true'] { border-color: var(--accent); color: var(--accent-bright); box-shadow: inset 0 0 0 1px var(--accent); }
+.person-avatar { flex: none; border: 1px solid var(--border); background: var(--raised); }
+.person-id { display: flex; flex-direction: column; min-width: 0; flex: 0 1 auto; }
+.person-name {
+  margin: 0;
+  font-family: var(--pf);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.person-sub { display: flex; gap: 10px; min-width: 0; font-size: 14px; color: var(--dim); white-space: nowrap; overflow: hidden; }
+.person-callsign { color: var(--accent-bright); font-family: var(--pf); font-size: 16px; }
+.person-role { overflow: hidden; text-overflow: ellipsis; }
+.person-status { flex: none; }
+.person-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 1 auto;
+  min-width: 0;
+  font-family: var(--mf);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg);
+  white-space: nowrap;
+}
+.person-sol { flex: none; }
+.person-where span { overflow: hidden; text-overflow: ellipsis; text-transform: uppercase; }
+.person-badges { display: inline-flex; gap: 6px; flex: none; }
+
+/* ── Body: model + organ strip | organ panel ──────────────────────────────── */
+.person-body {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 8px;
+  min-height: 0;
+  min-width: 0;
+}
+.person-left {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 0;
+  min-width: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+.person-model { position: relative; min-height: 0; min-width: 0; overflow: hidden; }
+.person-model > * { position: absolute; inset: 0; width: 100%; height: 100%; }
+.person-organs {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 4px;
+  padding: 6px;
+  border-top: 1px solid var(--border);
+}
+.person-organ {
+  --tone: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 48px;
+  padding: 4px;
+  background: var(--raised);
+  border: 1px solid var(--tone);
+  cursor: pointer;
+}
+.person-organ[data-status='caution'] { --tone: var(--caution); }
+.person-organ[data-status='alert'] { --tone: var(--alert); background: color-mix(in srgb, var(--alert) 16%, var(--raised)); }
+.person-organ:hover { border-color: var(--accent); }
+.person-organ[aria-pressed='true'] { border-color: var(--accent-bright); box-shadow: inset 0 0 0 2px var(--accent); background: var(--panel); }
+.person-organ:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 1px; }
+.person-right { display: flex; min-height: 0; min-width: 0; }
+.person-right > * { flex: 1; }
+
+/* Narrow landscape (laptop with the side panel): two rows of five organ buttons. */
+@media (max-width: 1500px) {
+  .person-organs { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .person-organ { min-height: 44px; }
+}
+@media (max-width: 1500px) and (max-height: 800px) {
+  .person-role { display: none; }
+}
+
+/* Portrait phone / tablet: model on top (~40 %), organ panel below. */
+@media (orientation: portrait) and (max-width: 900px) {
+  .person { padding: 4px; gap: 4px; }
+  .person-head { gap: 8px; padding: 4px 6px; flex-wrap: nowrap; }
+  .person-back span, .person-report span, .person-sub, .person-where, .person-avatar, .person-badges { display: none; }
+  .person-back, .person-report { min-height: 40px; padding: 0 8px; }
+  .person-name { font-size: 18px; }
+  .person-status .ui-status__word { display: none; }
+  .person-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: 36% minmax(0, 1fr); gap: 4px; }
+  .person-left { grid-template-rows: minmax(0, 1fr); grid-template-columns: minmax(0, 1fr) auto; }
+  .person-organs { grid-template-columns: repeat(2, 40px); grid-auto-rows: minmax(0, 1fr); border-top: 0; border-left: 1px solid var(--border); padding: 4px; gap: 3px; }
+  .person-organ { min-height: 0; padding: 2px; }
+  .person-organ svg { width: 26px; height: 26px; }
+}
+
+/* Short landscape (phone on its side): one compact header line, organ buttons beside the model. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .person { padding: 4px; gap: 4px; }
+  .person-head { gap: 8px; padding: 2px 6px; }
+  .person-back span, .person-report span, .person-sub, .person-avatar, .person-where, .person-badges { display: none; }
+  .person-back, .person-report { min-height: 36px; padding: 0 8px; }
+  .person-name { font-size: 17px; }
+  .person-status .ui-status__word { display: none; }
+  .person-chip { font-size: 14px; }
+  .person-body { grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr); gap: 4px; }
+  .person-left { grid-template-rows: minmax(0, 1fr); grid-template-columns: minmax(0, 1fr) auto; }
+  .person-organs { grid-template-columns: repeat(2, 34px); grid-auto-rows: minmax(0, 1fr); border-top: 0; border-left: 1px solid var(--border); padding: 3px; gap: 2px; }
+  .person-organ { min-height: 0; padding: 1px; }
+  .person-organ svg { width: 22px; height: 22px; }
+}

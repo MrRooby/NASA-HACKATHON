@@ -1,137 +1,179 @@
-import React, { useMemo } from 'react';
-import { Avatar, Badge, Button, Panel, StatusTag } from '../components/index.js';
+import React, { useMemo, useState } from 'react';
 import { useI18n } from '../i18n/index.js';
-import { CREW_PROFILES } from '../data/crewProfiles.js';
+import { CREW_PROFILES, localize } from '../data/crewProfiles.js';
 import { demoOverview } from '../data/demoReports.js';
-import { useHabitat } from '../habitat/useHabitat.js';
-import { ORGANS, ORGAN_STATUS_CODES, crewHealth, findLocation, localized, zoneName } from '../crew/crewStatus.js';
+import { useSharedHabitat } from '../habitat/sharedHabitat.js';
+import { ORGANS, crewHealth, findLocation } from '../crew/crewStatus.js';
+import { crewVitals } from '../crew/vitals.js';
+import { useCrewReports } from '../crew/useCrewReports.js';
+import { segmentStatusFromReport, ORGAN_SEGMENTS, LIMB_SEGMENTS, worstStatus } from '../organSegments.js';
+import { ORGAN_ICON, PixelAvatar, PixelIcon } from '../pixel/index.js';
+import { Badge, StatusMark } from '../ui/index.js';
+import BodyModel from '../body/BodyModel.jsx';
 import './crew.css';
 
-const STATUS_KEYS = {
-  ok: 'common.statusOk',
-  caution: 'common.statusCaution',
-  alert: 'common.statusAlert',
-  no_data: 'common.statusNoData',
-};
+const CODES = CREW_PROFILES.map(profile => profile.code);
+const ORGAN_IDS = ORGANS.map(item => item.organ);
 
-/** The ten organ statuses as two text lines per organ: code over status (BRN / OK). */
-function OrganStrip({ organs, name }) {
-  const { t } = useI18n();
+/** { segment: status } from the ten organ statuses alone (overview entry, no limb detail). */
+export function segmentStatusFromOrgans(organs) {
+  const collected = {};
+  for (const [organ, status] of Object.entries(organs || {})) {
+    const segments = organ === 'limbs' ? Object.values(LIMB_SEGMENTS).flat() : ORGAN_SEGMENTS[organ] || [];
+    for (const segment of segments) (collected[segment] ||= []).push(status);
+  }
+  return Object.fromEntries(Object.entries(collected).map(([segment, list]) => [segment, worstStatus(list)]));
+}
+
+/** 'Grażyna Brzęczyszczykiewicz' -> 'Grażyna B.' (the full name stays in title / aria-label). */
+export function shortName(name) {
+  const parts = String(name || '').trim().split(/\s+/);
+  return parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1][0]}.` : parts[0] || '';
+}
+
+function zoneLabel(t, code) {
+  if (!code) return null;
+  const key = `crew.zone_${code}`;
+  const text = t(key);
+  return text === key ? String(code).replace(/_/g, ' ') : text;
+}
+
+function Vital({ icon, value, unit, status, label, full }) {
+  const tone = status === 'caution' || status === 'alert' ? ` is-${status}` : '';
   return (
-    <ul className="crew-organs" aria-label={t('crew.organsOf', { name })}>
-      {ORGANS.map(({ organ, code }) => {
-        const status = organs[organ] ?? 'no_data';
-        const label = `${t(`crew.organ_${organ}`)}: ${t(STATUS_KEYS[status])}`;
-        return (
-          <li key={organ} className={`crew-organ crew-organ-${status}`} data-organ={organ} data-status={status} title={label} aria-label={label}>
-            <span aria-hidden="true">{code}</span>
-            <span aria-hidden="true">{ORGAN_STATUS_CODES[status]}</span>
-          </li>
-        );
-      })}
-    </ul>
+    <span className={`crew-vital${tone}`} title={value == null ? label : full} aria-label={value == null ? label : full}>
+      <PixelIcon name={icon} size={24} />
+      <span className="crew-vital-value num" aria-hidden="true">{value ?? '--'}</span>
+      <span className="crew-vital-unit" aria-hidden="true">{unit}</span>
+    </span>
   );
 }
 
-function CrewRow({ profile, isYou, health, loading, habitat, onOpen }) {
+function CrewTile({ profile, index, health, report, location, provenance, navigate }) {
   const { t, lang } = useI18n();
-  const location = findLocation(habitat, profile.crewCode);
+  const [hover, setHover] = useState(false);
+  const status = health.status;
+  const loud = status === 'caution' || status === 'alert';
+  const segmentStatus = useMemo(
+    () => (report ? segmentStatusFromReport(report) : segmentStatusFromOrgans(health.organs)),
+    [report, health.organs],
+  );
+  const vitals = useMemo(() => crewVitals(report), [report]);
+  const role = localize(profile.role, lang);
+  const open = () => navigate({ screen: 'person', code: profile.code });
 
   return (
-    <li className={`crew-member${isYou ? ' crew-member-you' : ''}`} data-code={profile.code} data-status={health.status}>
-      <Avatar code={profile.code} size={64} title={t('crew.avatarOf', { name: profile.name })} />
+    <li
+      className={`crew-tile px-frame crew-tile-${status}`}
+      data-code={profile.code}
+      data-status={status}
+      onPointerEnter={() => setHover(true)}
+      onPointerLeave={() => setHover(false)}
+    >
+      <button type="button" className="crew-tile-hit" onClick={open} aria-label={t('crew.openPerson', { name: profile.name })} title={profile.name} />
 
-      <div className="crew-member-id">
-        <h3 className="crew-member-name">
-          {profile.name}
-          {isYou ? <> <Badge tone="accent" data-testid="crew-you">{t('crew.you')}</Badge></> : null}
-        </h3>
-        <p className="crew-member-role">
-          <span className="crew-member-callsign">“{profile.callsign}”</span> · {localized(profile.role, lang)} · {profile.code}
-        </p>
-        <p className="crew-member-where">
-          <span className="label">{t('crew.home')}</span> {zoneName(habitat, profile.homeZone) ?? '—'}
-          {' · '}
-          <span className="label">{t('crew.location')}</span>{' '}
-          <span data-testid="crew-location">{location ? zoneName(habitat, location.code) : t('crew.locationUnknown')}</span>
-          {location && habitat?.demo ? <> <Badge kind="demo" /></> : null}
-        </p>
+      <header className="crew-head">
+        <PixelAvatar code={profile.code} size={48} className="crew-avatar" title={t('crew.avatarOf', { name: profile.name })} />
+        <div className="crew-id">
+          <h2 className="crew-name" title={profile.name} aria-label={profile.name}>{shortName(profile.name)}</h2>
+          <p className="crew-role"><span className="crew-callsign">{profile.callsign}</span> · {role}</p>
+        </div>
+        <StatusMark status={status} size="lg" className="crew-status" />
+      </header>
+      {loud && health.message ? <p className="crew-msg" title={health.message}>{health.message}</p> : null}
+
+      <div className="crew-model">
+        <BodyModel
+          segmentStatus={segmentStatus}
+          autoRotate
+          interactive={false}
+          paused={hover}
+          phase={index * (Math.PI / 2)}
+          label={t('crew.modelOf', { name: profile.name })}
+        />
       </div>
 
-      <div className="crew-member-health">
-        <p className="crew-member-status">
-          <StatusTag status={health.status} />{' '}
-          <span className="crew-member-message">{health.source === 'none'
-              ? (loading ? t('common.loading') : t('crew.noRecord'))
-              : (health.message || t('crew.noMessage'))}</span>
-        </p>
-        <OrganStrip organs={health.organs} name={profile.name} />
+      <ul className="crew-organs" aria-label={t('crew.organsOf', { name: profile.name })}>
+        {ORGAN_IDS.map(organ => {
+          const organStatus = health.organs[organ] ?? 'no_data';
+          const organName = t(`crew.organ_${organ}`);
+          return (
+            <li key={organ}>
+              <button
+                type="button"
+                className={`crew-organ is-${organStatus}`}
+                data-organ={organ}
+                data-status={organStatus}
+                title={`${organName}: ${t(`common.status_${organStatus}`)}`}
+                aria-label={t('crew.openOrgan', { organ: organName, status: t(`common.status_${organStatus}`), name: profile.name })}
+                onClick={event => {
+                  event.stopPropagation();
+                  navigate({ screen: 'person', code: profile.code, organ });
+                }}
+              >
+                <PixelIcon name={ORGAN_ICON[organ]} size={32} status={organStatus === 'ok' ? undefined : organStatus} />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div className="crew-vitals" aria-label={t('crew.vitals')}>
+        <Vital icon="hr" value={vitals.hr.value} unit="bpm" status={vitals.hr.status} label={t('crew.hr')} full={t('crew.hrFull', { v: vitals.hr.value })} />
+        <Vital icon="spo2" value={vitals.spo2.value} unit="%" status={vitals.spo2.status} label={t('crew.spo2')} full={t('crew.spo2Full', { v: vitals.spo2.value })} />
+        <Vital icon="sleep" value={vitals.sleep.value} unit="h" status={vitals.sleep.status} label={t('crew.sleep')} full={t('crew.sleepFull', { v: vitals.sleep.value })} />
       </div>
 
-      <div className="crew-member-actions">
-        <Button aria-label={`${t('crew.openProfile')}: ${profile.name}`} onClick={() => onOpen(profile.code, 'profile')}>
-          {t('crew.openProfile')}
-        </Button>
-        <Button aria-label={`${t('crew.openWearables')}: ${profile.name}`} onClick={() => onOpen(profile.code, 'wearables')}>
-          {t('crew.openWearables')}
-        </Button>
-      </div>
+      <footer className="crew-foot">
+        <span className="crew-where" data-testid="crew-location" title={t('crew.location')}>
+          <span className="crew-pin" aria-hidden="true">⌖</span>
+          {location ? zoneLabel(t, location) : t('crew.locationUnknown')}
+        </span>
+        {provenance ? <Badge kind={provenance} /> : null}
+      </footer>
     </li>
   );
 }
 
 /**
- * CREW screen: the four crew members as a vertical roster with their overall status, the ten
- * organ statuses (crew overview of MOTHER, GET /api/organs; the built-in demo overview while
- * MOTHER is unreachable) and where they are (habitat occupancy).
- * props (shared by every screen): { mother, session, viewedCode, setViewedCode, navigate, profile }
+ * CREW start screen (DESIGN.md §4.1): four crew tiles, each a big button to the person.
+ * Rotating 3D body with organ colours, the ten organ icons (each opens the person at that
+ * organ), three vitals and where the person is. Live: per-person organ reports at the shared
+ * sol (fallback: crew overview); offline: built-in demo records with a DEMO badge.
+ * props: { mother, route, navigate }
  */
-export default function CrewScreen({ mother, session, setViewedCode, navigate }) {
-  const { t } = useI18n();
-  const { data: habitat } = useHabitat({ sol: null }); // the overview is always the latest sol
+export default function CrewScreen({ mother, navigate }) {
+  const mode = mother?.mode ?? (mother?.online ? 'online' : 'offline');
+  const online = mode === 'online';
+  const offline = mode === 'offline';
+  const { reports } = useCrewReports(CODES, { mode, period: mother?.period });
+  const { data: habitat } = useSharedHabitat({ sol: mother?.period?.sol ?? null });
 
-  // Live (or last known) overview; without a link the demo records, labelled DEMO.
   const live = Array.isArray(mother?.overview) ? mother.overview : null;
-  const overview = useMemo(() => live ?? (mother?.online ? null : demoOverview()), [live, mother?.online]);
-  const health = Object.fromEntries(CREW_PROFILES.map(profile => [profile.code, crewHealth({ code: profile.code, overview })]));
-  const members = Object.values(health);
-  const demo = members.some(item => item.demo);
-  const synthetic = members.some(item => item.synthetic);
-  const metaText = live ? t('crew.asOfLatest') : overview ? t('crew.noLink') : t('common.loading');
-
-  const open = (code, screen) => {
-    setViewedCode(code);
-    navigate(screen);
-  };
+  const overview = useMemo(() => live ?? (offline ? demoOverview() : null), [live, offline]);
 
   return (
     <div className="crew-screen">
-      <Panel
-        title={t('crew.rosterTitle')}
-        meta={(
-          <>
-            <span>{metaText}</span>
-            {demo ? <Badge kind="demo" /> : null}
-            {synthetic ? <Badge kind="synthetic" /> : null}
-            <Badge kind="fictional">{t('crew.fictionalCrew')}</Badge>
-          </>
-        )}
-      >
-        <ol className="crew-roster" aria-label={t('crew.rosterTitle')}>
-          {CREW_PROFILES.map(profile => (
-            <CrewRow
+      <ol className="crew-grid">
+        {CREW_PROFILES.map((profile, index) => {
+          const report = reports[profile.code] ?? null;
+          const health = crewHealth({ code: profile.code, report, overview });
+          const zone = findLocation(habitat, profile.crewCode);
+          const provenance = offline || health.demo ? 'demo' : health.synthetic ? 'synthetic' : null;
+          return (
+            <CrewTile
               key={profile.code}
               profile={profile}
-              isYou={profile.code === session}
-              health={health[profile.code]}
-              loading={!overview}
-              habitat={habitat}
-              onOpen={open}
+              index={index}
+              health={health}
+              report={report && report.subject?.code === profile.code ? report : null}
+              location={zone?.code ?? null}
+              provenance={provenance}
+              navigate={navigate}
             />
-          ))}
-        </ol>
-        <p className="crew-legend">{t('crew.legend')}</p>
-      </Panel>
+          );
+        })}
+      </ol>
     </div>
   );
 }

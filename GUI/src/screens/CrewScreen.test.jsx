@@ -1,157 +1,70 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
-import { beforeEach, describe, expect, it } from 'vitest';
-import CrewScreen from './CrewScreen.jsx';
-import { demoOverview } from '../data/demoReports.js';
-import { fixtures } from '../test/mother.js';
-import { offlineMother, onlineMother, renderScreen, stubBackend } from '../profile/testUtils.jsx';
+import { describe, expect, it, vi } from 'vitest';
+import CrewScreen, { segmentStatusFromOrgans } from './CrewScreen.jsx';
+import { makeMother, renderWithProviders } from '../test/renderApp.jsx';
+import { stubHabitat } from '../habitat/testHelpers.js';
+import { jsonResponse, fixtures } from '../test/mother.js';
 
-const rows = () => within(screen.getByRole('list', { name: /^(Crew roster|Lista załogi)$/ })).getAllByRole('listitem').filter(item => item.matches('.crew-member'));
-const row = code => rows().find(item => item.getAttribute('data-code') === code);
-const overviewOf = code => fixtures.overview.find(entry => entry.subject.code === code);
+vi.mock('../body/BodyModel.jsx', async () => ({ default: (await import('../test/mocks.jsx')).MockBodyModel }));
 
-/** Render and wait for the habitat occupancy (useHabitat) to arrive. */
-async function renderCrew(options) {
-  const utils = renderScreen(CrewScreen, options);
-  await waitFor(() => expect(screen.getAllByTestId('crew-location')[0]).not.toHaveTextContent(/^Unknown$|^Nieznane$/));
-  return utils;
-}
+const tile = code => document.querySelector(`.crew-tile[data-code="${code}"]`);
+const renderCrew = (mother = makeMother(), navigate = vi.fn()) => {
+  renderWithProviders(<CrewScreen mother={mother} route={{ screen: 'crew' }} navigate={navigate} />);
+  return navigate;
+};
 
-beforeEach(() => {
-  stubBackend();
-});
-
-describe('CrewScreen: roster', () => {
-  it('lists the four crew members in order', async () => {
-    await renderCrew({ session: 'HAB-C1' });
-    expect(rows().map(item => item.getAttribute('data-code'))).toEqual(['HAB-C1', 'HAB-C2', 'HAB-C3', 'HAB-C4']);
-    expect(rows().map(item => within(item).getByRole('heading', { level: 3 }).textContent.replace(/\s*You$/, ''))).toEqual([
-      'Aleksander Polkowski', 'Bogusław Grzegrzułkiewicz', 'Roman Czarny', 'Grażyna Brzęczyszczykiewicz',
-    ]);
-  });
-
-  it('shows callsign, role, home module and avatar of each member', async () => {
-    await renderCrew({ session: 'HAB-C1' });
-    const c3 = within(row('HAB-C3'));
-    expect(c3.getByText(/BAZALT/)).toBeInTheDocument();
-    expect(row('HAB-C3').querySelector('.crew-member-role')).toHaveTextContent('“BAZALT” · Geologist · HAB-C3');
-    expect(row('HAB-C3').querySelector('.crew-member-where')).toHaveTextContent(/Home Habitation module M2/);
-    expect(c3.getByRole('img', { name: 'Avatar of Roman Czarny' })).toHaveAttribute('data-code', 'C3');
-  });
-
-  it('marks the logged-in member as YOU', async () => {
-    await renderCrew({ session: 'HAB-C3' });
-    const marks = screen.getAllByTestId('crew-you');
-    expect(marks).toHaveLength(1);
-    expect(marks[0]).toHaveTextContent('You');
-    expect(row('HAB-C3')).toContainElement(marks[0]);
-    expect(row('HAB-C3')).toHaveClass('crew-member-you');
-    expect(row('HAB-C1')).not.toHaveClass('crew-member-you');
-  });
-
-  it('labels the crew as fictional and the statuses as synthetic', async () => {
-    await renderCrew({ session: 'HAB-C1' });
-    expect(screen.getByText('Fictional crew')).toHaveAttribute('data-kind', 'fictional');
-    expect(screen.getByText('SYNTHETIC')).toBeInTheDocument();
-    expect(screen.getByText('Status as of the latest sol')).toBeInTheDocument();
-  });
-});
-
-describe('CrewScreen: health from the crew overview', () => {
-  it.each(['HAB-C1', 'HAB-C2', 'HAB-C3', 'HAB-C4'])('shows the overall status and top message of %s', async code => {
-    await renderCrew({ session: 'HAB-C1' });
-    const entry = overviewOf(code);
-    expect(row(code)).toHaveAttribute('data-status', entry.overall_status);
-    expect(row(code).querySelector('.crew-member-status .stag')).toHaveAttribute('data-status', entry.overall_status);
-    expect(within(row(code)).getByText(entry.top_message)).toBeInTheDocument();
-  });
-
-  it('shows the ten organ statuses as text', async () => {
-    await renderCrew({ session: 'HAB-C1' });
-    const organs = within(row('HAB-C3')).getByRole('list', { name: 'Organ status of Roman Czarny' });
-    const items = within(organs).getAllByRole('listitem');
-    expect(items).toHaveLength(10);
-    expect(Object.fromEntries(items.map(item => [item.getAttribute('data-organ'), item.getAttribute('data-status')])))
-      .toEqual(overviewOf('HAB-C3').organs);
-    expect(items.map(item => item.textContent)).toEqual([
-      'BRNOK', 'EYE--', 'HRTOK', 'LNGOK', 'BLDCA', 'KIDCA', 'GUTCA', 'MSK--', 'LMBOK', 'EXPOK',
-    ]);
-    expect(within(organs).getByLabelText('Blood: Caution')).toBeInTheDocument();
-    expect(within(organs).getByLabelText('Eyes: No data')).toBeInTheDocument();
-  });
-
-  it('shows where everyone is', async () => {
-    await renderCrew({ session: 'HAB-C1' });
-    expect(within(row('HAB-C1')).getByTestId('crew-location')).toHaveTextContent('Habitation module M1');
-    expect(within(row('HAB-C4')).getByTestId('crew-location')).toHaveTextContent('Habitation module M2');
-  });
-
-  it('shows the built-in demo records, labelled DEMO, without a link to MOTHER', async () => {
-    await renderCrew({ session: 'HAB-C1', mother: offlineMother() });
-    expect(rows()).toHaveLength(4);
-    for (const entry of demoOverview()) {
-      const item = row(entry.subject.code);
-      expect(item).toHaveAttribute('data-status', entry.overall_status);
-      expect(within(item).getByText(entry.top_message)).toBeInTheDocument();
+describe('CREW start screen', () => {
+  it('shows the four habitat crew members, each as one big button', async () => {
+    stubHabitat();
+    const navigate = renderCrew();
+    const tiles = document.querySelectorAll('.crew-tile');
+    expect([...tiles].map(item => item.getAttribute('data-code'))).toEqual(['HAB-C1', 'HAB-C2', 'HAB-C3', 'HAB-C4']);
+    expect(screen.getAllByTestId('body-model')).toHaveLength(4);
+    for (const model of screen.getAllByTestId('body-model')) {
+      expect(model).toHaveAttribute('data-auto-rotate', 'true');
+      expect(model).toHaveAttribute('data-interactive', 'false');
     }
-    expect(row('HAB-C4')).toHaveAttribute('data-status', 'alert'); // the demo keeps one alert
-    expect(screen.getByText('No link to MOTHER · demo data')).toBeInTheDocument();
-    expect(screen.getAllByText('DEMO').length).toBeGreaterThan(0);
-    expect(screen.queryByText('Status as of the latest sol')).not.toBeInTheDocument();
+    fireEvent.click(within(tile('HAB-C2')).getByRole('button', { name: 'Open Bogusław Grzegrzułkiewicz' }));
+    expect(navigate).toHaveBeenCalledWith({ screen: 'person', code: 'HAB-C2' });
+    await waitFor(() => expect(within(tile('HAB-C1')).getByTestId('crew-location')).toHaveTextContent(/Module M1/i));
   });
 
-  it('shows [ ---- ] for everyone while the overview has not arrived yet', async () => {
-    await renderCrew({ session: 'HAB-C1', mother: onlineMother('HAB-C1', { overview: null }) });
-    for (const item of rows()) {
-      expect(item).toHaveAttribute('data-status', 'no_data');
-      expect(within(item).getByText('[ ---- ]')).toBeInTheDocument();
-      expect(within(item).getByText('Loading…')).toBeInTheDocument();
-      expect(within(item).getAllByRole('listitem').every(organ => organ.getAttribute('data-status') === 'no_data')).toBe(true);
-    }
-    expect(screen.queryByText('SYNTHETIC')).not.toBeInTheDocument();
-    expect(screen.queryByText('DEMO')).not.toBeInTheDocument();
+  it('an organ icon opens the person at that organ (and not the tile)', () => {
+    stubHabitat();
+    const navigate = renderCrew();
+    const organs = within(tile('HAB-C4')).getAllByRole('button', { name: /Open for/ });
+    expect(organs).toHaveLength(10);
+    fireEvent.click(tile('HAB-C4').querySelector('[data-organ="limbs"]'));
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(navigate).toHaveBeenCalledWith({ screen: 'person', code: 'HAB-C4', organ: 'limbs' });
   });
 
-  it('shows [ ---- ] for a member the overview does not list', async () => {
-    const overview = fixtures.overview.filter(entry => entry.subject.code !== 'HAB-C2');
-    await renderCrew({ session: 'HAB-C1', mother: onlineMother('HAB-C1', { overview }) });
-    expect(row('HAB-C2')).toHaveAttribute('data-status', 'no_data');
-    expect(within(row('HAB-C2')).getByText('No health record.')).toBeInTheDocument();
-    expect(row('HAB-C1')).toHaveAttribute('data-status', 'caution');
-  });
-});
-
-describe('CrewScreen: actions', () => {
-  it('opens the profile of a crew member', async () => {
-    const { navigate, setViewedCode } = await renderCrew({ session: 'HAB-C1' });
-    fireEvent.click(within(row('HAB-C3')).getByRole('button', { name: 'Profile: Roman Czarny' }));
-    expect(setViewedCode).toHaveBeenCalledWith('HAB-C3');
-    expect(navigate).toHaveBeenCalledWith('profile');
-    expect(setViewedCode.mock.invocationCallOrder[0]).toBeLessThan(navigate.mock.invocationCallOrder[0]);
+  it('live: per-person reports give organ colours, vitals and the status', async () => {
+    stubHabitat(url => (url.includes('/api/organs/HAB-C4') ? jsonResponse(fixtures.habC4Sol142) : undefined));
+    renderCrew();
+    await waitFor(() => expect(tile('HAB-C4')).toHaveAttribute('data-status', 'alert'));
+    expect(tile('HAB-C4').querySelector('[data-organ="limbs"]')).toHaveAttribute('data-status', 'alert');
+    expect(tile('HAB-C4').querySelector('[data-organ="kidneys"]')).toHaveAttribute('data-status', 'caution');
+    expect(within(tile('HAB-C4')).getByLabelText('Heart rate 62 bpm')).toBeInTheDocument();
+    expect(within(tile('HAB-C4')).getByLabelText('Blood oxygen 97.2 %')).toBeInTheDocument();
+    const status = JSON.parse(within(tile('HAB-C4')).getByTestId('body-model').getAttribute('data-segment-status'));
+    expect(status.left_thigh).toBe('alert');
+    expect(status.right_thigh).not.toBe('alert');
+    // Caution / alert tiles show the top message in one line.
+    expect(tile('HAB-C4').querySelector('.crew-msg')).toHaveTextContent(fixtures.habC4Sol142.top_message);
+    expect(within(tile('HAB-C4')).getByText('SYNTHETIC')).toBeInTheDocument();
   });
 
-  it('opens the wearable data of a crew member', async () => {
-    const { navigate, setViewedCode } = await renderCrew({ session: 'HAB-C1' });
-    fireEvent.click(within(row('HAB-C4')).getByRole('button', { name: 'Wearable data: Grażyna Brzęczyszczykiewicz' }));
-    expect(setViewedCode).toHaveBeenCalledWith('HAB-C4');
-    expect(navigate).toHaveBeenCalledWith('wearables');
+  it('offline: the built-in demo records with a DEMO badge on every tile', async () => {
+    renderCrew(makeMother({ mode: 'offline', online: false, overview: null, report: null }));
+    await waitFor(() => expect(screen.getAllByText('DEMO')).toHaveLength(4));
+    expect(tile('HAB-C4')).toHaveAttribute('data-status', 'alert');
   });
 
-  it('has both buttons on every row', async () => {
-    await renderCrew({ session: 'HAB-C1' });
-    for (const item of rows()) {
-      expect(within(item).getByRole('button', { name: /^Profile:/ })).toBeEnabled();
-      expect(within(item).getByRole('button', { name: /^Wearable data:/ })).toBeEnabled();
-    }
-  });
-});
-
-describe('CrewScreen: Polish', () => {
-  it('translates roles and labels', async () => {
-    await renderCrew({ session: 'HAB-C4', lang: 'pl' });
-    expect(screen.getByRole('heading', { level: 2, name: 'Lista załogi' })).toBeInTheDocument();
-    expect(row('HAB-C4').querySelector('.crew-member-role')).toHaveTextContent('Lekarz misji');
-    expect(screen.getByTestId('crew-you')).toHaveTextContent('Ty');
-    expect(screen.getByText('Fikcyjna załoga')).toBeInTheDocument();
-    expect(within(row('HAB-C1')).getByLabelText('Nerki: Uwaga')).toBeInTheDocument();
+  it('maps the ten organ statuses onto body segments (worst wins)', () => {
+    const segments = segmentStatusFromOrgans({ brain: 'ok', eyes: 'caution', limbs: 'alert', heart: 'ok' });
+    expect(segments.head).toBe('caution');
+    expect(segments.left_hand).toBe('alert');
+    expect(segments.chest).toBe('ok');
   });
 });

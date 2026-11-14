@@ -19,10 +19,11 @@ describe('buildNotifications: HAB-C4 sol 142 + habitat sol 142', () => {
       id: 'organ:limbs',
       severity: 'alert',
       source: 'organ',
+      organ: 'limbs',
       title: 'Limbs (circulation)',
       detail: 'Left leg: blood flow (perfusion) 25% of the other limbs - check this limb now.',
       action: 'Inspect the limb (pressure, swelling, colour, cold); free it; if compressed >1 h start IV fluids BEFORE release.',
-      target: { screen: 'wearables', organ: 'limbs', limb: 'left_leg' },
+      target: { screen: 'person', code: 'HAB-C4', organ: 'limbs', limb: 'left_leg' },
     });
   });
 
@@ -32,7 +33,7 @@ describe('buildNotifications: HAB-C4 sol 142 + habitat sol 142', () => {
       source: 'organ',
       title: 'Kidneys & urine',
       detail: 'Stone risk: urine volume 1.73 L/d (< 2.5).',
-      target: { screen: 'wearables', organ: 'kidneys' },
+      target: { screen: 'person', code: 'HAB-C4', organ: 'kidneys' },
     });
     expect(byId(items, 'organ:kidneys').action).toMatch(/^Drink to/);
   });
@@ -45,7 +46,7 @@ describe('buildNotifications: HAB-C4 sol 142 + habitat sol 142', () => {
       title: 'Habitation module M1 (C1, C2)',
       detail: 'CO2 partial pressure: peak 7.74 mmHg (normal 1.5–2.5), now 2.28 mmHg',
       action: null,
-      target: { screen: 'base', zone: 'module_M1', channel: 'ppco2', sol: 142 },
+      target: { screen: 'base', room: 'quarters_north', zone: 'module_M1', channel: 'ppco2', sol: 142 },
     });
   });
 
@@ -62,7 +63,7 @@ describe('buildNotifications: HAB-C4 sol 142 + habitat sol 142', () => {
       severity: 'caution',
       title: 'Scrubber fault',
       detail: 'Habitation module M1 (C1, C2) · from 02:10 UTC to 14:10 UTC · sol 142',
-      target: { screen: 'base', zone: 'module_M1', event: 'evt-000483', sol: 142 },
+      target: { screen: 'base', room: 'quarters_north', zone: 'module_M1', event: 'evt-000483', sol: 142 },
     });
   });
 
@@ -128,7 +129,7 @@ describe('buildNotifications: other inputs', () => {
       source: 'device',
       title: 'Left arm band',
       detail: 'Left arm band lost contact. · State: disconnected · battery 0%',
-      target: { screen: 'wearables', device: 'left_arm' },
+      target: { screen: 'person', organ: 'limbs', device: 'left_arm' },
     });
     expect(byId(items, 'device:head_eeg')).toMatchObject({ title: 'EEG headband', detail: 'State: low battery · battery 12%' });
   });
@@ -139,7 +140,7 @@ describe('buildNotifications: other inputs', () => {
     limbs.headline = 'Circulation problem.';
     limbs.metrics = [];
     limbs.checks = [];
-    expect(buildNotifications({ report })[0].target).toEqual({ screen: 'wearables', organ: 'limbs' });
+    expect(buildNotifications({ report })[0].target).toEqual({ screen: 'person', code: 'HAB-C4', organ: 'limbs' });
   });
 
   it('sol 380: leak in cupola 2 (zone alert on a text channel + major event)', () => {
@@ -147,7 +148,7 @@ describe('buildNotifications: other inputs', () => {
     expect(byId(items, 'habitat:cupola_2')).toMatchObject({
       severity: 'alert',
       detail: 'Leak detector (joint): alert during this sol, now ok',
-      target: { screen: 'base', zone: 'cupola_2', channel: 'leak_detector', sol: 380 },
+      target: { screen: 'base', room: null, zone: 'cupola_2', channel: 'leak_detector', sol: 380 },
     });
     expect(byId(items, 'event:evt-000491')).toMatchObject({ severity: 'caution', title: 'Leak' });
     // The three other cupolas keep their shared caution; cupola 2 is not repeated there.

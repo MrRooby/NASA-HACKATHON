@@ -61,4 +61,21 @@ export default {
   footerDemo: 'No link to MOTHER · built-in demo data',
   disclaimer: 'Demonstration only · not medical advice',
   credit: 'NASA Space Apps 2026',
+
+  // v2 shell (src/App.jsx, src/shell/TopBar.jsx)
+  breadcrumb: 'Location in the app',
+  sidePanel: 'Activities and alerts',
+  linkLive: 'LIVE',
+  linkConnecting: 'LINK…',
+  linkDemo: 'DEMO',
+  alarmsSummary: '{alert} alerts, {caution} cautions',
+  habitatStatus: 'Habitat status',
+  status_ok: 'OK',
+  status_caution: 'Caution',
+  status_alert: 'Alert',
+  status_no_data: 'No data',
+  prevSol: 'Previous sol',
+  nextSol: 'Next sol',
+  tasks: 'Tasks',
+  tasksN: 'Tasks ({n})',
 };

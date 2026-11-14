@@ -29,3 +29,8 @@ afterEach(() => {
   document.documentElement.removeAttribute('data-crt');
   document.documentElement.setAttribute('lang', 'en');
 });
+
+// Every test starts at the app root URL (the shell mirrors its route into the query string).
+afterEach(() => {
+  window.history.replaceState(null, '', '/');
+});

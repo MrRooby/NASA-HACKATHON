@@ -61,4 +61,21 @@ export default {
   footerDemo: 'Brak łącza z MOTHER · wbudowane dane demo',
   disclaimer: 'Tylko demonstracja · to nie jest porada medyczna',
   credit: 'NASA Space Apps 2026',
+
+  // v2 shell (src/App.jsx, src/shell/TopBar.jsx)
+  breadcrumb: 'Miejsce w aplikacji',
+  sidePanel: 'Aktywności i alarmy',
+  linkLive: 'NA ŻYWO',
+  linkConnecting: 'ŁĄCZĘ…',
+  linkDemo: 'DEMO',
+  alarmsSummary: 'Alarmy: {alert}, ostrzeżenia: {caution}',
+  habitatStatus: 'Stan habitatu',
+  status_ok: 'OK',
+  status_caution: 'Uwaga',
+  status_alert: 'Alarm',
+  status_no_data: 'Brak danych',
+  prevSol: 'Poprzedni sol',
+  nextSol: 'Następny sol',
+  tasks: 'Zadania',
+  tasksN: 'Zadania ({n})',
 };

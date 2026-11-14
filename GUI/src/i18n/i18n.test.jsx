@@ -38,7 +38,7 @@ describe('dictionaries', () => {
 describe('translate', () => {
   it('interpolates {name} parameters', () => {
     expect(translate('en', 'common.solN', { n: 142 })).toBe('SOL 142');
-    expect(translate('pl', 'login.openFor', { name: 'Roman Czarny' })).toBe('Otwórz sesję jako Roman Czarny');
+    expect(translate('pl', 'crew.openPerson', { name: 'Roman Czarny' })).toBe('Otwórz: Roman Czarny');
     expect(translate('en', 'common.solN', { n: 0 })).toBe('SOL 0');
   });
 

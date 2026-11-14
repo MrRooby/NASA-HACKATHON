@@ -2,34 +2,35 @@ import { act, fireEvent, render, screen, waitFor, within } from '@testing-librar
 import { describe, expect, it, vi } from 'vitest';
 import exampleTheme from '../../themes/example-theme.json';
 import Providers from '../Providers.jsx';
-import SettingsScreen from '../screens/SettingsScreen.jsx';
+import SettingsModal from './SettingsModal.jsx';
 import { STORAGE_LANG } from '../i18n/index.js';
-import { makeMother, renderWithProviders } from '../test/renderApp.jsx';
+import { renderWithProviders } from '../test/renderApp.jsx';
 import { STORAGE_CUSTOM, STORAGE_SELECTED } from '../theme/index.js';
 import { STORAGE_CRT, useSettings } from './SettingsContext.jsx';
 
 const html = document.documentElement;
-const renderSettings = (mother = makeMother()) => renderWithProviders(<SettingsScreen mother={mother} />);
+const renderSettings = (onClose = () => {}) => renderWithProviders(<SettingsModal open onClose={onClose} />);
 const themeFile = (content, name = 'theme.json') =>
   new File([typeof content === 'string' ? content : JSON.stringify(content)], name, { type: 'application/json' });
 const importFile = file => fireEvent.change(screen.getByLabelText('Import theme (.json)'), { target: { files: [file] } });
-const themeRow = id => document.querySelector(`.theme-row[data-theme-id="${id}"]`);
+const themeRow = id => document.querySelector(`.theme-cell[data-theme-id="${id}"]`);
+const themeChip = id => themeRow(id)?.querySelector('.theme-chip');
 
 describe('language', () => {
   it('switches the visible text between English and Polish and persists the choice', () => {
     renderSettings();
-    expect(screen.getByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Settings' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'English' })).toHaveAttribute('aria-pressed', 'true');
 
     fireEvent.click(screen.getByRole('button', { name: 'Polski' }));
-    expect(screen.getByRole('heading', { level: 1, name: 'Ustawienia' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Ustawienia' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Motyw kolorów' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Polski' })).toHaveAttribute('aria-pressed', 'true');
     expect(window.localStorage.getItem(STORAGE_LANG)).toBe('pl');
     expect(html).toHaveAttribute('lang', 'pl');
 
     fireEvent.click(screen.getByRole('button', { name: 'English' }));
-    expect(screen.getByRole('heading', { level: 1, name: 'Settings' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Settings' })).toBeInTheDocument();
   });
 });
 
@@ -61,11 +62,11 @@ describe('CRT effect', () => {
 describe('themes', () => {
   it('lists the built-in themes with swatches and marks the active one', () => {
     renderSettings();
-    expect(document.querySelectorAll('.theme-row')).toHaveLength(6);
+    expect(document.querySelectorAll('.theme-cell')).toHaveLength(6);
     expect(html).toHaveAttribute('data-theme', 'nostromo');
-    expect(themeRow('nostromo')).toHaveAttribute('aria-current', 'true');
-    expect(within(themeRow('nostromo')).getByText('[ Active ]')).toBeInTheDocument();
-    expect(themeRow('phosphor').querySelectorAll('.theme-swatch')).toHaveLength(13);
+    expect(themeChip('nostromo')).toHaveAttribute('aria-pressed', 'true');
+    expect(themeChip('phosphor')).toHaveAttribute('aria-pressed', 'false');
+    expect(themeRow('phosphor').querySelectorAll('.theme-swatches span')).toHaveLength(6);
     expect(within(themeRow('phosphor')).queryByRole('button', { name: /remove/i })).not.toBeInTheDocument();
   });
 
@@ -75,8 +76,8 @@ describe('themes', () => {
     expect(html).toHaveAttribute('data-theme', 'phosphor');
     expect(html.style.getPropertyValue('--bg')).toBe('#050a07');
     expect(html.style.getPropertyValue('--accent')).toBe('#4dff9a');
-    expect(themeRow('phosphor')).toHaveAttribute('aria-current', 'true');
-    expect(themeRow('nostromo')).not.toHaveAttribute('aria-current');
+    expect(themeChip('phosphor')).toHaveAttribute('aria-pressed', 'true');
+    expect(themeChip('nostromo')).toHaveAttribute('aria-pressed', 'false');
     expect(window.localStorage.getItem(STORAGE_SELECTED)).toBe('phosphor');
   });
 
@@ -91,8 +92,8 @@ describe('themes', () => {
     renderSettings();
     importFile(themeFile(exampleTheme));
     expect(await screen.findByText(/Theme "Amber Terminal" imported and activated/)).toBeInTheDocument();
-    expect(document.querySelectorAll('.theme-row')).toHaveLength(7);
-    expect(themeRow('amber-terminal')).toHaveAttribute('aria-current', 'true');
+    expect(document.querySelectorAll('.theme-cell')).toHaveLength(7);
+    expect(themeChip('amber-terminal')).toHaveAttribute('aria-pressed', 'true');
     expect(html).toHaveAttribute('data-theme', 'amber-terminal');
     expect(html.style.getPropertyValue('--accent')).toBe('#ffb000');
     expect(JSON.parse(window.localStorage.getItem(STORAGE_CUSTOM))).toEqual([exampleTheme]);
@@ -111,7 +112,7 @@ describe('themes', () => {
     await screen.findByText(/imported and activated/);
     first.unmount();
     renderSettings();
-    expect(themeRow('amber-terminal')).toHaveAttribute('aria-current', 'true');
+    expect(themeChip('amber-terminal')).toHaveAttribute('aria-pressed', 'true');
     expect(html).toHaveAttribute('data-theme', 'amber-terminal');
   });
 
@@ -124,7 +125,7 @@ describe('themes', () => {
     expect(alert).toHaveTextContent('"name" must be');
     expect(alert).toHaveTextContent('colors.ok must be a hex colour');
     expect(alert).toHaveTextContent('colors.info is missing.');
-    expect(document.querySelectorAll('.theme-row')).toHaveLength(6);
+    expect(document.querySelectorAll('.theme-cell')).toHaveLength(6);
     expect(html).toHaveAttribute('data-theme', 'nostromo');
 
     importFile(themeFile('{ not json', 'broken.json'));
@@ -135,12 +136,20 @@ describe('themes', () => {
   });
 });
 
-describe('data link info', () => {
-  it('shows the API base read-only and the connection state', () => {
-    renderSettings(makeMother({ mode: 'offline', online: false, error: { message: 'Cannot reach MOTHER', hint: 'start MOTHER' } }));
-    expect(screen.getByText('same origin /api')).toBeInTheDocument();
-    expect(screen.getByText('OFFLINE · DEMO')).toHaveAttribute('title', 'Cannot reach MOTHER · start MOTHER');
-    expect(screen.getByText('Cannot reach MOTHER')).toBeInTheDocument();
+describe('modal', () => {
+  it('is a dialog that closes with the close button and with Escape', () => {
+    const onClose = vi.fn();
+    renderSettings(onClose);
+    expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    expect(onClose).toHaveBeenCalledTimes(1);
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(onClose).toHaveBeenCalledTimes(2);
+  });
+
+  it('renders nothing while closed', () => {
+    renderWithProviders(<SettingsModal open={false} onClose={() => {}} />);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });
 

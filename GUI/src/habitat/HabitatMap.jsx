@@ -18,10 +18,10 @@ const STATUS_WORD_KEYS = {
 export const mapStatus = status => (STATUSES.includes(status) ? status : 'no_data');
 
 const GRID = 51.2;
-const CREW_W = 26;
-const CREW_H = 17;
-const CREW_GAP = 4;
-const MARK_H = 20;
+const CREW_W = 38;
+const CREW_H = 26;
+const CREW_GAP = 5;
+const MARK_H = 28;
 
 const toLookup = rooms => (Array.isArray(rooms)
   ? Object.fromEntries(rooms.map(room => [room.id, room]))
@@ -41,7 +41,7 @@ function RoomLabel({ def, text, simulatedText }) {
         <text
           className="hmap-sim"
           x={x}
-          y={y + (lines.length - 1) * lineHeight + 21}
+          y={y + (lines.length - 1) * lineHeight + 25}
           textAnchor={align}
           dominantBaseline="central"
         >
@@ -73,8 +73,8 @@ function SubZoneMarks({ def, subZones, t }) {
     const y = (def.marks?.y ?? def.crew.y + 40) + index * MARK_H;
     return (
       <g key={sub.code} className={`hmap-mark is-${sub.status}`} data-subzone={sub.code} data-status={sub.status} aria-hidden="true">
-        <rect x={x} y={y} width={9} height={9} />
-        <text x={x + 15} y={y + 5} dominantBaseline="central">{t(`base.zone_${sub.code}`)}</text>
+        <rect x={x} y={y} width={16} height={16} />
+        <text x={x + 24} y={y + 8} dominantBaseline="central">{t(`base.zone_${sub.code}`)}</text>
       </g>
     );
   });

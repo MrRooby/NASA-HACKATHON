@@ -46,7 +46,7 @@ describe('NotificationList', () => {
     render(<NotificationList items={items} onOpen={onOpen} />);
     fireEvent.click(screen.getByRole('button', { name: 'Open: Limbs (circulation)' }));
     expect(onOpen).toHaveBeenCalledTimes(1);
-    expect(onOpen.mock.calls[0][0]).toEqual({ screen: 'wearables', organ: 'limbs', limb: 'left_leg' });
+    expect(onOpen.mock.calls[0][0]).toEqual({ screen: 'person', code: 'HAB-C4', organ: 'limbs', limb: 'left_leg' });
     expect(onOpen.mock.calls[0][1]).toBe(items[0]);
     fireEvent.click(screen.getByRole('button', { name: 'Open: Habitation module M1 (C1, C2)' }));
     expect(onOpen.mock.calls[1][0]).toMatchObject({ screen: 'base', zone: 'module_M1' });

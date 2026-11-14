@@ -1,0 +1,20 @@
+.body-model {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.body-model canvas { display: block; touch-action: none; }
+.body-model:not(.body-model-interactive) canvas { pointer-events: none; }
+.body-model-hot canvas { cursor: pointer; }
+.body-model-fault {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  color: var(--dim);
+}

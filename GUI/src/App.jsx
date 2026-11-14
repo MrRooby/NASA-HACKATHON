@@ -1,52 +1,27 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useMother from './useMother.js';
-import { getProfile } from './data/crewProfiles.js';
 import { useT } from './i18n/index.js';
-import { Button, ConnectionBadge, Panel, StatusTag } from './components/index.js';
-import LoginScreen from './screens/LoginScreen.jsx';
-import HomeScreen from './screens/HomeScreen.jsx';
-import WearablesScreen from './screens/WearablesScreen.jsx';
-import BaseScreen from './screens/BaseScreen.jsx';
-import ProfileScreen from './screens/ProfileScreen.jsx';
+import { demoReport } from './data/demoReports.js';
+import { useSharedHabitat } from './habitat/sharedHabitat.js';
+import { AlertPanel, TaskPanel, useAlertCounts, useTasks } from './tasks/index.js';
+import SettingsModal from './settings/SettingsModal.jsx';
+import TopBar from './shell/TopBar.jsx';
+import { DEFAULT_ROUTE, mergeRoute, normalizeRoute, parentRoute, routeFromSearch, routeToSearch, sameRoute } from './shell/route.js';
 import CrewScreen from './screens/CrewScreen.jsx';
-import TestsScreen from './screens/TestsScreen.jsx';
-import SettingsScreen from './screens/SettingsScreen.jsx';
+import PersonScreen from './screens/PersonScreen.jsx';
+import BaseScreen from './screens/BaseScreen.jsx';
+import TestRunScreen from './screens/TestRunScreen.jsx';
+import './shell/shell.css';
 
-/**
- * Screen id -> component. Every screen gets { mother, session, viewedCode, setViewedCode, navigate, profile,
- * setChromeHidden }. setChromeHidden(true) hides the top bar and the footer (a running cognitive test needs
- * the whole window and steady frame timing); leaving the screen always brings them back.
- */
+/** route.screen -> component. Every screen gets { mother, route, navigate, back }. */
 export const SCREEN_COMPONENTS = {
-  home: HomeScreen,
-  wearables: WearablesScreen,
-  base: BaseScreen,
-  profile: ProfileScreen,
   crew: CrewScreen,
-  tests: TestsScreen,
-  settings: SettingsScreen,
+  person: PersonScreen,
+  base: BaseScreen,
+  test: TestRunScreen,
 };
 
 export const SCREENS = Object.keys(SCREEN_COMPONENTS);
-
-const SCREEN_TITLE_KEYS = {
-  home: 'common.screenHome',
-  wearables: 'common.screenWearables',
-  base: 'common.screenBase',
-  profile: 'common.screenProfile',
-  crew: 'common.screenCrew',
-  tests: 'common.screenTests',
-  settings: 'common.screenSettings',
-};
-
-function UtcClock() {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-  return <time className="topbar-clock" dateTime={now.toISOString()}>{now.toISOString().slice(11, 19)} UTC</time>;
-}
 
 /** A screen that throws must not take the whole terminal down. */
 class ScreenBoundary extends React.Component {
@@ -59,136 +34,175 @@ class ScreenBoundary extends React.Component {
   render() {
     if (!this.state.error) return this.props.children;
     return (
-      <Panel title={this.props.title} tone="alert" role="alert">
-        <p className="screen-fault"><StatusTag status="alert" /> {String(this.state.error?.message || this.state.error)}</p>
-        <p className="dim">{this.props.hint}</p>
-      </Panel>
+      <div className="screen-fault" role="alert">
+        <strong>{this.props.title}</strong>
+        <span>{String(this.state.error?.message || this.state.error)}</span>
+        <span className="dim">{this.props.hint}</span>
+      </div>
     );
   }
 }
 
-function TopBar({ mother, session, viewedCode, screen, navigate, onLogout }) {
-  const t = useT();
-  const me = getProfile(session);
-  const sol = mother.report?.as_of?.sol;
-  const own = { viewedCode: session };
-  const tabs = [
-    { id: 'home', label: t('common.navHome'), opts: own, current: screen === 'home' },
-    { id: 'profile', label: me?.name ?? session, opts: own, current: screen === 'profile' && viewedCode === session },
-    { id: 'base', label: t('common.navBase'), current: screen === 'base' },
-    { id: 'crew', label: t('common.navCrew'), current: screen === 'crew' },
-    { id: 'tests', label: t('common.navTests'), current: screen === 'tests' },
-    { id: 'settings', label: '⚙', name: t('common.navSettings'), current: screen === 'settings' },
-  ];
+const HISTORY_KEY = 'awernasaRoute';
 
-  return (
-    <header className="topbar">
-      <div className="topbar-id">
-        <span className="topbar-brand">{t('common.appName')} // {t('common.habitatCode')}</span>
-        <span className="topbar-screen" data-testid="screen-name">{t(SCREEN_TITLE_KEYS[screen])}</span>
-        {viewedCode !== session && <span className="topbar-viewing">{t('common.viewing', { code: viewedCode })}</span>}
-      </div>
+/**
+ * Route state mirrored into the browser history: navigate() pushes an entry, the browser /
+ * phone back button (popstate) restores the previous route. back() uses the history when the
+ * previous entry is ours, else goes to the parent route.
+ */
+export function useRoute() {
+  const [route, setRoute] = useState(() => (typeof window === 'undefined' ? { ...DEFAULT_ROUTE } : routeFromSearch(window.location.search)));
+  const routeRef = useRef(route);
+  routeRef.current = route;
+  const depth = useRef(0);
 
-      <div className="topbar-status">
-        <ConnectionBadge mode={mother.mode} error={mother.error} />
-        <span className="topbar-sol" data-testid="topbar-sol">
-          {sol != null ? t('common.solN', { n: sol }) : t('common.solUnknown')}
-        </span>
-        <UtcClock />
-        <Button variant="ghost" onClick={onLogout}>{t('common.logout')}</Button>
-      </div>
+  useEffect(() => {
+    const state = window.history.state || {};
+    depth.current = state[HISTORY_KEY]?.depth ?? 0;
+    window.history.replaceState({ ...state, [HISTORY_KEY]: { route: routeRef.current, depth: depth.current } }, '', routeToSearch(routeRef.current) || window.location.pathname);
+    const onPop = event => {
+      const entry = event.state?.[HISTORY_KEY];
+      depth.current = entry?.depth ?? 0;
+      setRoute(normalizeRoute(entry?.route ?? routeFromSearch(window.location.search)));
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
-      <nav className="topbar-nav" aria-label={t('common.navMain')}>
-        {tabs.map(tab => (
-          <Button
-            key={tab.id}
-            data-nav={tab.id}
-            active={tab.current}
-            aria-current={tab.current ? 'page' : undefined}
-            aria-label={tab.name}
-            title={tab.name ?? tab.label}
-            onClick={() => navigate(tab.id, tab.opts)}
-          >
-            {tab.label}
-          </Button>
-        ))}
-      </nav>
-    </header>
-  );
+  /** navigate({ screen: 'person', code: 'HAB-C4', organ: 'limbs' }), navigate({ organ: 'heart' }), navigate('crew'). */
+  const navigate = useCallback((patch, { replace = false } = {}) => {
+    const next = mergeRoute(routeRef.current, patch);
+    if (sameRoute(next, routeRef.current)) return;
+    if (!replace) depth.current += 1;
+    const entry = { [HISTORY_KEY]: { route: next, depth: depth.current } };
+    const url = routeToSearch(next) || window.location.pathname;
+    if (replace) window.history.replaceState(entry, '', url);
+    else window.history.pushState(entry, '', url);
+    routeRef.current = next;
+    setRoute(next);
+  }, []);
+
+  const back = useCallback(() => {
+    if (depth.current > 0) window.history.back();
+    else navigate(parentRoute(routeRef.current), { replace: true });
+  }, [navigate]);
+
+  return { route, navigate, back };
 }
 
 /**
- * App shell: login -> top bar + one screen.
- * State: session (crew code | null), screen (one of SCREENS), viewedCode (whose data is shown; defaults to session).
- * The MOTHER hook is used once, here; its selected subject always follows viewedCode.
+ * Shared sol (DESIGN.md §3): mother.period, with the latest sol remembered from the last
+ * report fetched without a period. Offline the demo report's sol is shown and cannot change.
+ */
+function useSol(mother, code) {
+  const reportSol = mother.report?.as_of?.sol ?? null;
+  const [latest, setLatest] = useState(null);
+  useEffect(() => {
+    if (!mother.period && reportSol != null) setLatest(reportSol);
+  }, [mother.period, reportSol]);
+  const demoSol = mother.online ? null : demoReport(code || 'HAB-C1')?.as_of?.sol ?? null;
+  const value = mother.period?.sol ?? reportSol ?? latest ?? demoSol;
+  const live = mother.online && value != null;
+  const isLatest = !mother.period;
+  const { setPeriod } = mother;
+  return {
+    value,
+    isLatest,
+    canPrev: live && value > 1,
+    canNext: live && !isLatest && latest != null && value < latest,
+    prev: () => value != null && setPeriod({ sol: value - 1 }),
+    next: () => {
+      if (value == null) return;
+      if (latest != null && value + 1 >= latest) setPeriod(null);
+      else setPeriod({ sol: value + 1 });
+    },
+    toLatest: () => setPeriod(null),
+  };
+}
+
+function habitatOverall(data) {
+  if (!data) return 'no_data';
+  if (data.overall_status) return data.overall_status;
+  const rank = { no_data: 0, ok: 1, caution: 2, alert: 3 };
+  return (data.zones || []).reduce((worst, zone) => (rank[zone?.status] > rank[worst] ? zone.status : worst), 'no_data');
+}
+
+/**
+ * App shell (DESIGN.md §3): top bar + main screen + side panel (TO DO on top, ALERTS below).
+ * One useMother() for the whole app; its selected person follows route.code and the sol
+ * (mother.period) is shared by every screen. route.screen === 'test' shows only the screen.
  */
 export default function App() {
   const t = useT();
   const mother = useMother();
-  const [session, setSession] = useState(null);
-  const [screen, setScreen] = useState('home');
-  const [viewedOverride, setViewedOverride] = useState(null);
-  const [chromeHidden, setChromeHiddenState] = useState(false);
-  const viewedCode = viewedOverride ?? session;
+  const { route, navigate, back } = useRoute();
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const { selectSubject, setPeriod } = mother;
+  const periodRef = useRef(mother.period);
+  periodRef.current = mother.period;
 
-  // mother.report always belongs to viewedCode (on login and whenever another crew member is viewed).
+  // mother.report follows the person on screen; the shared sol survives the switch
+  // (selectSubject() itself would jump back to the latest sol).
   useEffect(() => {
-    if (session && viewedCode) selectSubject(viewedCode);
-  }, [session, viewedCode, selectSubject]);
+    if (!route.code) return;
+    const keep = periodRef.current;
+    selectSubject(route.code);
+    if (keep) setPeriod(keep);
+  }, [route.code, selectSubject, setPeriod]);
 
-  /** setViewedCode('HAB-C3'); setViewedCode(null) returns to the logged-in crew member. */
-  const setViewedCode = useCallback(code => setViewedOverride(code || null), []);
+  // The drawer closes on every navigation.
+  useEffect(() => { setDrawerOpen(false); }, [route]);
 
-  const setChromeHidden = useCallback(hidden => setChromeHiddenState(Boolean(hidden)), []);
+  const sol = useSol(mother, route.code);
+  const { data: habitat } = useSharedHabitat({ sol: mother.period?.sol ?? null });
+  const alerts = useAlertCounts({ mother, route }) || {};
+  const tasks = useTasks({ mother, route, code: route.code });
+  const openTasks = useMemo(() => {
+    const items = Array.isArray(tasks?.items) ? tasks.items : [];
+    if (items.length) return items.filter(item => !item.done).length;
+    const counts = tasks?.counts;
+    return counts ? Math.max(0, (counts.total || 0) - (counts.done || 0)) : 0;
+  }, [tasks]);
 
-  // The chrome never stays hidden after the screen that asked for it is gone.
-  useEffect(() => {
-    setChromeHiddenState(false);
-  }, [screen, session]);
+  const Screen = SCREEN_COMPONENTS[route.screen] || CrewScreen;
+  const screenProps = { mother, route, navigate, back };
+  const toggleDrawer = useCallback(() => setDrawerOpen(open => !open), []);
+  const closeSettings = useCallback(() => setSettingsOpen(false), []);
 
-  /** navigate('profile') or navigate('profile', { viewedCode: 'HAB-C3' }); unknown screens are ignored. */
-  const navigate = useCallback((next, opts) => {
-    if (!SCREENS.includes(next)) return;
-    if (opts && 'viewedCode' in opts) setViewedOverride(opts.viewedCode || null);
-    setScreen(next);
-  }, []);
+  const main = (
+    <main className="screen" data-screen={route.screen}>
+      <ScreenBoundary key={route.screen} title={t('common.screenFault')} hint={t('common.screenFaultHint')}>
+        <Screen {...screenProps} />
+      </ScreenBoundary>
+    </main>
+  );
 
-  const login = useCallback(code => {
-    setViewedOverride(null);
-    setScreen('home');
-    setPeriod(null); // a new session starts at the latest sol
-    setSession(code);
-  }, [setPeriod]);
-
-  const logout = useCallback(() => {
-    setSession(null);
-    setViewedOverride(null);
-    setScreen('home');
-  }, []);
-
-  if (!session) return <LoginScreen mother={mother} onLogin={login} />;
-
-  const Screen = SCREEN_COMPONENTS[screen];
-  const screenProps = { mother, session, viewedCode, setViewedCode, navigate, profile: getProfile(viewedCode), setChromeHidden };
+  if (route.screen === 'test') return <div className="shell shell-bare">{main}</div>;
 
   return (
-    <div className={chromeHidden ? 'shell shell-bare' : 'shell'}>
-      {!chromeHidden && (
-        <TopBar mother={mother} session={session} viewedCode={viewedCode} screen={screen} navigate={navigate} onLogout={logout} />
-      )}
-      <main className="screen" data-screen={screen}>
-        <ScreenBoundary key={screen} title={t('common.screenFault')} hint={t('common.screenFaultHint')}>
-          <Screen {...screenProps} />
-        </ScreenBoundary>
-      </main>
-      {!chromeHidden && (
-        <footer className="statusline">
-          <span>{mother.online ? t('common.footerLive') : t('common.footerDemo')}</span>
-          <span>{t('common.disclaimer')} · {t('common.credit')}</span>
-        </footer>
-      )}
+    <div className={`shell${drawerOpen ? ' shell-drawer-open' : ''}`}>
+      <TopBar
+        mother={mother}
+        route={route}
+        navigate={navigate}
+        back={back}
+        sol={sol}
+        alerts={alerts}
+        habitatStatus={habitatOverall(habitat)}
+        tasksOpen={drawerOpen}
+        tasksCount={openTasks}
+        onTasks={toggleDrawer}
+        onSettings={() => setSettingsOpen(true)}
+      />
+      {main}
+      <div className="side-backdrop" onClick={() => setDrawerOpen(false)} aria-hidden="true" />
+      <aside id="side-panel" className="side" aria-label={t('common.sidePanel')}>
+        <div className="side-tasks"><TaskPanel {...screenProps} /></div>
+        <div className="side-alerts"><AlertPanel {...screenProps} /></div>
+      </aside>
+      <SettingsModal open={settingsOpen} onClose={closeSettings} />
     </div>
   );
 }

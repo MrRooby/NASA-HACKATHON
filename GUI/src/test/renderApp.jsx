@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import App from '../App.jsx';
 import Providers from '../Providers.jsx';
@@ -9,24 +9,17 @@ export function renderWithProviders(ui, { lang } = {}) {
   return render(<Providers initialLang={lang}>{ui}</Providers>);
 }
 
-/** Open a session from the login screen (the crew row of the given code). */
-export function logIn(code = 'HAB-C1') {
-  fireEvent.click(document.querySelector(`.login-row[data-code="${code}"]`));
-}
-
 /**
- * Render the whole app. `login` = crew code to open a session with (default HAB-C1),
- * or null to stay on the login screen. fetch is stubbed by src/test/setup.js (offline)
- * unless the test calls stubMother() first.
+ * Render the whole app (it starts on the crew screen, or on the route in the URL).
+ * fetch is stubbed by src/test/setup.js (offline) unless the test calls stubMother() first.
  */
-export function renderApp({ login = 'HAB-C1', lang } = {}) {
-  const utils = renderWithProviders(<App />, { lang });
-  if (login) logIn(login);
-  return utils;
+export function renderApp({ lang, url = '/' } = {}) {
+  window.history.replaceState(null, '', url);
+  return renderWithProviders(<App />, { lang });
 }
 
-/** Top-bar navigation button of a screen id ('home', 'profile', 'base', 'crew', 'tests', 'settings'). */
-export const navButton = id => document.querySelector(`.topbar-nav [data-nav="${id}"]`);
+/** Top-bar navigation button ('crew' | 'base'). */
+export const navButton = id => document.querySelector(`.tb-nav [data-nav="${id}"]`);
 
 /** Screen currently shown, read from <main data-screen>. */
 export const currentScreen = () => screen.getByRole('main').getAttribute('data-screen');

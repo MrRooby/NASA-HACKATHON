@@ -38,7 +38,7 @@ export const BUILTIN_THEMES = [
       bg: '#11111b', panel: '#181825', raised: '#1e1e2e', border: '#7a4526',
       fg: '#d8cab8', dim: '#9b9b9b',
       accent: '#CE6B29', accentBright: '#e07b3a', accentDim: '#7a4526',
-      ok: '#57AE3A', caution: '#D4A93F', alert: '#C4402B', info: '#5285AD',
+      ok: '#57AE3A', caution: '#D4A93F', alert: '#E85A44', info: '#5E95C2',
     },
   },
   {

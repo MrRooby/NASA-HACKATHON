@@ -27,7 +27,7 @@ describe('built-in themes', () => {
   });
 
   it('nostromo uses the dotfiles palette', () => {
-    expect(byId('nostromo').colors).toMatchObject({ bg: '#11111b', fg: '#d8cab8', accent: '#CE6B29', alert: '#C4402B' });
+    expect(byId('nostromo').colors).toMatchObject({ bg: '#11111b', fg: '#d8cab8', accent: '#CE6B29', alert: '#E85A44' });
   });
 });
 
@@ -59,7 +59,7 @@ describe('applyTheme', () => {
 
 describe('getStatusColors', () => {
   it('follows the current theme; no_data is the dim colour', () => {
-    expect(getStatusColors()).toEqual({ ok: '#57AE3A', caution: '#D4A93F', alert: '#C4402B', no_data: '#9b9b9b' });
+    expect(getStatusColors()).toEqual({ ok: '#57AE3A', caution: '#D4A93F', alert: '#E85A44', no_data: '#9b9b9b' });
     applyTheme(byId('phosphor'));
     expect(getStatusColors()).toEqual({ ok: '#4dff9a', caution: '#e6d94a', alert: '#ff5a4d', no_data: '#3f9a68' });
   });

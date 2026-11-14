@@ -15,7 +15,7 @@ export const STATUS_COLORS = Object.freeze({
 export const HOVER_COLOR = MODEL_HOVER_COLOR;
 
 // How far the model colour is pulled towards the status colour (1 = flat status colour).
-const TINT_AMOUNT = 0.82;
+const TINT_AMOUNT = 0.86;
 
 const materialsOf = object => (Array.isArray(object.material) ? object.material : [object.material]);
 

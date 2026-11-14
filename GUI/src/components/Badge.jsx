@@ -22,7 +22,7 @@ export default function Badge({ kind, tone, className, children, ...rest }) {
   const known = BADGE_KINDS[kind];
   const label = children ?? (known ? t(known.key) : String(kind ?? '').toUpperCase());
   return (
-    <span className={cx('badge', `badge-${tone || known?.tone || 'accent'}`, className)} data-kind={kind} {...rest}>
+    <span className={cx("badge", `badge-${tone || known?.tone || "accent"}`, className)} data-kind={kind} data-badge={kind || "tag"} {...rest}>
       {label}
     </span>
   );

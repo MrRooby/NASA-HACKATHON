@@ -9,11 +9,16 @@
 //   severity,                'alert' | 'caution' | 'info'
 //   source,                  'organ' | 'device' | 'habitat' | 'event'
 //   title, detail, action,   strings; detail and action may be null
-//   target,                  where [ OPEN ] leads: { screen: 'wearables', organ, limb? }
-//                            { screen: 'wearables', device } · { screen: 'base', zone, zones?, channel?, sol? }
-//                            { screen: 'base', zone, event, sol? }
+//   target,                  the app route the item leads to (src/App.jsx):
+//                            { screen: 'person', code, organ, limb? } · { screen: 'person', code, organ: 'limbs', device }
+//                            { screen: 'base', room, zone, zones?, channel?, sol? } · { screen: 'base', room, zone, event, sol? }
+//                            (room = map room of the zone, null for exterior zones)
+//   organ | zone, channel | eventType   what the item is about (icons, short labels)
 // }
 import { limbSegmentStatus } from '../organSegments.js';
+import { roomForZone } from '../habitat/layout.js';
+
+const roomOf = zone => (zone ? roomForZone(zone)?.id ?? null : null);
 
 export const SEVERITY_RANK = { alert: 0, caution: 1, info: 2 };
 const SOURCE_RANK = { organ: 0, device: 1, habitat: 2, event: 3 };
@@ -56,9 +61,10 @@ const clock = iso => (typeof iso === 'string' && iso.length >= 16 ? `${iso.slice
 
 function organNotifications(report) {
   const items = [];
+  const code = report?.subject?.code ?? null;
   for (const card of report?.organs || []) {
     if (!card || !isProblem(card.status)) continue;
-    const target = { screen: 'wearables', organ: card.organ };
+    const target = { screen: 'person', code, organ: card.organ };
     if (card.organ === 'limbs') {
       const perLimb = limbSegmentStatus(card, report.devices);
       const limbs = Object.keys(perLimb)
@@ -71,6 +77,7 @@ function organNotifications(report) {
       id: `organ:${card.organ}`,
       severity: card.status,
       source: 'organ',
+      organ: card.organ,
       title: card.label || sentenceCase(card.organ),
       detail: card.headline ?? null,
       action: card.action ?? null,
@@ -84,6 +91,7 @@ function organNotifications(report) {
 
 function deviceNotifications(report) {
   const items = [];
+  const code = report?.subject?.code ?? null;
   for (const device of report?.devices || []) {
     if (!device?.limb || !device.status || device.status === 'ok') continue;
     const battery = formatNumber(typeof device.battery_pct === 'number' ? Math.round(device.battery_pct) : null);
@@ -95,7 +103,8 @@ function deviceNotifications(report) {
       title: DEVICE_LABEL[device.limb] || `${sentenceCase(device.limb)} band`,
       detail: [device.message, facts].filter(Boolean).join(' · ') || null,
       action: null,
-      target: { screen: 'wearables', device: device.limb },
+      organ: 'limbs',
+      target: { screen: 'person', code, organ: 'limbs', device: device.limb },
     });
   }
   return items;
@@ -187,6 +196,7 @@ function zoneNotifications(habitat) {
 
   const target = (zone, reading) => ({
     screen: 'base',
+    room: roomOf(zone.code),
     zone: zone.code,
     ...(reading?.channel ? { channel: reading.channel } : {}),
     ...(sol != null ? { sol } : {}),
@@ -196,6 +206,8 @@ function zoneNotifications(habitat) {
     id: `habitat:${zone.code}`,
     severity: 'alert',
     source: 'habitat',
+    zone: zone.code,
+    channel: reading?.channel ?? null,
     title: zone.label || words(zone.code),
     detail: readingDetail(reading),
     action: null,
@@ -209,6 +221,8 @@ function zoneNotifications(habitat) {
         id: `habitat:${zone.code}`,
         severity: 'caution',
         source: 'habitat',
+        zone: zone.code,
+        channel: reading?.channel ?? null,
         title: zone.label || words(zone.code),
         detail: readingDetail(reading),
         action: null,
@@ -222,6 +236,9 @@ function zoneNotifications(habitat) {
       id: `habitat:${group.map(entry => entry.zone.code).join('+')}`,
       severity: 'caution',
       source: 'habitat',
+      zone: worst.zone.code,
+      zones: group.map(entry => entry.zone.code),
+      channel: worst.reading?.channel ?? null,
       title: `${group.length} zones: ${group.map(entry => entry.zone.label || words(entry.zone.code)).join(', ')}`,
       detail: readingDetail(worst.reading),
       action: null,
@@ -254,11 +271,13 @@ function eventNotifications(habitat) {
       id: `event:${event.code}`,
       severity,
       source: 'event',
+      eventType: event.type ?? null,
+      zone: event.zone ?? null,
       title: sentenceCase(event.type || 'event'),
       detail: [where, event.crew ? `crew ${event.crew}` : null, when || null, event.sol != null ? `sol ${event.sol}` : null]
         .filter(Boolean).join(' · ') || null,
       action: null,
-      target: { screen: 'base', zone: event.zone ?? null, event: event.code, ...(sol != null ? { sol } : {}) },
+      target: { screen: 'base', room: roomOf(event.zone), zone: event.zone ?? null, event: event.code, ...(sol != null ? { sol } : {}) },
       startUtc: event.start_utc ?? null,
     });
   }
