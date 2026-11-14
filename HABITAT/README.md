@@ -152,17 +152,84 @@ Uwagi:
 
 ### 3.3 Mocz (per osoba, `crew_id`)
 
-Precedens: **UWMS Optical Sensor** (NASA TM 2023, NTRS 20230007658), czyli czujnik optyczny w toalecie. Analiza moczu w habitacie to **koncept zespołu oparty na prototypie NASA**. NASA nie ma operacyjnego automatycznego analizatora moczu w locie; pomiar wapnia demonstrowało Bisu na Polaris Dawn.
+#### Najważniejsze źródło: NASA OCHMO-MTB-003 „Urinary Health” (Rev A, 10-Mar-26), `data/siki.pdf`
+Oficjalny brief medyczny NASA, wyprowadzony z NASA-STD-3001. Najważniejsze fakty:
+- **Kamień nerkowy to 2. najbardziej prawdopodobny powód awaryjnej ewakuacji z ISS, a sepsa (głównie urosepsa) to 3.** Według NASA Integrated Medical Model.
+- **Przed lotem robi się profil ryzyka kamieni:** przesycenie szczawianem wapnia, bruszytem, moczanem sodu, struwitem i kwasem moczowym.
+- **Przed lotem i po locie mierzy się w moczu:** szczawian wapnia, kwas moczowy, cytrynian, pH, objętość całkowitą, sód, siarczany, fosfor, magnez, potas i kreatyninę.
+- **USG nerek przed lotem i po locie to standard.** W locie przy podejrzeniu kamienia stosuje się USG i ograniczone badania laboratoryjne. NASA testowała oprogramowanie AMOS (Autonomous Medical Officer Support), które prowadzi astronautę bez wykształcenia medycznego przez USG nerek.
+- **Epizody w historii:**
+  - kamień w locie zdarzył się raz (kosmonauta);
+  - od 2016 r. NASA odnotowała 43 epizody kamieni u 29 astronautów, w ciągu całej kariery;
+  - zatrzymanie moczu w locie wystąpiło 9 razy; u kobiet szansa jest 4,5 razy wyższa niż u mężczyzn, a ryzyko rośnie w 1. dniu po locie.
+- **Czynniki ryzyka:**
+  - więcej wapnia w moczu przez utratę kości;
+  - przesunięcie płynów ku głowie;
+  - mało picia, w tym **celowe „odwadnianie się”, żeby rzadziej korzystać z toalety**;
+  - dużo sodu i białka zwierzęcego w diecie;
+  - zmiany pH.
+- **Woda pitna (NASA-STD-3001 V2 [6109]):** co najmniej **2,5 L na osobę na dobę** i **240 mL na osobę na godzinę EVA**.
+- **ZUM:** przy cewnikowaniu dzienna zapadalność na bakteriurię wynosi 3–10%. Leczy się antybiotykami, a profilaktyka to nawodnienie i higiena.
+- **Profilaktyka kamieni:** nawodnienie, cytrynian potasu, tiazydy, bisfosfoniany, ćwiczenia oporowe.
 
-| Kanał | Jedn. | Realnie | Demo | Norma | Próg / sens | Status |
+**Nowe kanały HABITAT, które z tego wynikają:**
+- **`water_intake` per `crew_id`:** pobór wody z dystrybutora w mL. Wynik dobowy porównujemy z celem 2,5 L i dokładamy 240 mL za każdą godzinę EVA.
+- **`void_count_24h` i `time_since_last_void` per `crew_id`:** z toalety (UWMS). Mała liczba wizyt to sygnał odwodnienia albo zatrzymania moczu. Bardzo długi czas od ostatniej wizyty przy normalnym piciu to **możliwe zatrzymanie moczu**.
+
+#### Jak bada się mocz astronautów (stan obecny)
+
+**Badanie standardowe to 24-godzinna zbiórka moczu przed lotem, w trakcie i po nim.** Na jej podstawie ocenia się ryzyko kamieni nerkowych: przesycenie szczawianem wapnia, fosforanem wapnia i kwasem moczowym, a także pH, objętość, cytrynian, szczawian i kreatyninę. Próbki w locie są zamrażane i analizowane dopiero na Ziemi.
+- Źródła: NASA HRP Renal Stone Evidence Report 2024; Whitson 2009 (doi:10.1016/j.juro.2009.07.010, 30 członków załóg Mir i ISS, 24-h mocz przed lotem, w trakcie i po nim); Smith 2014 (doi:10.1002/jbmr.2185, 42 astronautów ISS).
+
+**Co pokazały dane z lotów:**
+- **Objętość moczu spada:** o 47% na początku misji (przed FD30) i o 39% po FD60 (Mir, Whitson 2001a, za Renal ER 2024).
+- **Wapń w moczu rośnie:**
+  - przed lotem 159–316 mg/dobę, w locie 129–435 mg/dobę;
+  - u 5 z 11 członków załogi powyżej 250 mg/dobę;
+  - na Skylabie wzrost już ok. 10. dnia lotu, prawie do 300 mg/dobę.
+- **pH spada i maleje ilość cytrynianu** (hipocytraturia), co zwiększa ryzyko kamieni szczawianowo-wapniowych i moczanowych. Ryzyko jest największe w pierwszych ok. 30 dniach i tuż po powrocie.
+- **Ryzyko kamieni rośnie po locie.** Rok po locie zachorowalność na kamienie nerkowe u astronautów jest 2–7 razy wyższa niż przed lotem (Renal ER 2024).
+- **Profilaktyka:**
+  - picie wody: NASA-STD-3001 Vol 2 zaleca co najmniej 2,5 L wody dziennie, a cel to 2,5–3 L moczu na dobę;
+  - cytrynian potasu (20 mEq/d): w badaniu obniżył wapń w moczu i podniósł pH (Whitson 2009);
+  - ćwiczenia oporowe (ARED).
+- **Diagnostyka w locie:** objawy (ból w boku, krwiomocz) i badanie USG. W JSC od ok. 9 lat USG służy też do przesiewowego wykrywania złogów w nerkach.
+
+**Badania w locie z wynikiem od razu (demonstracje, nie rutyna):**
+- **Ax-1 (2022), Healthy.io „Minuteful Kidney”.** Astronauta robi zdjęcie paska testowego, a aplikacja na tablecie odczytuje wynik od razu, bez mrożenia próbek. Mierzy albuminę/kreatyninę oraz glukozę, białko i ketony. Źródła: [Axiom Space](https://axiomspace.com/research/urinalysis-in-space), [Healthy.io](https://blog.healthy.io/company-news/healthy-in-space/).
+- **CSA Bio-Analyzer (ISS, 2019).** Urządzenie wielkości konsoli do gier, które z kilku kropli krwi, śliny lub moczu szybko podaje wyniki biomedyczne. Źródło: [CSA](https://asc-csa.gc.ca/eng/iss/bio-analyzer.asp).
+- **Polaris Dawn (2024), Dartmouth + Bisu.** Załoga pobierała próbki pierwszego porannego moczu **do analizy po locie na Ziemi**, w ramach badania utraty kości i ryzyka kamieni. Mikroprzepływowy analizator Bisu ma w przyszłości umożliwić badanie w trakcie lotu, ale **na tej misji nie był używany**. Źródło: [Dartmouth](https://home.dartmouth.edu/news/2024/09/preventing-bone-loss-caused-zero-gravity).
+- **NASA UWMS Optical Sensor** (NTRS 20230007658): czujnik optyczny w toalecie.
+- **NASA ogłosiła zapotrzebowanie na nowe technologie analizy moczu** dla medycyny precyzyjnej (yet2), co pokazuje, że to otwarta luka.
+
+**Wniosek:** automatyczna analiza moczu przy każdej wizycie w toalecie to **koncept zespołu**. Opiera się na prototypach NASA (UWMS Optical Sensor) i demonstracjach (Ax-1 Healthy.io, CSA Bio-Analyzer), a NASA sama szuka takich rozwiązań. Na Marsie nie da się odesłać próbek na Ziemię, więc analiza na miejscu jest konieczna.
+
+#### Kanały i normy
+
+Normy kliniczne pochodzą z MedlinePlus (NIH). Progi ryzyka kamieni pochodzą z NASA Renal Stone Evidence Report 2024.
+
+| Kanał | Jedn. | Demo | Norma kliniczna | Próg / sens w habitacie | Źródło | Status |
 |---|---|---|---|---|---|---|
-| `urine_void_volume` | mL | — | każda wizyta | — | — | [ZAŁ] |
-| `urine_volume_24h` | L/dobę | — | dziennie | 1,4–2,1 (BVAD) | < 0,8 przez kilka dni → odwodnienie, kamienie | [NASA] norma, [ZAŁ] próg |
-| `urine_specific_gravity` | — | — | każda wizyta | wartości kliniczne do sprawdzenia | rośnie przy odwodnieniu | [ZAŁ] |
-| `urine_ph` | — | — | każda wizyta | wartości kliniczne do sprawdzenia | kamienie | [ZAŁ] |
-| `urine_calcium` | mg/dobę | (Bisu, Polaris Dawn) | dziennie | do sprawdzenia | wzrost → utrata kości i ryzyko kamieni (Smith 2014) | [ZAŁ] |
+| `urine_void_volume` | mL | każda wizyta | — | — | — | [ZAŁ] |
+| `water_intake_24h` | L/dobę | dziennie (z poboru per wizyta) | — | **≥ 2,5** (+ 0,24 L/h EVA) | NASA-STD-3001 V2 [6109]; MTB-003 | [NASA] |
+| `void_count_24h` | wizyty/dobę | dziennie | — | spadek + mało picia → odwodnienie | MTB-003 | próg [ZAŁ] |
+| `time_since_last_void` | h | ciągle | — | > ok. 8 h w dzień przy normalnym piciu → podejrzenie zatrzymania moczu | MTB-003 (9 przypadków w locie) | próg [ZAŁ] |
+| `urine_volume_24h` | L/dobę | dziennie | **0,8–2,0** (przy wypiciu ok. 2 L) | **cel ≥ 2,5** (profilaktyka kamieni); **< 0,8 przez ≥ 2 doby → odwodnienie** | [MedlinePlus 24-h volume](https://medlineplus.gov/ency/article/003425.htm); Renal ER 2024; NASA-STD-3001 Vol 2 | [NASA] + [ZAŁ] próg 2 dób |
+| `urine_specific_gravity` | — | każda wizyta | **1,005–1,030** | > 1,030 → odwodnienie; trwale < 1,005 → bardzo rozcieńczony mocz | [MedlinePlus SG](https://medlineplus.gov/ency/article/003587.htm) | [NASA/klin.] |
+| `urine_ph` | — | każda wizyta | **4,6–8,0** | niskie pH (≈ < 5,5) sprzyja kamieniom moczanowym; > 7,2 kamieniom struwitowym (infekcja) | [MedlinePlus pH](https://medlineplus.gov/ency/article/003583.htm); Renal ER 2024 | [klin.] + [ZAŁ] próg 5,5 |
+| `urine_calcium_24h` | mg/dobę | dziennie | **100–250** (dieta normalna) | **hiperkalciuria: > 300 (M), > 250 (K)** → utrata kości i ryzyko kamieni | [MedlinePlus Ca](https://medlineplus.gov/ency/article/003603.htm); Renal ER 2024 | [NASA/klin.] |
+| `urine_oxalate_24h` | mg/dobę | dziennie | — | **< 45 niskie ryzyko; > 45 podwyższone** | Renal ER 2024 (Ennis & Asplin 2016) | [NASA] |
+| `urine_citrate_24h` | mg/dobę | dziennie | — | spadek (hipocytraturia) → ryzyko kamieni; reaguje na cytrynian potasu | Whitson 2009; Renal ER 2024 | [NASA], próg [ZAŁ] |
+| `urine_dipstick` (glukoza, ketony, białko, krew, azotyny, leukocyty, bilirubina) | ujemny / dodatni | każda wizyta | **normalnie ujemne** (niewykrywalne) | dodatni: glukoza → metabolizm; ketony → deficyt energii; krew → kamień lub uraz; azotyny i leukocyty → infekcja dróg moczowych | [MedlinePlus urinalysis](https://medlineplus.gov/ency/article/003579.htm); Ax-1 Healthy.io | [klin.] |
+| `urine_albumin_creatinine` | mg/g | tygodniowo | (do potwierdzenia klinicznie) | wzrost → funkcja nerek | Ax-1 Healthy.io | [ZAŁ] |
 
-**Dlaczego to ważne.** Grawitacja Marsa (0,38 g) **nie zatrzymuje utraty kości**: u myszy demineralizacja jest podobna jak w nieważkości (Cohen 2015, za Ellman 2011 i Wagner 2010). Wapń w moczu to więc wczesny sygnał dla prognozy BMD w MOTHER.
+**Dlaczego to ważne.**
+- **Grawitacja Marsa (0,38 g) nie zatrzymuje utraty kości.** U myszy demineralizacja jest podobna jak w nieważkości (Cohen 2015, za Ellman 2011 i Wagner 2010). Wapń w moczu to więc wczesny sygnał dla prognozy BMD w MOTHER.
+- **Spadek objętości moczu i pH w pierwszych ok. 30 solach to okno najwyższego ryzyka kamieni** (Renal ER 2024). MOTHER powinien wtedy częściej przypominać o piciu.
+- **Kanały moczu łączą się z innymi danymi:**
+  - nawodnienie łączy się z temperaturą i RH w module (pocenie się) oraz z siłownią;
+  - wapń łączy się z dziennikiem ćwiczeń (ARED);
+  - krwiomocz i ból w boku z self-assessmentu wskazują na podejrzenie kamienia, co jest eskalacją do lekarza.
 
 ### 3.4 Kał (per osoba)
 
@@ -422,6 +489,10 @@ Zweryfikowane przez Crossref, NTRS i Europe PMC. OA = open access.
 - Smith S.M. et al. (2012) *Benefits for bone from resistance exercise and nutrition in long-duration spaceflight.* JBMR. doi:10.1002/jbmr.1647 (OA)
 - Whitson P.A. et al. (2009) *Effect of Potassium Citrate Therapy on the Risk of Renal Stone Formation During Spaceflight.* J. Urol. doi:10.1016/j.juro.2009.07.010
 - **Singh U.N. et al. (2023) *ISS Universal Waste Management System (UWMS) Optical Sensor: Phase 2.* NASA/TM, NTRS 20230007658 (OA)**: toaleta jako sensor
+- **NASA OCHMO (2026) *NASA-STD-3001 Medical Technical Brief: Urinary Health*, OCHMO-MTB-003 Rev A (10-Mar-26).** Plik `data/siki.pdf`. Główne źródło NASA dla kanałów moczu, nawodnienia i zatrzymania moczu.
+- **Stratton E., Lumpkins S., Antonsen E. et al. (2024) *Risk of Renal Stone Formation and Obstructive Urinary Precipitates* (Evidence Report).** NASA HRP. https://humanresearchroadmap.nasa.gov/evidence/other/2024%20Renal%20Evidence%20Report_Final.pdf (OA). Główne źródło norm i progów dla moczu.
+- MedlinePlus (NIH): [24-h urine volume](https://medlineplus.gov/ency/article/003425.htm), [specific gravity](https://medlineplus.gov/ency/article/003587.htm), [urine pH](https://medlineplus.gov/ency/article/003583.htm), [urine calcium](https://medlineplus.gov/ency/article/003603.htm), [urinalysis](https://medlineplus.gov/ency/article/003579.htm)
+- Ax-1 Healthy.io: [Axiom Space, Urinalysis in Space](https://axiomspace.com/research/urinalysis-in-space); [CSA Bio-Analyzer](https://asc-csa.gc.ca/eng/iss/bio-analyzer.asp); [Dartmouth / Polaris Dawn](https://home.dartmouth.edu/news/2024/09/preventing-bone-loss-caused-zero-gravity)
 - Chung P.H. et al. (2026) *Variations in Urinary Microbiota on a Short-Duration Space Mission to the ISS.* JU Open Plus. doi:10.1097/ju9.0000000000000409 (OA)
 - Hoorn E.J., Gameiro J. (2024) *Cosmic kidney disease: a spaceflight-induced tubulopathy.* Clin. Kidney J. doi:10.1093/ckj/sfae329 (OA)
 
@@ -453,7 +524,7 @@ Zweryfikowane przez Crossref, NTRS i Europe PMC. OA = open access.
 - Współczynnik osłony tunelu dla dawki: brak publikowanej liczby dla Marsa, więc **[ZAŁ]**.
 - Interwały próbkowania MCA, ANITA-2 i SAM dla gazów śladowych; próg alarmu SPE w HERA.
 - Aktualność tabeli SMAC z 2008 r.
-- Kliniczne normy ciężaru właściwego, pH i wapnia w moczu: do uzupełnienia ze źródła klinicznego, np. MedlinePlus.
+- Normy moczu uzupełnione 2026-11-14: MedlinePlus i NASA Renal ER 2024, zob. §3.3. Do decyzji zespołu zostają progi [ZAŁ]: pH < 5,5; odwodnienie przy objętości < 0,8 L przez ≥ 2 doby; spadek cytrynianu. Wynik albumina/kreatynina wymaga jeszcze źródła klinicznego.
 - Lista sensorów CHAPEA nie została opublikowana.
 - Liczby z Mars-500 o spadku spójności grupy pochodzą z przeglądu Zhong 2025, a nie z pracy źródłowej.
 - Romio 2022 nie ma DOI w Crossref; cytujemy jako paper IAC.
