@@ -88,3 +88,46 @@ topBar.text = card.top_message;
 - Przykład z bazy: `GET /api/organs/HAB-C4?sol=142` daje kartę `limbs` = `alert` („Left leg: blood flow 25% of the other limbs”), scenariusz W1.
 - `data_kind: "synthetic"` oznacza dane syntetyczne i trzeba je tak oznaczyć na ekranie.
 - To demo edukacyjne, nie porada medyczna.
+
+---
+
+# MOTHER → UI: habitat (kontrakt 1.0)
+
+`GET /api/habitat` zwraca wszystkie strefy habitatu z pomiarami z jednego sola. Opcjonalnie `?sol=142`; bez parametru jest to ostatni sol z danymi.
+
+```json
+{
+  "schema_version": "1.0",
+  "habitat": { "code": "MARS-LT-ELYSIUM", "name": "...", "atm_pressure_kpa": 56.5, "atm_o2_fraction_pct": 34.0,
+               "atm_ppo2_inspired_mmhg": 128.0, "mission_sols": 600, "crew_capacity": 4, "data_kind": "synthetic" },
+  "as_of": { "sol": 142, "latest_sol": 600, "from_utc": "...Z", "to_utc": "...Z", "last_reading_utc": "...Z" },
+  "overall_status": "alert",
+  "zones": [
+    { "code": "module_M1", "label": "...", "type": "module", "module_id": "M1", "pressurized": true,
+      "status": "alert", "now_status": "ok", "occupants": ["C1", "C2"],
+      "readings": [
+        { "channel": "ppco2", "label": "CO2 partial pressure", "category": "air", "unit": "mmHg",
+          "value": 2.279, "text": null, "ts_utc": "...Z", "min": 1.61, "max": 7.737,
+          "normal_min": 1.5, "normal_max": 2.5, "outside_normal": false,
+          "status": "ok", "worst_status": "alert", "quality": "ok", "source_flag": "simulated",
+          "sensors": { "A": 2.21, "B": 2.35 } }
+      ] }
+  ],
+  "events": [ { "code": "evt-000483", "type": "scrubber_fault", "start_utc": "...Z", "end_utc": "...Z",
+                "sol": 142, "zone": "module_M1", "crew": null, "severity": "major", "source_flag": "simulated" } ]
+}
+```
+
+| Pole | Znaczenie |
+|---|---|
+| `value` / `text` | ostatni odczyt w tym solu (liczba albo wartość słowna, np. `leak`, `ok`); przy czujnikach A/B średnia, a oba odczyty są w `sensors` |
+| `min`, `max` | skrajne wartości w tym solu |
+| `status` | ocena ostatniego odczytu: `ok` · `caution` · `alert` · `unrated` (kanał bez progu i bez zakresu normy) |
+| `worst_status` | najgorsza ocena w całym solu (awaria, która minęła, nadal oznacza strefę) |
+| `outside_normal` | ostatni odczyt poza zakresem normy; dla kanałów informacyjnych (światło, otoczenie, moc) nie podnosi statusu |
+| `quality` | `ok` · `suspect` · `sensor_fault` (stan czujnika, nie zdrowia) |
+| strefa `status` / `now_status` | najgorszy `worst_status` / `status` jej pomiarów; `no_data`, gdy strefa nie ma pomiarów |
+| `occupants` | kody załogi (`C1`…) w strefie w chwili ostatniego odczytu sola |
+
+Zasady oceny: najpierw progi z `astro_habitat.channel_limit` (tylko chwilowe: `value` albo średnia do 1 h), potem zakres normy kanału. Progi na długich średnich, trendach i stosunkach do tła liczy analityka MOTHER, nie ten endpoint. Kanały przypisane do osób (mocz, dawka osobista) są w kartach narządów, nie tutaj.
+

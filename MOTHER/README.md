@@ -37,6 +37,7 @@ Kontrakt kart narządów: [`UI_CONTRACT.md`](UI_CONTRACT.md). Wszystkie adresy:
 |---|---|
 | `http://localhost:8000/api/dashboard` | pełna analiza MOTHER: każdy dzień misji, każdy astronauta, wnioski, ryzyka, sylwetka, EVA, zadania |
 | `http://localhost:8000/api/data-map` | inwentarz bazy według części ciała i czujników + graf zależności |
+| `http://localhost:8000/api/habitat` | strefy habitatu z pomiarami czujników dla jednego sola (`?sol=142`), zdarzenia, kto gdzie przebywa; opis w `UI_CONTRACT.md` |
 | `http://localhost:8000/api/status` | czy baza jest osiągalna i czy analiza jest gotowa |
 | `http://localhost:8000/api/docs` | automatyczna dokumentacja API |
 

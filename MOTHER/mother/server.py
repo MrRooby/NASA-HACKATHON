@@ -154,7 +154,7 @@ def create_app():
         """MOTHER is API-only; the user interface is the GUI/ app."""
         return {"service": "MOTHER", "ui": "GUI/ (React app)", "docs": "/api/docs",
                 "endpoints": ["/api/status", "/api/subjects", "/api/organs", "/api/organs/{code}",
-                              "/api/dashboard", "/api/data-map"]}
+                              "/api/habitat", "/api/dashboard", "/api/data-map"]}
 
     @app.get("/api/dashboard")
     def api_dashboard():
@@ -199,6 +199,12 @@ def create_app():
     def api_organs(subject: str, day: int | None = None, sol: int | None = None, mission: str | None = None):
         from .organs import organ_report
         return _db_call(lambda db: organ_report(db, subject, day=day, sol=sol, mission=mission))
+
+    @app.get("/api/habitat")
+    def api_habitat(sol: int | None = None):
+        """Habitat zones with their sensor readings for one sol (default: the latest sol with data)."""
+        from .habitat import habitat_report
+        return _db_call(lambda db: habitat_report(db, sol=sol))
 
     @app.get("/api/status")
     def api_status():
