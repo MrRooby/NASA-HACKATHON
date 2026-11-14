@@ -1,0 +1,211 @@
+/* Styles of BaseScreen.jsx and src/habitat/Readings.jsx (theme variables only;
+   the map itself is styled in src/habitat/habitatMap.css). */
+.base-screen { display: grid; gap: 12px; min-width: 0; }
+
+/* ── Header line ─────────────────────────────────────────────────────────── */
+.base-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 20px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+}
+.base-head-id { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; min-width: 0; }
+.base-head-name { font-size: 15px; overflow-wrap: anywhere; }
+.base-head-code { color: var(--dim); font-size: 12px; letter-spacing: 0.08em; }
+.base-head-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.base-head-atm { color: var(--fg); }
+.base-head-sol { color: var(--accent-bright); font-weight: 700; }
+.base-head-overall { display: inline-flex; align-items: center; gap: 6px; }
+.base-sol { margin-left: auto; flex: 1 1 320px; justify-content: flex-end; }
+
+.base-banner { margin: 0; padding: 4px 12px; border: 1px solid var(--border); background: var(--panel); }
+.base-banner.is-caution { border-color: var(--caution); color: var(--caution); }
+.base-banner.is-alert { border-color: var(--alert); color: var(--alert); }
+
+/* ── Map ─────────────────────────────────────────────────────────────────── */
+.base-map-scroll { overflow-x: auto; }
+.base-map-scroll .hmap { min-width: 860px; }
+.base-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 12px;
+  margin: 6px 0 0;
+  color: var(--dim);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.base-legend-sim { color: var(--caution); }
+
+/* ── Layout below the map ────────────────────────────────────────────────── */
+.base-columns { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+.base-side { display: grid; gap: 12px; min-width: 0; }
+@media (max-width: 1100px) {
+  .base-columns { grid-template-columns: minmax(0, 1fr); }
+}
+
+.base-meta { display: inline-flex; align-items: center; gap: 8px; }
+.base-dim { color: var(--dim); }
+.base-empty { color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; }
+.base-disclaimer { margin: 0; color: var(--dim); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ── Selected room: facts ────────────────────────────────────────────────── */
+.base-facts { display: grid; gap: 2px; margin-bottom: 10px; }
+.base-fact { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin: 0; min-width: 0; }
+.base-fact-key { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+.base-fact-key-inline { margin-left: 10px; }
+.base-crew-list { display: inline-flex; flex-wrap: wrap; gap: 2px 10px; }
+.base-crew { color: var(--fg); }
+.base-sim-note {
+  margin: 4px 0 0;
+  padding: 3px 8px;
+  border-left: 2px solid var(--caution);
+  color: var(--caution);
+  font-size: 12px;
+}
+
+/* ── Readings table (div grid, one row per channel) ──────────────────────── */
+.base-table { display: grid; min-width: 0; }
+.base-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.25fr) minmax(0, 1.35fr) minmax(0, 1fr) 9ch 6ch;
+  column-gap: 12px;
+  align-items: baseline;
+  padding: 1px 6px;
+  border-left: 2px solid transparent;
+}
+.base-row + .base-row { border-top: 1px dotted var(--accent-dim); }
+.base-row:hover { background: var(--raised); }
+.base-row-head, .base-row-head:hover {
+  background: transparent;
+  color: var(--dim);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.base-cell { min-width: 0; overflow-wrap: anywhere; }
+.base-cell-label { color: var(--fg); }
+.base-label-text { margin-right: 8px; }
+.base-row-badge { font-size: 10px; margin-right: 6px; }
+.base-cell-value { color: var(--fg); font-weight: 700; text-align: right; }
+.base-unit { color: var(--dim); font-weight: 400; font-size: 12px; }
+.base-cell-range, .base-cell-normal { color: var(--dim); text-align: right; font-size: 12px; white-space: nowrap; }
+.base-cell-status { text-align: right; }
+.base-cell-time { color: var(--dim); text-align: right; font-size: 12px; }
+.base-unrated { color: var(--dim); font-size: 11px; letter-spacing: 0.08em; }
+.base-cell-extra {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  padding-left: 2ch;
+  color: var(--dim);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.base-note { font-weight: 700; }
+.base-note.is-caution { color: var(--caution); }
+.base-note.is-alert { color: var(--alert); }
+.base-quality { color: var(--caution); }
+
+.base-row.is-caution { border-left-color: var(--caution); }
+.base-row.is-alert { border-left-color: var(--alert); }
+/* the latest value is coloured by its own status, not by the worst of the sol */
+.base-row.now-caution .base-cell-value { color: var(--caution); }
+.base-row.now-alert .base-cell-value { color: var(--alert); }
+.base-row.is-simulated .base-cell-value { font-weight: 400; }
+
+.base-group { display: grid; }
+.base-group-title {
+  margin-top: 8px;
+  padding: 1px 6px;
+  color: var(--accent);
+  background: var(--raised);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  .base-row { grid-template-columns: minmax(0, 1fr) auto auto; row-gap: 0; }
+  .base-row-head { display: none; }
+  .base-cell-label { grid-column: 1 / -1; grid-row: 1; }
+  .base-cell-value { grid-column: 1; grid-row: 2; text-align: left; }
+  .base-cell-status { grid-column: 2; grid-row: 2; }
+  .base-cell-time { grid-column: 3; grid-row: 2; }
+  .base-cell-range { grid-column: 1 / -1; grid-row: 3; text-align: left; }
+  .base-cell-normal { grid-column: 1 / -1; grid-row: 4; text-align: left; }
+  .base-cell-extra { grid-row: 5; }
+  .base-cell-range::before, .base-cell-normal::before { content: attr(data-col) ': '; }
+}
+
+/* ── Sub-zones (gym, farm) ───────────────────────────────────────────────── */
+.base-subs { display: grid; gap: 6px; margin-top: 14px; }
+.base-subs-title { color: var(--dim); font-size: 12px; }
+.base-sub { border: 1px solid var(--border); min-width: 0; }
+.base-sub.is-caution { border-color: var(--caution); }
+.base-sub.is-alert { border-color: var(--alert); }
+.base-sub-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  width: 100%;
+  padding: 3px 8px;
+  color: var(--fg);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.base-sub-head:hover, .base-sub-head:focus-visible { background: var(--raised); }
+.base-sub-caret { color: var(--accent); }
+.base-sub-name { color: var(--accent-bright); font-weight: 700; letter-spacing: 0.08em; }
+.base-sub-label { flex: 1 1 12ch; min-width: 0; color: var(--dim); font-size: 12px; }
+.base-sub-body { padding: 4px 8px 8px; border-top: 1px solid var(--border); }
+
+/* ── Exterior ────────────────────────────────────────────────────────────── */
+.base-ext-zone + .base-ext-zone { margin-top: 10px; }
+.base-ext-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 1px 6px;
+  color: var(--accent);
+  background: var(--raised);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+/* ── Event log ───────────────────────────────────────────────────────────── */
+.base-event-list { display: grid; gap: 2px; }
+.base-event {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 10px;
+  padding: 1px 6px;
+  border-left: 2px solid var(--border);
+}
+.base-event.is-caution { border-left-color: var(--caution); }
+.base-event.is-alert { border-left-color: var(--alert); }
+.base-event-type { color: var(--fg); font-weight: 700; letter-spacing: 0.06em; }
+.base-event-severity { color: var(--dim); font-size: 12px; letter-spacing: 0.08em; }
+.base-event-time { margin-left: auto; color: var(--dim); font-size: 12px; white-space: nowrap; }
+.base-eva { margin: 8px 0 0; color: var(--dim); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }

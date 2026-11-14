@@ -98,3 +98,14 @@ export function getOrganReport(code, { sol, day } = {}, options) {
   const query = params.toString();
   return request(`/api/organs/${encodeURIComponent(code)}${query ? `?${query}` : ''}`, options);
 }
+
+/**
+ * GET /api/habitat[?sol=N] -> every habitat zone with the readings of one sol
+ * (contract "habitat 1.0" in ../MOTHER/UI_CONTRACT.md). Omit `sol` for the latest sol.
+ */
+export function getHabitat({ sol } = {}, options) {
+  const params = new URLSearchParams();
+  if (sol != null && sol !== '') params.set('sol', String(sol));
+  const query = params.toString();
+  return request(`/api/habitat${query ? `?${query}` : ''}`, options);
+}
