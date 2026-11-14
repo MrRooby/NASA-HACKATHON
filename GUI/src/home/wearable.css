@@ -1,0 +1,131 @@
+/* Shared pieces of the home and wearables screens (src/home): limb card, telemetry notice.
+   Colours: theme variables only. */
+
+/* ── Telemetry notice ────────────────────────────────────────────────────── */
+.tele-notice {
+  margin: 0;
+  padding: 4px 10px;
+  color: var(--caution);
+  border: 1px solid currentColor;
+  background: var(--bg);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.tele-notice::before { content: '!\00a0'; content: '!\00a0' / ''; }
+.tele-awaiting { color: var(--accent); }
+.tele-awaiting::before { content: '>\00a0'; content: '>\00a0' / ''; }
+.tele-error, .tele-empty { color: var(--alert); }
+
+/* ── Limb card ───────────────────────────────────────────────────────────── */
+.limb-card {
+  --tone: var(--border);
+  min-width: 0;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--tone);
+}
+.limb-caution { --tone: var(--caution); }
+.limb-alert { --tone: var(--alert); border-width: 2px; }
+.limb-no_data { --tone: var(--accent-dim); }
+
+.limb-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--tone);
+}
+.limb-head h3 { color: var(--accent); }
+.limb-caution .limb-head h3 { color: var(--caution); }
+/* alert: inverse video header */
+.limb-alert .limb-head { background: var(--alert); }
+.limb-alert .limb-head h3, .limb-alert .limb-head .stag { color: var(--bg); }
+
+.limb-body { display: grid; gap: 1px; padding: 6px 8px 8px; }
+
+.limb-circ {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 8px;
+  margin-bottom: 4px;
+}
+.limb-circ .segbar { grid-column: 1 / -1; }
+.limb-circ-value { color: var(--fg); font-size: 20px; font-weight: 700; line-height: 1.1; }
+.limb-caution .limb-circ-value { color: var(--caution); }
+.limb-alert .limb-circ-value { color: var(--alert); }
+.limb-no_data .limb-circ-value { color: var(--dim); }
+.limb-unit { color: var(--dim); font-size: 12px; font-weight: 400; }
+
+.limb-band {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dotted var(--accent-dim);
+  font-size: 12px;
+}
+.limb-band-state { color: var(--fg); text-transform: uppercase; letter-spacing: 0.08em; }
+.limb-band-caution .limb-band-state { color: var(--caution); }
+.limb-band-alert .limb-band-state { color: var(--alert); }
+.limb-band-battery { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; white-space: nowrap; }
+.limb-band-pct { min-width: 5ch; color: var(--dim); text-align: right; }
+
+.limb-msg {
+  margin: 4px 0 0;
+  padding-top: 4px;
+  color: var(--tone);
+  border-top: 1px solid var(--tone);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.limb-msg::before { content: '>\00a0'; content: '>\00a0' / ''; color: var(--dim); }
+.limb-msg-device { color: var(--caution); border-top-style: dotted; }
+
+/* ── Organ card ──────────────────────────────────────────────────────────── */
+.organ-card {
+  --tone: var(--border);
+  min-width: 0;
+  background: var(--panel);
+  border: 1px solid var(--tone);
+}
+.organ-caution { --tone: var(--caution); }
+.organ-alert { --tone: var(--alert); border-width: 2px; }
+.organ-no_data { --tone: var(--accent-dim); }
+.organ-card.is-highlight { outline: 1px solid var(--accent-bright); outline-offset: 2px; }
+
+.organ-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--tone);
+}
+.organ-head h3 { min-width: 0; color: var(--accent); overflow-wrap: anywhere; }
+.organ-caution .organ-head h3 { color: var(--caution); }
+.organ-no_data .organ-head h3 { color: var(--dim); }
+.organ-alert .organ-head { background: var(--alert); }
+.organ-alert .organ-head h3, .organ-alert .organ-head .stag { color: var(--bg); }
+
+.organ-body { display: grid; gap: 2px; padding: 6px 8px 8px; }
+.organ-headline { margin: 0 0 4px; color: var(--fg); overflow-wrap: anywhere; }
+.organ-no_data .organ-headline { color: var(--dim); }
+.organ-alert .organ-headline { color: var(--alert); font-weight: 700; }
+.organ-body .datarow-label { text-transform: none; letter-spacing: 0; }
+.organ-action { margin: 4px 0 0; color: var(--tone); overflow-wrap: anywhere; }
+.organ-prompt { color: var(--dim); }
+.organ-why-wrap { margin-top: 4px; }
+.organ-why {
+  margin: 4px 0 0;
+  padding: 4px 0 0 8px;
+  color: var(--dim);
+  border-left: 1px solid var(--accent-dim);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
