@@ -1,0 +1,29 @@
+/* Pixel-art sprites: crisp scaling and subtle animations (off with prefers-reduced-motion). */
+.px-icon, .px-avatar {
+  display: inline-block;
+  flex: none;
+  vertical-align: middle;
+  image-rendering: pixelated;
+  overflow: visible;
+}
+
+.px-icon .px-sprite { transform-box: view-box; transform-origin: 50% 50%; }
+
+.px-anim-beat .px-sprite { animation: px-beat 1.1s steps(1, end) infinite; }
+.px-anim-blink { animation: px-blink 1.4s steps(1, end) infinite; }
+.px-anim-spin .px-sprite { animation: px-spin 12s steps(24, end) infinite; }
+.px-anim-bob .px-sprite { animation: px-bob 2s steps(1, end) infinite; }
+
+@keyframes px-beat {
+  0%, 30%, 100% { transform: scale(1); }
+  12% { transform: scale(1.12); }
+  20% { transform: scale(1); }
+  24% { transform: scale(1.06); }
+}
+@keyframes px-blink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0.35; } }
+@keyframes px-spin { to { transform: rotate(360deg); } }
+@keyframes px-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .px-anim-beat .px-sprite, .px-anim-blink, .px-anim-spin .px-sprite, .px-anim-bob .px-sprite { animation: none; }
+}
