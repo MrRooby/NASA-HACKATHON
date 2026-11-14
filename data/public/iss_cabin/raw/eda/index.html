@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BD8XQRLKJV"></script>
+    <script nonce="">
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-BD8XQRLKJV');
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Environmental Data App</title>
+    <script
+      async
+      type="text/javascript"
+      src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=NASA&subagency=ARC"
+      id="_fed_an_ua_tag"
+    ></script>
+  </head>
+
+  
+  <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/eda/static/images/favicon.ico" />
+
+  <link href="/eda/static/gridstack/gridstack.min.css" rel="stylesheet" />
+  <script src="/eda/static/gridstack/gridstack-h5.js"></script>
+
+  <link href="/eda/static/css/main0.css" rel="stylesheet" />
+  <link href="/eda/static/css/utility.css" rel="stylesheet" />
+  <link href="/eda/static/css/icon.css" rel="stylesheet" />
+  <link href="/eda/static/css/header_footer.css" rel="stylesheet" />
+
+  <link href="/eda/static/bootstrap/bootstrap.min.css" rel="stylesheet" />
+  <script src="/eda/static/bootstrap/bootstrap.bundle.min.js"></script>
+
+  <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
+  <!-- <script src="/eda/static/plotly/plotly-strict.min.js"></script> -->
+
+  <!-- <script src="/eda/static/js/sidebar.js"></script> -->
+  <script src="/eda/static/js/telemetry_plots.js"></script>
+  <script src="/eda/static/js/radiation_plots.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+  <script src="/eda/static/DataTables/datatables.min.js"></script>
+  <link href="/eda/static/DataTables/datatables.min.css" rel="stylesheet" />
+
+  <script src="/eda/static/js/compare_mission.js"></script>
+  <script src="/eda/static/js/navigation.js"></script>
+  <script src="/eda/static/js/menu.js"></script>
+
+  <script nonce="">
+    const nonce = '';
+  </script>
+
+  <body>
+    <div class="d-flex flex-column flex-shrink-0 p-3 sticky-top sidebar">
+  <a href="" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none" style="color: #555555">
+    <span class="fs-5">Environmental Data App</span>
+  </a>
+  <hr />
+
+  <h6 style="font-weight: bold"><button type="button" class="btn" id="dashboard" style="padding-left: 0px">Mission Dashboard</button></h6>
+  <div class="card" style="margin-left: 8px" id="dashboard-nav">
+    <div>
+      <div class="dropdown">
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          RR-1
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li style="display: none"><button class="dropdown-item" id="dash_RR-1">RR-1</button></li>
+          <li><button class="dropdown-item" id="dash_RR-3">RR-3</button></li>
+          <li><button class="dropdown-item" id="dash_RR-4">RR-4</button></li>
+          <li><button class="dropdown-item" id="dash_RR-5">RR-5</button></li>
+          <li><button class="dropdown-item" id="dash_RR-6">RR-6</button></li>
+          <li><button class="dropdown-item" id="dash_RR-7">RR-7</button></li>
+          <li><button class="dropdown-item" id="dash_RR-8">RR-8</button></li>
+          <li><button class="dropdown-item" id="dash_RR-9">RR-9</button></li>
+          <li><button class="dropdown-item" id="dash_RR-10">RR-10</button></li>
+          <li><button class="dropdown-item" id="dash_RR-12">RR-12</button></li>
+          <li><button class="dropdown-item" id="dash_RR-17">RR-17</button></li>
+          <li><button class="dropdown-item" id="dash_RR-18">RR-18</button></li>
+          <li><button class="dropdown-item" id="dash_RR-19">RR-19</button></li>
+          <li><button class="dropdown-item" id="dash_RR-20">RR-20</button></li>
+          <!--<li><button class="dropdown-item" id="dash_RR-22">RR-22</button></li>-->
+          <li><button class="dropdown-item" id="dash_RR-23">RR-23</button></li>
+          <li><button class="dropdown-item" id="dash_RR-25">RR-25</button></li>
+          <li><button class="dropdown-item" id="dash_RR-28">RR-28</button></li>
+          <li><button class="dropdown-item" id="dash_APEX-03-1">APEX-03-1</button></li>
+          <li><button class="dropdown-item" id="dash_APEX-03-2">APEX-03-2</button></li>
+          <li><button class="dropdown-item" id="dash_APEX-04">APEX-04</button></li>
+          <!--<li><button class="dropdown-item" id="dash_VEG-01A">VEG-01A</button></li>-->
+          <!--<li><button class="dropdown-item" id="dash_VEG-01B">VEG-01B</button></li>-->
+          <li><button class="dropdown-item" id="dash_VEG-01C">VEG-01C</button></li>
+        </ul>
+      </div>
+    </div>
+    <hr style="margin: 0px" />
+    <div id="plots-nav">
+      <ul class="navbar-nav" style="padding-left: 18px">
+        <li>
+          <button class="nav-button" scrollTarget="HOME">Mission Info</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-button" scrollTarget="telemetry_data">Telemetry Data</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-button" scrollTarget="radiation_data">Radiation Data</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <h6><button type="button" class="btn" id="mission_comparison" style="padding-left: 0px; margin-top: 8px">Mission Comparison</button></h6>
+  <div style="display: none" id="type">temperature</div>
+  <div class="card" style="margin-left: 8px" id="comparison-nav">
+    <div>
+      <ul class="navbar-nav" style="padding-left: 8px">
+        <li>
+          <button type="button" class="nav-button" id="compare-temperature">Temperature</button>
+          <div id="compare-temp-nav">
+            <ul class="navbar-nav" style="padding-left: 18px">
+              <li><button class="nav-button" scrollTarget="compare_iss" style="font-size: 14px">ISS</button></li>
+              <li class="nav-item"><button class="nav-button" scrollTarget="compare_ground" style="font-size: 14px">Ground</button></li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <button type="button" class="nav-button" id="compare-rh">Relative Humidity</button>
+          <div id="compare-rh-nav">
+            <ul class="navbar-nav" style="padding-left: 18px">
+              <li><button class="nav-button" scrollTarget="compare_iss" style="font-size: 14px">ISS</button></li>
+              <li class="nav-item"><button class="nav-button" scrollTarget="compare_ground" style="font-size: 14px">Ground</button></li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <button type="button" class="nav-button" id="compare-co2">CO2</button>
+          <div id="compare-co2-nav">
+            <ul class="navbar-nav" style="padding-left: 18px">
+              <li><button class="nav-button" scrollTarget="compare_iss" style="font-size: 14px">ISS</button></li>
+              <li class="nav-item"><button class="nav-button" scrollTarget="compare_ground" style="font-size: 14px">Ground</button></li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <button type="button" class="nav-button" id="compare-radiation">Radiation</button>
+          <div id="compare-rad-nav">
+            <ul class="navbar-nav" style="padding-left: 18px">
+              <li class="nav-item"><button class="nav-button" scrollTarget="compare_gcr" style="font-size: 14px">GCR</button></li>
+              <li class="nav-item"><button class="nav-button" scrollTarget="compare_saa" style="font-size: 14px">SAA</button></li>
+              <li class="nav-item"><button class="nav-button" scrollTarget="compare_total" style="font-size: 14px">Total</button></li>
+              <li class="nav-item">
+                <button class="nav-button" scrollTarget="compare_accumulated" style="font-size: 14px">Accumulated</button>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <h6><button type="button" class="btn" id="data_tables" style="padding-left: 0px">Data Tables</button></h6>
+  <div class="card" style="margin-left: 8px" id="tables-nav">
+    <div>
+      <div class="dropdown">
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+          RR-1
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+          <li style="display: none"><button class="dropdown-item" id="table_RR-1">RR-1</button></li>
+          <li><button class="dropdown-item" id="table_RR-3">RR-3</button></li>
+          <li><button class="dropdown-item" id="table_RR-4">RR-4</button></li>
+          <li><button class="dropdown-item" id="table_RR-5">RR-5</button></li>
+          <li><button class="dropdown-item" id="table_RR-6">RR-6</button></li>
+          <li><button class="dropdown-item" id="table_RR-7">RR-7</button></li>
+          <li><button class="dropdown-item" id="table_RR-8">RR-8</button></li>
+          <li><button class="dropdown-item" id="table_RR-9">RR-9</button></li>
+          <li><button class="dropdown-item" id="table_RR-10">RR-10</button></li>
+          <li><button class="dropdown-item" id="table_RR-12">RR-12</button></li>
+          <li><button class="dropdown-item" id="table_RR-17">RR-17</button></li>
+          <li><button class="dropdown-item" id="table_RR-18">RR-18</button></li>
+          <li><button class="dropdown-item" id="table_RR-19">RR-19</button></li>
+          <li><button class="dropdown-item" id="table_RR-20">RR-20</button></li>
+          <!--<li><button class="dropdown-item" id="table_RR-22">RR-22</button></li>-->
+          <li><button class="dropdown-item" id="table_RR-23">RR-23</button></li>
+          <li><button class="dropdown-item" id="table_RR-25">RR-25</button></li>
+          <li><button class="dropdown-item" id="table_RR-28">RR-28</button></li>
+          <li><button class="dropdown-item" id="table_APEX-03-1">APEX-03-1</button></li>
+          <li><button class="dropdown-item" id="table_APEX-03-2">APEX-03-2</button></li>
+          <li><button class="dropdown-item" id="table_APEX-04">APEX-04</button></li>
+          <!--<li><button class="dropdown-item" id="table_VEG-01A">VEG-01A</button></li>-->
+          <!--<li><button class="dropdown-item" id="table_VEG-01B">VEG-01B</button></li>-->
+          <li><button class="dropdown-item" id="table_VEG-01C">VEG-01C</button></li>
+        </ul>
+      </div>
+    </div>
+    <hr style="margin: 0px" />
+    <div id="tables-scroll">
+      <ul class="navbar-nav" style="padding-left: 18px">
+        <li>
+          <button class="nav-button" scrollTarget="summary_telemetry_table">Summary Table</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-button" scrollTarget="telemetry_table">Telemetry Table</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-button" scrollTarget="radiation_table">Radiation Table</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <h6><button type="button" class="btn" id="api" style="padding-left: 0px">API</button></h6>
+  <h6><button type="button" class="btn" id="eda_reference" style="padding-left: 0px">EDA Reference Page</button></h6>
+  <br />
+</div>
+
+<script>
+  document.getElementById('dash_RR-3').onclick = function () {
+    update_dashboard('RR-3');
+  };
+  document.getElementById('dash_RR-1').onclick = function () {
+    update_dashboard('RR-1');
+  };
+  document.getElementById('dash_RR-4').onclick = function () {
+    update_dashboard('RR-4');
+  };
+  document.getElementById('dash_RR-5').onclick = function () {
+    update_dashboard('RR-5');
+  };
+  document.getElementById('dash_RR-6').onclick = function () {
+    update_dashboard('RR-6');
+  };
+
+  document.getElementById('dash_RR-7').onclick = function () {
+    update_dashboard('RR-7');
+  };
+
+  document.getElementById('dash_RR-8').onclick = function () {
+    update_dashboard('RR-8');
+  };
+  document.getElementById('dash_RR-9').onclick = function () {
+    update_dashboard('RR-9');
+  };
+  document.getElementById('dash_RR-10').onclick = function () {
+    update_dashboard('RR-10');
+  };
+  document.getElementById('dash_RR-12').onclick = function () {
+    update_dashboard('RR-12');
+  };
+  document.getElementById('dash_RR-17').onclick = function () {
+    update_dashboard('RR-17');
+  };
+
+  document.getElementById('dash_RR-18').onclick = function () {
+    update_dashboard('RR-18');
+  };
+
+  document.getElementById('dash_RR-19').onclick = function () {
+    update_dashboard('RR-19');
+  };
+
+  document.getElementById('dash_RR-20').onclick = function () {
+    update_dashboard('RR-20');
+  };
+
+  /*document.getElementById('dash_RR-22').onclick = function () {
+    update_dashboard('RR-22');
+  };*/
+  document.getElementById('dash_RR-23').onclick = function () {
+    update_dashboard('RR-23');
+  };
+  document.getElementById('dash_RR-25').onclick = function () {
+    update_dashboard('RR-25');
+  };
+  document.getElementById('dash_RR-28').onclick = function () {
+    update_dashboard('RR-28');
+  };
+  document.getElementById('dash_APEX-03-1').onclick = function () {
+    update_dashboard('APEX-03-1');
+  };
+
+  document.getElementById('dash_APEX-03-2').onclick = function () {
+    update_dashboard('APEX-03-2');
+  };
+
+  document.getElementById('dash_APEX-04').onclick = function () {
+    update_dashboard('APEX-04');
+  };
+
+  /***document.getElementById('dash_VEG-01A').onclick = function () {
+    update_dashboard('VEG-01A');
+  };***/
+
+  /***document.getElementById('dash_VEG-01B').onclick = function () {
+    update_dashboard('VEG-01B');
+  };***/
+
+  document.getElementById('dash_VEG-01C').onclick = function () {
+    update_dashboard('VEG-01C');
+  };
+
+  document.getElementById('plots-nav').addEventListener('click', scrollToPlot);
+  document.getElementById('compare-temp-nav').addEventListener('click', scrollToPlot);
+  document.getElementById('compare-rh-nav').addEventListener('click', scrollToPlot);
+  document.getElementById('compare-co2-nav').addEventListener('click', scrollToPlot);
+  document.getElementById('compare-rad-nav').addEventListener('click', scrollToPlot);
+  document.getElementById('tables-scroll').addEventListener('click', scrollToPlot);
+
+  function update_dashboard(mission) {
+    if (mission.includes('dashboard_')) {
+      mission = mission.replace('dashboard_', '');
+    }
+    prev_mission = document.getElementById('dropdownMenuButton1').innerHTML.trim();
+    console.log(prev_mission);
+
+    document.getElementById('dropdownMenuButton1').innerHTML = mission;
+    document.getElementById('dropdownMenuButton2').innerHTML = mission;
+    document.getElementById('dash_' + mission).parentNode.style.display = 'none';
+    document.getElementById('dash_' + prev_mission).parentNode.style.display = 'block';
+    document.getElementById('table_' + mission).parentNode.style.display = 'none';
+    document.getElementById('table_' + prev_mission).parentNode.style.display = 'block';
+
+    url = 'dashboard_' + encodeURIComponent(mission);
+    $('#main')
+      .html('<div class="loader"></div>')
+      .load(url, function (response, status, xhr) {
+        if (status == 'error') {
+          var msg = 'Unexpected error encountered while loading the requested visualization: ';
+        }
+      });
+  }
+
+  function scrollToPlot(evt) {
+    var scrollTarget = evt.target.getAttribute('scrollTarget');
+    var bodyRect = document.body.getBoundingClientRect();
+
+    console.log(scrollTarget);
+    if (scrollTarget == 'HOME') {
+      offset = bodyRect.top;
+    } else {
+      var elemRect = document.getElementsByName(scrollTarget)[0].getBoundingClientRect();
+      offset = elemRect.top - bodyRect.top;
+    }
+
+    var buttons = document.querySelectorAll('#plots-nav .nav-button-active');
+    for (const btn of buttons) {
+      btn.classList.add('nav-button');
+      btn.classList.remove('nav-button-active');
+    }
+
+    var buttons = document.querySelectorAll('#compare-temp-nav .nav-button-active');
+    for (const btn of buttons) {
+      btn.classList.add('nav-button');
+      btn.classList.remove('nav-button-active');
+    }
+
+    var buttons = document.querySelectorAll('#compare-rh-nav .nav-button-active');
+    for (const btn of buttons) {
+      btn.classList.add('nav-button');
+      btn.classList.remove('nav-button-active');
+    }
+
+    var buttons = document.querySelectorAll('#compare-co2-nav .nav-button-active');
+    for (const btn of buttons) {
+      btn.classList.add('nav-button');
+      btn.classList.remove('nav-button-active');
+    }
+
+    var buttons = document.querySelectorAll('#compare-rad-nav .nav-button-active');
+    for (const btn of buttons) {
+      btn.classList.add('nav-button');
+      btn.classList.remove('nav-button-active');
+    }
+
+    var buttons = document.querySelectorAll('#tables-scroll .nav-button-active');
+    for (const btn of buttons) {
+      btn.classList.add('nav-button');
+      btn.classList.remove('nav-button-active');
+    }
+
+    evt.target.classList.remove('nav-button');
+    evt.target.classList.add('nav-button-active');
+
+    window.scrollTo({
+      top: offset,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  document.getElementById('table_RR-3').onclick = function () {
+    update_tables('RR-3');
+  };
+  document.getElementById('table_RR-1').onclick = function () {
+    update_tables('RR-1');
+  };
+  document.getElementById('table_RR-4').onclick = function () {
+    update_tables('RR-4');
+  };
+  document.getElementById('table_RR-5').onclick = function () {
+    update_tables('RR-5');
+  };
+  document.getElementById('table_RR-6').onclick = function () {
+    update_tables('RR-6');
+  };
+  document.getElementById('table_RR-7').onclick = function () {
+    update_tables('RR-7');
+  };
+  document.getElementById('table_RR-8').onclick = function () {
+    update_tables('RR-8');
+  };
+  document.getElementById('table_RR-9').onclick = function () {
+    update_tables('RR-9');
+  };
+  document.getElementById('table_RR-10').onclick = function () {
+    update_tables('RR-10');
+  };
+  document.getElementById('table_RR-12').onclick = function () {
+    update_tables('RR-12');
+  };
+  document.getElementById('table_RR-17').onclick = function () {
+    update_tables('RR-17');
+  };
+  document.getElementById('table_RR-18').onclick = function () {
+    update_tables('RR-18');
+  };
+  document.getElementById('table_RR-19').onclick = function () {
+    update_tables('RR-19');
+  };
+  document.getElementById('table_RR-20').onclick = function () {
+    update_tables('RR-20');
+  };
+  /*document.getElementById('table_RR-22').onclick = function () {
+    update_tables('RR-22');
+  };*/
+  document.getElementById('table_RR-23').onclick = function () {
+    update_tables('RR-23');
+  };
+
+  document.getElementById('table_RR-25').onclick = function () {
+    update_tables('RR-25');
+  };
+
+  document.getElementById('table_RR-28').onclick = function () {
+    update_tables('RR-28');
+  };
+
+  document.getElementById('table_APEX-03-1').onclick = function () {
+    update_tables('APEX-03-1');
+  };
+
+  document.getElementById('table_APEX-03-2').onclick = function () {
+    update_tables('APEX-03-2');
+  };
+
+  document.getElementById('table_APEX-04').onclick = function () {
+    update_tables('APEX-04');
+  };
+
+  /***document.getElementById('table_VEG-01A').onclick = function () {
+    update_tables('VEG-01A');
+  };***/
+
+  /***document.getElementById('table_VEG-01B').onclick = function () {
+    update_tables('VEG-01B');
+  };***/
+
+  document.getElementById('table_VEG-01C').onclick = function () {
+    update_tables('VEG-01C');
+  };
+
+  var get_button_title = function (kind) {
+    return function () {
+      return document.getElementById('dropdownMenuButton2').innerHTML.trim() + kind;
+    };
+  };
+
+  function update_tables(mission) {
+    prev_mission = document.getElementById('dropdownMenuButton2').innerHTML.trim();
+    //console.log("prev mission")
+    //console.log(prev_mission)
+    //console.log("mission")
+
+    document.getElementById('dropdownMenuButton1').innerHTML = mission;
+    document.getElementById('dropdownMenuButton2').innerHTML = mission;
+
+    document.getElementById('table_' + mission).parentNode.style.display = 'none';
+    document.getElementById('table_' + prev_mission).parentNode.style.display = 'block';
+
+    document.getElementById('dash_' + mission).parentNode.style.display = 'none';
+    document.getElementById('dash_' + prev_mission).parentNode.style.display = 'block';
+
+    var data_raw = JSON.parse(document.getElementById('data').textContent);
+    var data = { date: [], temp_g: [], temp_iss: [], rh_g: [], rh_iss: [], co2_g: [], co2_iss: [] };
+
+    $('#telemetry_table').DataTable().clear();
+    $('#summary_telemetry_table').DataTable().clear();
+
+    console.log(mission);
+    if (mission.includes('RR')) {
+      var html_headers =
+        '<h6 id="telemetry_table_title">Telemetry data</h6><p id="no_data_telemetry_table"></p><div id="tableContent" style="font-size: 12px"><table class="display" id="telemetry_table" style="width: 100%"><thead><tr><th style="font-size: 14px">Controller_Time_GMT</th><th style="font-size: 14px">Temp_degC_Ground</th><th style="font-size: 14px">Temp_degC_ISS</th><th style="font-size: 14px">RH_percent_Ground</th><th style="font-size: 14px">RH_percent_ISS</th><th style="font-size: 14px">CO2_ppm_Ground</th><th style="font-size: 14px">CO2_ppm_ISS</th></tr></thead><tfoot><tr><th>Controller_Time_GMT</th><th>Temp_degC_Ground</th><th>Temp_degC_ISS</th><th>RH_percent_Ground</th><th>RH_percent_ISS</th><th>CO2_ppm_Ground</th><th>CO2_ppm_ISS</th></tr></tfoot></table></div>';
+      document.getElementById('telemetry_table_div').innerHTML = html_headers;
+    } else {
+      var html_headers =
+        '<h6 id="telemetry_table_title">Telemetry data</h6><p id="no_data_telemetry_table"></p><div id="tableContent" style="font-size: 12px"><table class="display" id="telemetry_table" style="width: 100%"><thead><tr><th style="font-size: 14px">Controller_Time_GMT</th><th style="font-size: 14px">Temp_degC_Ground</th><th style="font-size: 14px">Temp_degC_ISS</th><th style="font-size: 14px">RH_percent_Ground</th><th style="font-size: 14px">RH_percent_ISS</th></tr></thead><tfoot><tr><th>Controller_Time_GMT</th><th>Temp_degC_Ground</th><th>Temp_degC_ISS</th><th>RH_percent_Ground</th><th>RH_percent_ISS</th></tr></tfoot></table></div>';
+      document.getElementById('telemetry_table_div').innerHTML = html_headers;
+    }
+    if (mission.includes('RR')) {
+      $('#telemetry_table').DataTable({
+        columns: [
+          { data: 'date' },
+          { data: 'temp_g' },
+          { data: 'temp_iss' },
+          { data: 'rh_g' },
+          { data: 'rh_iss' },
+          { data: 'co2_g' },
+          { data: 'co2_iss' }
+        ],
+        scrollX: true,
+        scrollY: '90vh',
+        scrollCollapse: true,
+        destroy: true,
+        dom: 'Bfrtip',
+        buttons: [
+          { extend: 'copy', title: get_button_title('_EDA_Telemetry_data') },
+          { extend: 'csv', title: get_button_title('_EDA_Telemetry_data') },
+          { extend: 'excel', title: get_button_title('_EDA_Telemetry_data') },
+          { extend: 'pdf', title: get_button_title('_EDA_Telemetry_data') },
+          { extend: 'print', title: get_button_title('_EDA_Telemetry_data') }
+        ]
+      });
+    } else {
+      console.log('mission does not include RR');
+      $('#telemetry_table').DataTable({
+        columns: [{ data: 'date' }, { data: 'temp_g' }, { data: 'temp_iss' }, { data: 'rh_g' }, { data: 'rh_iss' }],
+        scrollX: true,
+        scrollY: '90vh',
+        scrollCollapse: true,
+        destroy: true,
+        dom: 'Bfrtip',
+        buttons: [
+          { extend: 'copy', title: get_button_title('_EDA_Telemetry_data') },
+          { extend: 'csv', title: get_button_title('_EDA_Telemetry_data') },
+          { extend: 'excel', title: get_button_title('_EDA_Telemetry_data') },
+          { extend: 'pdf', title: get_button_title('_EDA_Telemetry_data') },
+          { extend: 'print', title: get_button_title('_EDA_Telemetry_data') }
+        ]
+      });
+    }
+    render_table(data_raw);
+    render_summary_table(data_raw);
+    document.getElementById('summary_table_title').innerHTML = mission + ' Summary table';
+    document.getElementById('telemetry_table_title').innerHTML = mission + ' Telemetry data';
+    document.getElementById('radiation_table_title').innerHTML = mission + ' Radiation data';
+  }
+
+  document.getElementById('dashboard').onclick = function () {
+    url = 'dashboard_' + document.getElementById('dropdownMenuButton1').innerText.trim();
+
+    //document.location.href = url;
+    document.getElementById('dashboard').style.paddingLeft = '0px';
+    document.getElementById('dashboard').style.fontWeight = 'bold';
+    document.getElementById('mission_comparison').style.fontWeight = 'normal';
+    document.getElementById('data_tables').style.fontWeight = 'normal';
+    document.getElementById('eda_reference').style.fontWeight = 'normal';
+    document.getElementById('comparison-nav').style.display = 'none';
+    document.getElementById('tables-nav').style.display = 'none';
+
+    $('#main')
+      .html('<div class="loader"></div>')
+      .load(url, function (response, status, xhr) {
+        if (status == 'error') {
+          var msg = 'Unexpected error encountered while loading the requested visualization: ';
+          $('#main').html(msg + xhr.status + ' ' + xhr.statusText);
+        } else {
+          console.log('success');
+          document.getElementById('dashboard-nav').style.display = 'block';
+          update_dashboard(url);
+        }
+      });
+  };
+
+  document.getElementById('mission_comparison').onclick = function () {
+    url = 'mission_comparison';
+    //document.location.href = url;
+    document.getElementById('dashboard').style.paddingLeft = '0px';
+    document.getElementById('dashboard').style.fontWeight = 'normal';
+    document.getElementById('mission_comparison').style.fontWeight = 'bold';
+    document.getElementById('data_tables').style.fontWeight = 'normal';
+    document.getElementById('eda_reference').style.fontWeight = 'normal';
+    document.getElementById('dashboard-nav').style.display = 'none';
+    document.getElementById('tables-nav').style.display = 'none';
+
+    $('#main')
+      .html('<div class="loader"></div>')
+      .load(url, function (response, status, xhr) {
+        if (status == 'error') {
+          var msg = 'Unexpected error encountered while loading the requested visualization: ';
+          $('#main').html(msg + xhr.status + ' ' + xhr.statusText);
+        } else {
+          console.log('success');
+          document.querySelector('#compare-temperature').classList.remove('nav-button-active');
+          document.querySelector('#compare-rh').classList.remove('nav-button-active');
+          document.querySelector('#compare-co2').classList.remove('nav-button-active');
+          document.querySelector('#compare-radiation').classList.remove('nav-button-active');
+          document.querySelector('#compare-temperature').classList.add('nav-button-active');
+          document.getElementById('compare-rh-nav').style.display = 'none';
+          document.getElementById('compare-co2-nav').style.display = 'none';
+          document.getElementById('compare-rad-nav').style.display = 'none';
+          document.getElementById('tables-nav').style.display = 'none';
+          document.getElementById('comparison-nav').style.display = 'block';
+        }
+      });
+  };
+
+  document.getElementById('data_tables').onclick = function () {
+    url = 'data_tables';
+    //document.location.href = url;
+    document.getElementById('dashboard').style.fontWeight = 'normal';
+    document.getElementById('mission_comparison').style.fontWeight = 'normal';
+    document.getElementById('data_tables').style.fontWeight = 'bold';
+    document.getElementById('dashboard-nav').style.display = 'none';
+    document.getElementById('comparison-nav').style.display = 'none';
+
+    $('#main')
+      .html('<div class="loader"></div>')
+      .load(url, function (response, status, xhr) {
+        if (status == 'error') {
+          var msg = 'Unexpected error encountered while loading the requested visualization: ';
+          $('#main').html(msg + xhr.status + ' ' + xhr.statusText);
+        } else {
+          console.log('success');
+          document.getElementById('tables-nav').style.display = 'block';
+        }
+      });
+  };
+  document.getElementById('eda_reference').onclick = function () {
+    url = 'eda_reference';
+    //document.location.href = url;
+    document.getElementById('dashboard').style.fontWeight = 'normal';
+    document.getElementById('mission_comparison').style.fontWeight = 'normal';
+    document.getElementById('data_tables').style.fontWeight = 'normal';
+    document.getElementById('eda_reference').style.fontWeight = 'bold';
+    document.getElementById('dashboard-nav').style.display = 'none';
+    document.getElementById('comparison-nav').style.display = 'none';
+
+    $('#main')
+      .html('<div class="loader"></div>')
+      .load(url, function (response, status, xhr) {
+        if (status == 'error') {
+          var msg = 'Unexpected error encountered while loading the requested visualization: ';
+          $('#main').html(msg + xhr.status + ' ' + xhr.statusText);
+        } else {
+          console.log('success');
+          //document.getElementById('tables-nav').style.display = 'block';
+        }
+      });
+  };
+
+  document.getElementById('api').onclick = function () {
+    url = 'api_reference';
+    //document.location.href = url;
+    document.getElementById('dashboard').style.fontWeight = 'normal';
+    document.getElementById('mission_comparison').style.fontWeight = 'normal';
+    document.getElementById('data_tables').style.fontWeight = 'normal';
+    document.getElementById('eda_reference').style.fontWeight = 'normal';
+    document.getElementById('dashboard-nav').style.display = 'none';
+    document.getElementById('comparison-nav').style.display = 'none';
+    document.getElementById('api').style.display = 'bold';
+
+    $('#main')
+      .html('<div class="loader"></div>')
+      .load(url, function (response, status, xhr) {
+        if (status == 'error') {
+          var msg = 'Unexpected error encountered while loading the requested visualization: ';
+          $('#main').html(msg + xhr.status + ' ' + xhr.statusText);
+        } else {
+          console.log('success');
+          //document.getElementById('tables-nav').style.display = 'block';
+        }
+      });
+  };
+</script>
+
+
+    <div class="index-ctr">
+      <header>
+
+<div class="external-content">
+            <div id="headers">
+
+            <a href="https://www.nasa.gov/"><img class="nasa-open-science-logo" src="https://visualization.osdr.nasa.gov/radlab/img/banners/NASA-OpenScience-transparent.png" alt="NASA"></a>
+            <div id="osdr-header" class="mouse header unselectable">
+            
+              <div class="dropdown-wrapper left onhover">
+                <a class="dropdown-header"> <span>Overview<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="arrow" fill="#FFF" xml:space="preserve" x="0px" y="0px" viewBox="0 0 306 306" style="enable-background:new 0 0 306 306;"><g><polygon points="270.3,58.65 153,175.95 35.7,58.65 0,94.35 153,247.35 306,94.35 "></polygon></g></svg></span></a>
+                <div class="dropdown-menu">
+                  <a href="https://science.nasa.gov/biological-physical/">About</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/resources/decadal-surveys/">Decadal Survey</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/investigations/">Investigations</a><br>
+                  <a href="https://science.nasa.gov/science-missions/">Missions</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/organization-and-staff/">Organization</a><br>
+                  <a href="https://www.nasa.gov/partnerships/">Partnerships</a><br>
+                  <a href="https://science.nasa.gov/researchers/nac/science-advisory-committees/bpac/">Advisory Committee</a><br>
+                  <a href="https://www.nasa.gov/ames/">Ames Research Center</a><br>
+                  <a href="https://www.nasa.gov/glenn/">Glenn Research Center</a><br>
+                  <a href="https://www.nasa.gov/marshall-space-flight-center/">Marshall Space Flight Center</a><br>
+                  <a href="https://www.nasa.gov/jpl/">Jet Propulsion Lab</a><br>
+                  <a href="https://www.nasa.gov/johnson/">Johnson Space Center</a><br>
+                  <a href="https://www.nasa.gov/kennedy/">Kennedy Space Center</a><br>
+                </div>
+              </div>
+              <div class="dropdown-wrapper left onhover">
+                <a class="dropdown-header"> <span>Goals<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="arrow" fill="#FFF" xml:space="preserve" x="0px" y="0px" viewBox="0 0 306 306" style="enable-background:new 0 0 306 306;"><g><polygon points="270.3,58.65 153,175.95 35.7,58.65 0,94.35 153,247.35 306,94.35 "></polygon></g></svg></span></a>
+                <div class="dropdown-menu">
+                  <a href="https://science.nasa.gov/biological-physical/goals/%20">Scientific Goals Overview</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/precision-health/%20">Precision Health</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/quantum-leaps/">Quantum Leaps</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/space-crops/%20">Space Crops</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/foundations/">Foundations</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/space-labs/">Space Labs</a><br>
+                </div>
+              </div>
+              <div class="dropdown-wrapper left onhover">
+                <a class="dropdown-header"> <span>Programs<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="arrow" fill="#FFF" xml:space="preserve" x="0px" y="0px" viewBox="0 0 306 306" style="enable-background:new 0 0 306 306;"><g><polygon points="270.3,58.65 153,175.95 35.7,58.65 0,94.35 153,247.35 306,94.35 "></polygon></g></svg></span></a>
+                <div class="dropdown-menu">
+                  <a href="https://science.nasa.gov/biological-physical/programs/">Programs Overview</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/programs/space-biology/">Space Biology Program</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/programs/physical-sciences/">Physical Sciences Program</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/commercial/">Commercial</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/focus-areas/fundamental-physics/">Fundamental Physics</a><br>
+                </div>
+              </div>
+              <div class="dropdown-wrapper left onhover">
+                <a class="dropdown-header"> <span>Resources<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="arrow" fill="#FFF" xml:space="preserve" x="0px" y="0px" viewBox="0 0 306 306" style="enable-background:new 0 0 306 306;"><g><polygon points="270.3,58.65 153,175.95 35.7,58.65 0,94.35 153,247.35 306,94.35 "></polygon></g></svg></span></a>
+                <div class="dropdown-menu">
+                  <a href="https://science.nasa.gov/biological-physical/resources/news/">News, Media &amp; Features</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/resources/explainers-infographics/">Articles, Explainers, Videos &amp; Infographics</a><br>
+                  <a href="https://nspires.nasaprs.com/external/">Solicitations</a><br>
+                  <a href="https://science.nasa.gov/about-us/communications">Contact Us</a><br>
+                  <a href="https://twitter.com/NASASpaceSci">Social Media</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/resources/newsletters/">Science Digest</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/stories/stem-trainings/">Education &amp; Opportunities</a><br>
+                </div>
+              </div>
+              <div class="dropdown-wrapper left onhover">
+                <a class="dropdown-header"> <span>Data<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="arrow" fill="#FFF" xml:space="preserve" x="0px" y="0px" viewBox="0 0 306 306" style="enable-background:new 0 0 306 306;"><g><polygon points="270.3,58.65 153,175.95 35.7,58.65 0,94.35 153,247.35 306,94.35 "></polygon></g></svg></span></a>
+                <div class="dropdown-menu">
+                  <a href="https://science.nasa.gov/biological-physical/data/">Overview</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/data/osdr/">OSDR</a><br>
+                  <a href="https://science.nasa.gov/physical-sciences-informatics-psi/history-of-physical-science-informatics/">PSI</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/data/nbisc/">NBISC</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/data/awg">AWGs</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/data/bps-data-management/">BPS Data Management Policy</a><br>
+                </div>
+              </div>
+              <div class="dropdown-wrapper left onhover">
+                <a class="dropdown-header"> <span>OSDR Tools<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="arrow" fill="#FFF" xml:space="preserve" x="0px" y="0px" viewBox="0 0 306 306" style="enable-background:new 0 0 306 306;"><g><polygon points="270.3,58.65 153,175.95 35.7,58.65 0,94.35 153,247.35 306,94.35 "></polygon></g></svg></span></a>
+                <div class="dropdown-menu">
+                  <a href="https://osdr.nasa.gov/bio/repo">Data Repository</a><br>
+                  <a href="https://www.nasa.gov/osdr-submission-portal/">Submission Portal</a><br>
+                  <a href="https://visualization.osdr.nasa.gov/">Data Visualization</a><br>
+                  <a href="https://osdr-tutorials.readthedocs.io/en/latest/">Tutorials</a><br>
+                  <a href="https://science.nasa.gov/biological-physical/data/osdr/osdr-help-contact-us/">Contact Us</a><br>
+                </div>
+              </div>
+            </div> <!-- END id="osdr-header" -->
+          </div> <!-- END id="headers" -->
+</div>
+<hr>
+<!--<div id="header-frame">
+  <div id="header1">
+    <div id="header-NASA-Logo">
+      <a href="https://www.nasa.gov/osdr/">
+        <img alt="NASA" src="/eda/static/images/nasa-logo.svg" />
+      </a>
+    </div>
+    <div id="header-tagline">Open Science for Life in Space</div>
+    <div id="header-menu">
+      <a href="https://www.nasa.gov/osdr/">
+        <div class="no-highlight gradient-menu-hover" id="menu-home">Home</div>
+      </a>
+      <div class="menu-expandable no-highlight gradient-menu-hover" id="menu-about">
+        About
+        <img alt="v" class="menu-expand-icon-down" height="15px" src="/eda/static/images/angle-down.svg" width="15px" />
+      </div>
+      <div class="menu-expandable no-highlight gradient-menu-hover" id="menu-data-tools">
+        Data &amp; Tools
+        <img alt="v" class="menu-expand-icon-down" height="15px" src="/eda/static/images/angle-down.svg" width="15px" />
+      </div>
+      <div class="menu-expandable no-highlight gradient-menu-hover" id="menu-research-resources">
+        Research &amp; Resources
+        <img alt="v" class="menu-expand-icon-down" height="15px" src="/eda/static/images/angle-down.svg" width="15px" />
+      </div>
+      <div class="menu-expandable no-highlight gradient-menu-hover" id="menu-services">
+        Services <img alt="v" class="menu-expand-icon-down" height="15px" src="/eda/static/images/angle-down.svg" width="15px" />
+      </div>
+      <div class="menu-expandable no-highlight gradient-menu-hover" id="menu-wrk-grps">
+        Working Groups <img alt="v" class="menu-expand-icon-down" height="15px" src="/eda/static/images/angle-down.svg" width="15px" />
+      </div>
+      <div class="menu-expandable no-highlight gradient-menu-hover" id="menu-engage">
+        Engage with Us <img alt="v" class="menu-expand-icon-down" height="15px" src="/eda/static/images/angle-down.svg" width="15px" />
+      </div>
+      <div class="menu-expandable no-highlight gradient-menu-hover" id="menu-help">
+        Help <img alt="v" class="menu-expand-icon-down" height="15px" src="/eda/static/images/angle-down.svg" width="15px" />
+      </div>
+    </div>
+    <div class="no-highlight" id="header-menu-panels">
+      <div class="menu-expanded menu-hidden" data-menu-section="menu-about" id="menu-about-expanded">
+        <a href="https://www.nasa.gov/osdr-about-open-science/">
+          <div class="menu-item">Open Science</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-about-osdr-project-overview/">
+          <div class="menu-item">Project Overview</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr/alsda/">
+          <div class="menu-item">ALSDA</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-genelab-about/">
+          <div class="menu-item">GeneLab</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-about-nbisc/">
+          <div class="menu-item">NBISC</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-bsp-about/">
+          <div class="menu-item">BSP</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr/news/">
+          <div class="menu-item">Latest News</div>
+        </a>
+      </div>
+      <div class="menu-expanded menu-hidden" data-menu-section="menu-data-tools" id="menu-data-tools-expanded">
+        <a href="https://osdr.nasa.gov/bio/repo/search/">
+          <div class="menu-item">Data Repository</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-submission-portal/">
+          <div class="menu-item">Submission Portal</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-workspace-osdr-workspace/">
+          <div class="menu-item">Workspace</div>
+        </a>
+        <a href="https://www.nasa.gov/fastwork">
+          <div class="menu-item">FASTWork</div>
+        </a>
+        <a href="https://visualization.osdr.nasa.gov/nbisc/home/">
+          <div class="menu-item">Biospecimen Search Tool</div>
+        </a>
+        <a href="https://visualization.osdr.nasa.gov/">
+          <div class="menu-item">Data Visualization</div>
+        </a>
+        <a href="https://visualization.osdr.nasa.gov/radlab/gui/overview/">
+          <div class="menu-item">RadLab</div>
+        </a>
+        <a href="https://visualization.osdr.nasa.gov/eda/">
+          <div class="menu-item">Environmental Data App</div>
+        </a>
+        <a href="https://www.nasa.gov/reference/osdr-environmental-data/">
+          <div class="menu-item">Environmental Data</div>
+        </a>
+        <a href="https://visualization.osdr.nasa.gov/biodata/api/">
+          <div class="menu-item">API</div>
+        </a>
+      </div>
+      <div
+        class="menu-expanded menu-hidden"
+        data-menu-section="menu-research-resources"
+        id="menu-research-resources-expanded"
+        style="left: 825.578px; top: 65.25px"
+      >
+        <a href="https://www.nasa.gov/reference/osdr-publications-archive/">
+          <div class="menu-item">Publications</div>
+        </a>
+        <a href="https://www.nasa.gov/reference/osdr-open-science/">
+          <div class="menu-item">NASA&#8217;s Open Science Initiative</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-space-biology-data-visualization-apps/">
+          <div class="menu-item">Space Biology Data Visualization Apps</div>
+        </a>
+        <a href="https://www.nasa.gov/opportunities-and-training-resources/">
+          <div class="menu-item">Opportunities and Training Resources</div>
+        </a>
+        <a href="https://www.nasa.gov/case-studies/">
+          <div class="menu-item">Case Studies</div>
+        </a>
+        <a href="https://public.ksc.nasa.gov/nslsl/">
+          <div class="menu-item">NASA Space Life Sciences Library (NSLSL)</div>
+        </a>
+        <a href="https://ibsls.megabank.tohoku.ac.jp/">
+          <div class="menu-item">Integrated Biobank for Space Life Sciences (ibSLS)</div>
+        </a>
+      </div>
+      <div class="menu-expanded menu-hidden" data-menu-section="menu-services" id="menu-services-expanded">
+        <a href="https://www.nasa.gov/sequencing-and-data-processing-quote-request/">
+          <div class="menu-item">Sequencing and Data Processing Quote Request</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-sequencing-and-sample-processing-overview/">
+          <div class="menu-item">Sequencing and Sample Processing</div>
+        </a>
+        <a href="https://www.nasa.gov/reference/osdr-data-processing/">
+          <div class="menu-item">Data Processing</div>
+        </a>
+        <a href="https://nlsp.nasa.gov/explore/lsdahome/datarequest">
+          <div class="menu-item">Request NBISC Tissue Samples</div>
+        </a>
+      </div>
+      <div
+        class="menu-expanded menu-hidden"
+        data-menu-section="menu-wrk-grps"
+        id="menu-wrk-grps-expanded"
+        style="left: 1170.62px; top: 65.25px"
+      >
+        <a href="https://www.nasa.gov/osdr-working-groups-how-to-join-the-analysis-working-groups/">
+          <div class="menu-item">Open Science Data Repository Analysis Working Groups</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-ai-ml-horizons-in-biosciences-informatics-seminar-series-hbiss/">
+          <div class="menu-item">Seminars and Other Events</div>
+        </a>
+      </div>
+      <div class="menu-expanded menu-hidden" data-menu-section="menu-engage" id="menu-engage-expanded">
+        <a href="https://www.nasa.gov/osdr-engage-with-us-latest-newsletters/">
+          <div class="menu-item">Newsletters</div>
+        </a>
+        <a href="https://x.com/i/flow/login?redirect_after_login=%2Fnasagenelab">
+          <div class="menu-item">X</div>
+        </a>
+        <a href="https://www.youtube.com/channel/UC8fJXt1D8IT4GM4qxKPgUmg">
+          <div class="menu-item">YouTube</div>
+        </a>
+        <a href="https://www.linkedin.com/company/nasa-genelab/">
+          <div class="menu-item">LinkedIn</div>
+        </a>
+        <a href="https://awg.osdr.space/">
+          <div class="menu-item">AWG Forum</div>
+        </a>
+        <a href="https://www.nasa.gov/calendar-of-osdr-events">
+          <div class="menu-item">Calendar of Events</div>
+        </a>
+      </div>
+      <div class="menu-expanded menu-hidden" data-menu-section="menu-help" id="menu-help-expanded">
+        <a href="https://www.nasa.gov/reference/osdr-faq-frequently-asked-questions/">
+          <div class="menu-item">FAQ</div>
+        </a>
+        <a href="https://www.nasa.gov/reference/osdr-help-terms-and-conditions/">
+          <div class="menu-item">Terms &amp; Conditions</div>
+        </a>
+        <a href="https://osdr-tutorials.readthedocs.io/en/latest/">
+          <div class="menu-item">Tutorials</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-help-troubleshooting/">
+          <div class="menu-item">Troubleshooting</div>
+        </a>
+        <a href="https://www.nasa.gov/osdr-help-contact-us/">
+          <div class="menu-item">Contact Us</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script nonce="">
+  // accordion controller for menus
+  // load the navigation bar from navigation.html into the header-frame div
+  /*** var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/bio/navigation.html', true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      document.getElementById('header-frame').innerHTML = xhr.responseText;
+    }
+  };
+  xhr.send(); ***/
+
+  // accordion controller for menus
+  window.addEventListener('load', function () {
+    console.log('accordion');
+    document.querySelectorAll('.accordion').forEach((accordion) => {
+      console.log(accordion);
+      accordion.addEventListener('click', function () {
+        var submenu = accordion.parentElement.nextElementSibling;
+        var indicator = accordion.children[1].children[0];
+        if (!submenu.style.height || submenu.style.height === '0px') {
+          var scrollHeight = submenu.scrollHeight;
+          submenu.style.height = scrollHeight + 'px';
+          indicator.style.transform = 'rotate(-180deg)';
+        } else {
+          submenu.style.height = '0px';
+          indicator.style.transform = 'rotate(0deg)';
+        }
+      });
+    });
+  });
+</script>-->
+</header>
+      <div id="main">
+
+
+
+  <script id="data" type="application/json">""</script>
+
+
+
+  <br>
+  <br>
+  <!-- <h4>RR-</h4> -->
+  <div class="card" style="padding:4px;background:#f4f7fd;color: #555555">
+    <h4 class="card-title" style="color: #555555;text-align: center;padding-top: 8px;">Environmental Data App</h4>
+    <!--<p>The Environmental Data App (EDA) is a portal where users can visualize and compare ISS (International Space Station) cabin environmental telemetry data and radiation data gathered from spaceflight missions. On the Mission Dashboard the users can visualize Temperature, Carbon dioxide (CO2), and Relative Humidity measurements and Radiation doses recorded in the ISS cabin and ground control for the duration of the mission. The Mission Comparison feature can be used to visualize data across multiple missions. Raw and summary data is available for download on the Data Tables tab through the Data Tables section.</p>-->
+    <p>The Environmental Data App (EDA) is a portal where users can visualize and compare International Space Station (ISS) cabin, hardware environmental telemetry data, and radiation data gathered from spaceflight missions. On the Mission Dashboard the users can visualize temperature, carbon dioxide (CO2), and relative humidity measurements and radiation doses recorded in the ISS cabin and ground control for the duration of the mission. In addition to Temperature and Relative Humidity data collected from both flight and ground hardware units. The Mission Comparison feature can be used to visualize data across multiple missions. Raw and summary data are available for download on the Data Tables tab through the Data Tables section.</p>
+  </div>
+  <br>
+
+  <h5><a href= target="_blank"></a></h5>
+  <p><br/><br/><i></i></p>
+
+            <br/>
+
+          <div class="row">
+            
+<div class="row">
+  <div class="col-3">
+    <div id="mission_milestones">
+      <div class="card" style="width: 18rem;background:#f4f7fd;color: #555555">
+        <div class="card-body" id="milestones-card-body">
+          <div >
+          <h6 class="card-title">Mission Milestone Dates
+            <a data-toggle='tooltip' data-placement='right' data-html='true' onclick="tooltipFcn(this)" id="test" title="Mission Milestone Dates represent significant moments in the mission and experiment. Milestone dates include vehicle launch, animal transfer, euthanization, and vehicle return to Earth.">
+              <i class="material-icons-outlined" style="font-size: 18px;" >info</i>
+            </a>
+          </h6>
+          <hr>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="showMilestones">
+            <label class="form-check-label" for="showMilestones">Display mission milestones</label>
+            </br>
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="col-9" name="telemetry_data">
+      <h5>Telemetry data
+        <a  data-toggle='tooltip' data-placement='right' data-html='true' onclick="tooltipFcn(this)" title="Temperature, RH and CO2 measurements gathered through sensors from the ISS cabin and ground control cages where rodents were kept through the duration of the mission.">
+          <i class="material-icons-outlined" style="font-size: 18px;" >info</i>
+        </a>
+      </h5>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="telemetryRelativeDateSwitch">
+        <label class="form-check-label" for="telemetryRelativeDateSwitch">Display relative time</label>
+      </div>
+      <div id="temperature" ></div>
+    </div>
+</div>
+<div class="row">
+  <div class="col-6">
+  
+    <div id="rh"></div>
+    </div>
+    <div class= "col-6">
+      
+      <div id="co2"></div>
+    </div>
+</div>
+
+<script>
+
+  var data = JSON.parse(document.getElementById('data').textContent);
+  //console.log(data)
+  
+  /*if(document.getElementById("dropdownMenuButton1").innerHTML != "RR-100"){
+    telemetry_plot(data, 'temperature')
+    telemetry_plot(data, 'rh')
+  }else{
+    document.getElementById("temperature").innerHTML = "There is no Temperature or Relative Humidity data available for RR-18."
+  }
+  telemetry_plot(data, 'co2')*/
+
+  if(document.getElementById("dropdownMenuButton1").innerHTML == "APEX-03-1"){
+    document.getElementById("co2").innerHTML = "There is no CO2 data available for APEX-03-1."
+   //document.getElementById("co2").parentElement.style.display = "none"
+  }
+  if(document.getElementById("dropdownMenuButton1").innerHTML == "APEX-03-2"){
+    document.getElementById("co2").innerHTML = "There is no CO2 data available for APEX-03-2."
+    //document.getElementById("co2").parentElement.style.display = "none"
+  }
+
+  if(document.getElementById("dropdownMenuButton1").innerHTML == "APEX-04"){
+    document.getElementById("co2").innerHTML = "There is no CO2 data available for APEX-04."
+    //document.getElementById("co2").parentElement.style.display = "none"
+  }
+  if(document.getElementById("dropdownMenuButton1").innerHTML == "VEG-01A"){
+    document.getElementById("co2").innerHTML = "There is no CO2 data available for VEG-01A."
+    //document.getElementById("co2").parentElement.style.display = "none"
+  }
+  if(document.getElementById("dropdownMenuButton1").innerHTML == "VEG-01C"){
+    document.getElementById("co2").innerHTML = "There is no CO2 data available for VEG-01C."
+    //document.getElementById("co2").parentElement.style.display = "none"
+  }
+
+  if(document.getElementById("dropdownMenuButton1").innerHTML == "RR-18"){
+    document.getElementById("co2").innerHTML = "There is no CO2 data available for RR-18."
+    //document.getElementById("co2").parentElement.style.display = "none"
+  }
+
+ document.getElementById("telemetryRelativeDateSwitch").addEventListener('change', function(){
+    telemetry_plot(data, 'temperature')
+    telemetry_plot(data, 'rh')
+    if(!document.getElementById("dropdownMenuButton1").innerHTML.includes("RR-") || document.getElementById("dropdownMenuButton1").innerHTML.includes("RR-18")){
+      document.getElementById("co2").innerHTML = "There is no CO2 data available for " + document.getElementById("dropdownMenuButton1").innerHTML + " ."
+    }else{
+      telemetry_plot(data, 'co2')
+    }
+      radiation_plot(data, 'gcr')
+      radiation_plot(data, 'saa')
+      radiation_plot(data, 'accumulated')
+    all_radiation_plot(data)
+  }) 
+
+function tooltipFcn(btn){
+  if(bootstrap.Tooltip.getInstance(btn) == null){
+    if(!(btn.classList.contains("active-tt"))){
+      btn.classList.add("active-tt");
+      var tooltip = new bootstrap.Tooltip(btn);
+      tooltip.show();
+    }
+  }else{
+    if(btn.classList.contains("active-tt")){
+      btn.classList.remove("active-tt");
+      bootstrap.Tooltip.getInstance(btn).hide();
+    }else{
+      btn.classList.add("active-tt");
+      bootstrap.Tooltip.getInstance(btn).show();
+    }
+  }
+  
+}
+
+</script>
+
+          </div>
+          <hr>
+          <br>
+          <br>
+          <h5 name="radiation_data">Radiation data
+            <a data-toggle='tooltip' data-placement='right' data-html='true' onclick="tooltipFcn(this)" title="Radiation dose received by the samples is calculated through dosimetry techniques. Doses are in water based on standard conversion from dose in silicon. Doses include approximate dose received on launch vehicle before transfer to the ISS.  Since there was no dosimetry on the launch vehicle, dose is approximated based on average values in the US Lab. Data are cumulative absorbed doses from preliminary analysis of results from instruments on the International Space Station, analyzed by subject matter experts from the Space Radiation Analysis Group (SRAG), NASA-JSC. https://genelab.nasa.gov/environmental/radiation/iss/rodentresearch">
+              <i class="material-icons-outlined" style="font-size: 18px;" >info</i>
+            </a>
+          </h5>
+            <div class="row">
+  <div class="col-6">
+    <p style="text-align: center;margin-bottom: 40px; font-family: Verdana, Geneva, Tahoma, sans-serif;" id="gcr_title">
+      Galactic Cosmic Ray (GCR)
+      <a data-toggle='tooltip' data-placement='right' data-html='true' onclick="tooltipFcn(this)" title="Galactic Cosmic Radiation (GCR) is a dominant source of radiation that must be dealt with aboard current spacecraft and future space missions within our solar system. GCR comes from outside the solar system but primarily from within our Milky Way galaxy. GCR are heavy, high-energy ions of elements that have had all their electrons stripped away as they journeyed through the galaxy at nearly the speed of light. They can cause atoms they pass through to ionize. https://www.nasa.gov/analogs/nsrl/why-space-radiation-matters">
+        <i class="material-icons-outlined" style="font-size: 18px;" >info</i>
+      </a>
+    </p>
+    <div id="gcr"></div>
+    <span id="test" style="display: none;">test</span>
+  </div>
+  <div class="col-6">
+    <p style="text-align: center;margin-bottom: 40px; font-family: Verdana, Geneva, Tahoma, sans-serif;" id="saa_title">
+      South Atlantic Anomaly (SAA)
+      <a data-toggle='tooltip' data-placement='right' data-html='true' onclick="tooltipFcn(this)" title="The South Atlantic Anomaly is a high radiation causing anomaly of the geomagnetic field strength on an area of the Earth’s surface that covers part of the South Atlantic Ocean and adjacent areas. Satellites or other objects orbiting around the Earth are affected by a high density of cosmic ray particles caused by it.">
+        <i class="material-icons-outlined" style="font-size: 18px;" >info</i>
+      </a>
+    </p>
+    <div id="saa"></div>
+  </div>
+</div>
+<br>
+<div class="row">
+  <!-- <div class="col-4">
+    <div id="total"></div>
+  </div> -->
+  <div class="col-6">
+    <p style="text-align: center;margin-bottom: 40px; font-family: Verdana, Geneva, Tahoma, sans-serif;" id="accumulated_title">
+      Accumulated Radiation Dose
+      <a data-toggle='tooltip' data-placement='right' data-html='true' onclick="tooltipFcn(this)" title="The accumulated radiation dose is the cumulative sum of the total radiation dose (GCR + SAA) over the duration of the mission.">
+        <i class="material-icons-outlined" style="font-size: 18px;" >info</i>
+      </a>
+    </p>
+    <div id="accumulated"></div>
+  </div>
+  <div class="col-6">
+    <p style="text-align: center;margin-bottom: 40px; font-family: Verdana, Geneva, Tahoma, sans-serif;" id="total_title">Total Radiation Dose
+      <a data-toggle='tooltip' data-placement='right' data-html='true' onclick="tooltipFcn(this)" title="The total radiation dose is the sum of the GCR and SAA absorbed doses.">
+        <i class="material-icons-outlined" style="font-size: 18px;" >info</i>
+      </a>
+    </p>
+    <div id="all_radiation"></div>
+  </div>
+</div>
+
+<script>
+  var data = JSON.parse(document.getElementById('data').textContent);
+  //console.log(data)
+
+  radiation_plot(data, 'gcr')
+  radiation_plot(data, 'saa')
+  //radiation_plot(data, 'total')
+  radiation_plot(data, 'accumulated')
+  all_radiation_plot(data)
+
+  
+</script>
+
+
+
+<script>
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
+ var data = JSON.parse(document.getElementById('data').textContent);
+ console.log(data.telemetry_data)
+ if(data.telemetry_data.includes("milestones")){
+  var milestones_arr = JSON.parse(data.telemetry_data).milestones
+ }else{
+  if(data.radiation_data.includes("milestones")){
+    var milestones_arr = JSON.parse(data.radiation_data).milestones
+  }else{
+    var milestones_arr = {}
+  }
+ }
+
+ milestones(data)
+
+ if(document.getElementById("dropdownMenuButton1").innerHTML != "RR-100"){
+    telemetry_plot(data, 'temperature')
+    telemetry_plot(data, 'rh')
+  }else{
+    document.getElementById("temperature").innerHTML = "There is no Temperature or Relative Humidity data available for RR-18."
+  }
+
+  if(document.getElementById("dropdownMenuButton1").innerHTML != "RR-18"){
+    telemetry_plot(data, 'co2')
+  }
+  
+ if(document.getElementById("showMilestones")){
+ document.getElementById("showMilestones").addEventListener('change', function(){
+    if(document.getElementById("showMilestones").checked){
+      const elements = document.querySelectorAll('.milestone-checkbox');
+      elements.forEach((element) => {
+        element.checked = true
+      });
+    }else{
+      const elements = document.querySelectorAll('.milestone-checkbox');
+      elements.forEach((element) => {
+        element.checked = false
+      });
+    }
+    if(document.getElementById("dropdownMenuButton1").innerHTML != "RR-100" ){
+      console.log("inside if")
+      telemetry_plot(data, 'temperature')
+      telemetry_plot(data, 'rh')
+      radiation_plot(data, 'gcr')
+      radiation_plot(data, 'saa')
+      radiation_plot(data, 'accumulated')
+      all_radiation_plot(data)
+    }
+    if(document.getElementById("dropdownMenuButton1").innerHTML.includes("RR-") && !document.getElementById("dropdownMenuButton1").innerHTML.includes("RR-18")){
+      telemetry_plot(data, 'co2')
+    }else{
+      document.getElementById("co2").innerHTML = "There is no CO2 data available for " + document.getElementById("dropdownMenuButton1").innerHTML + " ."
+    }
+  }) 
+  if(Object.keys(milestones_arr).length == 0){
+  document.getElementById("showMilestones").disabled = true
+ }else{
+  document.getElementById("showMilestones").disabled = false
+
+}
+ }
+
+
+
+ 
+
+</script>
+ </div>
+        <style type="text/css" nonce="">
+  /* OSDR Page Footer */
+  #footer-osdr-container {
+    background-color: #e6e7e8;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 17px;
+
+    min-width: 1195px;
+  }
+
+  .footer-col {
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+    margin: 0 35px;
+  }
+
+  #footer-osdr-container h1 {
+    font-size: 0.95em;
+    font-weight: 500;
+    font-family: 'Oswald';
+    color: #414042;
+    margin: 0 0 3px 0;
+  }
+
+  #footer-osdr-container ul {
+    list-style-type: none;
+    padding-left: 7px;
+    margin: 0;
+  }
+
+  #footer-follow-us h1 {
+    margin-bottom: 5px;
+  }
+  #footer-follow-us li {
+    padding-top: 0;
+  }
+
+  #footer-site-information {
+    margin-top: 9px;
+  }
+
+  #footer-newsletter {
+    margin-top: 9px;
+  }
+
+  #footer-osdr-container a
+  {
+    color: inherit;
+    text-decoration: inherit;
+    font-size: 0.7em;
+    font-weight: 400;
+    color: #756e66;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    vertical-align: top;
+  }
+
+  .footer-span{
+    color: inherit;
+    text-decoration: inherit;
+    font-size: 0.7em;
+    font-weight: 400;
+    color: #756e66;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    vertical-align: top; 
+  }
+
+  #footer-osdr-container a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+    color: #c01700;
+  }
+
+  #footer-osdr-container strong a {
+    font-weight: 700;
+    color: #414042;
+  }
+
+  #footer-nasa-logo img {
+    margin-top: 10px;
+    margin-right: 5px;
+    width: 157px;
+    height: 128px;
+  }
+
+  .footer-list-bullet {
+    width: 5px;
+    height: 10px;
+    padding-right: 3px;
+    padding-bottom: 2px;
+    filter: invert(41%) sepia(1%) saturate(4172%) hue-rotate(353deg) brightness(98%) contrast(68%);
+  }
+
+  .footer-brand-logo-bullet {
+    width: 15px;
+  }
+
+  .footer-brand-logo-container {
+    display: inline-block;
+    height: 25px;
+  }
+
+  .footer-brand-logo-container img {
+    vertical-align: middle;
+  }
+
+  .footer-brand-label-container {
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 4px;
+    padding-top: 3px;
+  }
+
+  /* Footer with NASA sites links */
+  #footer-nasa-std {
+    display: block;
+    font-size: 0.85em;
+    font-weight: 400;
+    color: #756e66;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    min-width: 1195px;
+  }
+
+  #footer-nasa-std div {
+    display: inline;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  #footer-nasa-std a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  #footer-nasa-std a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+    color: #c01700;
+  }
+
+  .footer-nasa-std-sep {
+    font-size: 0.95em;
+    font-weight: 600;
+    vertical-align: top;
+  }
+</style>
+
+<div id="footer-osdr-container">
+  <div class="footer-col" id="footer-nasa-logo">
+    <a href="https://www.nasa.gov/osdr/">
+      <img alt="NASA" src="/eda/static/images/nasa-logo.svg" />
+    </a>
+  </div>
+  <div class="footer-col">
+    <div id="footer-contacts">
+      <h1>CONTACTS</h1>
+      <ul>
+        <li>
+          <span class="footer-span"> NASA Official: Jonathan Galazka </span>
+        </li>
+        <li>
+          <strong>
+            <a href="https://www.nasa.gov/osdr-help-contact-us/"> Questions and Feedback </a>
+          </strong>
+        </li>
+      </ul>
+    </div>
+    <div id="footer-site-information">
+      <h1>SITE INFORMATION</h1>
+      <ul>
+        <li>
+          <img class="footer-list-bullet" src="/eda/static/images/angle-right.svg" />
+          <a href="https://www.nasa.gov/osdr-about-osdr-project-overview/"> NASA GeneLab Overview </a>
+        </li>
+        <li>
+          <img class="footer-list-bullet" src="/eda/static/images/angle-right.svg" />
+          <a href="https://www.nasa.gov/reference/osdr-help-terms-and-conditions/"> Terms and Conditions </a>
+        </li>
+        <li>
+          <img class="footer-list-bullet" src="/eda/static/images/angle-right.svg" />
+          <a href="https://www.nasa.gov/about/highlights/HP_Privacy.html"> NASA Privacy Policy and Notices </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-col" id="footer-other-resources">
+    <h1>OTHER RESOURCES</h1>
+    <ul>
+      <li>
+        <img class="footer-list-bullet" src="/eda/static/images/angle-right.svg" />
+        <a href="https://science.nasa.gov/biological-physical/">  NASA Biological & Physical Sciences  </a>
+      </li>
+      <li>
+        <img class="footer-list-bullet" src="/eda/static/images/angle-right.svg" />
+        <a href="https://science.nasa.gov/biological-physical/programs/space-biology/"> NASA Space Biology Program </a>
+      </li>
+      <li>
+        <img class="footer-list-bullet" src="/eda/static/images/angle-right.svg" />
+        <a href="https://www.nasa.gov/ames/research/space-biosciences/"> NASA Ames Space Biosciences Division </a>
+      </li>
+      <li>
+        <img class="footer-list-bullet" src="/eda/static/images/angle-right.svg" />
+        <a href="https://nlsp.nasa.gov/explore/lsdahome"> NASA Life Sciences Portal </a>
+      </li>
+      <li>
+        <img class="footer-list-bullet" src="/eda/static/images/angle-right.svg" />
+        <a href="https://science.nasa.gov/physical-sciences-informatics-psi"> NASA Physical Science Informatics </a>
+      </li>
+      <li>
+        <img class="footer-list-bullet" src="/eda/static/images/angle-right.svg" />
+        <a href="https://science.nasa.gov/"> NASA Science Mission Directorate </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>
+
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+
+  url = 'dashboard_RR-1';
+  $('#main')
+    .html('<div class="loader"></div>')
+    .load(url, function (response, status, xhr) {
+      if (status == 'error') {
+        var msg = 'Unexpected error encountered while loading the requested visualization: ';
+      } else {
+        document.getElementById('dashboard').style.fontWeight = 'bold';
+        document.getElementById('comparison-nav').style.display = 'none';
+        document.getElementById('tables-nav').style.display = 'none';
+      }
+    });
+</script>

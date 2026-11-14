@@ -149,10 +149,10 @@ Logika: od S1 ostrzeżenie, od S3 zakaz EVA i schronienie. Poza ISS (Księżyc, 
 | Środowisko | Dawka równoważna | Źródło |
 |---|---|---|
 | Ziemia (Houston) | 0,001 mSv/dzień | [Artemis I, Nature 2024, Tab. 2](https://www.osti.gov/pages/servlets/purl/2447574) |
-| ISS | **0,5–0,73 mSv/dzień** (0,68 wg Artemis I Tab. 2; 0,731 wg DOSIS 2019), ~40–90 mSv na 6 mies. | Artemis I; [Chang'e-4](https://pmc.ncbi.nlm.nih.gov/articles/PMC7518862/); [LSAH 2023](https://www.nasa.gov/wp-content/uploads/2023/10/lsah-newsletter-2023-vol28-issue2.pdf) |
+| ISS | **0,5–0,68 mSv/dzień** (0,68 wg Artemis I Tab. 2; ok. 0,5 wg LSAH), ~40–90 mSv na 6 mies. | Artemis I; [LSAH 2023](https://www.nasa.gov/wp-content/uploads/2023/10/lsah-newsletter-2023-vol28-issue2.pdf) |
 | Orion, cislunar (Artemis I) | 0,96–1,24 mSv/dzień (GCR); 26,7–35,4 mSv za całą misję | Artemis I |
 | Niska orbita Księżyca | 1,55 mSv/dzień | Artemis I, Tab. 2 |
-| Powierzchnia Księżyca | **0,81 mSv/dzień** (Artemis I, Tab. 2); 1,37 mSv/dzień wg pomiaru Chang'e-4 (CNSA); ~0,5 wg projekcji LSAH. Źródła się różnią, więc podajemy zakres | Artemis I; Chang'e-4; LSAH |
+| Powierzchnia Księżyca | **0,81 mSv/dzień** (Artemis I, Tab. 2); ~0,5 wg projekcji LSAH. Źródła się różnią, więc podajemy zakres | Artemis I; LSAH |
 | Przelot na Marsa | **~1,6–1,8 mSv/dzień**; podróż w obie strony ~660 mSv | Artemis I Tab. 2; [JPL](https://www.jpl.nasa.gov/news/data-from-nasa-rovers-voyage-to-mars-aids-planning/) |
 | Powierzchnia Marsa | **~0,65–0,67 mSv/dzień** | [NASA Curiosity](https://www.nasa.gov/news-release/nasa-rover-results-include-first-age-measurement-on-mars-and-help-for-human-exploration/); Artemis I |
 
@@ -274,7 +274,7 @@ Główne dokumenty:
 
 - Pełne, oficjalne harmonogramy badań medycznych na ISS (MORD/MRID) nie są publiczne. Częstotliwość ważenia (SLAMMD), obecny rytm testów słuchu, dni pobrań krwi w locie: niepotwierdzone.
 - Jednostki w RadLab (`absorbed_dose_rate`, prawdopodobnie µGy/h) i w EDA (`total`, prawdopodobnie mGy/dzień).
-- Dawka na powierzchni Księżyca: źródła się różnią (0,5 / 0,81 / 1,37 mSv/dzień).
+- Dawka na powierzchni Księżyca: źródła się różnią (0,5 / 0,81 mSv/dzień). Pomiary chińskiej misji Chang'e-4 celowo pomijamy (zasady Space Apps, zob. RULES-NASA.md §8).
 - Wartości dla Marsa w mGy/dzień (0,48 w przelocie, 0,21 na powierzchni) potwierdzone tylko ze źródeł wtórnych; wartości w mSv/dzień mają wiele źródeł.
 - Zmiany HR/BP w locie pochodzą z Norsk 2015 (recenzowane, ale nie NASA).
 - Licencja zbioru danych Mendeley z ciśnieniem.

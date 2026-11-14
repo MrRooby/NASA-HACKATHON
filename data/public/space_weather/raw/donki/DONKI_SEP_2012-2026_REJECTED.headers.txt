@@ -1,0 +1,24 @@
+HTTP/2 400 
+date: Sat, 14 Nov 2026 14:10:22 GMT
+content-type: text/plain; charset=UTF-8
+content-length: 69
+access-control-allow-origin: *
+age: 0
+cache-control: no-cache, no-store, max-age=0, must-revalidate
+expires: 0
+pragma: no-cache
+strict-transport-security: max-age=31536000; includeSubDomains; preload
+vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+via: https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+x-api-umbrella-request-id: d1r9ihq5p52legq1sd60
+x-cache: MISS
+x-content-type-options: nosniff
+x-content-type-options: nosniff
+x-rate-limit-remaining: 119
+x-ratelimit-limit: 10
+x-ratelimit-remaining: 1
+x-vcap-request-id: 247f3dc8-a631-455c-73a6-5ae4ec590b56
+x-xss-protection: 1; mode=block
+x-xss-protection: 0
+x-frame-options: SAMEORIGIN
+

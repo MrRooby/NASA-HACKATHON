@@ -9,3 +9,13 @@ CLAUDE.local.md
 
 # Duże pliki generatora HABITAT (deterministyczne: python3 DATABASE/synthetic/habitat_generate.py --seed 7)
 data/synthetic/habitat_demo/*.csv.gz
+
+# Materiały chronione prawem autorskim / licencje NC-ND (RULES-NASA.md §9)
+data/*.pdf
+!data/siki.pdf
+!data/20140006469.pdf
+data/public/indoor_analog/processed/cave_maunaloa_lavatube_long__CC-BY-NC-ND.csv
+data/public/indoor_analog/raw/zenodo_maunaloa_lavatube/
+HABITAT/jaskinia/romio_rysunki_NIE_COMMITOWAC/
+.vscode/
+__pycache__/
