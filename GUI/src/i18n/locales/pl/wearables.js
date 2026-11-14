@@ -1,0 +1,53 @@
+// Ekran danych z czujników (pełny skan ciała). Klucze jak w en/wearables.js.
+// Teksty z backendu (nazwy narządów, nagłówki, zalecenia, uzasadnienia) zostają po angielsku.
+export default {
+  title: 'Dane z opasek',
+
+  scanPanel: 'Skan ciała',
+  readOnly: 'PODGLĄD: {name} — TYLKO DO ODCZYTU',
+  crew: 'Załogant',
+  mission: 'Misja',
+  zone: 'Strefa',
+  flightDay: 'Dzień lotu',
+  overall: 'Stan ogólny',
+  updating: 'AKTUALIZACJA…',
+  solFixed: 'Brak łącza · sol zablokowany',
+
+  bodyMap: 'Mapa ciała',
+  bodyMapMeta: 'Najedź · kliknij · wybierz region',
+  regions: 'Regiony ciała',
+  regionAll: 'Wszystko',
+  regionHead: 'Głowa',
+  regionChest: 'Klatka',
+  regionAbdomen: 'Brzuch',
+  regionPelvis: 'Miednica',
+  regionLeftArm: 'L ręka',
+  regionRightArm: 'P ręka',
+  regionLeftLeg: 'L noga',
+  regionRightLeg: 'P noga',
+  region: 'Region',
+  regionHint: 'Najedź na część ciała, aby zobaczyć przypisane do niej układy; kliknij ją lub region, aby przefiltrować karty narządów.',
+  regionNone: 'Z tą częścią ciała nie jest powiązana żadna karta narządu.',
+
+  environment: 'Środowisko',
+  environmentNone: 'BRAK DANYCH O EKSPOZYCJI',
+
+  organs: 'Układy narządów',
+  organsMeta: '{n} układów · schemat {schema}',
+  organsFiltered: '{n} z {total} · {region}',
+  organsNone: 'BRAK DANYCH O NARZĄDACH',
+  showAll: 'Pokaż wszystko',
+  why: 'Dlaczego?',
+  whyHide: 'Ukryj uzasadnienie',
+
+  devices: 'Opaski',
+  devicesOk: 'Opaski: {n} · wszystkie sprawne',
+  devicesAttention: 'Opaski: {n} · wymaga uwagi: {bad}',
+  devicesNone: 'BRAK DANYCH Z OPASEK',
+  deviceLeftArm: 'Opaska: lewa ręka',
+  deviceRightArm: 'Opaska: prawa ręka',
+  deviceLeftLeg: 'Opaska: lewa noga',
+  deviceRightLeg: 'Opaska: prawa noga',
+  deviceHead: 'Opaska EEG',
+  battery: 'Bateria',
+};

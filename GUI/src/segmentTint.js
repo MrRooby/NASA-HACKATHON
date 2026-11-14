@@ -1,15 +1,18 @@
 import { Color } from 'three';
 import { segmentForMesh } from './organSegments.js';
+import { MODEL_HOVER_COLOR, getStatusColors } from './theme/index.js';
 
-// Status colours of the body map; same values as .body-zone-* / .legend-* in styles.css.
-export const STATUS_COLORS = {
-  ok: '#4ea891',
-  caution: '#d49542',
-  alert: '#cf6c6c',
-  no_data: '#a3b1b7',
-};
+// Status colours of the body map come from the current UI theme (src/theme) and are read
+// at call time, so the 3D model follows a theme switch on its next tint.
+// STATUS_COLORS.ok / .caution / .alert / .no_data always return the current theme's colours.
+export const STATUS_COLORS = Object.freeze({
+  get ok() { return getStatusColors().ok; },
+  get caution() { return getStatusColors().caution; },
+  get alert() { return getStatusColors().alert; },
+  get no_data() { return getStatusColors().no_data; },
+});
 
-export const HOVER_COLOR = '#ffd166';
+export const HOVER_COLOR = MODEL_HOVER_COLOR;
 
 // How far the model colour is pulled towards the status colour (1 = flat status colour).
 const TINT_AMOUNT = 0.82;

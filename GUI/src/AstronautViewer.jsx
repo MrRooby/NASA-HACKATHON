@@ -1,10 +1,11 @@
-import React, { Suspense, useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef, useSyncExternalStore } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Bounds, Center, Html, OrbitControls, useGLTF } from '@react-three/drei';
 import { MOUSE, Vector3 } from 'three';
 import landmarks from '../models/anny_astronaut_landmarks.json';
 import { applySegmentTint, baseColors, clearSegmentTint, setColors, setHighlight } from './segmentTint.js';
 import { segmentForMesh } from './organSegments.js';
+import { getCurrentTheme, subscribeTheme } from './theme/index.js';
 
 const MODEL_PATH = '/models/anny_astronaut_bone_segmented.glb';
 
@@ -20,11 +21,14 @@ function AstronautModel({ onModelFrame, segmentStatus, onSegmentHover, onSegment
   const statusRef = useRef(segmentStatus);
   statusRef.current = segmentStatus;
 
-  // Status tint; re-applied whenever the statuses change. The hovered mesh keeps its highlight.
+  // The status colours belong to the UI theme: a theme switch repaints the model.
+  const theme = useSyncExternalStore(subscribeTheme, getCurrentTheme, getCurrentTheme);
+
+  // Status tint; re-applied whenever the statuses (or the theme) change. The hovered mesh keeps its highlight.
   useEffect(() => {
     applySegmentTint(scene, segmentStatus);
     if (hoveredObject.current) setHighlight(hoveredObject.current);
-  }, [scene, segmentStatus]);
+  }, [scene, segmentStatus, theme]);
 
   useEffect(() => () => {
     clearSegmentTint(scene);

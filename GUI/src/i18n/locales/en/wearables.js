@@ -1,0 +1,53 @@
+// Wearables screen (full body scan). Keep the same keys in pl/wearables.js.
+// Backend texts (organ labels, headlines, actions, why) stay English.
+export default {
+  title: 'Wearable data',
+
+  scanPanel: 'Body scan',
+  readOnly: 'VIEWING {name} — READ ONLY',
+  crew: 'Crew',
+  mission: 'Mission',
+  zone: 'Zone',
+  flightDay: 'Flight day',
+  overall: 'Overall status',
+  updating: 'UPDATING…',
+  solFixed: 'No link · sol fixed',
+
+  bodyMap: 'Body map',
+  bodyMapMeta: 'Hover · click · pick a region',
+  regions: 'Body regions',
+  regionAll: 'All',
+  regionHead: 'Head',
+  regionChest: 'Chest',
+  regionAbdomen: 'Abdomen',
+  regionPelvis: 'Pelvis',
+  regionLeftArm: 'L arm',
+  regionRightArm: 'R arm',
+  regionLeftLeg: 'L leg',
+  regionRightLeg: 'R leg',
+  region: 'Region',
+  regionHint: 'Hover a body part to see what is mapped there; click it or a region to filter the organ cards.',
+  regionNone: 'No organ card is linked to this part.',
+
+  environment: 'Environment',
+  environmentNone: 'NO EXPOSURE DATA',
+
+  organs: 'Organ systems',
+  organsMeta: '{n} systems · schema {schema}',
+  organsFiltered: '{n} of {total} · {region}',
+  organsNone: 'NO ORGAN DATA',
+  showAll: 'Show all',
+  why: 'Why?',
+  whyHide: 'Hide why',
+
+  devices: 'Wearables',
+  devicesOk: '{n} bands · all ok',
+  devicesAttention: '{n} bands · {bad} need attention',
+  devicesNone: 'NO WEARABLE DATA',
+  deviceLeftArm: 'Left arm band',
+  deviceRightArm: 'Right arm band',
+  deviceLeftLeg: 'Left leg band',
+  deviceRightLeg: 'Right leg band',
+  deviceHead: 'EEG headband',
+  battery: 'Battery',
+};

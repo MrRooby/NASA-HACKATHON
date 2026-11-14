@@ -1,0 +1,100 @@
+// PROFILE screen (src/screens/ProfileScreen.jsx, src/profile/*) and the daily check-in
+// (src/checkin/CheckIn.jsx). Keep the same keys in pl/profile.js.
+export default {
+  title: 'Crew profile',
+
+  // [ CREW FILE ]
+  fileTitle: 'Crew file',
+  avatarOf: 'Avatar of {name}',
+  fieldAge: 'Age',
+  fieldNationality: 'Nationality',
+  fieldHome: 'Home module',
+  fieldLocation: 'Current location',
+  fieldEducation: 'Education',
+  fieldBio: 'Crew note',
+  fieldStatus: 'Health status',
+  locationUnknown: 'Unknown',
+  statusNone: 'No health record available.',
+  statusNoMessage: 'No message.',
+  wearableData: 'Wearable data',
+
+  // someone else's profile
+  readOnly: 'Viewing {name} — read only',
+  backToOwn: 'Back to my profile',
+  unknownPerson: 'No crew file for {code}.',
+
+  notConnected: 'Not connected · TODO',
+
+  // [ NOTES / DIARY ]
+  notesTitle: 'Notes / diary',
+  notesHint: 'Private notes will be stored in the base database. The database has no table for them yet, so nothing can be saved.',
+  notesPrivate: 'Diary entries are private. Only the author can read them.',
+  notesEmpty: 'No entries',
+  notesInputLabel: 'New entry',
+  notesPlaceholder: 'Write a note for this sol…',
+  notesDisabledPlaceholder: 'Input disabled: not connected to the base database.',
+  notesSave: 'Save entry',
+
+  // [ PSYCHOLOGICAL TESTS ]
+  testsTitle: 'Psychological tests',
+  testsHint: 'Planned test battery. Results will be stored in the base database. The tests cannot be started yet and there are no results.',
+  testsColName: 'Test',
+  testsColPurpose: 'Purpose',
+  testsColCadence: 'Cadence',
+  testsColLast: 'Last result',
+  testsColNext: 'Next due',
+  testsColAction: 'Action',
+  testsReference: 'Ref',
+  testsDuration: 'about {n} min',
+  testsStart: 'Start',
+  testsAssumption: 'Cadence and duration are team assumptions for the demo, not a NASA protocol.',
+
+  // [ NOTIFICATIONS ]
+  notificationsTitle: 'Notifications',
+  notificationsEmpty: 'No active notifications for this crew member',
+
+  // [ DAILY CHECK-IN ]
+  checkinTitle: 'Daily check-in',
+  checkinSimulatedHint: 'The form starts with simulated demo readings',
+  checkinHead: 'Daily biometric intake',
+  checkinEstimate: 'est. 4 min',
+  checkinSectionVitals: '01 · Vital signs',
+  checkinSectionRecovery: '02 · Recovery',
+  checkinSectionPsych: '03 · Psychological self-score',
+  checkinTagDevice: 'Device input',
+  checkinTagSelf: 'Self report',
+  checkinSystolic: 'Systolic pressure',
+  checkinDiastolic: 'Diastolic pressure',
+  checkinHeartRate: 'Resting heart rate',
+  checkinGlucose: 'Fasting glucose',
+  checkinTemperature: 'Body temperature',
+  checkinSleep: 'Sleep duration',
+  checkinMood: 'Psych self-score (1–5)',
+  checkinMoodHint: '1 = severe distress · 5 = fully nominal',
+  checkinSymptoms: 'Symptom log',
+  checkinSymptomNone: 'None',
+  checkinSymptomHeadache: 'Headache',
+  checkinSymptomDizziness: 'Dizziness',
+  checkinSymptomFatigue: 'Fatigue',
+  checkinSymptomOther: 'Other',
+  checkinNotStored: 'Kept in this session only · not stored in the database yet',
+  checkinCommit: 'Commit log entry',
+  checkinCommitted: 'Entry committed at {time} UTC.',
+  checkinAttention: 'Readings that need attention: {n}.',
+  checkinAllNormal: 'All readings within the normal range.',
+
+  // [ FLIGHT SURGEON REPORT ]
+  reportTitle: 'Flight surgeon report',
+  reportLocalOnly: 'Local queue · TODO',
+  reportHint: 'Asynchronous health summary for the flight surgeon on Earth: the check-in readings with status and guidance, plus the organ status from MOTHER when linked. A signal to Earth takes up to about 20 minutes one way, so this is a report, not a live chat. For now it is queued on this terminal only.',
+  reportReadings: 'Readings in the report',
+  reportAttention: 'Outside normal range',
+  reportMother: 'MOTHER organ summary',
+  reportMotherAttached: 'Attached',
+  reportMotherMissing: 'Not attached (no link)',
+  reportLast: 'Last queued',
+  reportShare: 'Share with flight surgeon',
+  reportQueued: 'Report queued',
+  reportQueuedDetail: 'Report queued on this terminal. Transmission to Earth is not implemented yet.',
+  reportFailed: 'The report was not queued.',
+};

@@ -1,0 +1,19 @@
+{
+  "id": "amber-terminal",
+  "name": "Amber Terminal",
+  "colors": {
+    "bg": "#0b0700",
+    "panel": "#140d02",
+    "raised": "#1e1404",
+    "border": "#7a5310",
+    "fg": "#ffc24a",
+    "dim": "#a97f2c",
+    "accent": "#ffb000",
+    "accentBright": "#ffd27a",
+    "accentDim": "#7a5310",
+    "ok": "#9bd24a",
+    "caution": "#ffe066",
+    "alert": "#ff5533",
+    "info": "#66c2ff"
+  }
+}

@@ -1,0 +1,100 @@
+// Ekran PROFIL (src/screens/ProfileScreen.jsx, src/profile/*) i codzienny check-in
+// (src/checkin/CheckIn.jsx). Klucze takie same jak w en/profile.js.
+export default {
+  title: 'Profil załoganta',
+
+  // [ CREW FILE ]
+  fileTitle: 'Akta załogi',
+  avatarOf: 'Awatar: {name}',
+  fieldAge: 'Wiek',
+  fieldNationality: 'Narodowość',
+  fieldHome: 'Moduł mieszkalny',
+  fieldLocation: 'Aktualne położenie',
+  fieldEducation: 'Wykształcenie',
+  fieldBio: 'Notka o załogancie',
+  fieldStatus: 'Stan zdrowia',
+  locationUnknown: 'Nieznane',
+  statusNone: 'Brak danych o zdrowiu.',
+  statusNoMessage: 'Brak komunikatu.',
+  wearableData: 'Dane z czujników',
+
+  // profil innej osoby
+  readOnly: 'Przeglądasz: {name} — tylko do odczytu',
+  backToOwn: 'Wróć do mojego profilu',
+  unknownPerson: 'Brak akt dla {code}.',
+
+  notConnected: 'Niepodłączone · TODO',
+
+  // [ NOTES / DIARY ]
+  notesTitle: 'Notatki / pamiętnik',
+  notesHint: 'Prywatne notatki będą zapisywane w bazie danych habitatu. Baza nie ma jeszcze na nie tabeli, więc niczego nie da się zapisać.',
+  notesPrivate: 'Wpisy w pamiętniku są prywatne. Czyta je tylko autor.',
+  notesEmpty: 'Brak wpisów',
+  notesInputLabel: 'Nowy wpis',
+  notesPlaceholder: 'Zapisz notatkę z tego sola…',
+  notesDisabledPlaceholder: 'Pole wyłączone: brak połączenia z bazą danych habitatu.',
+  notesSave: 'Zapisz wpis',
+
+  // [ PSYCHOLOGICAL TESTS ]
+  testsTitle: 'Testy psychologiczne',
+  testsHint: 'Planowany zestaw testów. Wyniki będą zapisywane w bazie danych habitatu. Testów nie da się jeszcze uruchomić i nie ma wyników.',
+  testsColName: 'Test',
+  testsColPurpose: 'Cel',
+  testsColCadence: 'Częstotliwość',
+  testsColLast: 'Ostatni wynik',
+  testsColNext: 'Następny termin',
+  testsColAction: 'Akcja',
+  testsReference: 'Źródło',
+  testsDuration: 'ok. {n} min',
+  testsStart: 'Start',
+  testsAssumption: 'Częstotliwość i czas trwania to założenia zespołu na potrzeby demo, a nie protokół NASA.',
+
+  // [ NOTIFICATIONS ]
+  notificationsTitle: 'Powiadomienia',
+  notificationsEmpty: 'Brak aktywnych powiadomień dla tej osoby',
+
+  // [ DAILY CHECK-IN ]
+  checkinTitle: 'Codzienny check-in',
+  checkinSimulatedHint: 'Formularz startuje z symulowanymi odczytami demo',
+  checkinHead: 'Codzienny pomiar biometryczny',
+  checkinEstimate: 'ok. 4 min',
+  checkinSectionVitals: '01 · Parametry życiowe',
+  checkinSectionRecovery: '02 · Regeneracja',
+  checkinSectionPsych: '03 · Samoocena psychiczna',
+  checkinTagDevice: 'Odczyt z urządzenia',
+  checkinTagSelf: 'Samoocena',
+  checkinSystolic: 'Ciśnienie skurczowe',
+  checkinDiastolic: 'Ciśnienie rozkurczowe',
+  checkinHeartRate: 'Tętno spoczynkowe',
+  checkinGlucose: 'Glukoza na czczo',
+  checkinTemperature: 'Temperatura ciała',
+  checkinSleep: 'Długość snu',
+  checkinMood: 'Samoocena nastroju (1–5)',
+  checkinMoodHint: '1 = silny dyskomfort · 5 = pełna sprawność',
+  checkinSymptoms: 'Objawy',
+  checkinSymptomNone: 'Brak',
+  checkinSymptomHeadache: 'Ból głowy',
+  checkinSymptomDizziness: 'Zawroty głowy',
+  checkinSymptomFatigue: 'Zmęczenie',
+  checkinSymptomOther: 'Inne',
+  checkinNotStored: 'Tylko w tej sesji · jeszcze bez zapisu w bazie danych',
+  checkinCommit: 'Zatwierdź wpis',
+  checkinCommitted: 'Wpis zatwierdzony o {time} UTC.',
+  checkinAttention: 'Odczyty wymagające uwagi: {n}.',
+  checkinAllNormal: 'Wszystkie odczyty w normie.',
+
+  // [ FLIGHT SURGEON REPORT ]
+  reportTitle: 'Raport dla flight surgeona',
+  reportLocalOnly: 'Kolejka lokalna · TODO',
+  reportHint: 'Asynchroniczne podsumowanie zdrowia dla flight surgeona (lekarza na Ziemi): odczyty z check-inu ze statusem i zaleceniami oraz stan narządów z MOTHER, gdy jest połączenie. Sygnał na Ziemię leci do ok. 20 minut w jedną stronę, więc to raport, a nie rozmowa na żywo. Na razie raport trafia tylko do kolejki na tym terminalu.',
+  reportReadings: 'Odczyty w raporcie',
+  reportAttention: 'Poza normą',
+  reportMother: 'Podsumowanie narządów z MOTHER',
+  reportMotherAttached: 'Dołączone',
+  reportMotherMissing: 'Niedołączone (brak połączenia)',
+  reportLast: 'Ostatnio w kolejce',
+  reportShare: 'Wyślij do flight surgeona',
+  reportQueued: 'Raport w kolejce',
+  reportQueuedDetail: 'Raport czeka w kolejce na tym terminalu. Transmisja na Ziemię nie jest jeszcze zaimplementowana.',
+  reportFailed: 'Raport nie trafił do kolejki.',
+};

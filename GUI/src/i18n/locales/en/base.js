@@ -1,0 +1,106 @@
+// Base screen (interactive habitat map). Keep the same keys in pl/base.js.
+// Channel labels and zone descriptions come from MOTHER in English and are not translated.
+export default {
+  title: 'Base',
+
+  // Header
+  overall: 'HABITAT',
+  offlineNote: 'MOTHER unreachable: showing the built-in demo habitat (sol {n}). The sol control has no effect until the link is back.',
+  loadError: 'Habitat data not loaded: {message}',
+  refreshing: 'REFRESHING…',
+  disclaimer: 'Synthetic habitat data · thresholds are demonstrative, not operational limits.',
+
+  // Map
+  mapTitle: 'HABITAT MAP',
+  mapAria: 'Habitat map: select a room',
+  mapHint: 'SELECT A ROOM · CLICK OR TAB + ENTER',
+  simulated: 'SIMULATED',
+  crewHere: 'crew: {codes}',
+  legendSimulated: '- - - SIMULATED ROOM (NO SENSORS IN THE DATABASE)',
+  legendCrew: 'C1–C4 CREW PRESENT',
+
+  // Rooms (full names) and the shorter texts drawn on the map
+  roomAirlock1: 'AIRLOCK 1',
+  roomAirlock2: 'AIRLOCK 2',
+  roomService: 'SERVICE / STORAGE',
+  roomMedbay: 'MEDBAY',
+  roomRecreation: 'RECREATION ZONE',
+  roomLab: 'LAB',
+  roomQuartersNorth: 'CREW QUARTERS N',
+  roomQuartersSouth: 'CREW QUARTERS S',
+  roomTechnical: 'TECHNICAL ZONE',
+  roomReactor: 'REACTOR',
+  mapQuartersNorth: 'CREW QUARTERS N',
+  mapQuartersSouth: 'CREW QUARTERS S',
+
+  // Database zones that are not a room of their own
+  zone_gym: 'GYM',
+  zone_farm: 'FARM',
+  zone_surface: 'SURFACE',
+  zone_cupola_1: 'CUPOLA 1',
+  zone_cupola_2: 'CUPOLA 2',
+  zone_cupola_3: 'CUPOLA 3',
+  zone_cupola_4: 'CUPOLA 4',
+
+  // Selected room
+  zone: 'ZONE',
+  statusSol: 'WORST THIS SOL',
+  statusNow: 'LATEST READING',
+  crewPresent: 'CREW PRESENT',
+  crewNone: 'NOBODY',
+  openProfile: 'Open the profile of {name}',
+  subZones: 'SUB-ZONES',
+  readingsOf: 'Readings: {name}',
+  noReadings: 'No readings in this sol.',
+  noZoneData: 'This zone sent no data in this sol.',
+  simulatedZone: 'none in the database',
+  simulatedNote: 'This room has no sensors in the MOTHER database. Rows marked SIMULATED are generated in the GUI from a fixed seed and the sol number; they are placeholders, not measurements.',
+  fromMother: 'MOTHER · {zone}',
+
+  // Readings table
+  colChannel: 'CHANNEL',
+  colValue: 'LATEST',
+  colRange: 'SOL MIN – MAX',
+  colNormal: 'NORMAL',
+  colStatus: 'STATUS',
+  colTime: 'UTC',
+  unrated: 'INFO',
+  unratedHint: 'Informative channel: no threshold, not rated',
+  peakNow: 'PEAK {peak} · {now}',
+  faultEarlier: 'FAULT EARLIER THIS SOL · {now}',
+  nowOk: 'NOW OK',
+  nowCaution: 'NOW CAUTION',
+  nowAlert: 'NOW ALERT',
+  outsideNormal: 'OUTSIDE NORMAL RANGE (INFORMATIVE)',
+  sensors: 'SENSORS {values}',
+  qualitySuspect: 'SENSOR SUSPECT',
+  qualityFault: 'SENSOR FAULT',
+  qualityOther: 'QUALITY: {quality}',
+
+  // Reading groups
+  group_pressure: 'PRESSURE',
+  group_air: 'AIR COMPOSITION',
+  group_temperature: 'TEMPERATURE',
+  group_humidity: 'HUMIDITY',
+  group_contamination: 'AIR CONTAMINATION',
+  group_radiation: 'RADIATION',
+  group_integrity: 'AIRLOCK / INTEGRITY',
+  group_water: 'WATER',
+  group_lightNoise: 'LIGHT & NOISE',
+  group_structure: 'STRUCTURE',
+  group_power: 'POWER',
+  group_systems: 'LIFE SUPPORT (ECLSS)',
+  group_reactor: 'REACTOR',
+  group_stores: 'STORES',
+  group_exterior: 'WEATHER',
+  group_other: 'OTHER',
+
+  // Exterior and events
+  exterior: 'EXTERIOR',
+  exteriorMeta: 'SURFACE · CUPOLAS',
+  eventLog: 'EVENT LOG',
+  eventCount: 'NON-ROUTINE: {n}',
+  noEvents: 'No non-routine events in this sol.',
+  eventOpen: 'OPEN',
+  evaRoutine: 'ROUTINE, NOT LISTED: {starts} EVA STARTS · {ends} EVA ENDS',
+};

@@ -1,0 +1,106 @@
+// Ekran bazy (interaktywna mapa habitatu). Te same klucze co w en/base.js.
+// Nazwy kanałów i opisy stref przychodzą z MOTHER po angielsku i nie są tłumaczone.
+export default {
+  title: 'Baza',
+
+  // Nagłówek
+  overall: 'HABITAT',
+  offlineNote: 'Brak połączenia z MOTHER: pokazuję wbudowany habitat demo (sol {n}). Wybór sola nie działa, dopóki łącze nie wróci.',
+  loadError: 'Nie wczytano danych habitatu: {message}',
+  refreshing: 'ODŚWIEŻANIE…',
+  disclaimer: 'Syntetyczne dane habitatu · progi są demonstracyjne, to nie limity operacyjne.',
+
+  // Mapa
+  mapTitle: 'MAPA HABITATU',
+  mapAria: 'Mapa habitatu: wybierz pomieszczenie',
+  mapHint: 'WYBIERZ POMIESZCZENIE · KLIK ALBO TAB + ENTER',
+  simulated: 'SYMULOWANE',
+  crewHere: 'załoga: {codes}',
+  legendSimulated: '- - - POMIESZCZENIE SYMULOWANE (BRAK CZUJNIKÓW W BAZIE)',
+  legendCrew: 'C1–C4 OBECNA ZAŁOGA',
+
+  // Pomieszczenia (pełne nazwy) i krótsze napisy na mapie
+  roomAirlock1: 'ŚLUZA 1',
+  roomAirlock2: 'ŚLUZA 2',
+  roomService: 'SERWIS / MAGAZYN',
+  roomMedbay: 'SZPITAL',
+  roomRecreation: 'STREFA REKREACYJNA',
+  roomLab: 'LAB',
+  roomQuartersNorth: 'STREFA MIESZKALNA N',
+  roomQuartersSouth: 'STREFA MIESZKALNA S',
+  roomTechnical: 'STREFA TECHNICZNA',
+  roomReactor: 'REAKTOR',
+  mapQuartersNorth: 'STREFA MIESZKALNA',
+  mapQuartersSouth: 'STREFA MIESZKALNA',
+
+  // Strefy z bazy danych, które nie są osobnym pomieszczeniem
+  zone_gym: 'SIŁOWNIA',
+  zone_farm: 'FARMA',
+  zone_surface: 'POWIERZCHNIA',
+  zone_cupola_1: 'KOPUŁA 1',
+  zone_cupola_2: 'KOPUŁA 2',
+  zone_cupola_3: 'KOPUŁA 3',
+  zone_cupola_4: 'KOPUŁA 4',
+
+  // Wybrane pomieszczenie
+  zone: 'STREFA',
+  statusSol: 'NAJGORSZY W TYM SOLU',
+  statusNow: 'OSTATNI ODCZYT',
+  crewPresent: 'OBECNA ZAŁOGA',
+  crewNone: 'NIKT',
+  openProfile: 'Otwórz profil: {name}',
+  subZones: 'PODSTREFY',
+  readingsOf: 'Odczyty: {name}',
+  noReadings: 'Brak odczytów w tym solu.',
+  noZoneData: 'Ta strefa nie przysłała danych w tym solu.',
+  simulatedZone: 'brak w bazie danych',
+  simulatedNote: 'To pomieszczenie nie ma czujników w bazie MOTHER. Wiersze oznaczone SYMULOWANE generuje GUI ze stałego ziarna i numeru sola; to wartości zastępcze, nie pomiary.',
+  fromMother: 'MOTHER · {zone}',
+
+  // Tabela odczytów
+  colChannel: 'KANAŁ',
+  colValue: 'OSTATNI',
+  colRange: 'MIN – MAX SOLA',
+  colNormal: 'NORMA',
+  colStatus: 'STATUS',
+  colTime: 'UTC',
+  unrated: 'INFO',
+  unratedHint: 'Kanał informacyjny: bez progu, nie jest oceniany',
+  peakNow: 'SZCZYT {peak} · {now}',
+  faultEarlier: 'AWARIA WCZEŚNIEJ W TYM SOLU · {now}',
+  nowOk: 'TERAZ OK',
+  nowCaution: 'TERAZ UWAGA',
+  nowAlert: 'TERAZ ALARM',
+  outsideNormal: 'POZA ZAKRESEM NORMY (INFORMACYJNIE)',
+  sensors: 'CZUJNIKI {values}',
+  qualitySuspect: 'CZUJNIK NIEPEWNY',
+  qualityFault: 'AWARIA CZUJNIKA',
+  qualityOther: 'JAKOŚĆ: {quality}',
+
+  // Grupy odczytów
+  group_pressure: 'CIŚNIENIE',
+  group_air: 'SKŁAD POWIETRZA',
+  group_temperature: 'TEMPERATURA',
+  group_humidity: 'WILGOTNOŚĆ',
+  group_contamination: 'ZANIECZYSZCZENIA POWIETRZA',
+  group_radiation: 'PROMIENIOWANIE',
+  group_integrity: 'ŚLUZA / SZCZELNOŚĆ',
+  group_water: 'WODA',
+  group_lightNoise: 'ŚWIATŁO I HAŁAS',
+  group_structure: 'KONSTRUKCJA',
+  group_power: 'ZASILANIE',
+  group_systems: 'PODTRZYMYWANIE ŻYCIA (ECLSS)',
+  group_reactor: 'REAKTOR',
+  group_stores: 'ZAPASY',
+  group_exterior: 'POGODA',
+  group_other: 'POZOSTAŁE',
+
+  // Otoczenie i zdarzenia
+  exterior: 'OTOCZENIE',
+  exteriorMeta: 'POWIERZCHNIA · KOPUŁY',
+  eventLog: 'DZIENNIK ZDARZEŃ',
+  eventCount: 'NIERUTYNOWE: {n}',
+  noEvents: 'Brak nierutynowych zdarzeń w tym solu.',
+  eventOpen: 'TRWA',
+  evaRoutine: 'RUTYNOWE, NIEWYMIENIONE: {starts} WYJŚĆ EVA · {ends} POWROTÓW EVA',
+};
