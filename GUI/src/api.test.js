@@ -94,3 +94,22 @@ describe('MOTHER api client', () => {
     expect(isOfflineError(error)).toBe(false);
   });
 });
+
+describe('POST helper', () => {
+  it('sends JSON with the X-Requested-With header MOTHER requires', async () => {
+    const fetchMock = stubMother(() => jsonResponse({ session_id: 1 }, { status: 201 }));
+    const { postSession } = await import('./cognitive/engine/api.js');
+    expect(await postSession({ a: 1 })).toEqual({ session_id: 1 });
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(String(url)).toBe('/api/cognitive/sessions');
+    expect(init.method).toBe('POST');
+    expect(init.headers['X-Requested-With']).toBe('awernasa');
+    expect(init.headers['Content-Type']).toBe('application/json');
+    expect(JSON.parse(init.body)).toEqual({ a: 1 });
+  });
+  it('422 surfaces as an http ApiError', async () => {
+    stubMother(() => jsonResponse({ error: 'bad trial' }, { status: 422 }));
+    const { postSession } = await import('./cognitive/engine/api.js');
+    expect(await postSession({}).catch(e => e)).toMatchObject({ kind: 'http', status: 422, message: 'bad trial' });
+  });
+});

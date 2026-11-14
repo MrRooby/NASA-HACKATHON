@@ -41,6 +41,11 @@ PLAUSIBLE: dict[str, tuple[float, float]] = {
     "eva_hours": (0, 12),
     "exercise_minutes_daily": (0, 600),
     "reaction_time_ms": (100, 2000),
+    "pvt_lapses": (0, 100),
+    "gonogo_commission_rate": (0, 1),
+    "gonogo_omission_rate": (0, 1),
+    "dsst_correct": (0, 150),
+    "dsst_throughput_per_min": (0, 150),
 }
 
 # Expected cadence of continuous habitat streams -> staleness check.

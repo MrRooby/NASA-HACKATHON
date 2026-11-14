@@ -9,6 +9,7 @@ automatically when the database owner imports new data (astro_api.import_log cha
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import socket
 import threading
@@ -16,9 +17,12 @@ import time
 import traceback
 from datetime import datetime, timedelta, timezone
 
+from fastapi import Request  # module level: FastAPI resolves route annotations from module globals
+
 from .config import load_config
 
 RECHECK_SECONDS = 30
+CSRF_HEADER_VALUE = "awernasa"   # POST /api/cognitive/sessions needs X-Requested-With: awernasa (anti-CSRF)
 DB_HINT = ("Check that Tailscale is connected to the team network and that the password in MOTHER/.env is right "
            "(run start again with --setup to re-enter it).")
 
@@ -146,6 +150,7 @@ DATA_MAP = Live("data-map", compute_data_map)
 def create_app():
     from fastapi import FastAPI
     from fastapi.responses import JSONResponse
+    from pydantic import ValidationError
 
     app = FastAPI(title="MOTHER", docs_url="/api/docs")
 
@@ -154,7 +159,8 @@ def create_app():
         """MOTHER is API-only; the user interface is the GUI/ app."""
         return {"service": "MOTHER", "ui": "GUI/ (React app)", "docs": "/api/docs",
                 "endpoints": ["/api/status", "/api/subjects", "/api/organs", "/api/organs/{code}",
-                              "/api/dashboard", "/api/data-map"]}
+                              "/api/dashboard", "/api/data-map", "/api/cognitive/protocols", "/api/cognitive/{subject}",
+                              "POST /api/cognitive/sessions"]}
 
     @app.get("/api/dashboard")
     def api_dashboard():
@@ -199,6 +205,73 @@ def create_app():
     def api_organs(subject: str, day: int | None = None, sol: int | None = None, mission: str | None = None):
         from .organs import organ_report
         return _db_call(lambda db: organ_report(db, subject, day=day, sol=sol, mission=mission))
+
+    # ---------------- cognitive tests (MOTHER/UI_CONTRACT.md v1.2, config/cognitive/CONTRACT.md) ----------------
+    # /protocols is declared before /{subject} so it is never captured as a person's code.
+    @app.get("/api/cognitive/protocols")
+    def api_cognitive_protocols():
+        from . import cognitive
+        return JSONResponse(cognitive.protocols(), headers={"Cache-Control": "no-store"})
+
+    @app.get("/api/cognitive/{subject}")
+    def api_cognitive(subject: str):
+        from . import cognitive
+        return _db_call(lambda db: cognitive.cognitive_report(db, subject))
+
+    @app.post("/api/cognitive/sessions")
+    async def api_cognitive_save(request: Request):
+        from starlette.concurrency import run_in_threadpool
+        from . import cognitive
+        nostore = {"Cache-Control": "no-store"}
+        if request.headers.get("x-requested-with") != CSRF_HEADER_VALUE:
+            return JSONResponse({"error": f"Header X-Requested-With: {CSRF_HEADER_VALUE} is required"}, status_code=403,
+                                headers=nostore)
+        too_big = JSONResponse({"error": f"Body larger than {cognitive.MAX_BODY_BYTES} bytes"}, status_code=413, headers=nostore)
+        try:
+            if int(request.headers.get("content-length") or 0) > cognitive.MAX_BODY_BYTES:
+                return too_big
+        except ValueError:
+            return JSONResponse({"error": "Bad Content-Length"}, status_code=400, headers=nostore)
+        body = bytearray()
+        async for chunk in request.stream():
+            body += chunk
+            if len(body) > cognitive.MAX_BODY_BYTES:
+                return too_big
+        try:
+            raw = json.loads(bytes(body) or b"null")
+            payload = cognitive.CognitiveSession.model_validate(raw)
+        except ValidationError as e:
+            return JSONResponse({"error": "Invalid session", "detail": cognitive.validation_errors(e)}, status_code=422,
+                                headers=nostore)
+        except ValueError:
+            return JSONResponse({"error": "Body is not valid JSON"}, status_code=422, headers=nostore)
+
+        def work():
+            from . import db_writer
+            try:
+                conn = db_writer.connect()
+            except db_writer.WriterNotConfigured as e:
+                return JSONResponse({"error": f"Cognitive writer is not configured ({e})", "hint": db_writer.WRITER_HINT},
+                                    status_code=503, headers=nostore)
+            except Exception as e:
+                return JSONResponse({"error": f"Cannot reach the team database ({type(e).__name__})", "hint": DB_HINT},
+                                    status_code=503, headers=nostore)
+            try:
+                result, created = cognitive.save_session(conn, payload)
+            except cognitive.SessionNotFound as e:
+                return JSONResponse({"error": str(e)}, status_code=404, headers=nostore)
+            except Exception as e:
+                traceback.print_exc()
+                return JSONResponse({"error": f"Session was not saved ({type(e).__name__})", "hint": DB_HINT},
+                                    status_code=503, headers=nostore)
+            finally:
+                try:
+                    conn.close()
+                except Exception:  # pragma: no cover
+                    pass
+            return JSONResponse(result, status_code=201 if created else 200, headers=nostore)
+
+        return await run_in_threadpool(work)
 
     @app.get("/api/status")
     def api_status():

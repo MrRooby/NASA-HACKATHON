@@ -352,6 +352,63 @@
       ],
       "projection": "With ARED ~0.32%/month femoral-neck loss.",
       "sources": ["nasa_std_3001_v1", "hrr_er_bone"]
+    },
+
+    {
+      "id": "reaction_time_pct_change",
+      "label": "Reaction time vs own baseline (PVT)",
+      "unit": "% slower",
+      "category": "behavioral",
+      "evaluation": "baseline_percent_change",
+      "bands": [
+        { "max": 10, "status": "ok", "basis": "team_assumption", "message": "Reaction time within 10% of your baseline." },
+        { "min": 10, "max": 20, "status": "caution", "basis": "team_assumption", "message": "Reaction time 10-20% slower than your baseline.", "action": "Check sleep, fatigue and CO2 exposure; repeat the test in 24 h." },
+        { "min": 20, "status": "alert", "basis": "team_assumption", "message": "Reaction time 20% or more slower than your baseline.", "action": "Avoid critical tasks until reviewed; consider a private psychological conference.", "escalate": true }
+      ],
+      "spaceflight_context": "Performance indicator compared with the person's own baseline (preflight or the first in-app tests), not a diagnosis.",
+      "sources": ["basner_2024", "basner_2011_pvtb", "ntrs_space_psych"]
+    },
+    {
+      "id": "pvt_lapses",
+      "label": "PVT lapses (responses of 355 ms or more)",
+      "unit": "count",
+      "category": "behavioral",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 3, "status": "ok", "basis": "team_assumption", "message": "0-2 lapses in the 3-minute reaction test." },
+        { "min": 3, "max": 6, "status": "caution", "basis": "team_assumption", "message": "3-5 lapses in the reaction test.", "action": "Rest or sleep, then repeat the test in 24 h." },
+        { "min": 6, "status": "alert", "basis": "team_assumption", "message": "6 or more lapses in the reaction test.", "action": "Avoid critical tasks until reviewed; consider a private psychological conference.", "escalate": true }
+      ],
+      "spaceflight_context": "Lapse threshold 355 ms is the PVT-B definition (Basner 2011); band edges are a team assumption. Not a diagnosis.",
+      "sources": ["basner_2011_pvtb", "basner_2024"]
+    },
+    {
+      "id": "gonogo_commission_rate",
+      "label": "Go/No-Go false presses (share of No-Go trials)",
+      "unit": "ratio 0-1",
+      "category": "behavioral",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 0.15, "status": "ok", "basis": "team_assumption", "message": "Few false presses on No-Go trials." },
+        { "min": 0.15, "max": 0.3, "status": "caution", "basis": "team_assumption", "message": "15-30% false presses on No-Go trials.", "action": "Rest or sleep, then repeat the test in 24 h." },
+        { "min": 0.3, "status": "alert", "basis": "team_assumption", "message": "30% or more false presses on No-Go trials.", "action": "Avoid critical tasks until reviewed; consider a private psychological conference.", "escalate": true }
+      ],
+      "spaceflight_context": "Response-inhibition performance indicator; band edges are a team assumption. Not a diagnosis.",
+      "sources": ["basner_2015_ctb", "hautus_1995"]
+    },
+    {
+      "id": "dsst_throughput_z",
+      "label": "DSST processing speed vs own baseline (z-score)",
+      "unit": "z",
+      "category": "behavioral",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": -2, "status": "alert", "basis": "team_assumption", "message": "Processing speed 2 or more SD below your baseline.", "action": "Avoid critical tasks until reviewed; consider a private psychological conference.", "escalate": true },
+        { "min": -2, "max": -1, "status": "caution", "basis": "team_assumption", "message": "Processing speed 1-2 SD below your baseline.", "action": "Rest or sleep, then repeat the test in 24 h." },
+        { "min": -1, "status": "ok", "basis": "team_assumption", "message": "Processing speed within 1 SD of your baseline." }
+      ],
+      "spaceflight_context": "z = (value - baseline mean) / baseline SD (SD floored); negative is always worse. Computed by MOTHER from the in-app DSST. Not a diagnosis.",
+      "sources": ["basner_2015_ctb", "dev_2024_iss"]
     }
   ],
 

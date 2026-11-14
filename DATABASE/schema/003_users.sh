@@ -2,7 +2,8 @@
 # 003_users.sh | MariaDB 11.4 LTS | wersja schematu 0.2 (2026-11-14)
 # Tworzy użytkowników bazy z haseł w zmiennych środowiskowych (plik DATABASE/.env, poza gitem).
 #   astro_etl    - import: SELECT/INSERT/UPDATE/DELETE na astro_core.*, SELECT na astro_api.*
-#   astro_reader - backend/GUI/eksport: wyłącznie SELECT na astro_api.* (widoki)
+#   astro_reader - backend/GUI/eksport: SELECT na astro_api.* (widoki) + tylko-do-odczytu tabele,
+#                  które MOTHER czyta bezpośrednio (lista w 012_users_extra.sql); bez zapisu, bez astro_medical
 #   admin        - konto zespołu do ręcznej pracy: pełne prawa do astro_core, astro_api, astro_habitat (hasło domyślnie 'admin')
 #   habitat_writer - producent HABITAT: zapis odczytów/zdarzeń do astro_habitat (bez kasowania katalogu)
 # Uruchamianie:
@@ -35,12 +36,12 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON astro_habitat.* TO 'astro_etl'@'%';
 CREATE USER IF NOT EXISTS 'habitat_writer'@'%' IDENTIFIED BY '$(astro_sql_escape "$HABITAT_WRITER_PASSWORD")';
 ALTER  USER               'habitat_writer'@'%' IDENTIFIED BY '$(astro_sql_escape "$HABITAT_WRITER_PASSWORD")';
 GRANT SELECT ON astro_habitat.* TO 'habitat_writer'@'%';
-GRANT INSERT, UPDATE ON astro_habitat.reading        TO 'habitat_writer'@'%';
-GRANT INSERT, UPDATE ON astro_habitat.reading_hourly TO 'habitat_writer'@'%';
-GRANT INSERT, UPDATE ON astro_habitat.event          TO 'habitat_writer'@'%';
-GRANT INSERT, UPDATE ON astro_habitat.crew_location  TO 'habitat_writer'@'%';
 GRANT SELECT ON astro_api.* TO 'habitat_writer'@'%';
 FLUSH PRIVILEGES;
+-- Tylko uprawnienia na poziomie bazy (db.*): MariaDB pozwala je nadać, zanim baza powstanie.
+-- Uprawnienia do POJEDYNCZYCH tabel (habitat_writer -> reading/event/..., astro_reader -> tabele czytane
+-- przez MOTHER) są w 012_users_extra.sql, który uruchamia się po utworzeniu tabel (004-011);
+-- GRANT na nieistniejącą tabelę kończy się ERROR 1146 i przerywa inicjalizację świeżego wolumenu.
 "
 
 if declare -F docker_process_sql >/dev/null; then

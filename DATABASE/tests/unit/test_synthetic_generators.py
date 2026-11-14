@@ -227,3 +227,145 @@ def test_wearables_gzip_bytes_deterministic(wear, tmp_path, monkeypatch):
             m.setattr(gzip.time, "time", lambda now=now: now)
             wear.write_csv(tmp_path / name, ["a"], [dict(a=1)], compressed=True)
     assert (tmp_path / "a.csv.gz").read_bytes() == (tmp_path / "b.csv.gz").read_bytes()
+
+
+# ------------------------------------------------------------------ cognitive_generate.py
+@pytest.fixture(scope="module")
+def cog():
+    return load_script(SYN_DIR / "cognitive_generate.py")
+
+
+@pytest.fixture(scope="module")
+def cog_data(cog):
+    sessions, trials = cog.build(42)
+    by_session = {}
+    for t in trials:
+        by_session.setdefault(t["session_uuid"], []).append(t)
+    return sessions, by_session
+
+
+def test_cognitive_same_seed_identical_bytes(cog, tmp_path):
+    cog.main(["--seed", "42", "--out", str(tmp_path / "a")])
+    cog.main(["--seed", "42", "--out", str(tmp_path / "b")])
+    cog.main(["--seed", "43", "--out", str(tmp_path / "c")])
+    a, b, c = (tree_bytes(tmp_path / x) for x in "abc")
+    assert set(a) == {"meta.json", "sessions.csv", "trials.csv"}
+    assert a == b
+    assert a["trials.csv"] != c["trials.csv"]
+
+
+def test_cognitive_schedule_and_practice(cog, cog_data):
+    sessions, _ = cog_data
+    assert {s["subject_code"] for s in sessions} == {"SYN-01", "SYN-02", "SYN-03", "SYN-04"}
+    assert len({s["session_uuid"] for s in sessions}) == len(sessions)
+    for subject in ("SYN-01", "SYN-04"):
+        for test in ("pvt", "gonogo", "dsst"):
+            rows = [s for s in sessions if s["subject_code"] == subject and s["test_id"] == test]
+            assert [s["session_no"] for s in rows] == list(range(1, len(rows) + 1))
+            assert [s["is_practice"] for s in rows] == [1] + [0] * (len(rows) - 1)
+            assert [s["day_offset"] for s in rows][:4] == [-14, -10, -7, -3]    # practice + 3 baseline sessions
+            days = [s["day_offset"] for s in rows][4:]
+            step = 7 if test == "pvt" else 14
+            assert days == list(range(step, 180, step))
+            assert [s["stimulus_set"] for s in rows][:5] == list("ABCDA")
+
+
+def test_cognitive_pvt_trials_classified_by_scoring(cog, cog_data):
+    sessions, by = cog_data
+    cs = cog.cs
+    for s in [x for x in sessions if x["test_id"] == "pvt"][:20]:
+        trials = by[s["session_uuid"]]
+        assert [t["is_practice"] for t in trials[:3]] == [True] * 3 and not trials[3]["is_practice"]
+        main = [t for t in trials if not t["is_practice"]]
+        assert 50 <= len(main) <= 80                       # ~180 s / (2.5 s mean ISI incl. 1 s feedback + RT) ~ 65
+        for t in trials:
+            assert t["event_type"] == cs.classify_pvt(t["rt_ms"]) or t["event_type"] == "false_start"
+            if t["timeout"]:
+                assert t["rt_ms"] is None and t["event_type"] == "lapse"
+            if t["rt_ms"] is not None:
+                assert 0 <= t["rt_ms"] <= 30000
+
+
+def test_cognitive_gonogo_sequence_rules(cog_data):
+    sessions, by = cog_data
+    gng = [s for s in sessions if s["test_id"] == "gonogo"]
+    assert gng
+    for s in gng:
+        trials = by[s["session_uuid"]]
+        practice, main = trials[:10], trials[10:]
+        assert all(t["is_practice"] for t in practice) and not any(t["is_practice"] for t in main)
+        assert len(main) == 120
+        seq = [t["stimulus"] for t in main]
+        assert seq.count("go") == 90 and seq.count("nogo") == 30
+        assert seq[:3] == ["go"] * 3
+        assert all(not (seq[i] == seq[i + 1] == seq[i + 2] == "nogo") for i in range(len(seq) - 2))   # <= 2 in a row
+        assert [seq[q * 30:(q + 1) * 30].count("nogo") for q in range(4)] in ([7, 8, 7, 8],)
+        assert [t["stimulus"] for t in practice][:3] == ["go"] * 3
+        for t in main:
+            assert t["event_type"] in {"hit", "omission", "commission", "correct_rejection"}
+            assert (t["stimulus"] == "go") == (t["event_type"] in ("hit", "omission"))
+
+
+def test_cognitive_dsst_blocks_are_permutations(cog_data):
+    sessions, by = cog_data
+    dsst = [s for s in sessions if s["test_id"] == "dsst"]
+    assert dsst
+    for s in dsst:
+        trials = by[s["session_uuid"]]
+        practice, main = trials[:9], trials[9:]
+        assert all(t["is_practice"] for t in practice) and not any(t["is_practice"] for t in main)
+        assert sorted(t["expected"] for t in practice) == [str(d) for d in range(1, 10)]
+        stimuli = [t["stimulus"] for t in main]
+        assert all(st.startswith(s["stimulus_set"]) for st in stimuli)
+        digits = [t["expected"] for t in main]
+        for i in range(0, len(digits) - len(digits) % 9, 9):
+            assert sorted(digits[i:i + 9]) == [str(d) for d in range(1, 10)]
+        assert all(a != b for a, b in zip(stimuli, stimuli[1:]))                # never the same symbol twice
+        assert max(t["t_response_ms"] for t in main) <= 90000                   # answers after 90 s not recorded
+
+
+def test_cognitive_syn04_degrades_in_second_half(cog, cog_data):
+    sessions, by = cog_data
+    cs = cog.cs
+
+    def metric(subject, test, key, late):
+        vals = []
+        for s in sessions:
+            if s["subject_code"] == subject and s["test_id"] == test and not s["is_practice"] \
+                    and (s["day_offset"] >= 120 if late else 0 < s["day_offset"] < 80 or s["day_offset"] < 0):
+                vals.append(cs.score(test, by[s["session_uuid"]], s["duration_s"])["metrics"][key])
+        return vals
+
+    late_lapses = metric("SYN-04", "pvt", "pvt_lapses", True)
+    assert sum(late_lapses) / len(late_lapses) >= 6
+    for healthy in ("SYN-01", "SYN-02", "SYN-03"):
+        h = metric(healthy, "pvt", "pvt_lapses", True)
+        assert sum(h) / len(h) < 4
+    early, late = (metric("SYN-04", "pvt", "pvt_median_rt_ms", x) for x in (False, True))
+    assert sum(late) / len(late) > 1.08 * sum(early) / len(early)
+    c_early, c_late = (metric("SYN-04", "gonogo", "gonogo_commission_rate", x) for x in (False, True))
+    assert sum(c_late) / len(c_late) > sum(c_early) / len(c_early) + 0.08
+    d_early, d_late = (metric("SYN-04", "dsst", "dsst_throughput_per_min", x) for x in (False, True))
+    assert sum(d_late) / len(d_late) < 0.9 * sum(d_early) / len(d_early)
+
+
+def test_cognitive_learning_effect_and_scoring_valid(cog, cog_data):
+    sessions, by = cog_data
+    cs = cog.cs
+    first, later = [], []
+    for s in sessions:
+        if s["test_id"] == "dsst" and s["subject_code"] != "SYN-04":
+            r = cs.score("dsst", by[s["session_uuid"]], s["duration_s"])
+            assert r["status"] == "complete"
+            (first if s["session_no"] == 1 else later).append(r["metrics"]["dsst_throughput_per_min"])
+    assert sum(first) / len(first) < sum(later) / len(later)
+    for s in sessions:
+        assert s["fatigue"] is None or 1 <= s["fatigue"] <= 10
+        assert 1 <= s["kss"] <= 9 and 0 <= s["sleep_h"] <= 24
+        assert cs.score(s["test_id"], by[s["session_uuid"]], s["duration_s"])["quality"] == "ok" or s["is_practice"]
+
+
+def test_cognitive_seed_is_fnv1a32(cog):
+    assert cog.fnv1a32("") == 0x811C9DC5
+    assert cog.fnv1a32("a") == 0xE40C292C
+    assert cog.stimulus_set(1) == "A" and cog.stimulus_set(5) == "A" and cog.stimulus_set(4) == "D"

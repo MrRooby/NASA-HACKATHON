@@ -315,6 +315,34 @@
       "type": "peer_reviewed",
       "url": "https://pubmed.ncbi.nlm.nih.gov/25197887/",
       "checked": "2026-11-14"
+    },
+    "basner_2011_pvtb": {
+      "title": "Basner, Mollicone & Dinges 2011 — Validity and sensitivity of a brief psychomotor vigilance test (PVT-B): 3 min, lapse = RT of 355 ms or more, false start below 100 ms",
+      "publisher": "peer-reviewed",
+      "type": "peer_reviewed",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3197786/",
+      "checked": "2026-11-14"
+    },
+    "basner_2015_ctb": {
+      "title": "Basner et al. 2015 — Cognition Test Battery (Aerosp Med Hum Perform): practice effects, stimulus-set rotation, repeated administration",
+      "publisher": "peer-reviewed",
+      "type": "peer_reviewed",
+      "url": "https://doi.org/10.3357/AMHP.4343.2015",
+      "checked": "2026-11-14"
+    },
+    "dev_2024_iss": {
+      "title": "Dev et al. 2024 — ISS cognition study (Frontiers in Physiology, doi 10.3389/fphys.2024.1451269)",
+      "publisher": "peer-reviewed",
+      "type": "peer_reviewed",
+      "url": "https://doi.org/10.3389/fphys.2024.1451269",
+      "checked": "2026-11-14"
+    },
+    "hautus_1995": {
+      "title": "Hautus 1995 — Corrections for extreme proportions and their biasing effects on estimated values of d' (log-linear correction used for the Go/No-Go d')",
+      "publisher": "peer-reviewed",
+      "type": "peer_reviewed",
+      "url": "https://doi.org/10.3758/BF03203619",
+      "checked": "2026-11-14"
     }
   }
 }

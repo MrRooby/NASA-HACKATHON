@@ -38,13 +38,17 @@ Kontrakt kart narządów: [`UI_CONTRACT.md`](UI_CONTRACT.md). Wszystkie adresy:
 | `http://localhost:8000/api/dashboard` | pełna analiza MOTHER: każdy dzień misji, każdy astronauta, wnioski, ryzyka, sylwetka, EVA, zadania |
 | `http://localhost:8000/api/data-map` | inwentarz bazy według części ciała i czujników + graf zależności |
 | `http://localhost:8000/api/status` | czy baza jest osiągalna i czy analiza jest gotowa |
+| `http://localhost:8000/api/cognitive/protocols`, `/api/cognitive/{osoba}` | testy poznawcze (PVT, Go/No-Go, DSST): protokoły i raport względem własnego baseline'u |
+| `POST http://localhost:8000/api/cognitive/sessions` | zapis sesji testu z GUI (jedyny zapis do bazy, patrz niżej) |
 | `http://localhost:8000/api/docs` | automatyczna dokumentacja API |
 
 ## Bezpieczeństwo
 
 - Hasło zapisuje się tylko lokalnie w `MOTHER/.env`, a ten plik **nie trafia do gita**.
 - Serwer działa tylko na Twoim komputerze (`127.0.0.1`). Nikt z zewnątrz się do niego nie podłączy.
-- MOTHER **tylko czyta** bazę i niczego w niej nie zmienia.
+- MOTHER **czyta** bazę jako użytkownik `astro_reader`. **Jedyny wyjątek** to zapis testów poznawczych (`POST /api/cognitive/sessions`): robi go osobne połączenie `mother/db_writer.py` na koncie `cognitive_writer` (tylko INSERT do `astro_cognitive` i do `astro_core.observation` / `import_batch`, bez UPDATE i DELETE). Dane logowania: `COGNITIVE_DB_USER` i `COGNITIVE_DB_PASSWORD` w `MOTHER/.env` (hasło ustala właściciel bazy). Bez nich zapis zwraca 503 z podpowiedzią, a reszta MOTHER działa jak dotąd.
+- Zapis wymaga nagłówka `X-Requested-With: awernasa` (ochrona przed CSRF), body do 1 MB. Aplikacja demo nie ma logowania: każdy klient lokalny może zapisać sesję dowolnej osoby (ograniczenie hackathonowe).
+- Wyniki testów poznawcze to wskaźniki wydajności względem własnego baseline'u, nie diagnoza.
 - Dane syntetyczne są w API oznaczone (`data_kind: "synthetic"`), a GUI musi je tak pokazywać. To demo edukacyjne, nie porada medyczna.
 
 ---
@@ -59,6 +63,7 @@ Kontrakt kart narządów: [`UI_CONTRACT.md`](UI_CONTRACT.md). Wszystkie adresy:
 | `mother/rules.py` | progi z `config/thresholds.json` (jedyne źródło statusu ALERT) |
 | `mother/analytics.py` | norma osobista (FD8–28), EWMA, CUSUM, obwiednia w stylu NASA IMS, trendy Theil–Sen |
 | `mother/knowledge.py` + `config/knowledge_graph.json` | zagrożenia → ryzyka → części ciała; syndromy (CO2+ból głowy, SANS, infekcja…), EVA GO/NO-GO |
+| `mother/cognitive.py`, `cognitive_scoring.py`, `db_writer.py` | testy poznawcze: walidacja i zapis sesji (jedna transakcja), przeliczenie metryk po stronie serwera (`cognitive_scoring` = źródło prawdy, kontrakt w `config/cognitive/CONTRACT.md`), raport i statusy |
 | `mother/forecast.py`, `scheduler.py` | prognozy (dawka, kości, masa) i zadania dla astronauty |
 
 Migawki offline jako JSON (ten sam kształt co `/api/dashboard` i `/api/data-map`): `python -m mother.export_demo` (symulator, bez bazy) i `python -m mother.data_map` (z bazy). Wynik trafia do `exports/`.

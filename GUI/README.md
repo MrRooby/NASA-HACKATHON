@@ -13,6 +13,24 @@ npm run dev          # live data: MOTHER_URL=http://127.0.0.1:8000 npm run dev
 
 Open the local URL printed by Vite. Build the production bundle with `npm run build`.
 
+### Cognitive tests on yourself (standalone)
+
+`cognitive.html` runs only the cognitive module (PVT, Go/No-Go, DSST): no login, no dashboard, no 3D, no `/api` calls. Results live in this browser's localStorage (`cognitive.self.sessions.v1`) and are never sent anywhere; export/import them as JSON or export CSV. They never mix with astronaut data.
+
+```bash
+npm run cognitive                      # opens http://localhost:5173/cognitive.html
+# http://localhost:5173/cognitive.html?demo=1   shortened demo (PVT 30 s, Go/No-Go 30 trials, DSST 30 s), never counted in the baseline
+```
+
+Without Node on the host, via Docker (from the repository root):
+
+```bash
+docker run --rm -it -p 5173:5173 -v "$PWD":/repo -w /repo/GUI node:20 npx vite --host 0.0.0.0
+# then open http://localhost:5173/cognitive.html
+```
+
+`npm run build` produces both `dist/index.html` and `dist/cognitive.html`. Code: `src/cognitive/standalone.jsx`, `SelfStart.jsx`, `SelfHistory.jsx`, `Diagnostics.jsx`, `engine/{sink,localStore,localReport,diagnostics}.js`.
+
 ### Live data from MOTHER
 
 The dashboard asks the MOTHER backend for real data (`/api/status`, `/api/subjects`, `/api/organs`, `/api/organs/{code}?sol=N|day=N`, contract in `../MOTHER/UI_CONTRACT.md`) and refreshes every 30 s. URLs are relative: in Docker, nginx proxies `/api/` to MOTHER; in development, `vite.config.js` proxies `/api` to `MOTHER_URL` (default `http://127.0.0.1:8000`):

@@ -1,13 +1,18 @@
+import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 
 // Dev / preview only: forward /api to a local MOTHER so the GUI can use relative URLs
 // exactly like behind the production nginx proxy (see nginx.conf).
 //   MOTHER_URL=http://127.0.0.1:8000 npm run dev
-// The production bundle is unaffected (no plugins, default build options).
+// The production bundle has no plugins and default build options besides the two HTML entry points.
 const motherUrl = process.env.MOTHER_URL || 'http://127.0.0.1:8000';
 const proxy = { '/api': { target: motherUrl, changeOrigin: true } };
 
+// Two pages: the full app and the standalone cognitive self-test (cognitive.html, no backend needed).
+const page = file => fileURLToPath(new URL(file, import.meta.url));
+
 export default defineConfig({
+  build: { rollupOptions: { input: { main: page('./index.html'), cognitive: page('./cognitive.html') } } },
   server: { proxy },
   preview: { proxy },
 });

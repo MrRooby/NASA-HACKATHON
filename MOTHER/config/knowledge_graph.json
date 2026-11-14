@@ -70,7 +70,7 @@
       "label": "Behavioural health & cognition",
       "hazards": ["isolation_confinement", "distance_from_earth"],
       "body_regions": ["brain"],
-      "indicators": ["mood", "fatigue", "reaction_time_pct_change"],
+      "indicators": ["mood", "fatigue", "reaction_time_pct_change", "pvt_lapses", "gonogo_commission_rate", "dsst_throughput_z"],
       "countermeasures": ["Private psychological conference", "Family contact", "Leisure time", "Workload review"],
       "sources": ["ntrs_bhp_ops", "ntrs_space_psych"],
       "links": ["https://humanresearchroadmap.nasa.gov/Risks/?i=99"]
@@ -216,15 +216,6 @@
         { "min": 4, "status": "caution", "basis": "team_assumption", "message": "High fatigue.", "action": "Review sleep and workload." }
       ],
       "sources": ["ntrs_bhp_ops"]
-    },
-    {
-      "id": "reaction_time_pct_change", "label": "Reaction time vs preflight (PVT-like)", "unit": "% slower", "category": "behavioral", "evaluation": "baseline_percent_change",
-      "bands": [
-        { "max": 10, "status": "ok", "basis": "team_assumption", "message": "Reaction time within 10% of preflight." },
-        { "min": 10, "max": 20, "status": "caution", "basis": "team_assumption", "message": "Reaction time 10-20% slower than preflight.", "action": "Check sleep, fatigue and CO2 exposure; retest tomorrow." },
-        { "min": 20, "status": "alert", "basis": "team_assumption", "message": "Reaction time >20% slower than preflight.", "action": "Avoid critical tasks until reviewed.", "escalate": true }
-      ],
-      "sources": ["basner_2024", "ntrs_space_psych"]
     },
     { "id": "body_mass_kg", "label": "Body mass", "unit": "kg", "category": "input", "evaluation": "input", "sources": ["zwart_2014"] },
     { "id": "vo2max_ml_kg_min", "label": "Estimated VO2max", "unit": "ml/kg/min", "category": "input", "evaluation": "input", "sources": ["petersen_2016"] },

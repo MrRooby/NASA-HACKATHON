@@ -1,0 +1,1349 @@
+{
+ "note": "Generated from MOTHER/mother/cognitive.py _test_block (source of truth). Local GUI report must match.",
+ "cases": [
+  {
+   "name": "pvt_calibrating_2_of_3",
+   "test_id": "pvt",
+   "sessions": [
+    {
+     "session_id": 1,
+     "test_id": "pvt",
+     "session_no": 1,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": true,
+     "started_at": "2026-11-02T08:01:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 300,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 2,
+     "test_id": "pvt",
+     "session_no": 2,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-03T08:02:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 3,
+     "test_id": "pvt",
+     "session_no": 3,
+     "stimulus_set": "C",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 285,
+      "pvt_lapses": 2,
+      "pvt_false_starts": 0
+     }
+    }
+   ],
+   "expected": {
+    "test_id": "pvt",
+    "label": "Reaction time (PVT)",
+    "status": "no_data",
+    "headline": "Building your baseline (1/3).",
+    "baseline": {
+     "n": 1,
+     "needed": 3,
+     "ready": false
+    },
+    "latest": {
+     "session_id": 3,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "session_no": 3,
+     "quality": "ok",
+     "metrics": {
+      "pvt_median_rt_ms": 285,
+      "pvt_lapses": 2,
+      "pvt_false_starts": 0
+     },
+     "z": {},
+     "pct_change": {}
+    },
+    "trend": [
+     {
+      "started_at": "2026-11-03T08:02:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-04T08:03:00.000Z",
+      "value": 285
+     }
+    ],
+    "next": {
+     "session_no": 4,
+     "stimulus_set": "D"
+    }
+   },
+   "expected_key_z": null
+  },
+  {
+   "name": "pvt_ok",
+   "test_id": "pvt",
+   "sessions": [
+    {
+     "session_id": 1,
+     "test_id": "pvt",
+     "session_no": 1,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": true,
+     "started_at": "2026-11-02T08:01:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 300,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 2,
+     "test_id": "pvt",
+     "session_no": 2,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-03T08:02:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 3,
+     "test_id": "pvt",
+     "session_no": 3,
+     "stimulus_set": "C",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 290,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 4,
+     "test_id": "pvt",
+     "session_no": 4,
+     "stimulus_set": "D",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 270,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 5,
+     "test_id": "pvt",
+     "session_no": 5,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-06T08:05:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 285,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    }
+   ],
+   "expected": {
+    "test_id": "pvt",
+    "label": "Reaction time (PVT)",
+    "status": "ok",
+    "headline": "Reaction time +2% vs your baseline.",
+    "baseline": {
+     "n": 3,
+     "needed": 3,
+     "ready": true
+    },
+    "latest": {
+     "session_id": 5,
+     "started_at": "2026-11-06T08:05:00.000Z",
+     "session_no": 5,
+     "quality": "ok",
+     "metrics": {
+      "pvt_median_rt_ms": 285,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     },
+     "z": {
+      "pvt_median_rt_ms": -0.35714285714285715,
+      "pvt_lapses": -0.0,
+      "pvt_false_starts": -0.0
+     },
+     "pct_change": {
+      "pvt_median_rt_ms": 1.7857142857142856
+     }
+    },
+    "trend": [
+     {
+      "started_at": "2026-11-03T08:02:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-04T08:03:00.000Z",
+      "value": 290
+     },
+     {
+      "started_at": "2026-11-05T08:04:00.000Z",
+      "value": 270
+     },
+     {
+      "started_at": "2026-11-06T08:05:00.000Z",
+      "value": 285
+     }
+    ],
+    "next": {
+     "session_no": 6,
+     "stimulus_set": "B"
+    }
+   },
+   "expected_key_z": -0.35714285714285715
+  },
+  {
+   "name": "pvt_alert_pct",
+   "test_id": "pvt",
+   "sessions": [
+    {
+     "session_id": 1,
+     "test_id": "pvt",
+     "session_no": 1,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-02T08:01:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 2,
+     "test_id": "pvt",
+     "session_no": 2,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-03T08:02:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 3,
+     "test_id": "pvt",
+     "session_no": 3,
+     "stimulus_set": "C",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 4,
+     "test_id": "pvt",
+     "session_no": 4,
+     "stimulus_set": "D",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 5,
+     "test_id": "pvt",
+     "session_no": 5,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-06T08:05:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 6,
+     "test_id": "pvt",
+     "session_no": 6,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-07T08:06:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 340,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    }
+   ],
+   "expected": {
+    "test_id": "pvt",
+    "label": "Reaction time (PVT)",
+    "status": "alert",
+    "headline": "Reaction time +21% vs your baseline.",
+    "baseline": {
+     "n": 5,
+     "needed": 3,
+     "ready": true
+    },
+    "latest": {
+     "session_id": 6,
+     "started_at": "2026-11-07T08:06:00.000Z",
+     "session_no": 6,
+     "quality": "ok",
+     "metrics": {
+      "pvt_median_rt_ms": 340,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     },
+     "z": {
+      "pvt_median_rt_ms": -4.285714285714286,
+      "pvt_lapses": -0.0,
+      "pvt_false_starts": -0.0
+     },
+     "pct_change": {
+      "pvt_median_rt_ms": 21.428571428571427
+     }
+    },
+    "trend": [
+     {
+      "started_at": "2026-11-02T08:01:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-03T08:02:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-04T08:03:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-05T08:04:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-06T08:05:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-07T08:06:00.000Z",
+      "value": 340
+     }
+    ],
+    "next": {
+     "session_no": 7,
+     "stimulus_set": "C"
+    }
+   },
+   "expected_key_z": -4.285714285714286
+  },
+  {
+   "name": "pvt_caution_lapses",
+   "test_id": "pvt",
+   "sessions": [
+    {
+     "session_id": 1,
+     "test_id": "pvt",
+     "session_no": 1,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-02T08:01:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 2,
+     "test_id": "pvt",
+     "session_no": 2,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-03T08:02:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 282,
+      "pvt_lapses": 0,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 3,
+     "test_id": "pvt",
+     "session_no": 3,
+     "stimulus_set": "C",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 279,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 4,
+     "test_id": "pvt",
+     "session_no": 4,
+     "stimulus_set": "D",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 281,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 5,
+     "test_id": "pvt",
+     "session_no": 5,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-06T08:05:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 6,
+     "test_id": "pvt",
+     "session_no": 6,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-07T08:06:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 283,
+      "pvt_lapses": 4,
+      "pvt_false_starts": 0
+     }
+    }
+   ],
+   "expected": {
+    "test_id": "pvt",
+    "label": "Reaction time (PVT)",
+    "status": "caution",
+    "headline": "4 lapses (responses of 355 ms or more) in the latest test.",
+    "baseline": {
+     "n": 5,
+     "needed": 3,
+     "ready": true
+    },
+    "latest": {
+     "session_id": 6,
+     "started_at": "2026-11-07T08:06:00.000Z",
+     "session_no": 6,
+     "quality": "ok",
+     "metrics": {
+      "pvt_median_rt_ms": 283,
+      "pvt_lapses": 4,
+      "pvt_false_starts": 0
+     },
+     "z": {
+      "pvt_median_rt_ms": -0.18544935805991603,
+      "pvt_lapses": -3.2,
+      "pvt_false_starts": -0.0
+     },
+     "pct_change": {
+      "pvt_median_rt_ms": 0.9272467902995802
+     }
+    },
+    "trend": [
+     {
+      "started_at": "2026-11-02T08:01:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-03T08:02:00.000Z",
+      "value": 282
+     },
+     {
+      "started_at": "2026-11-04T08:03:00.000Z",
+      "value": 279
+     },
+     {
+      "started_at": "2026-11-05T08:04:00.000Z",
+      "value": 281
+     },
+     {
+      "started_at": "2026-11-06T08:05:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-07T08:06:00.000Z",
+      "value": 283
+     }
+    ],
+    "next": {
+     "session_no": 7,
+     "stimulus_set": "C"
+    }
+   },
+   "expected_key_z": -0.18544935805991603
+  },
+  {
+   "name": "pvt_excludes_bad_sessions",
+   "test_id": "pvt",
+   "sessions": [
+    {
+     "session_id": 1,
+     "test_id": "pvt",
+     "session_no": 1,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-02T08:01:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 2,
+     "test_id": "pvt",
+     "session_no": 2,
+     "stimulus_set": "B",
+     "status": "interrupted",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-03T08:02:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 500,
+      "pvt_lapses": 9,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 3,
+     "test_id": "pvt",
+     "session_no": 3,
+     "stimulus_set": "C",
+     "status": "complete",
+     "quality": "low",
+     "is_practice": false,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 290,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 4,
+     "test_id": "pvt",
+     "session_no": 4,
+     "stimulus_set": "D",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 285,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 5,
+     "test_id": "pvt",
+     "session_no": 5,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-06T08:05:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 275,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 6,
+     "test_id": "pvt",
+     "session_no": 6,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-07T08:06:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 282,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    }
+   ],
+   "expected": {
+    "test_id": "pvt",
+    "label": "Reaction time (PVT)",
+    "status": "ok",
+    "headline": "Reaction time +1% vs your baseline.",
+    "baseline": {
+     "n": 3,
+     "needed": 3,
+     "ready": true
+    },
+    "latest": {
+     "session_id": 6,
+     "started_at": "2026-11-07T08:06:00.000Z",
+     "session_no": 6,
+     "quality": "ok",
+     "metrics": {
+      "pvt_median_rt_ms": 282,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     },
+     "z": {
+      "pvt_median_rt_ms": -0.14285714285714285,
+      "pvt_lapses": -0.0,
+      "pvt_false_starts": -0.0
+     },
+     "pct_change": {
+      "pvt_median_rt_ms": 0.7142857142857143
+     }
+    },
+    "trend": [
+     {
+      "started_at": "2026-11-02T08:01:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-04T08:03:00.000Z",
+      "value": 290
+     },
+     {
+      "started_at": "2026-11-05T08:04:00.000Z",
+      "value": 285
+     },
+     {
+      "started_at": "2026-11-06T08:05:00.000Z",
+      "value": 275
+     },
+     {
+      "started_at": "2026-11-07T08:06:00.000Z",
+      "value": 282
+     }
+    ],
+    "next": {
+     "session_no": 7,
+     "stimulus_set": "C"
+    }
+   },
+   "expected_key_z": -0.14285714285714285
+  },
+  {
+   "name": "pvt_device_change",
+   "test_id": "pvt",
+   "sessions": [
+    {
+     "session_id": 1,
+     "test_id": "pvt",
+     "session_no": 1,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-02T08:01:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 2,
+     "test_id": "pvt",
+     "session_no": 2,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-03T08:02:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 3,
+     "test_id": "pvt",
+     "session_no": 3,
+     "stimulus_set": "C",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "pvt_median_rt_ms": 280,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    },
+    {
+     "session_id": 4,
+     "test_id": "pvt",
+     "session_no": 4,
+     "stimulus_set": "D",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "device_class": "touch",
+     "metrics": {
+      "pvt_median_rt_ms": 330,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     }
+    }
+   ],
+   "expected": {
+    "test_id": "pvt",
+    "label": "Reaction time (PVT)",
+    "status": "no_data",
+    "headline": "Building your baseline (0/3).",
+    "baseline": {
+     "n": 0,
+     "needed": 3,
+     "ready": false
+    },
+    "latest": {
+     "session_id": 4,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "session_no": 4,
+     "quality": "ok",
+     "metrics": {
+      "pvt_median_rt_ms": 330,
+      "pvt_lapses": 1,
+      "pvt_false_starts": 0
+     },
+     "z": {},
+     "pct_change": {}
+    },
+    "trend": [
+     {
+      "started_at": "2026-11-02T08:01:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-03T08:02:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-04T08:03:00.000Z",
+      "value": 280
+     },
+     {
+      "started_at": "2026-11-05T08:04:00.000Z",
+      "value": 330
+     }
+    ],
+    "next": {
+     "session_no": 5,
+     "stimulus_set": "A"
+    }
+   },
+   "expected_key_z": null
+  },
+  {
+   "name": "gonogo_caution",
+   "test_id": "gonogo",
+   "sessions": [
+    {
+     "session_id": 1,
+     "test_id": "gonogo",
+     "session_no": 1,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-02T08:01:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "gonogo_commission_rate": 0.1,
+      "gonogo_omission_rate": 0.05
+     }
+    },
+    {
+     "session_id": 2,
+     "test_id": "gonogo",
+     "session_no": 2,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-03T08:02:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "gonogo_commission_rate": 0.1,
+      "gonogo_omission_rate": 0.05
+     }
+    },
+    {
+     "session_id": 3,
+     "test_id": "gonogo",
+     "session_no": 3,
+     "stimulus_set": "C",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "gonogo_commission_rate": 0.07,
+      "gonogo_omission_rate": 0.05
+     }
+    },
+    {
+     "session_id": 4,
+     "test_id": "gonogo",
+     "session_no": 4,
+     "stimulus_set": "D",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "gonogo_commission_rate": 0.2,
+      "gonogo_omission_rate": 0.05
+     }
+    }
+   ],
+   "expected": {
+    "test_id": "gonogo",
+    "label": "Response inhibition (Go/No-Go)",
+    "status": "caution",
+    "headline": "Pressed on 20% of No-Go trials.",
+    "baseline": {
+     "n": 3,
+     "needed": 3,
+     "ready": true
+    },
+    "latest": {
+     "session_id": 4,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "session_no": 4,
+     "quality": "ok",
+     "metrics": {
+      "gonogo_commission_rate": 0.2,
+      "gonogo_omission_rate": 0.05
+     },
+     "z": {
+      "gonogo_commission_rate": -3.666666666666667,
+      "gonogo_omission_rate": 2.312964634635743e-16
+     },
+     "pct_change": {
+      "gonogo_commission_rate": 122.22222222222221
+     }
+    },
+    "trend": [
+     {
+      "started_at": "2026-11-02T08:01:00.000Z",
+      "value": 0.1
+     },
+     {
+      "started_at": "2026-11-03T08:02:00.000Z",
+      "value": 0.1
+     },
+     {
+      "started_at": "2026-11-04T08:03:00.000Z",
+      "value": 0.07
+     },
+     {
+      "started_at": "2026-11-05T08:04:00.000Z",
+      "value": 0.2
+     }
+    ],
+    "next": {
+     "session_no": 5,
+     "stimulus_set": "A"
+    }
+   },
+   "expected_key_z": -3.666666666666667
+  },
+  {
+   "name": "gonogo_alert",
+   "test_id": "gonogo",
+   "sessions": [
+    {
+     "session_id": 1,
+     "test_id": "gonogo",
+     "session_no": 1,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-02T08:01:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "gonogo_commission_rate": 0.1,
+      "gonogo_omission_rate": 0.05
+     }
+    },
+    {
+     "session_id": 2,
+     "test_id": "gonogo",
+     "session_no": 2,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-03T08:02:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "gonogo_commission_rate": 0.1,
+      "gonogo_omission_rate": 0.05
+     }
+    },
+    {
+     "session_id": 3,
+     "test_id": "gonogo",
+     "session_no": 3,
+     "stimulus_set": "C",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "gonogo_commission_rate": 0.07,
+      "gonogo_omission_rate": 0.05
+     }
+    },
+    {
+     "session_id": 4,
+     "test_id": "gonogo",
+     "session_no": 4,
+     "stimulus_set": "D",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "gonogo_commission_rate": 0.33,
+      "gonogo_omission_rate": 0.05
+     }
+    }
+   ],
+   "expected": {
+    "test_id": "gonogo",
+    "label": "Response inhibition (Go/No-Go)",
+    "status": "alert",
+    "headline": "Pressed on 33% of No-Go trials.",
+    "baseline": {
+     "n": 3,
+     "needed": 3,
+     "ready": true
+    },
+    "latest": {
+     "session_id": 4,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "session_no": 4,
+     "quality": "ok",
+     "metrics": {
+      "gonogo_commission_rate": 0.33,
+      "gonogo_omission_rate": 0.05
+     },
+     "z": {
+      "gonogo_commission_rate": -8.0,
+      "gonogo_omission_rate": 2.312964634635743e-16
+     },
+     "pct_change": {
+      "gonogo_commission_rate": 266.66666666666663
+     }
+    },
+    "trend": [
+     {
+      "started_at": "2026-11-02T08:01:00.000Z",
+      "value": 0.1
+     },
+     {
+      "started_at": "2026-11-03T08:02:00.000Z",
+      "value": 0.1
+     },
+     {
+      "started_at": "2026-11-04T08:03:00.000Z",
+      "value": 0.07
+     },
+     {
+      "started_at": "2026-11-05T08:04:00.000Z",
+      "value": 0.33
+     }
+    ],
+    "next": {
+     "session_no": 5,
+     "stimulus_set": "A"
+    }
+   },
+   "expected_key_z": -8.0
+  },
+  {
+   "name": "dsst_alert_z",
+   "test_id": "dsst",
+   "sessions": [
+    {
+     "session_id": 1,
+     "test_id": "dsst",
+     "session_no": 1,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-02T08:01:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "dsst_throughput_per_min": 30,
+      "dsst_correct": 45.0
+     }
+    },
+    {
+     "session_id": 2,
+     "test_id": "dsst",
+     "session_no": 2,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-03T08:02:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "dsst_throughput_per_min": 32,
+      "dsst_correct": 48.0
+     }
+    },
+    {
+     "session_id": 3,
+     "test_id": "dsst",
+     "session_no": 3,
+     "stimulus_set": "C",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "dsst_throughput_per_min": 31,
+      "dsst_correct": 46.5
+     }
+    },
+    {
+     "session_id": 4,
+     "test_id": "dsst",
+     "session_no": 4,
+     "stimulus_set": "D",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "dsst_throughput_per_min": 33,
+      "dsst_correct": 49.5
+     }
+    },
+    {
+     "session_id": 5,
+     "test_id": "dsst",
+     "session_no": 5,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-06T08:05:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "dsst_throughput_per_min": 22,
+      "dsst_correct": 33.0
+     }
+    }
+   ],
+   "expected": {
+    "test_id": "dsst",
+    "label": "Processing speed (DSST)",
+    "status": "alert",
+    "headline": "Processing speed 22 symbols/min (z -7.1 vs your baseline).",
+    "baseline": {
+     "n": 4,
+     "needed": 3,
+     "ready": true
+    },
+    "latest": {
+     "session_id": 5,
+     "started_at": "2026-11-06T08:05:00.000Z",
+     "session_no": 5,
+     "quality": "ok",
+     "metrics": {
+      "dsst_throughput_per_min": 22,
+      "dsst_correct": 33.0
+     },
+     "z": {
+      "dsst_throughput_per_min": -7.142857142857142,
+      "dsst_correct": -7.125
+     },
+     "pct_change": {
+      "dsst_throughput_per_min": -30.158730158730158
+     }
+    },
+    "trend": [
+     {
+      "started_at": "2026-11-02T08:01:00.000Z",
+      "value": 30
+     },
+     {
+      "started_at": "2026-11-03T08:02:00.000Z",
+      "value": 32
+     },
+     {
+      "started_at": "2026-11-04T08:03:00.000Z",
+      "value": 31
+     },
+     {
+      "started_at": "2026-11-05T08:04:00.000Z",
+      "value": 33
+     },
+     {
+      "started_at": "2026-11-06T08:05:00.000Z",
+      "value": 22
+     }
+    ],
+    "next": {
+     "session_no": 6,
+     "stimulus_set": "B"
+    }
+   },
+   "expected_key_z": -7.142857142857142
+  },
+  {
+   "name": "dsst_ok",
+   "test_id": "dsst",
+   "sessions": [
+    {
+     "session_id": 1,
+     "test_id": "dsst",
+     "session_no": 1,
+     "stimulus_set": "A",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-02T08:01:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "dsst_throughput_per_min": 30,
+      "dsst_correct": 45.0
+     }
+    },
+    {
+     "session_id": 2,
+     "test_id": "dsst",
+     "session_no": 2,
+     "stimulus_set": "B",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-03T08:02:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "dsst_throughput_per_min": 32,
+      "dsst_correct": 48.0
+     }
+    },
+    {
+     "session_id": 3,
+     "test_id": "dsst",
+     "session_no": 3,
+     "stimulus_set": "C",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-04T08:03:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "dsst_throughput_per_min": 31,
+      "dsst_correct": 46.5
+     }
+    },
+    {
+     "session_id": 4,
+     "test_id": "dsst",
+     "session_no": 4,
+     "stimulus_set": "D",
+     "status": "complete",
+     "quality": "ok",
+     "is_practice": false,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "device_class": "keyboard",
+     "metrics": {
+      "dsst_throughput_per_min": 31,
+      "dsst_correct": 46.5
+     }
+    }
+   ],
+   "expected": {
+    "test_id": "dsst",
+    "label": "Processing speed (DSST)",
+    "status": "ok",
+    "headline": "Processing speed 31 symbols/min (z +0.0 vs your baseline).",
+    "baseline": {
+     "n": 3,
+     "needed": 3,
+     "ready": true
+    },
+    "latest": {
+     "session_id": 4,
+     "started_at": "2026-11-05T08:04:00.000Z",
+     "session_no": 4,
+     "quality": "ok",
+     "metrics": {
+      "dsst_throughput_per_min": 31,
+      "dsst_correct": 46.5
+     },
+     "z": {
+      "dsst_throughput_per_min": 0.0,
+      "dsst_correct": 0.0
+     },
+     "pct_change": {
+      "dsst_throughput_per_min": 0.0
+     }
+    },
+    "trend": [
+     {
+      "started_at": "2026-11-02T08:01:00.000Z",
+      "value": 30
+     },
+     {
+      "started_at": "2026-11-03T08:02:00.000Z",
+      "value": 32
+     },
+     {
+      "started_at": "2026-11-04T08:03:00.000Z",
+      "value": 31
+     },
+     {
+      "started_at": "2026-11-05T08:04:00.000Z",
+      "value": 31
+     }
+    ],
+    "next": {
+     "session_no": 5,
+     "stimulus_set": "A"
+    }
+   },
+   "expected_key_z": 0.0
+  },
+  {
+   "name": "empty",
+   "test_id": "pvt",
+   "sessions": [],
+   "expected": {
+    "test_id": "pvt",
+    "label": "Reaction time (PVT)",
+    "status": "no_data",
+    "headline": "Building your baseline (0/3).",
+    "baseline": {
+     "n": 0,
+     "needed": 3,
+     "ready": false
+    },
+    "latest": null,
+    "trend": [],
+    "next": {
+     "session_no": 1,
+     "stimulus_set": "A"
+    }
+   },
+   "expected_key_z": null
+  }
+ ]
+}

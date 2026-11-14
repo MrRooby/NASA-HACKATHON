@@ -1,0 +1,22 @@
+{
+ "name": "pvt_empty",
+ "test_id": "pvt",
+ "duration_s": null,
+ "note": "no trials -> all metrics null, status invalid",
+ "trials": [],
+ "expected": {
+  "metrics": {
+   "pvt_median_rt_ms": null,
+   "pvt_mean_rt_ms": null,
+   "pvt_mean_inv_rt": null,
+   "pvt_slowest10_inv_rt": null,
+   "pvt_fastest10_rt_ms": null,
+   "pvt_lapses": null,
+   "pvt_false_starts": null,
+   "pvt_score": null
+  },
+  "quality": "low",
+  "status": "invalid",
+  "n_trials": 0
+ }
+}

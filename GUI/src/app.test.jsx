@@ -142,6 +142,18 @@ describe('navigation', () => {
   });
 });
 
+describe('cognitive tests page', () => {
+  it('opens from the top bar (lazy chunk) and goes back to the overview', async () => {
+    await renderApp();
+    fireEvent.click(screen.getByRole('button', { name: 'Cognitive tests' }));
+    expect(await screen.findByRole('heading', { name: 'COGNITIVE TESTS' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /quick test/i })).toBeInTheDocument();
+    expect(screen.getByText(/not a diagnosis/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Base' }));
+    expect(screen.getByRole('heading', { name: /good morning, john doe/i })).toBeInTheDocument();
+  });
+});
+
 describe('daily check-in', () => {
   it('prefills the form with the current readings', async () => {
     await renderApp();

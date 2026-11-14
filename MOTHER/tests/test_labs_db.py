@@ -116,3 +116,54 @@ def test_load_mission_maps_codes_and_preflight(cfg):
     hr = next(x for x in ms if x.indicator_id == "heart_rate_resting")
     assert hr.ts == T0 + timedelta(days=4, hours=8) and hr.simulated
     assert meta["is_synthetic"] is True
+
+
+# ---------------------------------------------------------------- B1: PVT from the database feeds MOTHER's reaction-time analytics
+def test_pvt_reaction_ms_is_mapped_to_reaction_time_ms():
+    from mother.db_mission import DB_TO_MOTHER
+    assert DB_TO_MOTHER["pvt_reaction_ms"] == "reaction_time_ms"
+
+
+def _pvt_db(rows):
+    base = {"subject_code": "S1", "indicator_code": "pvt_reaction_ms", "anchor": "launch", "unit": "ms",
+            "sample_type": None, "is_synthetic": 1, "source_id": "synthetic"}
+    return TeamDatabase(conn=FakeConn([
+        ("FROM astro_api.missions", [{"mission_code": "M1", "mission_name": "Mission 1", "environment": "iss",
+                                      "duration_days": 60, "is_synthetic": 1, "n_subjects": 1}]),
+        ("FROM astro_api.subjects WHERE mission_code", [{"subject_code": "S1", "sex": "F", "age_band": "30-39"}]),
+        ("FROM astro_api.observations", [dict(base, **r) for r in rows]),
+        ("FROM astro_core.env_observation", []),
+    ]))
+
+
+def test_db_pvt_preflight_gives_baseline_and_reaction_time_pct_change(cfg):
+    from mother.derive import derive_all
+    from mother.repository import InMemoryRepository
+    rows = [{"day_offset": -5, "measured_at": (T0 - timedelta(days=5)).replace(tzinfo=None, hour=8), "value": 280.0, "phase": "pre"},
+            {"day_offset": -1, "measured_at": (T0 - timedelta(days=1)).replace(tzinfo=None, hour=8), "value": 280.0, "phase": "pre"},
+            {"day_offset": 10, "measured_at": (T0 + timedelta(days=10)).replace(tzinfo=None, hour=8), "value": 336.0, "phase": "in"}]
+    mission, ms, _ = load_mission(_pvt_db(rows), cfg)
+    assert mission.crew[0].preflight == {"reaction_time_ms": 280.0}
+    repo = InMemoryRepository()
+    repo.add_many(ms)
+    ov = derive_all(repo, mission, cfg, T0 + timedelta(days=11))
+    assert ov.latest("S1", "reaction_time_pct_change").value == pytest.approx(20.0)
+
+
+def test_reaction_time_baseline_falls_back_to_first_three_in_mission_values(cfg):
+    from mother.derive import derive_all
+    from mother.repository import InMemoryRepository
+    days = [(2, 280.0), (4, 282.0), (6, 278.0), (20, 336.0)]
+    rows = [{"day_offset": d, "measured_at": (T0 + timedelta(days=d)).replace(tzinfo=None, hour=8), "value": v, "phase": "in"}
+            for d, v in days]
+    mission, ms, _ = load_mission(_pvt_db(rows), cfg)
+    assert "reaction_time_ms" not in mission.crew[0].preflight
+    repo = InMemoryRepository()
+    repo.add_many(ms)
+    ov = derive_all(repo, mission, cfg, T0 + timedelta(days=25))
+    assert ov.latest("S1", "reaction_time_pct_change").value == pytest.approx((336 / 280 - 1) * 100)
+    # fewer than 3 values: no baseline yet, nothing derived
+    mission2, ms2, _ = load_mission(_pvt_db(rows[:2]), cfg)
+    repo2 = InMemoryRepository()
+    repo2.add_many(ms2)
+    assert derive_all(repo2, mission2, cfg, T0 + timedelta(days=25)).latest("S1", "reaction_time_pct_change") is None

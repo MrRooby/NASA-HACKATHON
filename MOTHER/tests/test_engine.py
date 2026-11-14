@@ -148,3 +148,23 @@ def test_detected_events_merges_crew_wide_events():
     ev = detected_events(days)
     assert len(ev) == 1 and ev[0]["who"] is None and ev[0]["fd"] == 2
     assert "_rid" not in ev[0]
+
+
+def test_weekly_pvt_task_and_behavioral_strain_pvt_followup(sim_run, cfg):
+    from mother.models import Finding, FindingKind
+    sim, mother, _, _ = sim_run
+    a = sim.mission.crew[0]
+    tasks = routine_tasks(mother.repo, cfg, sim.mission, a, sim.mission.date_of_flight_day(14))
+    pvt = next(t for t in tasks if t.task_id.startswith("weekly_pvt"))
+    assert pvt.completes_with == ["reaction_time_ms"] and pvt.category == "behavioral"
+    assert not any(t.task_id.startswith("weekly_pvt") for t in
+                   routine_tasks(mother.repo, cfg, sim.mission, a, sim.mission.date_of_flight_day(13)))
+    f = Finding(a.id, FindingKind.SYNDROME, Status.CAUTION, "Sleep, mood and performance are deteriorating together",
+                "syndrome.behavioral_strain", sim.time_of(30))
+    titles = [t.title for t in follow_up_tasks(mother.repo, a, [f], sim.time_of(30))]
+    assert "Request a Private Psychological Conference" in titles
+    assert any("reaction test (PVT)" in t for t in titles)
+    # winscat / sm_cognition are closed by the same indicator the database mapping produces
+    from mother.scheduler import COMPLETES
+    from mother.db_mission import DB_TO_MOTHER
+    assert COMPLETES["winscat"] == COMPLETES["sm_cognition"] == [DB_TO_MOTHER["pvt_reaction_ms"]]

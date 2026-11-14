@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 import AstronautViewer from './AstronautViewer.jsx';
 import LiveDashboard from './LiveDashboard.jsx';
 import useMother from './useMother.js';
+
+const CognitivePage = lazy(() => import('./cognitive/CognitivePage.jsx'));
 import thresholdConfig from '../../config/thresholds.json';
 
 const initialBiometrics = [
@@ -145,6 +147,7 @@ function App() {
   const [mission, setMission] = useState('ISS-EXP74');
   const [toast, setToast] = useState('');
   const [reportSent, setReportSent] = useState(false);
+  const [testRunning, setTestRunning] = useState(false);
 
   const now = useClock();
   const mother = useMother();
@@ -199,14 +202,15 @@ function App() {
     ['checkin', 'Daily check-in', '02'],
     ['trends', 'Health trends', '03'],
     ['protocols', 'Guidance', '04'],
+    ['cognitive', 'Cognitive tests', '05'],
   ];
 
   if (!authenticated) return <AuthScreen onComplete={() => setAuthenticated(true)} />;
 
   return (
-    <div className="shell">
-      {/* ── TOP TELEMETRY BAR ── */}
-      <header className="topbar">
+    <div className={`shell${testRunning ? ' shell-testing' : ''}`}>
+      {/* ── TOP TELEMETRY BAR ── (hidden while a cognitive test runs, to keep frame timing steady) */}
+      {!testRunning && <header className="topbar">
         <div className="topbar-brand">
           <span className="brand-sig">AWERNASA</span>
           <span className="brand-ver">CREW WELLNESS</span>
@@ -214,12 +218,15 @@ function App() {
 
         <div className="topbar-fields">
           <button className="topbar-tab topbar-tab-active" onClick={() => setActivePage('dashboard')}>Base</button>
+          {navItems.filter(([id]) => id === 'cognitive').map(([id, label]) => (
+            <button key={id} className={`topbar-tab${activePage === id ? ' topbar-tab-active' : ''}`} onClick={() => setActivePage(id)}>{label}</button>
+          ))}
           <button className="topbar-tab">{mother.online && mother.subject ? mother.subject.label : 'John Doe'}</button>
           <span className="topbar-status"><ConnectionBadge mode={mother.mode} error={mother.error} /></span>
         </div>
 
         <button className="topbar-logout" onClick={() => setAuthenticated(false)}>SIGN OUT</button>
-      </header>
+      </header>}
 
       <div className="layout">
         <main className="main">
@@ -238,15 +245,21 @@ function App() {
           {activePage === 'trends'   && <Telemetry biometrics={biometrics} />}
           {activePage === 'protocols' && <Protocols protocols={protocols} />}
 
+          {activePage === 'cognitive' && (
+            <Suspense fallback={<p className="cog-muted">Loading cognitive tests...</p>}>
+              <CognitivePage mother={mother} onRunningChange={setTestRunning} />
+            </Suspense>
+          )}
+
           {toast && <div className="toast-bar"><span className="toast-caret">&gt;_</span>{toast}</div>}
         </main>
       </div>
 
-      <footer className="sysbar">
+      {!testRunning && <footer className="sysbar">
         <span>{mother.online ? 'Live data · MOTHER (synthetic records are labelled)' : 'Demo data · calibrated to NASA research'}</span>
         <span>Awernasa · NASA Space Apps 2026</span>
         <span>For demonstration only</span>
-      </footer>
+      </footer>}
     </div>
   );
 }

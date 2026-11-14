@@ -1,0 +1,426 @@
+{
+ "name": "dsst_basic",
+ "test_id": "dsst",
+ "duration_s": 90,
+ "note": "40 correct, 5 errors in 90 s -> 26.67/min, accuracy 0.889",
+ "trials": [
+  {
+   "idx": 0,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "1",
+   "event_type": "correct",
+   "rt_ms": 1500
+  },
+  {
+   "idx": 1,
+   "is_practice": false,
+   "valid": true,
+   "expected": "2",
+   "actual": "2",
+   "event_type": "correct",
+   "rt_ms": 1510
+  },
+  {
+   "idx": 2,
+   "is_practice": false,
+   "valid": true,
+   "expected": "3",
+   "actual": "3",
+   "event_type": "correct",
+   "rt_ms": 1520
+  },
+  {
+   "idx": 3,
+   "is_practice": false,
+   "valid": true,
+   "expected": "4",
+   "actual": "4",
+   "event_type": "correct",
+   "rt_ms": 1530
+  },
+  {
+   "idx": 4,
+   "is_practice": false,
+   "valid": true,
+   "expected": "5",
+   "actual": "5",
+   "event_type": "correct",
+   "rt_ms": 1540
+  },
+  {
+   "idx": 5,
+   "is_practice": false,
+   "valid": true,
+   "expected": "6",
+   "actual": "6",
+   "event_type": "correct",
+   "rt_ms": 1550
+  },
+  {
+   "idx": 6,
+   "is_practice": false,
+   "valid": true,
+   "expected": "7",
+   "actual": "7",
+   "event_type": "correct",
+   "rt_ms": 1560
+  },
+  {
+   "idx": 7,
+   "is_practice": false,
+   "valid": true,
+   "expected": "8",
+   "actual": "8",
+   "event_type": "correct",
+   "rt_ms": 1570
+  },
+  {
+   "idx": 8,
+   "is_practice": false,
+   "valid": true,
+   "expected": "9",
+   "actual": "9",
+   "event_type": "correct",
+   "rt_ms": 1580
+  },
+  {
+   "idx": 9,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "1",
+   "event_type": "correct",
+   "rt_ms": 1590
+  },
+  {
+   "idx": 10,
+   "is_practice": false,
+   "valid": true,
+   "expected": "2",
+   "actual": "2",
+   "event_type": "correct",
+   "rt_ms": 1600
+  },
+  {
+   "idx": 11,
+   "is_practice": false,
+   "valid": true,
+   "expected": "3",
+   "actual": "3",
+   "event_type": "correct",
+   "rt_ms": 1610
+  },
+  {
+   "idx": 12,
+   "is_practice": false,
+   "valid": true,
+   "expected": "4",
+   "actual": "4",
+   "event_type": "correct",
+   "rt_ms": 1620
+  },
+  {
+   "idx": 13,
+   "is_practice": false,
+   "valid": true,
+   "expected": "5",
+   "actual": "5",
+   "event_type": "correct",
+   "rt_ms": 1630
+  },
+  {
+   "idx": 14,
+   "is_practice": false,
+   "valid": true,
+   "expected": "6",
+   "actual": "6",
+   "event_type": "correct",
+   "rt_ms": 1640
+  },
+  {
+   "idx": 15,
+   "is_practice": false,
+   "valid": true,
+   "expected": "7",
+   "actual": "7",
+   "event_type": "correct",
+   "rt_ms": 1650
+  },
+  {
+   "idx": 16,
+   "is_practice": false,
+   "valid": true,
+   "expected": "8",
+   "actual": "8",
+   "event_type": "correct",
+   "rt_ms": 1660
+  },
+  {
+   "idx": 17,
+   "is_practice": false,
+   "valid": true,
+   "expected": "9",
+   "actual": "9",
+   "event_type": "correct",
+   "rt_ms": 1670
+  },
+  {
+   "idx": 18,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "1",
+   "event_type": "correct",
+   "rt_ms": 1680
+  },
+  {
+   "idx": 19,
+   "is_practice": false,
+   "valid": true,
+   "expected": "2",
+   "actual": "2",
+   "event_type": "correct",
+   "rt_ms": 1690
+  },
+  {
+   "idx": 20,
+   "is_practice": false,
+   "valid": true,
+   "expected": "3",
+   "actual": "3",
+   "event_type": "correct",
+   "rt_ms": 1700
+  },
+  {
+   "idx": 21,
+   "is_practice": false,
+   "valid": true,
+   "expected": "4",
+   "actual": "4",
+   "event_type": "correct",
+   "rt_ms": 1710
+  },
+  {
+   "idx": 22,
+   "is_practice": false,
+   "valid": true,
+   "expected": "5",
+   "actual": "5",
+   "event_type": "correct",
+   "rt_ms": 1720
+  },
+  {
+   "idx": 23,
+   "is_practice": false,
+   "valid": true,
+   "expected": "6",
+   "actual": "6",
+   "event_type": "correct",
+   "rt_ms": 1730
+  },
+  {
+   "idx": 24,
+   "is_practice": false,
+   "valid": true,
+   "expected": "7",
+   "actual": "7",
+   "event_type": "correct",
+   "rt_ms": 1740
+  },
+  {
+   "idx": 25,
+   "is_practice": false,
+   "valid": true,
+   "expected": "8",
+   "actual": "8",
+   "event_type": "correct",
+   "rt_ms": 1750
+  },
+  {
+   "idx": 26,
+   "is_practice": false,
+   "valid": true,
+   "expected": "9",
+   "actual": "9",
+   "event_type": "correct",
+   "rt_ms": 1760
+  },
+  {
+   "idx": 27,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "1",
+   "event_type": "correct",
+   "rt_ms": 1770
+  },
+  {
+   "idx": 28,
+   "is_practice": false,
+   "valid": true,
+   "expected": "2",
+   "actual": "2",
+   "event_type": "correct",
+   "rt_ms": 1780
+  },
+  {
+   "idx": 29,
+   "is_practice": false,
+   "valid": true,
+   "expected": "3",
+   "actual": "3",
+   "event_type": "correct",
+   "rt_ms": 1790
+  },
+  {
+   "idx": 30,
+   "is_practice": false,
+   "valid": true,
+   "expected": "4",
+   "actual": "4",
+   "event_type": "correct",
+   "rt_ms": 1800
+  },
+  {
+   "idx": 31,
+   "is_practice": false,
+   "valid": true,
+   "expected": "5",
+   "actual": "5",
+   "event_type": "correct",
+   "rt_ms": 1810
+  },
+  {
+   "idx": 32,
+   "is_practice": false,
+   "valid": true,
+   "expected": "6",
+   "actual": "6",
+   "event_type": "correct",
+   "rt_ms": 1820
+  },
+  {
+   "idx": 33,
+   "is_practice": false,
+   "valid": true,
+   "expected": "7",
+   "actual": "7",
+   "event_type": "correct",
+   "rt_ms": 1830
+  },
+  {
+   "idx": 34,
+   "is_practice": false,
+   "valid": true,
+   "expected": "8",
+   "actual": "8",
+   "event_type": "correct",
+   "rt_ms": 1840
+  },
+  {
+   "idx": 35,
+   "is_practice": false,
+   "valid": true,
+   "expected": "9",
+   "actual": "9",
+   "event_type": "correct",
+   "rt_ms": 1850
+  },
+  {
+   "idx": 36,
+   "is_practice": false,
+   "valid": true,
+   "expected": "1",
+   "actual": "1",
+   "event_type": "correct",
+   "rt_ms": 1860
+  },
+  {
+   "idx": 37,
+   "is_practice": false,
+   "valid": true,
+   "expected": "2",
+   "actual": "2",
+   "event_type": "correct",
+   "rt_ms": 1870
+  },
+  {
+   "idx": 38,
+   "is_practice": false,
+   "valid": true,
+   "expected": "3",
+   "actual": "3",
+   "event_type": "correct",
+   "rt_ms": 1880
+  },
+  {
+   "idx": 39,
+   "is_practice": false,
+   "valid": true,
+   "expected": "4",
+   "actual": "4",
+   "event_type": "correct",
+   "rt_ms": 1890
+  },
+  {
+   "idx": 40,
+   "is_practice": false,
+   "valid": true,
+   "expected": "3",
+   "actual": "4",
+   "event_type": "error",
+   "rt_ms": 1800
+  },
+  {
+   "idx": 41,
+   "is_practice": false,
+   "valid": true,
+   "expected": "3",
+   "actual": "4",
+   "event_type": "error",
+   "rt_ms": 1800
+  },
+  {
+   "idx": 42,
+   "is_practice": false,
+   "valid": true,
+   "expected": "3",
+   "actual": "4",
+   "event_type": "error",
+   "rt_ms": 1800
+  },
+  {
+   "idx": 43,
+   "is_practice": false,
+   "valid": true,
+   "expected": "3",
+   "actual": "4",
+   "event_type": "error",
+   "rt_ms": 1800
+  },
+  {
+   "idx": 44,
+   "is_practice": false,
+   "valid": true,
+   "expected": "3",
+   "actual": "4",
+   "event_type": "error",
+   "rt_ms": 1800
+  }
+ ],
+ "expected": {
+  "metrics": {
+   "dsst_correct": 40,
+   "dsst_errors": 5,
+   "dsst_attempts": 45,
+   "dsst_throughput_per_min": 26.666666666666668,
+   "dsst_accuracy": 0.8888888888888888,
+   "dsst_median_rt_correct_ms": 1695.0
+  },
+  "quality": "ok",
+  "status": "complete",
+  "n_trials": 45
+ }
+}

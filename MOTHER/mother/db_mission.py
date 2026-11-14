@@ -15,7 +15,9 @@ from .models import Astronaut, Measurement, Mission
 
 HABITAT_ID = "hab-1"
 SPACE_WEATHER_ID = "space_weather"
-DB_TO_MOTHER = {"body_mass": "body_mass_kg", "vo2max": "vo2max_ml_kg_min", "strength_knee_extension": "strength_index"}
+DB_TO_MOTHER = {"body_mass": "body_mass_kg", "vo2max": "vo2max_ml_kg_min", "strength_knee_extension": "strength_index",
+                # PVT median RT (preflight value or the in-app cognitive tests) feeds derive.py's reaction_time_pct_change
+                "pvt_reaction_ms": "reaction_time_ms", "pvt_median_rt_ms": "reaction_time_ms"}
 PREFLIGHT = ["body_mass_kg", "vo2max_ml_kg_min", "strength_index", "reaction_time_ms"]
 
 
