@@ -1,12 +1,14 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Bounds, Center, Html, OrbitControls, useGLTF } from '@react-three/drei';
-import { MOUSE } from 'three';
+import { MOUSE, Vector3 } from 'three';
+import landmarks from '../models/anny_astronaut_landmarks.json';
 
 const MODEL_PATH = '/models/anny_astronaut_bone_segmented.glb';
 
-function AstronautModel() {
+function AstronautModel({ onModelFrame }) {
   const { scene } = useGLTF(MODEL_PATH);
+  const modelGroup = useRef();
   const hoveredObject = useRef(null);
   const originalColors = useRef(new Map());
 
@@ -55,8 +57,36 @@ function AstronautModel() {
     setHoveredObject(null);
   };
 
+  useFrame(({ camera }) => {
+    if (!onModelFrame || !modelGroup.current) return;
+    const project = name => {
+      const point = new Vector3(...landmarks.points[name].position);
+      modelGroup.current.localToWorld(point);
+      point.project(camera);
+      return { x: (point.x + 1) / 2, y: (1 - point.y) / 2 };
+    };
+    const projected = Object.entries(landmarks.points).map(([name, landmark]) => ({
+      name,
+      region: landmark.region,
+      ...project(name),
+    }));
+    const edge = (regions, side) => projected
+      .filter(point => regions.some(region => point.region === region))
+      .sort((a, b) => side === 'min' ? a.x - b.x : b.x - a.x)[0];
+    const leftArm = edge(['left_forearm', 'left_hand'], 'min');
+    const rightArm = edge(['right_forearm', 'right_hand'], 'max');
+    const leftLeg = edge(['left_lower_leg', 'left_foot'], 'min');
+    const rightLeg = edge(['right_lower_leg', 'right_foot'], 'max');
+    onModelFrame({
+      leftArm: rightArm,
+      rightArm: leftArm,
+      leftLeg: rightLeg,
+      rightLeg: leftLeg,
+    });
+  });
+
   return (
-    <group rotation={[-Math.PI / 2, 0, 0]}>
+    <group ref={modelGroup} rotation={[-Math.PI / 2, 0, 0]}>
       <primitive
         object={scene}
         onPointerOver={handlePointerOver}
@@ -101,22 +131,22 @@ class ModelErrorBoundary extends React.Component {
   }
 }
 
-export default function AstronautViewer() {
+export default function AstronautViewer({ frontView = false, onModelFrame }) {
   return (
-    <div className="astronaut-viewer" aria-label="Interactive 3D astronaut model">
+    <div className={`astronaut-viewer${frontView ? ' astronaut-viewer-front' : ''}`} aria-label="Front-facing astronaut health model">
       <ModelErrorBoundary>
-        <Canvas camera={{ position: [0, 0, 4], fov: 35 }} dpr={[1, 2]}>
+        <Canvas camera={{ position: frontView ? [0, 0, 5] : [0, 0, 4], fov: frontView ? 28 : 35 }} dpr={[1, 2]}>
           <ambientLight intensity={1.4} />
           <hemisphereLight args={['#ffffff', '#b8c9c7', 1.8]} />
           <CameraLight />
           <Suspense fallback={<LoadingState />}>
-            <Bounds fit clip margin={1.2}>
+            <Bounds fit clip margin={frontView ? 0.9 : 1.2}>
               <Center>
-                <AstronautModel />
+                <AstronautModel onModelFrame={onModelFrame} />
               </Center>
             </Bounds>
           </Suspense>
-          <OrbitControls
+          {!frontView && <OrbitControls
             enablePan
             zoomToCursor
             mouseButtons={{
@@ -126,10 +156,10 @@ export default function AstronautViewer() {
             }}
             minDistance={1}
             maxDistance={12}
-          />
+          />}
         </Canvas>
       </ModelErrorBoundary>
-      <span className="model-viewer-hint">L-DRAG ROTATE · R-DRAG PAN · SCROLL ZOOM · HOVER TO HIGHLIGHT</span>
+      {!frontView && <span className="model-viewer-hint">L-DRAG ROTATE · R-DRAG PAN · SCROLL ZOOM · HOVER TO HIGHLIGHT</span>}
     </div>
   );
 }
