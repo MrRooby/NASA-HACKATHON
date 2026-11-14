@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 import AstronautViewer from './AstronautViewer.jsx';
+import LiveDashboard from './LiveDashboard.jsx';
+import useMother from './useMother.js';
 import thresholdConfig from '../../config/thresholds.json';
 
 const initialBiometrics = [
@@ -121,6 +123,17 @@ function Sparkline({ values, status }) {
   );
 }
 
+/** Connection state of the MOTHER backend; offline means the built-in demo data is shown. */
+function ConnectionBadge({ mode, error }) {
+  if (mode === 'online') return <span className="conn-badge conn-online"><span className="status-dot" /> LIVE · MOTHER</span>;
+  if (mode === 'connecting') return <span className="conn-badge conn-connecting"><span className="status-dot" /> CONNECTING…</span>;
+  return (
+    <span className="conn-badge conn-offline" title={[error?.message, error?.hint].filter(Boolean).join(' · ') || 'MOTHER unreachable'}>
+      <span className="status-dot" /> OFFLINE · demo data
+    </span>
+  );
+}
+
 function StatusTag({ status }) {
   return <span className={`stag stag-${status}`}>[{STATUS[status]}]</span>;
 }
@@ -134,6 +147,7 @@ function App() {
   const [reportSent, setReportSent] = useState(false);
 
   const now = useClock();
+  const mother = useMother();
 
   const cauCount = biometrics.filter(b => b.status !== 'ok').length;
   const protocols = buildProtocols(biometrics);
@@ -162,6 +176,18 @@ function App() {
       })),
       disclaimer: 'Demonstration data only. Not for clinical use.',
     };
+    if (mother.online && mother.report) {
+      const { subject, as_of, overall_status, top_message, organs, devices } = mother.report;
+      report.mother = {
+        subject: subject?.code,
+        data_kind: subject?.data_kind,
+        as_of,
+        overall_status,
+        top_message,
+        organs: (organs || []).map(({ organ, status, headline, action }) => ({ organ, status, headline, action })),
+        devices: (devices || []).filter(device => device.status !== 'ok'),
+      };
+    }
     window.localStorage.setItem('orbit-health-report', JSON.stringify(report));
     setReportSent(true);
     setToast('[QUEUED] HEALTH SUMMARY SAVED LOCALLY // ASYNC TRANSMISSION PENDING');
@@ -188,8 +214,8 @@ function App() {
 
         <div className="topbar-fields">
           <button className="topbar-tab topbar-tab-active" onClick={() => setActivePage('dashboard')}>Base</button>
-          <button className="topbar-tab">John Doe</button>
-          <span className="topbar-status"><span className="status-dot" /> Online</span>
+          <button className="topbar-tab">{mother.online && mother.subject ? mother.subject.label : 'John Doe'}</button>
+          <span className="topbar-status"><ConnectionBadge mode={mother.mode} error={mother.error} /></span>
         </div>
 
         <button className="topbar-logout" onClick={() => setAuthenticated(false)}>SIGN OUT</button>
@@ -205,6 +231,7 @@ function App() {
               onCheckIn={() => setActivePage('checkin')}
               onReport={queueReport}
               reportSent={reportSent}
+              mother={mother}
             />
           )}
           {activePage === 'checkin' && <CheckIn onSubmit={submitCheckIn} onUpdate={updateBio} biometrics={biometrics} />}
@@ -216,7 +243,7 @@ function App() {
       </div>
 
       <footer className="sysbar">
-        <span>Demo data · calibrated to NASA research</span>
+        <span>{mother.online ? 'Live data · MOTHER (synthetic records are labelled)' : 'Demo data · calibrated to NASA research'}</span>
         <span>Awernasa · NASA Space Apps 2026</span>
         <span>For demonstration only</span>
       </footer>
@@ -436,7 +463,7 @@ function ConnectorOverlay({ stageRef, modelRef, anchors }) {
   );
 }
 
-function HealthOverview({ biometrics }) {
+function HealthOverview({ biometrics, mother }) {
   const byId = Object.fromEntries(biometrics.map(item => [item.id, item]));
   const stageRef = useRef(null);
   const modelRef = useRef(null);
@@ -461,7 +488,11 @@ function HealthOverview({ biometrics }) {
           <div className="eyebrow">ISS EXPEDITION 74 · FLIGHT DAY 142</div>
           <h1 className="page-h1">Good morning, John Doe</h1>
           <p>Here is your health status for today. Sensors are connected and your latest check-in is saved locally.</p>
-          <div className="hero-meta"><span className="status-dot" /> All systems connected <span>·</span> Last update 14:32 UTC</div>
+          <div className="hero-meta">
+            {mother && mother.mode !== 'online'
+              ? <><ConnectionBadge mode={mother.mode} error={mother.error} /><span>·</span> Built-in demo profile{mother.mode === 'offline' && mother.error?.message ? <><span>·</span> {mother.error.message}</> : null}</>
+              : <><span className="status-dot" /> All systems connected <span>·</span> Last update 14:32 UTC</>}
+          </div>
         </div>
         <div className="hero-date"><span>MONDAY</span><strong>26</strong><small>JUL 2026</small></div>
       </section>
@@ -525,11 +556,13 @@ function SensorCard({ card, status, statusText, byId }) {
   );
 }
 
-function Dashboard({ biometrics, cauCount, mission, onCheckIn, onReport, reportSent }) {
+function Dashboard({ biometrics, cauCount, mission, onCheckIn, onReport, reportSent, mother }) {
   const alerts = biometrics.filter(b => b.status !== 'ok');
   return (
     <div className="page-grid">
-      <HealthOverview biometrics={biometrics} />
+      {mother?.online
+        ? <LiveDashboard mother={mother} />
+        : <HealthOverview biometrics={biometrics} mother={mother} />}
 
       <div className="overview-actions">
         <button className="btn-primary" onClick={onCheckIn}>Start daily check-in</button>

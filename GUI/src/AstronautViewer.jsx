@@ -3,48 +3,41 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Bounds, Center, Html, OrbitControls, useGLTF } from '@react-three/drei';
 import { MOUSE, Vector3 } from 'three';
 import landmarks from '../models/anny_astronaut_landmarks.json';
+import { applySegmentTint, baseColors, clearSegmentTint, setColors, setHighlight } from './segmentTint.js';
+import { segmentForMesh } from './organSegments.js';
 
 const MODEL_PATH = '/models/anny_astronaut_bone_segmented.glb';
 
-function AstronautModel({ onModelFrame }) {
+/**
+ * segmentStatus: optional { anatomicalSegment: 'ok' | 'caution' | 'alert' | 'no_data' } (see organSegments.js;
+ *   the GLB's swapped chest/abdomen mesh names are translated there).
+ * Without it the model keeps its own colours (offline demo).
+ */
+function AstronautModel({ onModelFrame, segmentStatus, onSegmentHover, onSegmentClick }) {
   const { scene } = useGLTF(MODEL_PATH);
   const modelGroup = useRef();
   const hoveredObject = useRef(null);
-  const originalColors = useRef(new Map());
+  const statusRef = useRef(segmentStatus);
+  statusRef.current = segmentStatus;
 
+  // Status tint; re-applied whenever the statuses change. The hovered mesh keeps its highlight.
   useEffect(() => {
-    scene.traverse((object) => {
-      if (!object.isMesh || !object.material) return;
-      const materials = Array.isArray(object.material) ? object.material : [object.material];
-      originalColors.current.set(object, materials.map(material => material.color?.clone()));
-    });
+    applySegmentTint(scene, segmentStatus);
+    if (hoveredObject.current) setHighlight(hoveredObject.current);
+  }, [scene, segmentStatus]);
 
-    return () => {
-      originalColors.current.clear();
-      hoveredObject.current = null;
-    };
+  useEffect(() => () => {
+    clearSegmentTint(scene);
+    hoveredObject.current = null;
   }, [scene]);
 
   const setHoveredObject = (object) => {
     if (hoveredObject.current === object) return;
-    if (hoveredObject.current) restoreColor(hoveredObject.current);
+    // Back to the status tint (or the original colour when there is no status), not to the raw material.
+    if (hoveredObject.current) setColors(hoveredObject.current, baseColors(hoveredObject.current, statusRef.current));
     hoveredObject.current = object;
-    if (object) highlight(object);
-  };
-
-  const restoreColor = (object) => {
-    const materials = Array.isArray(object.material) ? object.material : [object.material];
-    const colors = originalColors.current.get(object) || [];
-    materials.forEach((material, index) => {
-      if (material.color && colors[index]) material.color.copy(colors[index]);
-    });
-  };
-
-  const highlight = (object) => {
-    const materials = Array.isArray(object.material) ? object.material : [object.material];
-    materials.forEach((material) => {
-      if (material.color) material.color.set('#ffd166');
-    });
+    if (object) setHighlight(object);
+    onSegmentHover?.(object ? segmentForMesh(object.name) : null);
   };
 
   const handlePointerOver = (event) => {
@@ -55,6 +48,11 @@ function AstronautModel({ onModelFrame }) {
   const clearHover = (event) => {
     event?.stopPropagation();
     setHoveredObject(null);
+  };
+
+  const handleClick = (event) => {
+    event.stopPropagation();
+    onSegmentClick?.(segmentForMesh(event.object.name));
   };
 
   useFrame(({ camera }) => {
@@ -91,6 +89,7 @@ function AstronautModel({ onModelFrame }) {
         object={scene}
         onPointerOver={handlePointerOver}
         onPointerOut={clearHover}
+        onClick={handleClick}
       />
     </group>
   );
@@ -131,7 +130,7 @@ class ModelErrorBoundary extends React.Component {
   }
 }
 
-export default function AstronautViewer({ frontView = false, onModelFrame }) {
+export default function AstronautViewer({ frontView = false, onModelFrame, segmentStatus, onSegmentHover, onSegmentClick }) {
   return (
     <div className={`astronaut-viewer${frontView ? ' astronaut-viewer-front' : ''}`} aria-label="Front-facing astronaut health model">
       <ModelErrorBoundary>
@@ -142,7 +141,12 @@ export default function AstronautViewer({ frontView = false, onModelFrame }) {
           <Suspense fallback={<LoadingState />}>
             <Bounds fit clip margin={frontView ? 0.9 : 1.2}>
               <Center>
-                <AstronautModel onModelFrame={onModelFrame} />
+                <AstronautModel
+                  onModelFrame={onModelFrame}
+                  segmentStatus={segmentStatus}
+                  onSegmentHover={onSegmentHover}
+                  onSegmentClick={onSegmentClick}
+                />
               </Center>
             </Bounds>
           </Suspense>
