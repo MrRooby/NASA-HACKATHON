@@ -1,0 +1,29 @@
+/* Daily check-in form (src/checkin/CheckIn.jsx). Colours come from the theme variables only. */
+.intake-form { display: grid; gap: 12px; }
+.intake-head { margin: 0; }
+.intake-section { display: grid; gap: 6px; min-width: 0; }
+.intake-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--border);
+}
+.intake-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px 24px; }
+.intake-field { display: grid; gap: 3px; align-content: start; min-width: 0; }
+.intake-label { color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; }
+.intake-input-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
+.intake-input { width: 9ch; text-align: right; }
+.intake-select { max-width: 100%; }
+.intake-unit { min-width: 5ch; }
+.intake-unit, .intake-hint, .intake-autosave { color: var(--dim); font-size: 12px; }
+.intake-caution .intake-input { border-color: var(--caution); color: var(--caution); }
+.intake-alert .intake-input { border-color: var(--alert); color: var(--alert); }
+.intake-guidance { flex: 1 0 100%; margin: 0; padding-left: 8px; border-left: 1px solid var(--caution); color: var(--fg); font-size: 12px; }
+.intake-alert .intake-guidance { border-left-color: var(--alert); }
+.intake-action { color: var(--dim); }
+.mood-row { display: flex; gap: 4px; }
+.intake-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.intake-actions { display: flex; gap: 8px; }
