@@ -1,3 +1,7 @@
 CLAUDE.md
 CLAUDE.local.md
 .claude/
+
+# Hasła i lokalne dane bazy
+.env
+**/.env

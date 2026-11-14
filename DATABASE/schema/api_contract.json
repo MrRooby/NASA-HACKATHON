@@ -1,0 +1,2692 @@
+{
+  "contract": "astro_api",
+  "version": "0.2",
+  "date": "2026-11-14",
+  "status": "draft: SQL nieuruchomiony jeszcze na serwerze; typy logiczne (JSON), nie typy SQL",
+  "changelog": [
+    {
+      "version": "0.2",
+      "date": "2026-11-14",
+      "changes": [
+        "Nowy widok classifications (klasy T-score/Z-score wg WHO/ISCD).",
+        "latest: status = najgorszy z progu bezwzględnego, progu względem baseline'u i normy laboratoryjnej; status_basis ma nową wartość 'baseline_threshold'; nowe kolumny time_order, baseline_value, pct_of_baseline; escalate obejmuje wartości krytyczne.",
+        "latest: poprawione wybieranie ostatniego pomiaru dla bed restu (sortowanie po time_order zamiast mission_day).",
+        "change_from_baseline: metryka zależna od progu (pct_of_baseline albo pct_change); nowe kolumny pct_change, baseline_metric, baseline_action, time_order.",
+        "daily_series: średnia z 7 dni kalendarzowych liczona osobno dla każdej misji; nowa kolumna n_days_7d.",
+        "observations, observations_mean: nowe kolumny time_order, ref_critical_low, ref_critical_high.",
+        "reference_ranges: nowe kolumny low_inclusive, high_inclusive.",
+        "Wszystkie GROUP BY wymieniają komplet kolumn (zgodność z ONLY_FULL_GROUP_BY).",
+        "Użytkownicy bazy tworzeni skryptem 003_users.sh z haseł w .env (zamiast 003_users.sql z hasłami w repo)."
+      ]
+    },
+    {
+      "version": "0.1",
+      "date": "2026-11-14",
+      "changes": [
+        "Pierwsza wersja: 18 widoków."
+      ]
+    }
+  ],
+  "database": "astro_api",
+  "read_user": "astro_reader",
+  "type_mapping": {
+    "string": "VARCHAR/ENUM/TEXT → JSON string",
+    "integer": "INT/BIGINT → JSON number (całkowita)",
+    "number": "DOUBLE → JSON number",
+    "boolean": "TINYINT(1) 0/1 → JSON true/false",
+    "date": "DATE → 'YYYY-MM-DD'",
+    "datetime": "DATETIME(3) UTC → ISO 8601 'YYYY-MM-DDTHH:MM:SS.sssZ'",
+    "enum": "ENUM → JSON string z listy values"
+  },
+  "views": [
+    {
+      "name": "sources",
+      "group": "Katalogi",
+      "grain": "jedno źródło danych lub literatury",
+      "key": [
+        "source_id"
+      ],
+      "filters": [
+        "data_kind",
+        "access_status"
+      ],
+      "endpoint": "GET /api/sources, GET /api/sources/{source_id}",
+      "use": "Lista źródeł i ile danych każde wnosi; strona „Data sources”.",
+      "columns": [
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Id źródła (slug), np. osdr_osd575"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa źródła"
+        },
+        {
+          "name": "publisher",
+          "type": "string",
+          "nullable": true,
+          "description": "Wydawca (NASA OSDR, NASA LSDA, WHO…)"
+        },
+        {
+          "name": "data_kind",
+          "type": "enum",
+          "nullable": false,
+          "description": "Rodzaj danych — UI musi pokazać etykietę",
+          "values": [
+            "real_spaceflight",
+            "real_analog",
+            "real_environment",
+            "literature_aggregate",
+            "reference_literature",
+            "synthetic"
+          ]
+        },
+        {
+          "name": "access_status",
+          "type": "enum",
+          "nullable": false,
+          "description": "Dostępność plików",
+          "values": [
+            "files_public",
+            "metadata_public",
+            "request_required",
+            "unknown",
+            "generated"
+          ]
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "nullable": true,
+          "description": "Link do źródła"
+        },
+        {
+          "name": "doi",
+          "type": "string",
+          "nullable": true,
+          "description": "DOI"
+        },
+        {
+          "name": "license",
+          "type": "string",
+          "nullable": true,
+          "description": "Licencja"
+        },
+        {
+          "name": "retrieved_at",
+          "type": "date",
+          "nullable": true,
+          "description": "Data pobrania"
+        },
+        {
+          "name": "n_subjects",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba osób z tego źródła"
+        },
+        {
+          "name": "n_missions",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba misji/kampanii"
+        },
+        {
+          "name": "n_indicators",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba różnych wskaźników w pomiarach"
+        },
+        {
+          "name": "n_observations",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba pomiarów osób"
+        },
+        {
+          "name": "n_cohorts",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba grup z publikacji (dane zbiorcze)"
+        },
+        {
+          "name": "n_env_observations",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba pomiarów środowiska"
+        },
+        {
+          "name": "last_import_at",
+          "type": "datetime",
+          "nullable": true,
+          "description": "Koniec ostatniego udanego importu"
+        }
+      ]
+    },
+    {
+      "name": "missions",
+      "group": "Katalogi",
+      "grain": "jedna misja / kampania",
+      "key": [
+        "mission_code"
+      ],
+      "filters": [
+        "environment",
+        "is_synthetic",
+        "source_id"
+      ],
+      "endpoint": "GET /api/missions",
+      "use": "Wybór kontekstu misji; przełącznik środowisk.",
+      "columns": [
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Kod misji, np. I4, MR035G-C3A, SYN-ISS-180"
+        },
+        {
+          "name": "mission_name",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa"
+        },
+        {
+          "name": "environment",
+          "type": "enum",
+          "nullable": false,
+          "description": "Środowisko",
+          "values": [
+            "earth",
+            "iss",
+            "cislunar",
+            "lunar_surface",
+            "mars_transit",
+            "mars_surface",
+            "leo_free_flyer",
+            "analog_hdt"
+          ]
+        },
+        {
+          "name": "environment_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa środowiska"
+        },
+        {
+          "name": "is_analog",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Analog naziemny (bed rest)"
+        },
+        {
+          "name": "start_date",
+          "type": "date",
+          "nullable": true,
+          "description": "Start / początek (tylko gdy publicznie znany)"
+        },
+        {
+          "name": "end_date",
+          "type": "date",
+          "nullable": true,
+          "description": "Lądowanie / koniec"
+        },
+        {
+          "name": "duration_days",
+          "type": "integer",
+          "nullable": true,
+          "description": "Długość w dniach"
+        },
+        {
+          "name": "is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Misja symulacyjna"
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło"
+        },
+        {
+          "name": "n_subjects",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba uczestników"
+        }
+      ]
+    },
+    {
+      "name": "subjects",
+      "group": "Katalogi",
+      "grain": "jedna osoba w jednej misji",
+      "key": [
+        "subject_code",
+        "mission_code"
+      ],
+      "filters": [
+        "source_id",
+        "mission_code",
+        "sex",
+        "age_band",
+        "is_synthetic",
+        "data_kind"
+      ],
+      "endpoint": "GET /api/subjects?source_id=&mission_code=&is_synthetic=, GET /api/subjects/{subject_code}",
+      "use": "Lista osób; profil osoby; przełącznik astronauty.",
+      "columns": [
+        {
+          "name": "subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Pseudonim osoby, np. I4-C001, SYN-01"
+        },
+        {
+          "name": "source_subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Kod w pliku źródłowym"
+        },
+        {
+          "name": "sex",
+          "type": "enum",
+          "nullable": false,
+          "description": "Płeć (U = nieznana)",
+          "values": [
+            "F",
+            "M",
+            "U"
+          ]
+        },
+        {
+          "name": "age_band",
+          "type": "string",
+          "nullable": true,
+          "description": "Przedział wieku, np. 30-39; NULL = nieznany"
+        },
+        {
+          "name": "is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Osoba symulacyjna"
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło"
+        },
+        {
+          "name": "source_title",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa źródła"
+        },
+        {
+          "name": "data_kind",
+          "type": "enum",
+          "nullable": false,
+          "description": "Rodzaj danych",
+          "values": [
+            "real_spaceflight",
+            "real_analog",
+            "real_environment",
+            "literature_aggregate",
+            "reference_literature",
+            "synthetic"
+          ]
+        },
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Misja"
+        },
+        {
+          "name": "mission_name",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa misji"
+        },
+        {
+          "name": "environment",
+          "type": "enum",
+          "nullable": false,
+          "description": "Środowisko misji",
+          "values": [
+            "earth",
+            "iss",
+            "cislunar",
+            "lunar_surface",
+            "mars_transit",
+            "mars_surface",
+            "leo_free_flyer",
+            "analog_hdt"
+          ]
+        },
+        {
+          "name": "role",
+          "type": "enum",
+          "nullable": false,
+          "description": "Rola w misji",
+          "values": [
+            "crew",
+            "bed_rest_subject",
+            "control",
+            "synthetic_crew"
+          ]
+        },
+        {
+          "name": "group_label",
+          "type": "string",
+          "nullable": true,
+          "description": "Grupa badania (np. countermeasure)"
+        },
+        {
+          "name": "n_observations",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba pomiarów"
+        },
+        {
+          "name": "n_indicators",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba wskaźników"
+        },
+        {
+          "name": "n_timepoints",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba punktów czasowych"
+        },
+        {
+          "name": "categories",
+          "type": "string",
+          "nullable": true,
+          "description": "Kategorie danych, lista rozdzielona ', '"
+        }
+      ]
+    },
+    {
+      "name": "indicators",
+      "group": "Katalogi",
+      "grain": "jeden wskaźnik",
+      "key": [
+        "indicator_code"
+      ],
+      "filters": [
+        "category",
+        "body_system",
+        "body_region"
+      ],
+      "endpoint": "GET /api/indicators, GET /api/indicators/{indicator_code}",
+      "use": "Słownik wskaźników, legenda, opisy edukacyjne, mapowanie na sylwetkę.",
+      "columns": [
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Kod wskaźnika"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa (EN)"
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "nullable": false,
+          "description": "Kategoria",
+          "values": [
+            "vitals",
+            "lab_cbc",
+            "lab_cmp",
+            "lab_cardio",
+            "lab_cytokine",
+            "bone_dxa",
+            "body_composition",
+            "fitness",
+            "sleep",
+            "mood",
+            "nutrition",
+            "environment",
+            "radiation"
+          ]
+        },
+        {
+          "name": "body_system",
+          "type": "string",
+          "nullable": true,
+          "description": "Układ ciała"
+        },
+        {
+          "name": "body_region",
+          "type": "string",
+          "nullable": true,
+          "description": "Region klikalnej sylwetki (heart, bones, head…)"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka kanoniczna"
+        },
+        {
+          "name": "value_type",
+          "type": "enum",
+          "nullable": false,
+          "description": "Typ wartości",
+          "values": [
+            "numeric",
+            "ordinal",
+            "text"
+          ]
+        },
+        {
+          "name": "scope",
+          "type": "enum",
+          "nullable": false,
+          "description": "Dotyczy osoby czy środowiska",
+          "values": [
+            "subject",
+            "environment"
+          ]
+        },
+        {
+          "name": "threshold_id",
+          "type": "string",
+          "nullable": true,
+          "description": "Id progów bezwzględnych w config/thresholds.json"
+        },
+        {
+          "name": "baseline_threshold_id",
+          "type": "string",
+          "nullable": true,
+          "description": "Id progów % baseline'u w config/thresholds.json"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "nullable": true,
+          "description": "Opis"
+        },
+        {
+          "name": "n_subjects",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba osób z pomiarami"
+        },
+        {
+          "name": "n_observations",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba pomiarów"
+        },
+        {
+          "name": "sources",
+          "type": "string",
+          "nullable": true,
+          "description": "Źródła, lista rozdzielona ', '"
+        }
+      ]
+    },
+    {
+      "name": "source_data_map",
+      "group": "Mapy pokrycia",
+      "grain": "źródło × wskaźnik",
+      "key": [
+        "source_id",
+        "indicator_code"
+      ],
+      "filters": [
+        "source_id",
+        "category"
+      ],
+      "endpoint": "GET /api/sources/{source_id}/indicators",
+      "use": "Co dokładnie zawiera źródło.",
+      "columns": [
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło"
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "indicator_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa wskaźnika"
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "nullable": false,
+          "description": "Kategoria",
+          "values": [
+            "vitals",
+            "lab_cbc",
+            "lab_cmp",
+            "lab_cardio",
+            "lab_cytokine",
+            "bone_dxa",
+            "body_composition",
+            "fitness",
+            "sleep",
+            "mood",
+            "nutrition",
+            "environment",
+            "radiation"
+          ]
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "n_subjects",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba osób"
+        },
+        {
+          "name": "n_observations",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba pomiarów"
+        },
+        {
+          "name": "n_timepoints",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba różnych punktów czasowych"
+        },
+        {
+          "name": "timepoints",
+          "type": "string",
+          "nullable": false,
+          "description": "Punkty czasowe (alfabetycznie), lista ', '; może być obcięta (group_concat_max_len)"
+        },
+        {
+          "name": "min_value",
+          "type": "number",
+          "nullable": true,
+          "description": "Najmniejsza wartość"
+        },
+        {
+          "name": "max_value",
+          "type": "number",
+          "nullable": true,
+          "description": "Największa wartość"
+        }
+      ]
+    },
+    {
+      "name": "subject_data_map",
+      "group": "Mapy pokrycia",
+      "grain": "osoba × misja × źródło × wskaźnik",
+      "key": [
+        "subject_code",
+        "mission_code",
+        "source_id",
+        "indicator_code"
+      ],
+      "filters": [
+        "subject_code",
+        "mission_code",
+        "category"
+      ],
+      "endpoint": "GET /api/subjects/{subject_code}/indicators",
+      "use": "Jakie dane ma osoba i kiedy były mierzone.",
+      "columns": [
+        {
+          "name": "subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Osoba"
+        },
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Misja"
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło"
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "indicator_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa wskaźnika"
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "nullable": false,
+          "description": "Kategoria",
+          "values": [
+            "vitals",
+            "lab_cbc",
+            "lab_cmp",
+            "lab_cardio",
+            "lab_cytokine",
+            "bone_dxa",
+            "body_composition",
+            "fitness",
+            "sleep",
+            "mood",
+            "nutrition",
+            "environment",
+            "radiation"
+          ]
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "n_values",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba wartości (z powtórzeniami)"
+        },
+        {
+          "name": "n_timepoints",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba punktów czasowych"
+        },
+        {
+          "name": "timepoints",
+          "type": "string",
+          "nullable": false,
+          "description": "Punkty czasowe chronologicznie, lista ', '"
+        },
+        {
+          "name": "is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Dane symulacyjne"
+        }
+      ]
+    },
+    {
+      "name": "reference_ranges",
+      "group": "Dane referencyjne",
+      "grain": "jedna norma / klasa",
+      "key": [
+        "indicator_code",
+        "range_kind",
+        "class_label",
+        "sex",
+        "age_min",
+        "age_max",
+        "population",
+        "environment",
+        "source_id"
+      ],
+      "filters": [
+        "indicator_code",
+        "sex",
+        "range_kind",
+        "population"
+      ],
+      "endpoint": "GET /api/reference-ranges?indicator_code=&sex=&age=",
+      "use": "Tabela norm wg płci, wieku, populacji, środowiska; audyt; klasyfikacje (T-score).",
+      "columns": [
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "indicator_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa"
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "nullable": false,
+          "description": "Kategoria",
+          "values": [
+            "vitals",
+            "lab_cbc",
+            "lab_cmp",
+            "lab_cardio",
+            "lab_cytokine",
+            "bone_dxa",
+            "body_composition",
+            "fitness",
+            "sleep",
+            "mood",
+            "nutrition",
+            "environment",
+            "radiation"
+          ]
+        },
+        {
+          "name": "range_kind",
+          "type": "enum",
+          "nullable": false,
+          "description": "Zakres normy czy klasyfikacja",
+          "values": [
+            "reference_interval",
+            "classification"
+          ]
+        },
+        {
+          "name": "class_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa klasy ('' dla zakresu normy)"
+        },
+        {
+          "name": "sex",
+          "type": "enum",
+          "nullable": false,
+          "description": "Płeć, której dotyczy norma",
+          "values": [
+            "F",
+            "M",
+            "any"
+          ]
+        },
+        {
+          "name": "age_min",
+          "type": "integer",
+          "nullable": false,
+          "description": "Wiek od (włącznie)"
+        },
+        {
+          "name": "age_max",
+          "type": "integer",
+          "nullable": false,
+          "description": "Wiek do (włącznie)"
+        },
+        {
+          "name": "population",
+          "type": "string",
+          "nullable": false,
+          "description": "Populacja (general_adult, postmenopausal…)"
+        },
+        {
+          "name": "environment",
+          "type": "enum",
+          "nullable": true,
+          "description": "Środowisko; NULL = dowolne",
+          "values": [
+            "earth",
+            "iss",
+            "cislunar",
+            "lunar_surface",
+            "mars_transit",
+            "mars_surface",
+            "leo_free_flyer",
+            "analog_hdt"
+          ]
+        },
+        {
+          "name": "low_value",
+          "type": "number",
+          "nullable": true,
+          "description": "Dolna granica"
+        },
+        {
+          "name": "high_value",
+          "type": "number",
+          "nullable": true,
+          "description": "Górna granica"
+        },
+        {
+          "name": "low_inclusive",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Czy dolna granica należy do przedziału"
+        },
+        {
+          "name": "high_inclusive",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Czy górna granica należy do przedziału"
+        },
+        {
+          "name": "critical_low",
+          "type": "number",
+          "nullable": true,
+          "description": "Wartość krytyczna dolna"
+        },
+        {
+          "name": "critical_high",
+          "type": "number",
+          "nullable": true,
+          "description": "Wartość krytyczna górna"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka (= kanoniczna)"
+        },
+        {
+          "name": "condition_note",
+          "type": "string",
+          "nullable": true,
+          "description": "Warunki pomiaru"
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło normy"
+        },
+        {
+          "name": "source_title",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa źródła"
+        },
+        {
+          "name": "basis",
+          "type": "enum",
+          "nullable": false,
+          "description": "Ze źródła czy założenie zespołu",
+          "values": [
+            "source",
+            "team_assumption"
+          ]
+        },
+        {
+          "name": "priority",
+          "type": "integer",
+          "nullable": false,
+          "description": "Priorytet przy remisie"
+        },
+        {
+          "name": "notes",
+          "type": "string",
+          "nullable": true,
+          "description": "Uwagi"
+        }
+      ]
+    },
+    {
+      "name": "reference_match",
+      "group": "Dane referencyjne",
+      "grain": "jeden pomiar → wybrana norma",
+      "key": [
+        "observation_id"
+      ],
+      "filters": [
+        "observation_id"
+      ],
+      "endpoint": "(wewnętrzny; dane są już w widoku observations)",
+      "use": "Która norma została dobrana do pomiaru (płeć, wiek, środowisko).",
+      "columns": [
+        {
+          "name": "observation_id",
+          "type": "integer",
+          "nullable": false,
+          "description": "Id pomiaru"
+        },
+        {
+          "name": "reference_range_id",
+          "type": "integer",
+          "nullable": false,
+          "description": "Id normy"
+        },
+        {
+          "name": "ref_low",
+          "type": "number",
+          "nullable": true,
+          "description": "Dolna granica"
+        },
+        {
+          "name": "ref_high",
+          "type": "number",
+          "nullable": true,
+          "description": "Górna granica"
+        },
+        {
+          "name": "ref_critical_low",
+          "type": "number",
+          "nullable": true,
+          "description": "Krytyczna dolna"
+        },
+        {
+          "name": "ref_critical_high",
+          "type": "number",
+          "nullable": true,
+          "description": "Krytyczna górna"
+        },
+        {
+          "name": "ref_sex",
+          "type": "enum",
+          "nullable": false,
+          "description": "Płeć normy",
+          "values": [
+            "F",
+            "M",
+            "any"
+          ]
+        },
+        {
+          "name": "ref_age_min",
+          "type": "integer",
+          "nullable": false,
+          "description": "Wiek od"
+        },
+        {
+          "name": "ref_age_max",
+          "type": "integer",
+          "nullable": false,
+          "description": "Wiek do"
+        },
+        {
+          "name": "ref_population",
+          "type": "string",
+          "nullable": false,
+          "description": "Populacja"
+        },
+        {
+          "name": "ref_source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło normy"
+        }
+      ]
+    },
+    {
+      "name": "classifications",
+      "group": "Dane referencyjne",
+      "grain": "jeden pomiar × pasująca klasa",
+      "key": [
+        "observation_id",
+        "class_label"
+      ],
+      "filters": [
+        "subject_code",
+        "indicator_code",
+        "class_label"
+      ],
+      "endpoint": "GET /api/subjects/{subject_code}/classifications",
+      "use": "Klasyfikacje pomiarów (np. T-score: normal / osteopenia / osteoporosis wg WHO). Tylko dla osób ze znanym przedziałem wieku.",
+      "columns": [
+        {
+          "name": "observation_id",
+          "type": "integer",
+          "nullable": false,
+          "description": "Id pomiaru"
+        },
+        {
+          "name": "subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Osoba"
+        },
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Misja"
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "phase",
+          "type": "enum",
+          "nullable": false,
+          "description": "Faza",
+          "values": [
+            "pre",
+            "in",
+            "post",
+            "none"
+          ]
+        },
+        {
+          "name": "timepoint_label",
+          "type": "string",
+          "nullable": true,
+          "description": "Etykieta czasu"
+        },
+        {
+          "name": "time_order",
+          "type": "integer",
+          "nullable": true,
+          "description": "Klucz chronologii"
+        },
+        {
+          "name": "replicate",
+          "type": "integer",
+          "nullable": false,
+          "description": "Nr powtórzenia"
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "nullable": false,
+          "description": "Wartość"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "class_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Klasa"
+        },
+        {
+          "name": "population",
+          "type": "string",
+          "nullable": false,
+          "description": "Populacja, dla której klasyfikacja obowiązuje"
+        },
+        {
+          "name": "ref_sex",
+          "type": "enum",
+          "nullable": false,
+          "description": "Płeć",
+          "values": [
+            "F",
+            "M",
+            "any"
+          ]
+        },
+        {
+          "name": "ref_age_min",
+          "type": "integer",
+          "nullable": false,
+          "description": "Wiek od"
+        },
+        {
+          "name": "ref_age_max",
+          "type": "integer",
+          "nullable": false,
+          "description": "Wiek do"
+        },
+        {
+          "name": "ref_source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło klasyfikacji"
+        },
+        {
+          "name": "basis",
+          "type": "enum",
+          "nullable": false,
+          "description": "Ze źródła czy założenie zespołu",
+          "values": [
+            "source",
+            "team_assumption"
+          ]
+        },
+        {
+          "name": "is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Dane symulacyjne"
+        }
+      ]
+    },
+    {
+      "name": "observations",
+      "group": "Dane",
+      "grain": "jeden pomiar (jedno powtórzenie)",
+      "key": [
+        "observation_id"
+      ],
+      "filters": [
+        "subject_code",
+        "mission_code",
+        "source_id",
+        "indicator_code",
+        "category",
+        "phase",
+        "ref_flag",
+        "ref_conflict",
+        "is_synthetic"
+      ],
+      "endpoint": "GET /api/subjects/{subject_code}/observations?indicator_code=&phase=&from_day=&to_day=",
+      "use": "Główne źródło dla tabel i wykresów; wartości poza normą; konflikty norm.",
+      "columns": [
+        {
+          "name": "observation_id",
+          "type": "integer",
+          "nullable": false,
+          "description": "Id pomiaru"
+        },
+        {
+          "name": "subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Osoba"
+        },
+        {
+          "name": "sex",
+          "type": "enum",
+          "nullable": false,
+          "description": "Płeć osoby",
+          "values": [
+            "F",
+            "M",
+            "U"
+          ]
+        },
+        {
+          "name": "subject_is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Osoba symulacyjna"
+        },
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Misja"
+        },
+        {
+          "name": "environment",
+          "type": "enum",
+          "nullable": false,
+          "description": "Środowisko",
+          "values": [
+            "earth",
+            "iss",
+            "cislunar",
+            "lunar_surface",
+            "mars_transit",
+            "mars_surface",
+            "leo_free_flyer",
+            "analog_hdt"
+          ]
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło"
+        },
+        {
+          "name": "data_kind",
+          "type": "enum",
+          "nullable": false,
+          "description": "Rodzaj danych",
+          "values": [
+            "real_spaceflight",
+            "real_analog",
+            "real_environment",
+            "literature_aggregate",
+            "reference_literature",
+            "synthetic"
+          ]
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "indicator_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa"
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "nullable": false,
+          "description": "Kategoria",
+          "values": [
+            "vitals",
+            "lab_cbc",
+            "lab_cmp",
+            "lab_cardio",
+            "lab_cytokine",
+            "bone_dxa",
+            "body_composition",
+            "fitness",
+            "sleep",
+            "mood",
+            "nutrition",
+            "environment",
+            "radiation"
+          ]
+        },
+        {
+          "name": "body_system",
+          "type": "string",
+          "nullable": true,
+          "description": "Układ ciała"
+        },
+        {
+          "name": "phase",
+          "type": "enum",
+          "nullable": false,
+          "description": "Faza: pre / in / post (wyliczana)",
+          "values": [
+            "pre",
+            "in",
+            "post",
+            "none"
+          ]
+        },
+        {
+          "name": "anchor",
+          "type": "enum",
+          "nullable": false,
+          "description": "Punkt odniesienia czasu",
+          "values": [
+            "launch",
+            "landing",
+            "none"
+          ]
+        },
+        {
+          "name": "day_offset",
+          "type": "integer",
+          "nullable": true,
+          "description": "Dni względem anchor (L-92 → -92, R+45 → 45)"
+        },
+        {
+          "name": "time_is_approx",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Czas przybliżony (np. kontrola '6MO')"
+        },
+        {
+          "name": "time_order",
+          "type": "integer",
+          "nullable": true,
+          "description": "Klucz chronologii (launch: day_offset; landing: 100000+day_offset; serie: 200000+numer dnia) — sortuj po nim"
+        },
+        {
+          "name": "mission_day",
+          "type": "integer",
+          "nullable": true,
+          "description": "Dzień liczony od startu (dla landing: duration_days + day_offset); NULL gdy długość misji nieznana"
+        },
+        {
+          "name": "timepoint_label",
+          "type": "string",
+          "nullable": true,
+          "description": "Oryginalna etykieta czasu"
+        },
+        {
+          "name": "measured_at",
+          "type": "datetime",
+          "nullable": true,
+          "description": "Czas pomiaru UTC (serie)"
+        },
+        {
+          "name": "replicate",
+          "type": "integer",
+          "nullable": false,
+          "description": "Nr powtórzenia (triplikaty DXA: 1..3)"
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "nullable": true,
+          "description": "Wartość liczbowa w jednostce kanonicznej"
+        },
+        {
+          "name": "value_text",
+          "type": "string",
+          "nullable": true,
+          "description": "Wartość tekstowa"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "ref_min",
+          "type": "number",
+          "nullable": true,
+          "description": "Dolna granica normy (tabela norm, a gdy brak — z pliku)"
+        },
+        {
+          "name": "ref_max",
+          "type": "number",
+          "nullable": true,
+          "description": "Górna granica normy"
+        },
+        {
+          "name": "ref_critical_low",
+          "type": "number",
+          "nullable": true,
+          "description": "Wartość krytyczna dolna (z tabeli norm)"
+        },
+        {
+          "name": "ref_critical_high",
+          "type": "number",
+          "nullable": true,
+          "description": "Wartość krytyczna górna"
+        },
+        {
+          "name": "ref_basis",
+          "type": "enum",
+          "nullable": true,
+          "description": "Skąd norma",
+          "values": [
+            "reference_table",
+            "source_file"
+          ]
+        },
+        {
+          "name": "reference_range_id",
+          "type": "integer",
+          "nullable": true,
+          "description": "Id dobranej normy"
+        },
+        {
+          "name": "ref_sex",
+          "type": "enum",
+          "nullable": true,
+          "description": "Płeć dobranej normy",
+          "values": [
+            "F",
+            "M",
+            "any"
+          ]
+        },
+        {
+          "name": "ref_age_min",
+          "type": "integer",
+          "nullable": true,
+          "description": "Wiek od"
+        },
+        {
+          "name": "ref_age_max",
+          "type": "integer",
+          "nullable": true,
+          "description": "Wiek do"
+        },
+        {
+          "name": "file_ref_min",
+          "type": "number",
+          "nullable": true,
+          "description": "Norma z pliku źródłowego (dolna)"
+        },
+        {
+          "name": "file_ref_max",
+          "type": "number",
+          "nullable": true,
+          "description": "Norma z pliku (górna)"
+        },
+        {
+          "name": "ref_conflict",
+          "type": "boolean",
+          "nullable": true,
+          "description": "1 = norma z pliku ≠ norma z tabeli (do przeglądu)"
+        },
+        {
+          "name": "ref_flag",
+          "type": "enum",
+          "nullable": true,
+          "description": "Położenie względem normy",
+          "values": [
+            "critical_low",
+            "below",
+            "in_range",
+            "above",
+            "critical_high"
+          ]
+        },
+        {
+          "name": "sample_type",
+          "type": "enum",
+          "nullable": false,
+          "description": "Rodzaj próbki/pomiaru",
+          "values": [
+            "lab_serum",
+            "lab_whole_blood",
+            "lab_plasma",
+            "dxa_scan",
+            "self_report",
+            "wearable",
+            "manual_device",
+            "derived"
+          ]
+        },
+        {
+          "name": "is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Dane symulacyjne"
+        },
+        {
+          "name": "raw_name",
+          "type": "string",
+          "nullable": true,
+          "description": "Surowa nazwa w źródle"
+        },
+        {
+          "name": "raw_value",
+          "type": "string",
+          "nullable": true,
+          "description": "Surowa wartość"
+        },
+        {
+          "name": "raw_unit",
+          "type": "string",
+          "nullable": true,
+          "description": "Surowa jednostka"
+        }
+      ]
+    },
+    {
+      "name": "observations_mean",
+      "group": "Dane",
+      "grain": "osoba × wskaźnik × punkt czasowy (średnia z powtórzeń)",
+      "key": [
+        "subject_code",
+        "mission_code",
+        "source_id",
+        "indicator_code",
+        "anchor",
+        "day_offset",
+        "measured_date"
+      ],
+      "filters": [
+        "subject_code",
+        "indicator_code",
+        "phase"
+      ],
+      "endpoint": "GET /api/subjects/{subject_code}/trend/{indicator_code}",
+      "use": "Wykresy trendów (szczególnie DXA z triplikatami).",
+      "columns": [
+        {
+          "name": "subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Osoba"
+        },
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Misja"
+        },
+        {
+          "name": "environment",
+          "type": "enum",
+          "nullable": false,
+          "description": "Środowisko",
+          "values": [
+            "earth",
+            "iss",
+            "cislunar",
+            "lunar_surface",
+            "mars_transit",
+            "mars_surface",
+            "leo_free_flyer",
+            "analog_hdt"
+          ]
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło"
+        },
+        {
+          "name": "data_kind",
+          "type": "enum",
+          "nullable": false,
+          "description": "Rodzaj danych",
+          "values": [
+            "real_spaceflight",
+            "real_analog",
+            "real_environment",
+            "literature_aggregate",
+            "reference_literature",
+            "synthetic"
+          ]
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "indicator_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa"
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "nullable": false,
+          "description": "Kategoria",
+          "values": [
+            "vitals",
+            "lab_cbc",
+            "lab_cmp",
+            "lab_cardio",
+            "lab_cytokine",
+            "bone_dxa",
+            "body_composition",
+            "fitness",
+            "sleep",
+            "mood",
+            "nutrition",
+            "environment",
+            "radiation"
+          ]
+        },
+        {
+          "name": "body_system",
+          "type": "string",
+          "nullable": true,
+          "description": "Układ ciała"
+        },
+        {
+          "name": "phase",
+          "type": "enum",
+          "nullable": false,
+          "description": "Faza",
+          "values": [
+            "pre",
+            "in",
+            "post",
+            "none"
+          ]
+        },
+        {
+          "name": "anchor",
+          "type": "enum",
+          "nullable": false,
+          "description": "Anchor",
+          "values": [
+            "launch",
+            "landing",
+            "none"
+          ]
+        },
+        {
+          "name": "day_offset",
+          "type": "integer",
+          "nullable": true,
+          "description": "Dni względem anchor"
+        },
+        {
+          "name": "time_order",
+          "type": "integer",
+          "nullable": true,
+          "description": "Klucz chronologii"
+        },
+        {
+          "name": "mission_day",
+          "type": "integer",
+          "nullable": true,
+          "description": "Dzień od startu"
+        },
+        {
+          "name": "timepoint_label",
+          "type": "string",
+          "nullable": true,
+          "description": "Etykieta czasu"
+        },
+        {
+          "name": "measured_date",
+          "type": "date",
+          "nullable": true,
+          "description": "Data (serie)"
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "nullable": false,
+          "description": "Średnia z powtórzeń"
+        },
+        {
+          "name": "value_sd",
+          "type": "number",
+          "nullable": true,
+          "description": "Odchylenie standardowe powtórzeń"
+        },
+        {
+          "name": "n_replicates",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba powtórzeń"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "ref_min",
+          "type": "number",
+          "nullable": true,
+          "description": "Norma dolna"
+        },
+        {
+          "name": "ref_max",
+          "type": "number",
+          "nullable": true,
+          "description": "Norma górna"
+        },
+        {
+          "name": "ref_critical_low",
+          "type": "number",
+          "nullable": true,
+          "description": "Wartość krytyczna dolna"
+        },
+        {
+          "name": "ref_critical_high",
+          "type": "number",
+          "nullable": true,
+          "description": "Wartość krytyczna górna"
+        },
+        {
+          "name": "is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Dane symulacyjne"
+        }
+      ]
+    },
+    {
+      "name": "baseline",
+      "group": "Ocena",
+      "grain": "osoba × misja × wskaźnik",
+      "key": [
+        "subject_code",
+        "mission_code",
+        "indicator_code"
+      ],
+      "filters": [
+        "subject_code",
+        "indicator_code"
+      ],
+      "endpoint": "GET /api/subjects/{subject_code}/baseline",
+      "use": "Wartość wyjściowa osoby sprzed misji.",
+      "columns": [
+        {
+          "name": "subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Osoba"
+        },
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Misja"
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "baseline_value",
+          "type": "number",
+          "nullable": false,
+          "description": "Średnia przedlotowa (phase = pre)"
+        },
+        {
+          "name": "n_pre_timepoints",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba punktów przedlotowych"
+        },
+        {
+          "name": "baseline_timepoints",
+          "type": "string",
+          "nullable": false,
+          "description": "Użyte punkty, lista ', '"
+        }
+      ]
+    },
+    {
+      "name": "change_from_baseline",
+      "group": "Ocena",
+      "grain": "osoba × wskaźnik × punkt czasowy",
+      "key": [
+        "subject_code",
+        "mission_code",
+        "indicator_code",
+        "timepoint_label",
+        "day_offset"
+      ],
+      "filters": [
+        "subject_code",
+        "indicator_code",
+        "baseline_status"
+      ],
+      "endpoint": "GET /api/subjects/{subject_code}/trend/{indicator_code}",
+      "use": "Zmiana względem baseline'u i status progów typu „% wartości sprzed lotu” (BMD, VO2max, masa).",
+      "columns": [
+        {
+          "name": "subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Osoba"
+        },
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Misja"
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "indicator_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa"
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "nullable": false,
+          "description": "Kategoria",
+          "values": [
+            "vitals",
+            "lab_cbc",
+            "lab_cmp",
+            "lab_cardio",
+            "lab_cytokine",
+            "bone_dxa",
+            "body_composition",
+            "fitness",
+            "sleep",
+            "mood",
+            "nutrition",
+            "environment",
+            "radiation"
+          ]
+        },
+        {
+          "name": "body_system",
+          "type": "string",
+          "nullable": true,
+          "description": "Układ ciała"
+        },
+        {
+          "name": "phase",
+          "type": "enum",
+          "nullable": false,
+          "description": "Faza",
+          "values": [
+            "pre",
+            "in",
+            "post",
+            "none"
+          ]
+        },
+        {
+          "name": "timepoint_label",
+          "type": "string",
+          "nullable": true,
+          "description": "Etykieta czasu"
+        },
+        {
+          "name": "day_offset",
+          "type": "integer",
+          "nullable": true,
+          "description": "Dni względem anchor"
+        },
+        {
+          "name": "mission_day",
+          "type": "integer",
+          "nullable": true,
+          "description": "Dzień od startu"
+        },
+        {
+          "name": "time_order",
+          "type": "integer",
+          "nullable": true,
+          "description": "Klucz chronologii"
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "nullable": false,
+          "description": "Wartość (średnia z powtórzeń)"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "baseline_value",
+          "type": "number",
+          "nullable": false,
+          "description": "Baseline"
+        },
+        {
+          "name": "delta",
+          "type": "number",
+          "nullable": false,
+          "description": "Różnica bezwzględna"
+        },
+        {
+          "name": "pct_of_baseline",
+          "type": "number",
+          "nullable": true,
+          "description": "Procent baseline'u (100 = bez zmian)"
+        },
+        {
+          "name": "pct_change",
+          "type": "number",
+          "nullable": true,
+          "description": "Zmiana procentowa (0 = bez zmian)"
+        },
+        {
+          "name": "baseline_threshold_id",
+          "type": "string",
+          "nullable": true,
+          "description": "Id progów względem baseline'u"
+        },
+        {
+          "name": "baseline_metric",
+          "type": "enum",
+          "nullable": true,
+          "description": "Która metryka była oceniana (zależy od progu)",
+          "values": [
+            "pct_of_baseline",
+            "pct_change"
+          ]
+        },
+        {
+          "name": "baseline_status",
+          "type": "enum",
+          "nullable": true,
+          "description": "Status wg progów względem baseline'u",
+          "values": [
+            "ok",
+            "caution",
+            "alert"
+          ]
+        },
+        {
+          "name": "baseline_message",
+          "type": "string",
+          "nullable": true,
+          "description": "Komunikat"
+        },
+        {
+          "name": "baseline_action",
+          "type": "string",
+          "nullable": true,
+          "description": "Zalecane działanie"
+        },
+        {
+          "name": "escalate",
+          "type": "boolean",
+          "nullable": true,
+          "description": "Eskalacja do flight surgeona"
+        },
+        {
+          "name": "is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Dane symulacyjne"
+        }
+      ]
+    },
+    {
+      "name": "latest",
+      "group": "Ocena",
+      "grain": "osoba × misja × wskaźnik (ostatni pomiar)",
+      "key": [
+        "subject_code",
+        "mission_code",
+        "indicator_code"
+      ],
+      "filters": [
+        "subject_code",
+        "status",
+        "category",
+        "body_system"
+      ],
+      "endpoint": "GET /api/subjects/{subject_code}/latest",
+      "use": "Dashboard: kafelki z kolorem, komunikatem i akcją.",
+      "columns": [
+        {
+          "name": "subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Osoba"
+        },
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Misja"
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "indicator_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa"
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "nullable": false,
+          "description": "Kategoria",
+          "values": [
+            "vitals",
+            "lab_cbc",
+            "lab_cmp",
+            "lab_cardio",
+            "lab_cytokine",
+            "bone_dxa",
+            "body_composition",
+            "fitness",
+            "sleep",
+            "mood",
+            "nutrition",
+            "environment",
+            "radiation"
+          ]
+        },
+        {
+          "name": "body_system",
+          "type": "string",
+          "nullable": true,
+          "description": "Układ ciała"
+        },
+        {
+          "name": "timepoint_label",
+          "type": "string",
+          "nullable": true,
+          "description": "Etykieta czasu"
+        },
+        {
+          "name": "mission_day",
+          "type": "integer",
+          "nullable": true,
+          "description": "Dzień od startu"
+        },
+        {
+          "name": "time_order",
+          "type": "integer",
+          "nullable": true,
+          "description": "Klucz chronologii"
+        },
+        {
+          "name": "measured_date",
+          "type": "date",
+          "nullable": true,
+          "description": "Data"
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "nullable": false,
+          "description": "Wartość"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "ref_min",
+          "type": "number",
+          "nullable": true,
+          "description": "Norma dolna"
+        },
+        {
+          "name": "ref_max",
+          "type": "number",
+          "nullable": true,
+          "description": "Norma górna"
+        },
+        {
+          "name": "baseline_value",
+          "type": "number",
+          "nullable": true,
+          "description": "Baseline osoby (średnia sprzed misji)"
+        },
+        {
+          "name": "pct_of_baseline",
+          "type": "number",
+          "nullable": true,
+          "description": "Procent baseline'u"
+        },
+        {
+          "name": "is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Dane symulacyjne"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "nullable": true,
+          "description": "Najgorszy z: próg bezwzględny, próg względem baseline'u, norma laboratoryjna; NULL = brak reguły i normy",
+          "values": [
+            "ok",
+            "caution",
+            "alert"
+          ]
+        },
+        {
+          "name": "status_basis",
+          "type": "enum",
+          "nullable": true,
+          "description": "Która ocena dała status",
+          "values": [
+            "threshold",
+            "baseline_threshold",
+            "lab_reference"
+          ]
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "nullable": true,
+          "description": "Komunikat dla astronauty (z progów)"
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "nullable": true,
+          "description": "Zalecane działanie (z progów)"
+        },
+        {
+          "name": "escalate",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Eskalacja do flight surgeona (próg z eskalacją albo wartość krytyczna)"
+        }
+      ]
+    },
+    {
+      "name": "body_system_status",
+      "group": "Ocena",
+      "grain": "osoba × misja × układ ciała",
+      "key": [
+        "subject_code",
+        "mission_code",
+        "body_system"
+      ],
+      "filters": [
+        "subject_code"
+      ],
+      "endpoint": "GET /api/subjects/{subject_code}/body",
+      "use": "Klikalna sylwetka: kolor części ciała.",
+      "columns": [
+        {
+          "name": "subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Osoba"
+        },
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Misja"
+        },
+        {
+          "name": "body_system",
+          "type": "string",
+          "nullable": false,
+          "description": "Układ ciała"
+        },
+        {
+          "name": "body_system_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa układu"
+        },
+        {
+          "name": "body_region",
+          "type": "string",
+          "nullable": false,
+          "description": "Region sylwetki"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "nullable": false,
+          "description": "Najgorszy status wśród wskaźników układu",
+          "values": [
+            "ok",
+            "caution",
+            "alert",
+            "no_data"
+          ]
+        },
+        {
+          "name": "n_indicators",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba wskaźników z danymi"
+        },
+        {
+          "name": "n_alert",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba alertów"
+        },
+        {
+          "name": "n_caution",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba ostrzeżeń"
+        },
+        {
+          "name": "escalate",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Czy którykolwiek wymaga eskalacji"
+        }
+      ]
+    },
+    {
+      "name": "daily_series",
+      "group": "Dane",
+      "grain": "osoba × wskaźnik × dzień",
+      "key": [
+        "subject_code",
+        "mission_code",
+        "indicator_code",
+        "measured_date"
+      ],
+      "filters": [
+        "subject_code",
+        "indicator_code",
+        "measured_date"
+      ],
+      "endpoint": "GET /api/subjects/{subject_code}/daily/{indicator_code}?from=&to=",
+      "use": "Wykresy serii dziennych (wearables, dane symulacyjne) ze średnią 7-dniową; dane dla reguł kroczących.",
+      "columns": [
+        {
+          "name": "subject_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Osoba"
+        },
+        {
+          "name": "mission_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Misja"
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "indicator_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "measured_date",
+          "type": "date",
+          "nullable": false,
+          "description": "Dzień (UTC)"
+        },
+        {
+          "name": "mission_day",
+          "type": "integer",
+          "nullable": true,
+          "description": "Dzień od startu"
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "nullable": false,
+          "description": "Średnia dzienna"
+        },
+        {
+          "name": "value_min",
+          "type": "number",
+          "nullable": false,
+          "description": "Minimum dnia"
+        },
+        {
+          "name": "value_max",
+          "type": "number",
+          "nullable": false,
+          "description": "Maksimum dnia"
+        },
+        {
+          "name": "n_samples",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba pomiarów w dniu"
+        },
+        {
+          "name": "is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Dane symulacyjne"
+        },
+        {
+          "name": "value_7d_mean",
+          "type": "number",
+          "nullable": false,
+          "description": "Średnia z 7 dni kalendarzowych (bieżący + 6 poprzednich; luki nie wydłużają okna)"
+        },
+        {
+          "name": "n_days_7d",
+          "type": "integer",
+          "nullable": false,
+          "description": "Ile dni z danymi było w oknie 7 dni (do oceny wiarygodności średniej)"
+        }
+      ]
+    },
+    {
+      "name": "environment_daily",
+      "group": "Dane",
+      "grain": "środowisko × miejsce × wskaźnik × źródło × dzień",
+      "key": [
+        "environment",
+        "location",
+        "indicator_code",
+        "source_id",
+        "measured_date"
+      ],
+      "filters": [
+        "environment",
+        "indicator_code",
+        "measured_date"
+      ],
+      "endpoint": "GET /api/environments/{environment}/daily?indicator_code=",
+      "use": "Panel promieniowania i warunków kabiny.",
+      "columns": [
+        {
+          "name": "environment",
+          "type": "enum",
+          "nullable": false,
+          "description": "Środowisko",
+          "values": [
+            "earth",
+            "iss",
+            "cislunar",
+            "lunar_surface",
+            "mars_transit",
+            "mars_surface",
+            "leo_free_flyer",
+            "analog_hdt"
+          ]
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "nullable": false,
+          "description": "Miejsce ('' = całe środowisko)"
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "indicator_label",
+          "type": "string",
+          "nullable": false,
+          "description": "Nazwa"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło"
+        },
+        {
+          "name": "measured_date",
+          "type": "date",
+          "nullable": false,
+          "description": "Dzień (UTC)"
+        },
+        {
+          "name": "value_mean",
+          "type": "number",
+          "nullable": false,
+          "description": "Średnia"
+        },
+        {
+          "name": "value_min",
+          "type": "number",
+          "nullable": false,
+          "description": "Minimum"
+        },
+        {
+          "name": "value_max",
+          "type": "number",
+          "nullable": false,
+          "description": "Maksimum"
+        },
+        {
+          "name": "n_samples",
+          "type": "integer",
+          "nullable": false,
+          "description": "Liczba próbek"
+        },
+        {
+          "name": "is_synthetic",
+          "type": "boolean",
+          "nullable": false,
+          "description": "Dane symulacyjne"
+        }
+      ]
+    },
+    {
+      "name": "cohort_stats",
+      "group": "Literatura",
+      "grain": "badanie × wskaźnik",
+      "key": [
+        "source_id",
+        "source_row",
+        "indicator_code"
+      ],
+      "filters": [
+        "mission_type",
+        "indicator_code"
+      ],
+      "endpoint": "GET /api/literature/cohorts?indicator_code=&mission_type=",
+      "use": "Dane zbiorcze z publikacji (np. BP przed/w trakcie/po locie); kalibracja generatora.",
+      "columns": [
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło"
+        },
+        {
+          "name": "source_row",
+          "type": "integer",
+          "nullable": false,
+          "description": "Wiersz w pliku źródłowym"
+        },
+        {
+          "name": "study_title",
+          "type": "string",
+          "nullable": false,
+          "description": "Tytuł badania"
+        },
+        {
+          "name": "mission_type",
+          "type": "string",
+          "nullable": true,
+          "description": "ISS, STS, Soyuz, HDT…"
+        },
+        {
+          "name": "environment",
+          "type": "enum",
+          "nullable": true,
+          "description": "Środowisko",
+          "values": [
+            "earth",
+            "iss",
+            "cislunar",
+            "lunar_surface",
+            "mars_transit",
+            "mars_surface",
+            "leo_free_flyer",
+            "analog_hdt"
+          ]
+        },
+        {
+          "name": "n",
+          "type": "integer",
+          "nullable": true,
+          "description": "Liczba osób"
+        },
+        {
+          "name": "n_male",
+          "type": "integer",
+          "nullable": true,
+          "description": "Mężczyźni"
+        },
+        {
+          "name": "n_female",
+          "type": "integer",
+          "nullable": true,
+          "description": "Kobiety"
+        },
+        {
+          "name": "age_mean",
+          "type": "number",
+          "nullable": true,
+          "description": "Średni wiek"
+        },
+        {
+          "name": "bmi_mean",
+          "type": "number",
+          "nullable": true,
+          "description": "Średnie BMI"
+        },
+        {
+          "name": "countermeasure",
+          "type": "string",
+          "nullable": true,
+          "description": "Countermeasure"
+        },
+        {
+          "name": "indicator_code",
+          "type": "string",
+          "nullable": false,
+          "description": "Wskaźnik"
+        },
+        {
+          "name": "unit",
+          "type": "string",
+          "nullable": false,
+          "description": "Jednostka"
+        },
+        {
+          "name": "pre_mean",
+          "type": "number",
+          "nullable": true,
+          "description": "Średnia przed lotem"
+        },
+        {
+          "name": "pre_sd",
+          "type": "number",
+          "nullable": true,
+          "description": "SD przed lotem"
+        },
+        {
+          "name": "in_mean",
+          "type": "number",
+          "nullable": true,
+          "description": "Średnia w locie"
+        },
+        {
+          "name": "in_sd",
+          "type": "number",
+          "nullable": true,
+          "description": "SD w locie"
+        },
+        {
+          "name": "post_mean",
+          "type": "number",
+          "nullable": true,
+          "description": "Średnia po locie"
+        },
+        {
+          "name": "post_sd",
+          "type": "number",
+          "nullable": true,
+          "description": "SD po locie"
+        }
+      ]
+    },
+    {
+      "name": "import_log",
+      "group": "Diagnostyka",
+      "grain": "jeden import pliku",
+      "key": [
+        "batch_id"
+      ],
+      "filters": [
+        "source_id",
+        "status"
+      ],
+      "endpoint": "GET /api/meta/imports",
+      "use": "Diagnostyka importów, wersjonowanie danych.",
+      "columns": [
+        {
+          "name": "batch_id",
+          "type": "integer",
+          "nullable": false,
+          "description": "Id importu"
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "nullable": false,
+          "description": "Źródło"
+        },
+        {
+          "name": "adapter",
+          "type": "string",
+          "nullable": false,
+          "description": "Adapter"
+        },
+        {
+          "name": "file_name",
+          "type": "string",
+          "nullable": false,
+          "description": "Plik"
+        },
+        {
+          "name": "file_sha256",
+          "type": "string",
+          "nullable": false,
+          "description": "Suma SHA-256 pliku"
+        },
+        {
+          "name": "started_at",
+          "type": "datetime",
+          "nullable": false,
+          "description": "Start"
+        },
+        {
+          "name": "finished_at",
+          "type": "datetime",
+          "nullable": true,
+          "description": "Koniec"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "nullable": false,
+          "description": "Status",
+          "values": [
+            "running",
+            "ok",
+            "failed"
+          ]
+        },
+        {
+          "name": "rows_read",
+          "type": "integer",
+          "nullable": true,
+          "description": "Wierszy przeczytanych"
+        },
+        {
+          "name": "rows_upserted",
+          "type": "integer",
+          "nullable": true,
+          "description": "Wierszy zapisanych"
+        },
+        {
+          "name": "rows_rejected",
+          "type": "integer",
+          "nullable": true,
+          "description": "Wierszy odrzuconych"
+        },
+        {
+          "name": "notes",
+          "type": "string",
+          "nullable": true,
+          "description": "Uwagi / powody odrzuceń"
+        }
+      ]
+    }
+  ]
+}
