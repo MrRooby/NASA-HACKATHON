@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MOTHER Organ Cards</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@600;700&display=swap">
+<style>
+/* Layout: a toolbar, then a responsive grid of exactly ten organ cards - the same shape the UI receives from /api/organs/{person}. */
+:root{--bg:#f4f6f9;--surface:#fff;--surface2:#edf1f6;--ink:#0f1a2b;--muted:#5a6a80;--line:#d5dce7;--accent:#2b62d9;
+  --ok:#0e8f6f;--caution:#b97a06;--alert:#cf3b3b;--nodata:#9aa5b5;
+  --display:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;--text:"Inter",ui-sans-serif,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0b111b;--surface:#121a27;--surface2:#182336;--ink:#e5ecf6;--muted:#94a3b9;--line:#27354c;--accent:#74a7ff;--ok:#38d1a6;--caution:#f0b44e;--alert:#ff6b6b;--nodata:#55637a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b111b;--surface:#121a27;--surface2:#182336;--ink:#e5ecf6;--muted:#94a3b9;--line:#27354c;--accent:#74a7ff;--ok:#38d1a6;--caution:#f0b44e;--alert:#ff6b6b;--nodata:#55637a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--text)}
+main{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+h1{font:700 30px var(--display);margin:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+select,input,button{font:500 14px var(--text);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+button{cursor:pointer} button:hover,select:focus,input:focus{border-color:var(--accent);outline:none}
+.summary{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.pill{font:700 11px var(--text);letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px;color:var(--surface)}
+.s-ok{background:var(--ok)} .s-caution{background:var(--caution)} .s-alert{background:var(--alert)} .s-no_data{background:var(--nodata)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--nodata);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card.st-ok{border-top-color:var(--ok)} .card.st-caution{border-top-color:var(--caution)} .card.st-alert{border-top-color:var(--alert)}
+.card h2{font:600 16px var(--display);margin:0;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.headline{font-size:14px}
+.card.st-no_data .headline{color:var(--muted)}
+.metric{display:flex;justify-content:space-between;gap:8px;font-size:13px;border-top:1px solid var(--line);padding-top:5px}
+.metric b{font-variant-numeric:tabular-nums}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+details{font-size:12.5px;color:var(--muted)}
+summary{cursor:pointer;color:var(--accent)}
+code{font:12px var(--mono)}
+pre{font:11.5px/1.45 var(--mono);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;max-height:420px}
+.muted{color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <div><h1>Organ cards</h1><p class="muted" style="margin:4px 0 0">Exactly what the UI gets from <code>GET /api/organs/{person}</code>: ten cards, one status, one sentence and up to three numbers each. Computed live from the team database with published clinical formulas.</p></div>
+  <div class="bar">
+    <label for="who">Person<select id="who"></select></label>
+    <label for="day">Mission day (ISS) <input id="day" type="number" min="1" placeholder="latest" style="width:110px"></label>
+    <label for="sol">Sol (Mars habitat) <input id="sol" type="number" min="1" placeholder="latest" style="width:110px"></label>
+    <button id="go">Show</button>
+    <button id="json">Show JSON</button>
+  </div>
+  <div class="summary" id="summary">Loading…</div>
+  <div class="grid" id="grid"></div>
+  <pre id="raw" hidden></pre>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const COLOR = {ok: "var(--ok)", caution: "var(--caution)", alert: "var(--alert)", no_data: "var(--nodata)"};
+let last = null;
+async function loadPeople() {
+  const r = await fetch("/api/subjects"); const people = await r.json();
+  if (people.error) { $("summary").textContent = people.error + " " + (people.hint || ""); return; }
+  $("who").innerHTML = people.map(p => `<option value="${esc(p.code)}">${esc(p.label)} · ${esc(p.mission || "")}${p.synthetic ? " (synthetic)" : " (real)"}</option>`).join("");
+  $("who").value = people.some(p => p.code === "HAB-C2") ? "HAB-C2" : people[0].code;
+  if ($("who").value === "HAB-C2") $("sol").value = 253;
+  show();
+}
+async function show() {
+  const q = new URLSearchParams();
+  if ($("day").value) q.set("day", $("day").value);
+  if ($("sol").value) q.set("sol", $("sol").value);
+  const url = `/api/organs/${encodeURIComponent($("who").value)}${q.toString() ? "?" + q : ""}`;
+  $("summary").textContent = "Loading " + url + " …";
+  const d = await (await fetch(url)).json(); last = d;
+  if (d.error) { $("summary").textContent = d.error; $("grid").innerHTML = ""; return; }
+  const asof = d.as_of.sol != null ? "sol " + d.as_of.sol : d.as_of.mission_day != null ? "mission day " + d.as_of.mission_day : "latest data";
+  $("summary").innerHTML = `<span class="pill s-${d.overall_status}">${esc(d.overall_status.replace("_", " "))}</span>
+    <b>${esc(d.subject.label)}</b><span class="muted">${esc(d.subject.mission || "")} · ${asof} · ${esc(d.subject.data_kind)}${d.subject.linked_health_subject ? " · linked to " + esc(d.subject.linked_health_subject) : ""}</span>
+    <span>${esc(d.top_message)}</span><code class="muted">${esc(url)}</code>`;
+  $("grid").innerHTML = d.organs.map(c => `<article class="card st-${c.status}">
+    <h2>${esc(c.label)}<span class="pill s-${c.status}">${esc(c.status.replace("_", " "))}</span></h2>
+    <div class="headline">${esc(c.headline)}</div>
+    ${c.metrics.map(m => `<div class="metric"><span><i class="dot" style="background:${COLOR[m.status]}"></i>${esc(m.name)}</span><b>${esc(m.value)} <span class="muted">${esc(m.unit)}</span></b></div>`).join("")}
+    ${c.status !== "ok" && c.status !== "no_data" ? `<details><summary>Why and what to do</summary><p>${esc(c.why || "")}</p><p><b>Do:</b> ${esc(c.action || "")}</p></details>` : ""}
+  </article>`).join("");
+  $("raw").textContent = JSON.stringify(d, null, 2);
+}
+$("go").onclick = show;
+$("who").onchange = () => { $("day").value = ""; $("sol").value = ""; show(); };
+$("json").onclick = () => { $("raw").hidden = !$("raw").hidden; $("json").textContent = $("raw").hidden ? "Show JSON" : "Hide JSON"; };
+loadPeople().catch(() => { $("summary").textContent = "MOTHER server is not running. Start it with start.bat or ./start.sh."; });
+</script>
+</body>
+</html>

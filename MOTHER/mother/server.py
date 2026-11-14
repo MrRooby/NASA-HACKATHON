@@ -177,6 +177,39 @@ def create_app():
                     break
         return JSONResponse(r, headers={"Cache-Control": "no-store"})
 
+    # ---------------- simple contract for the UI (see MOTHER/UI_CONTRACT.md) ----------------
+    def _db_call(fn):
+        from .db_source import TeamDatabase
+        try:
+            db = TeamDatabase()
+        except Exception as e:
+            return JSONResponse({"error": f"Cannot reach the team database ({type(e).__name__})", "hint": DB_HINT}, status_code=503)
+        try:
+            return JSONResponse(fn(db), headers={"Cache-Control": "no-store"})
+        except KeyError as e:
+            return JSONResponse({"error": f"Unknown person {e}"}, status_code=404)
+        finally:
+            db.close()
+
+    @app.get("/api/subjects")
+    def api_subjects():
+        from .organs import list_subjects
+        return _db_call(list_subjects)
+
+    @app.get("/api/organs")
+    def api_organs_overview():
+        from .organs import overview
+        return _db_call(overview)
+
+    @app.get("/api/organs/{subject}")
+    def api_organs(subject: str, day: int | None = None, sol: int | None = None, mission: str | None = None):
+        from .organs import organ_report
+        return _db_call(lambda db: organ_report(db, subject, day=day, sol=sol, mission=mission))
+
+    @app.get("/organs")
+    def organs_page():
+        return FileResponse(WEB / "organs.html")
+
     @app.get("/api/status")
     def api_status():
         try:
