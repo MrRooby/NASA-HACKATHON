@@ -1,22 +1,28 @@
 import React from 'react';
+import { Panel, SegBar, StatusTag } from '../components/index.js';
+import { useT } from '../i18n/index.js';
 import { BASELINE_NEEDED, PROTOCOLS } from './engine/protocols.js';
 import { fmt } from './session.js';
 
-const STATUS_TEXT = { ok: 'OK', caution: 'CAUTION', alert: 'ALERT', no_data: 'BUILDING BASELINE' };
-const STATUS_ICON = { ok: '✓', caution: '!', alert: '⚠', no_data: 'i' };
+const STATUSES = ['ok', 'caution', 'alert', 'no_data'];
+const safeStatus = status => (STATUSES.includes(status) ? status : 'no_data');
 
-/** Small inline SVG trend line (same look as the dashboard sparklines). */
+/**
+ * Small inline SVG trend line: straight segments, square caps, colour by status
+ * (theme variables, see .cog-spark in cognitive.css).
+ */
 export function TrendSpark({ values, status = 'ok' }) {
+  const t = useT();
   const v = (values || []).filter(x => typeof x === 'number' && Number.isFinite(x));
-  if (v.length < 2) return <span className="cog-muted cog-spark-empty">no trend yet</span>;
+  if (v.length < 2) return <span className="cog-muted cog-spark-empty">{t('tests.noTrend')}</span>;
   const max = Math.max(...v);
   const min = Math.min(...v);
   const y = x => 28 - ((x - min) / (max - min || 1)) * 24;
   const pts = v.map((x, i) => `${(i / (v.length - 1)) * 100},${y(x)}`).join(' ');
   return (
-    <svg className={`spark ${status === 'no_data' ? 'ok' : status}`} viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-label={`Trend of the last ${v.length} sessions`}>
+    <svg className={`cog-spark cog-spark-${safeStatus(status)}`} viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-label={t('tests.trendLabel', { n: v.length })}>
       <polyline points={pts} />
-      <circle cx="100" cy={y(v[v.length - 1])} r="2.5" />
+      <rect x="98.5" y={y(v[v.length - 1]) - 3} width="1.5" height="6" />
     </svg>
   );
 }
@@ -26,31 +32,39 @@ export const emptyTile = id => ({
   baseline: { n: 0, needed: BASELINE_NEEDED, ready: false }, latest: null, trend: [], next: null,
 });
 
-function keyValue(tile) {
+function keyValue(tile, t) {
   const m = tile.latest?.metrics;
   if (!m) return null;
-  if (tile.test_id === 'pvt') return ['Median reaction time', fmt(m.pvt_median_rt_ms, 0, ' ms')];
-  if (tile.test_id === 'gonogo') return ['Commission errors', fmt(m.gonogo_commission_rate != null ? m.gonogo_commission_rate * 100 : null, 0, ' %')];
-  return ['Speed', fmt(m.dsst_throughput_per_min, 1, ' / min')];
+  if (tile.test_id === 'pvt') return [t('tests.metricPvt'), fmt(m.pvt_median_rt_ms, 0, ' ms')];
+  if (tile.test_id === 'gonogo') return [t('tests.metricGonogo'), fmt(m.gonogo_commission_rate != null ? m.gonogo_commission_rate * 100 : null, 0, ' %')];
+  return [t('tests.metricDsst'), fmt(m.dsst_throughput_per_min, 1, ' / min')];
 }
 
+/** One test as a framed panel: tone and [ OK ] / [ CAUT ] / [ ALRT ] / [ ---- ] by status. */
 export function Tile({ tile }) {
-  const kv = keyValue(tile);
+  const t = useT();
+  const kv = keyValue(tile, t);
   const n = tile.baseline?.n ?? 0;
   const needed = tile.baseline?.needed ?? BASELINE_NEEDED;
+  const status = safeStatus(tile.status);
   return (
-    <section className={`data-panel cog-tile cog-tile-${tile.status}`} data-testid={`tile-${tile.test_id}`} data-status={tile.status}>
-      <div className="panel-header">
-        <span className="panel-title">{tile.label}</span>
-        <span className={`cog-badge cog-badge-${tile.status}`}><span aria-hidden="true">{STATUS_ICON[tile.status]}</span> {STATUS_TEXT[tile.status] || String(tile.status).toUpperCase()}</span>
-      </div>
-      <div className="cog-tile-body">
-        <p className="cog-headline">{tile.headline}</p>
-        {kv && <p className="cog-kv"><span>{kv[0]}</span><strong>{kv[1]}</strong></p>}
-        <p className="cog-muted">Baseline {n}/{needed}{tile.baseline?.ready ? ' (ready)' : ''}</p>
-        <TrendSpark values={(tile.trend || []).map(p => p.value)} status={tile.status} />
-        {tile.next && <p className="cog-muted">Next: session {tile.next.session_no}, set {tile.next.stimulus_set}</p>}
-      </div>
-    </section>
+    <Panel
+      className={`cog-tile cog-tile-${status}`}
+      title={tile.label}
+      meta={<StatusTag status={status} />}
+      tone={status === 'no_data' ? 'default' : status}
+      data-testid={`tile-${tile.test_id}`}
+      data-status={tile.status}
+    >
+      {status === 'no_data' && <p className="cog-note">{t('tests.buildingBaseline')}</p>}
+      <p className="cog-headline">{tile.headline}</p>
+      {kv && <p className="cog-line"><span className="label">{kv[0]}</span> <strong>{kv[1]}</strong></p>}
+      <p className="cog-line">
+        <span className="label">{t('tests.baseline')}</span> {n}/{needed}{tile.baseline?.ready ? ` ${t('tests.baselineReady')}` : ''}{' '}
+        <SegBar value={n} max={needed} segments={needed} status={tile.baseline?.ready ? 'ok' : 'no_data'} label={t('tests.baseline')} />
+      </p>
+      <TrendSpark values={(tile.trend || []).map(p => p.value)} status={status} />
+      {tile.next && <p className="cog-muted">{t('tests.next', { n: tile.next.session_no, set: tile.next.stimulus_set })}</p>}
+    </Panel>
   );
 }

@@ -1,2 +1,19 @@
-/* Styles of TestsScreen.jsx (theme variables only). */
-.tests-screen { display: grid; gap: 12px; }
+/* Styles of TestsScreen.jsx (theme variables only); the test module itself: src/cognitive/cognitive.css. */
+.tests-screen { display: grid; gap: 12px; min-width: 0; }
+
+/* read-only banner: someone else's tests */
+.tests-readonly {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  padding: 4px 12px;
+  color: var(--caution);
+  border: 1px solid var(--caution);
+  background: var(--panel);
+}
+.tests-readonly-text { font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.tests-readonly-hint { flex: 1 1 auto; color: var(--dim); font-size: 12px; }
+
+/* a running test owns the window: no screen padding fight, chrome hidden by App */
+.shell-bare .screen { padding: 12px; }

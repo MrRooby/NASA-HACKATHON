@@ -12,7 +12,11 @@ import CrewScreen from './screens/CrewScreen.jsx';
 import TestsScreen from './screens/TestsScreen.jsx';
 import SettingsScreen from './screens/SettingsScreen.jsx';
 
-/** Screen id -> component. Every screen gets { mother, session, viewedCode, setViewedCode, navigate, profile }. */
+/**
+ * Screen id -> component. Every screen gets { mother, session, viewedCode, setViewedCode, navigate, profile,
+ * setChromeHidden }. setChromeHidden(true) hides the top bar and the footer (a running cognitive test needs
+ * the whole window and steady frame timing); leaving the screen always brings them back.
+ */
 export const SCREEN_COMPONENTS = {
   home: HomeScreen,
   wearables: WearablesScreen,
@@ -124,6 +128,7 @@ export default function App() {
   const [session, setSession] = useState(null);
   const [screen, setScreen] = useState('home');
   const [viewedOverride, setViewedOverride] = useState(null);
+  const [chromeHidden, setChromeHiddenState] = useState(false);
   const viewedCode = viewedOverride ?? session;
 
   const { selectSubject, setPeriod } = mother;
@@ -135,6 +140,13 @@ export default function App() {
 
   /** setViewedCode('HAB-C3'); setViewedCode(null) returns to the logged-in crew member. */
   const setViewedCode = useCallback(code => setViewedOverride(code || null), []);
+
+  const setChromeHidden = useCallback(hidden => setChromeHiddenState(Boolean(hidden)), []);
+
+  // The chrome never stays hidden after the screen that asked for it is gone.
+  useEffect(() => {
+    setChromeHiddenState(false);
+  }, [screen, session]);
 
   /** navigate('profile') or navigate('profile', { viewedCode: 'HAB-C3' }); unknown screens are ignored. */
   const navigate = useCallback((next, opts) => {
@@ -159,20 +171,24 @@ export default function App() {
   if (!session) return <LoginScreen mother={mother} onLogin={login} />;
 
   const Screen = SCREEN_COMPONENTS[screen];
-  const screenProps = { mother, session, viewedCode, setViewedCode, navigate, profile: getProfile(viewedCode) };
+  const screenProps = { mother, session, viewedCode, setViewedCode, navigate, profile: getProfile(viewedCode), setChromeHidden };
 
   return (
-    <div className="shell">
-      <TopBar mother={mother} session={session} viewedCode={viewedCode} screen={screen} navigate={navigate} onLogout={logout} />
+    <div className={chromeHidden ? 'shell shell-bare' : 'shell'}>
+      {!chromeHidden && (
+        <TopBar mother={mother} session={session} viewedCode={viewedCode} screen={screen} navigate={navigate} onLogout={logout} />
+      )}
       <main className="screen" data-screen={screen}>
         <ScreenBoundary key={screen} title={t('common.screenFault')} hint={t('common.screenFaultHint')}>
           <Screen {...screenProps} />
         </ScreenBoundary>
       </main>
-      <footer className="statusline">
-        <span>{mother.online ? t('common.footerLive') : t('common.footerDemo')}</span>
-        <span>{t('common.disclaimer')} · {t('common.credit')}</span>
-      </footer>
+      {!chromeHidden && (
+        <footer className="statusline">
+          <span>{mother.online ? t('common.footerLive') : t('common.footerDemo')}</span>
+          <span>{t('common.disclaimer')} · {t('common.credit')}</span>
+        </footer>
+      )}
     </div>
   );
 }

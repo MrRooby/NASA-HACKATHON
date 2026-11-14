@@ -1,0 +1,227 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Cognitive tests (src/cognitive): PVT, Go/No-Go, DSST.
+   Imported by CognitivePage.jsx (the [ TESTS ] screen) and standalone.jsx (cognitive.html).
+   Theme variables only; no radius, shadows or gradients. The one functional exception
+   is the round Go/No-Go stimulus (.cog-shape-circle).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Page ────────────────────────────────────────────────────────────────── */
+.cog-page { display: grid; gap: 12px; align-content: start; min-width: 0; }
+
+.cog-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 16px; min-width: 0; }
+.cog-eyebrow { margin: 0; color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.cog-select { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+.cog-select > span:first-child { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+/* the pseudonym / person-code <input> has no type attribute, so the base form rules do not reach it */
+.cog-select select, .cog-select input {
+  min-height: 28px;
+  min-width: 12ch;
+  padding: 2px 6px;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+.cog-select select:hover, .cog-select input:hover { border-color: var(--accent); }
+.cog-person { color: var(--accent-bright); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.cog-muted { margin: 0; color: var(--dim); font-size: 12px; }
+.cog-note { margin: 0; color: var(--dim); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.cog-disclaimer { margin: 0; color: var(--dim); font-size: 12px; }
+.cog-disclaimer::before { content: '* '; content: '* ' / ''; color: var(--accent-dim); }
+.cog-warn { margin: 0; color: var(--caution); font-size: 13px; }
+.cog-warn::before { content: '! '; content: '! ' / ''; font-weight: 700; }
+
+/* banners: one bordered terminal line each */
+.cog-banner {
+  margin: 0;
+  padding: 3px 10px;
+  color: var(--info);
+  background: var(--panel);
+  border: 1px solid var(--info);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.cog-banner::before { content: '> '; content: '> ' / ''; font-weight: 700; }
+.cog-banner-offline { color: var(--caution); border-color: var(--caution); }
+.cog-banner-alert { color: var(--alert); border-color: var(--alert); }
+.cog-banner-synth { color: var(--dim); border: 1px dashed var(--dim); }
+.cog-banner-readonly { color: var(--caution); border-color: var(--caution); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.cog-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
+/* large touch target, still drawn as [ LABEL ] */
+.cog-btn.btn { padding: 6px 4px; }
+
+/* ── Tiles ───────────────────────────────────────────────────────────────── */
+.cog-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; align-items: stretch; }
+.cog-tile .panel-body { display: grid; gap: 4px; align-content: start; }
+.cog-headline { margin: 0; color: var(--fg); overflow-wrap: anywhere; }
+.cog-line { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; margin: 0; font-size: 12px; color: var(--fg); }
+.cog-line .label { margin-right: 0; }
+
+/* trend line: straight segments, square caps, colour by status */
+.cog-spark { --spark: var(--ok); display: block; width: 100%; height: 40px; overflow: visible; border-bottom: 1px dotted var(--accent-dim); }
+.cog-spark-caution { --spark: var(--caution); }
+.cog-spark-alert { --spark: var(--alert); }
+.cog-spark-no_data { --spark: var(--dim); }
+.cog-spark polyline {
+  fill: none;
+  stroke: var(--spark);
+  stroke-width: 2;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
+}
+.cog-spark rect { fill: var(--spark); }
+.cog-spark-empty { display: block; min-height: 40px; line-height: 40px; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px dotted var(--accent-dim); }
+
+/* ── Session steps (survey, calibration, instructions, result) ───────────── */
+.cog-run {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: calc(100vh - 140px);
+  min-width: 0;
+}
+.shell-bare .cog-run { min-height: calc(100vh - 28px); }
+
+.cog-card { width: 100%; max-width: 600px; }
+.cog-card > .panel-body { display: grid; gap: 10px; align-content: start; padding-top: 10px; padding-bottom: 12px; }
+.cog-card form { display: grid; gap: 10px; }
+.cog-card .cog-actions { margin-top: 2px; }
+
+.cog-steps { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; color: var(--fg); }
+.cog-steps li { padding-left: 2ch; text-indent: -2ch; }
+.cog-steps li::before { content: '> '; content: '> ' / ''; color: var(--accent); font-weight: 700; }
+
+.cog-rows { display: grid; gap: 0; }
+
+.cog-q { display: grid; grid-template-columns: minmax(0, 1fr) minmax(120px, 160px); gap: 2px 12px; align-items: center; margin: 0; padding: 0 0 6px; border: 0; border-bottom: 1px dotted var(--accent-dim); min-width: 0; }
+.cog-q > label, .cog-q legend { color: var(--fg); text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; }
+.cog-q legend { padding: 0; }
+.cog-q select { min-height: 32px; width: 100%; }
+.cog-q-hint { grid-column: 1 / -1; color: var(--dim); font-size: 12px; }
+.cog-q-radio { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; }
+.cog-q-radio legend { float: left; margin-right: auto; }
+.cog-q-radio label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.08em; }
+.cog-q-radio input[type='radio'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  cursor: pointer;
+}
+.cog-q-radio input[type='radio']:checked { background: var(--accent-bright); border-color: var(--accent-bright); }
+
+.cog-status {
+  --tone: var(--dim);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: 0;
+  padding: 4px 10px;
+  color: var(--tone);
+  border: 1px solid var(--tone);
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.cog-status-ok { --tone: var(--ok); }
+.cog-status-caution { --tone: var(--caution); }
+.cog-status-alert { --tone: var(--alert); }
+
+/* ── Stimulus field: large, high contrast, no selection, no double-tap zoom ─ */
+.cog-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: min(960px, 96vw);
+  height: min(620px, 80vh);
+  color: var(--fg);
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.cog-field:focus-visible { outline: none; }
+.cog-pvt-counter {
+  color: var(--alert);
+  font-size: clamp(72px, 16vw, 168px);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.cog-hint { min-height: 28px; color: var(--fg); font-size: 20px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; text-align: center; }
+
+.cog-gng { position: relative; width: 200px; height: 200px; }
+.cog-shape { position: absolute; inset: 0; background: var(--fg); }
+.cog-shape-circle { border-radius: 50%; } /* functional: the Go stimulus is a circle */
+
+.cog-field-dsst { justify-content: space-between; gap: 10px; padding: 14px; cursor: default; }
+.cog-key { display: grid; grid-template-columns: repeat(9, 1fr); width: 100%; border: 1px solid var(--accent); }
+.cog-key-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  color: var(--fg);
+  border-right: 1px solid var(--accent-dim);
+  font-size: 18px;
+  font-weight: 700;
+}
+.cog-key-cell:last-child { border-right: 0; }
+.cog-key-cell span { color: var(--accent-bright); }
+.cog-stim-box { display: flex; align-items: center; justify-content: center; width: 120px; height: 120px; border: 2px solid var(--fg); }
+.cog-keypad { display: grid; grid-template-columns: repeat(3, 72px); gap: 8px; }
+.cog-keypad-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 72px;
+  min-height: 64px;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.cog-keypad-btn:active { color: var(--bg); background: var(--accent-bright); }
+.cog-symbol { display: block; color: inherit; }
+
+@media (max-width: 640px) {
+  .cog-q { grid-template-columns: minmax(0, 1fr); }
+  .cog-field { height: 74vh; }
+}
+
+/* ── Standalone "tests on yourself" page (cognitive.html) ────────────────── */
+.cog-standalone { max-width: 1100px; margin: 0 auto; padding: 16px; }
+.cog-standalone .cog-run { min-height: calc(100vh - 32px); }
+
+.cog-diag .cog-hist { display: block; width: 100%; max-width: 420px; height: auto; }
+.cog-hist-bar { fill: var(--accent); }
+.cog-hist-axis { stroke: var(--border); }
+.cog-hist-label { fill: var(--dim); font-size: 10px; font-family: inherit; }
+
+.cog-history .panel-body { display: grid; gap: 8px; }
+.cog-trends { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.cog-trend { display: grid; gap: 2px; min-width: 0; }
+.cog-table-wrap { overflow-x: auto; }
+.cog-table td, .cog-table th { white-space: nowrap; }

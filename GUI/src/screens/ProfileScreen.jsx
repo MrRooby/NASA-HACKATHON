@@ -51,7 +51,8 @@ function CheckInPanel({ biometrics, committed, sol, onUpdate, onCommit }) {
 }
 
 /**
- * PROFILE screen: crew file, notes / diary (skeleton), psychological tests (skeleton),
+ * PROFILE screen: crew file, notes / diary (skeleton), psychological tests (cognitive battery on the
+ * TESTS screen, questionnaires still a skeleton),
  * notifications; on the logged-in person's own profile also the daily check-in and the
  * flight-surgeon report. Another person's profile is read-only.
  * props (shared by every screen): { mother, session, viewedCode, setViewedCode, navigate, profile }
@@ -89,6 +90,11 @@ export default function ProfileScreen({ mother, session, viewedCode, setViewedCo
     setCommitted({ at: new Date().toISOString(), symptoms: values?.symptoms && values.symptoms !== 'NONE' ? values.symptoms : null });
   };
 
+  // Cognitive tests (PVT, Go/No-Go, DSST) run on the TESTS screen; the questionnaires have no runner yet.
+  const startTest = test => {
+    if (isOwn && test?.runner === 'cognitive') navigate('tests');
+  };
+
   const backToOwn = () => {
     setViewedCode(session);
     navigate('profile');
@@ -117,7 +123,7 @@ export default function ProfileScreen({ mother, session, viewedCode, setViewedCo
       <div className="profile-columns">
         <div className="profile-column">
           <CrewFilePanel profile={profile} report={report} mother={mother} habitat={habitat} navigate={navigate} />
-          <PsychTestsPanel crewCode={profile.code} isOwn={isOwn} />
+          <PsychTestsPanel crewCode={profile.code} isOwn={isOwn} onStart={startTest} />
           {isOwn ? (
             <CheckInPanel
               biometrics={biometrics}

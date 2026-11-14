@@ -57,6 +57,16 @@
 .profile-note-input { width: 100%; min-height: 6em; resize: vertical; }
 
 /* [ PSYCHOLOGICAL TESTS ] */
+.profile-tests-battery {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0 0 6px;
+  padding: 3px 8px;
+  border: 1px solid var(--ok);
+}
+.profile-tests-battery-text { flex: 1 1 28ch; min-width: 0; color: var(--fg); font-size: 12px; }
 .profile-table-wrap { overflow-x: auto; margin: 6px 0; }
 .profile-tests-table th[scope='row'] {
   padding: 2px 12px 2px 0;

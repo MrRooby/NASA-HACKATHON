@@ -31,12 +31,12 @@ describe('crewStore: notes / diary (skeleton)', () => {
 });
 
 describe('crewStore: psychological tests (skeleton)', () => {
-  it('has the five catalogue entries, all unavailable, with EN and PL texts', () => {
+  it('has the five catalogue entries with EN and PL texts; only the PVT (cognitive module) is available', () => {
     expect(PSYCH_TEST_CATALOG.map(test => test.id)).toEqual([
       'mood_state', 'symptom_checklist', 'pvt', 'sleep_quality', 'team_cohesion',
     ]);
     for (const test of PSYCH_TEST_CATALOG) {
-      expect(test.available).toBe(false);
+      expect(test.available).toBe(test.id === 'pvt');
       expect(test.name.en).toBeTruthy();
       expect(test.name.pl).toBeTruthy();
       expect(test.purpose.en).toBeTruthy();

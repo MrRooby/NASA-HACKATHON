@@ -37,7 +37,10 @@ export default {
 
   // [ PSYCHOLOGICAL TESTS ]
   testsTitle: 'Psychological tests',
-  testsHint: 'Planned test battery. Results will be stored in the base database. The tests cannot be started yet and there are no results.',
+  testsHint: 'Questionnaires are planned: they cannot be started yet and have no results. Results will be stored in the base database.',
+  testsLive: 'Live',
+  testsBattery: 'Cognitive battery: PVT · Go/No-Go · DSST. Runs on the Tests screen, compared with your own baseline.',
+  testsOpenBattery: 'Open cognitive tests',
   testsColName: 'Test',
   testsColPurpose: 'Purpose',
   testsColCadence: 'Cadence',

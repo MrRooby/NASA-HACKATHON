@@ -12,7 +12,7 @@ Lista rzeczy, które w GUI wyglądają na gotowe, ale nie mają jeszcze prawdziw
 | # | Obszar | Stan | Kto ma ruch |
 |---|---|---|---|
 | a | Notatki / pamiętnik | SZKIELET | baza + API |
-| b | Testy psychologiczne | SZKIELET | baza + API + medycyna (treść testów) |
+| b | Testy psychologiczne | testy kognitywne DZIAŁAJĄ, kwestionariusze SZKIELET | baza + API + medycyna (treść kwestionariuszy) |
 | c | Profile załogi | FIKCYJNE, wpisane w GUI | baza + API |
 | d | Codzienny check-in i raport dla flight surgeona | LOKALNIE | baza + API |
 | e | Trzy pomieszczenia na mapie bazy | SYMULOWANE | baza (czujniki, strefy) |
@@ -21,7 +21,7 @@ Lista rzeczy, które w GUI wyglądają na gotowe, ale nie mają jeszcze prawdziw
 | h | Powiadomienia: potwierdzanie i odrzucanie | BRAK | baza + API |
 | i | Logowanie | wybór osoby bez hasła | API |
 
-Cały dostęp GUI do danych z punktów a, b i d idzie przez jeden plik: `src/data/crewStore.js`. Po podłączeniu backendu zmienia się tylko on. Ekrany czytają pole `connected` i same odblokowują formularze.
+Cały dostęp GUI do danych z punktów a, b (kwestionariusze) i d idzie przez jeden plik: `src/data/crewStore.js`. Testy kognitywne mają własny moduł `src/cognitive/`. Po podłączeniu backendu zmienia się tylko on. Ekrany czytają pole `connected` i same odblokowują formularze.
 
 ---
 
@@ -38,21 +38,36 @@ Cały dostęp GUI do danych z punktów a, b i d idzie przez jeden plik: `src/dat
 
 ## b) Testy psychologiczne
 
-- **Stan:** SZKIELET. Tabela pięciu testów ze stałego katalogu, „ostatni wynik” i „następny termin” to `—`, `[ START ]` wyłączony.
+### Testy kognitywne (PVT, Go/No-Go, DSST): DZIAŁAJĄ
+
+- **Stan:** prawdziwe. Zakładka `[ TESTS ]` pokazuje trzy kafle (status względem własnego baseline'u, trend, postęp budowania baseline'u) i uruchamia sesję: ankieta przed testem → kontrola ekranu → instrukcja → próba → test → wynik.
+- **W kodzie:** moduł `src/cognitive/` (silnik w `engine/`, zadania w `tests/`, style w `cognitive.css`), ekran `src/screens/TestsScreen.jsx`. Backend: `GET /api/cognitive/{code}` i zapis sesji przez `/api/cognitive/*` (MOTHER liczy wyniki i baseline).
+- **Czyje testy:** ekran pokazuje osobę, którą właśnie oglądamy (`viewedCode`). Test uruchamia się tylko z własnej sesji. Cudze kafle są tylko do odczytu (`VIEWING {NAME} — READ ONLY`).
+- **W trakcie testu** aplikacja chowa górny pasek i stopkę (`setChromeHidden` w `src/App.jsx`), żeby nic nie zakłócało pomiaru czasu.
+- **Offline:** wynik zostaje w localStorage (kolejka) i jest wysyłany, gdy MOTHER wróci.
+- **Autotest bez bazy:** osobna strona `cognitive.html` (`src/cognitive/standalone.jsx`). Wyniki zostają tylko w przeglądarce, `?demo=1` skraca testy.
+- **Wejście z profilu:** w panelu testów psychologicznych wiersz PVT (`available: true`, `runner: 'cognitive'`) i linia „Cognitive battery” (`COGNITIVE_BATTERY` w `src/data/crewStore.js`) mają aktywne przyciski, które na własnym profilu otwierają ekran `tests`.
+- **Zostało do zrobienia:**
+  - Teksty wewnątrz sesji (ankieta, instrukcje, informacja zwrotna, karta wyniku, diagnostyka) oraz cała strona `cognitive.html` są **tylko po angielsku**. Przetłumaczona jest strona z kaflami (przestrzeń nazw `tests` w `src/i18n`). Nagłówki kafli i `headline` przychodzą z backendu po angielsku (punkt f).
+  - Tabela w profilu nie pokazuje jeszcze „ostatniego wyniku” ani „następnego terminu” PVT. Dane są w `GET /api/cognitive/{code}`, trzeba je tylko wczytać w `listPsychResults`.
+
+### Kwestionariusze: SZKIELET
+
+- **Stan:** SZKIELET. Cztery kwestionariusze ze stałego katalogu, „ostatni wynik” i „następny termin” to `—`, `[ START ]` wyłączony, panel ma znaczek `NOT CONNECTED · TODO`.
 - **W kodzie:** `src/profile/PsychTestsPanel.jsx`, `src/data/crewStore.js` (`PSYCH_TEST_CATALOG`, `listPsychTests`, `listPsychResults`, `submitPsychResult`).
-- **Teraz w katalogu:** kwestionariusz nastroju (typu POMS), lista objawów (typu SCL-90), PVT (czas reakcji), jakość snu, spójność zespołu i konflikty. Wszystkie mają `available: false`. Częstotliwość i czas trwania to **założenie zespołu** (`basis: 'team_assumption'`), nie protokół NASA.
+- **Teraz w katalogu:** kwestionariusz nastroju (typu POMS), lista objawów (typu SCL-90), jakość snu, spójność zespołu i konflikty. Wszystkie mają `available: false`. Piąty wpis katalogu to PVT (opisany wyżej, `available: true`). Częstotliwość i czas trwania to **założenie zespołu** (`basis: 'team_assumption'`), nie protokół NASA.
 - **Potrzebne z bazy:**
   - `psych_test` (`id`, `code`, `name_en`, `name_pl`, `purpose_en`, `purpose_pl`, `cadence_sols`, `duration_min`, `reference`, `active`).
   - `psych_test_item` (`id`, `test_id`, `position`, `text_en`, `text_pl`, `scale_min`, `scale_max`, `reverse_scored`, `subscale`).
   - `psych_test_result` (`id`, `test_id`, `habitat_id`, `crew_code`, `sol`, `created_utc`, `score`, `subscales` JSON, `status`, `duration_s`).
-  - `psych_test_answer` (`result_id`, `item_id`, `value`): odpowiedzi na pojedyncze pytania. Dla PVT zamiast tego surowe czasy reakcji.
+  - `psych_test_answer` (`result_id`, `item_id`, `value`): odpowiedzi na pojedyncze pytania.
 - **Potrzebne z API:**
   - `GET /api/psych/tests` (katalog) i `GET /api/psych/tests/{code}` (pytania).
   - `GET /api/crew/{code}/psych/results` → wyniki z `test_id`, `sol`, `score`, `status`.
   - `POST /api/crew/{code}/psych/results` z `{ test_id, sol, answers }` → wynik policzony przez backend.
-- **Punktacja:** po stronie MOTHER (sumy podskal, progi ok / caution / alert z polem `basis`, trend względem własnego baseline'u). Dla PVT: średni czas reakcji, liczba przeoczeń > 500 ms, falstarty.
-- **Uwaga o licencjach:** POMS i SCL-90-R są płatne. Do demo potrzebne są własne pytania „w stylu” albo narzędzia wolne. PVT można zaimplementować samemu.
-- **W GUI zostanie do zrobienia:** ekran przeprowadzania testu (formularz pytań, zadanie PVT). `PsychTestsPanel` ma już na to prop `onStart`.
+- **Punktacja:** po stronie MOTHER (sumy podskal, progi ok / caution / alert z polem `basis`, trend względem własnego baseline'u).
+- **Uwaga o licencjach:** POMS i SCL-90-R są płatne. Do demo potrzebne są własne pytania „w stylu” albo narzędzia wolne.
+- **W GUI zostanie do zrobienia:** ekran wypełniania kwestionariusza (formularz pytań). `PsychTestsPanel` ma już prop `onStart`, którego dziś używają testy kognitywne.
 
 ## c) Profile załogi
 

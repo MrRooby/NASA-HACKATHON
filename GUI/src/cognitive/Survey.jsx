@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, Panel } from '../components/index.js';
 
 const range = (from, to) => Array.from({ length: to - from + 1 }, (_, i) => from + i);
 const SLEEP_STEPS = Array.from({ length: 29 }, (_, i) => i * 0.5);
@@ -30,27 +31,28 @@ export default function Survey({ onDone }) {
   );
 
   return (
-    <form className="cog-card cog-survey" onSubmit={submit}>
-      <h2 className="cog-h2">Before you start</h2>
-      <p className="cog-muted">Six quick questions. They help interpret your results.</p>
-      <div className="cog-q">
-        <label htmlFor="sleep_h">Hours of sleep last night</label>
-        <select id="sleep_h" value={v.sleep_h} onChange={set('sleep_h')} required>
-          <option value="">Choose...</option>
-          {SLEEP_STEPS.map(h => <option key={h} value={h}>{h}</option>)}
-        </select>
-        <span className="cog-q-hint">0 to 14 h, in half hours</span>
-      </div>
-      {scale('sleep_quality', 'Sleep quality', 1, 10, '1 = very poor, 10 = excellent')}
-      {scale('fatigue', 'Fatigue now', 1, 10, '1 = fresh, 10 = exhausted')}
-      {scale('kss', 'Sleepiness (KSS)', 1, 9, '1 = very alert, 9 = very sleepy')}
-      {scale('stress', 'Stress now', 1, 10, '1 = calm, 10 = very stressed')}
-      <fieldset className="cog-q cog-q-radio">
-        <legend>Caffeine in the last 3 hours</legend>
-        <label><input type="radio" name="caffeine" value="no" checked={v.caffeine_3h === 'no'} onChange={set('caffeine_3h')} /> No</label>
-        <label><input type="radio" name="caffeine" value="yes" checked={v.caffeine_3h === 'yes'} onChange={set('caffeine_3h')} /> Yes</label>
-      </fieldset>
-      <button type="submit" className="btn-primary cog-btn" disabled={!complete}>CONTINUE</button>
-    </form>
+    <Panel className="cog-card cog-survey" title="Before you start">
+      <form onSubmit={submit}>
+        <p className="cog-muted">Six quick questions. They help interpret your results.</p>
+        <div className="cog-q">
+          <label htmlFor="sleep_h">Hours of sleep last night</label>
+          <select id="sleep_h" value={v.sleep_h} onChange={set('sleep_h')} required>
+            <option value="">Choose...</option>
+            {SLEEP_STEPS.map(h => <option key={h} value={h}>{h}</option>)}
+          </select>
+          <span className="cog-q-hint">0 to 14 h, in half hours</span>
+        </div>
+        {scale('sleep_quality', 'Sleep quality', 1, 10, '1 = very poor, 10 = excellent')}
+        {scale('fatigue', 'Fatigue now', 1, 10, '1 = fresh, 10 = exhausted')}
+        {scale('kss', 'Sleepiness (KSS)', 1, 9, '1 = very alert, 9 = very sleepy')}
+        {scale('stress', 'Stress now', 1, 10, '1 = calm, 10 = very stressed')}
+        <fieldset className="cog-q cog-q-radio">
+          <legend>Caffeine in the last 3 hours</legend>
+          <label><input type="radio" name="caffeine" value="no" checked={v.caffeine_3h === 'no'} onChange={set('caffeine_3h')} /> No</label>
+          <label><input type="radio" name="caffeine" value="yes" checked={v.caffeine_3h === 'yes'} onChange={set('caffeine_3h')} /> Yes</label>
+        </fieldset>
+        <div className="cog-actions"><Button type="submit" variant="primary" className="cog-btn" disabled={!complete}>CONTINUE</Button></div>
+      </form>
+    </Panel>
   );
 }

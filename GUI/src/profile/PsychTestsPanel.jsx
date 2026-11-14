@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge, Button, Panel } from '../components/index.js';
 import { useI18n } from '../i18n/index.js';
-import { PSYCH_TEST_CATALOG, listPsychResults, listPsychTests } from '../data/crewStore.js';
+import { COGNITIVE_BATTERY, PSYCH_TEST_CATALOG, listPsychResults, listPsychTests } from '../data/crewStore.js';
 import { localized } from '../crew/crewStatus.js';
 import { useStoreList } from './useStoreList.js';
 
@@ -17,11 +17,12 @@ function latestByTest(results) {
 
 /**
  * List of psychological tests with the last result and the next due sol per test.
- * SKELETON: the catalogue is static (crewStore.PSYCH_TEST_CATALOG), there are no results
- * and no test can be started; all of it is read through crewStore, so real data needs
- * no change here (see GUI/TODO.md, section b).
+ * The cognitive battery (PVT, Go/No-Go, DSST) is real and runs on the TESTS screen: its line and
+ * the PVT row (`available: true`) call onStart. The questionnaires are still a SKELETON: static
+ * catalogue (crewStore.PSYCH_TEST_CATALOG), no results, [ START ] disabled; all of it is read
+ * through crewStore, so real data needs no change here (see GUI/TODO.md, section b).
  * props: crewCode ('HAB-C1'), isOwn (only the person themselves starts a test),
- *        onStart(test) — the future test runner; without it [ START ] stays disabled.
+ *        onStart(test) — opens the test runner; without it every [ START ] stays disabled.
  */
 export default function PsychTestsPanel({ crewCode, isOwn, onStart }) {
   const { t, lang } = useI18n();
@@ -36,6 +37,13 @@ export default function PsychTestsPanel({ crewCode, isOwn, onStart }) {
       title={t('profile.testsTitle')}
       meta={connected ? null : <Badge kind="todo" data-testid="tests-todo">{t('profile.notConnected')}</Badge>}
     >
+      <p className="profile-tests-battery" data-testid="cognitive-battery">
+        <Badge tone="ok">{t('profile.testsLive')}</Badge>
+        <span className="profile-tests-battery-text">{t('profile.testsBattery')}</span>
+        <Button small disabled={!onStart || !isOwn} onClick={() => onStart?.(COGNITIVE_BATTERY)}>
+          {t('profile.testsOpenBattery')}
+        </Button>
+      </p>
       <p className="profile-hint">{t('profile.testsHint')}</p>
       <div className="profile-table-wrap">
         <table className="table profile-tests-table">

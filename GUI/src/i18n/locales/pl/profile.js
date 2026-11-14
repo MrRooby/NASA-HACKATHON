@@ -37,7 +37,10 @@ export default {
 
   // [ PSYCHOLOGICAL TESTS ]
   testsTitle: 'Testy psychologiczne',
-  testsHint: 'Planowany zestaw testów. Wyniki będą zapisywane w bazie danych habitatu. Testów nie da się jeszcze uruchomić i nie ma wyników.',
+  testsHint: 'Kwestionariusze są planowane: nie da się ich jeszcze uruchomić i nie mają wyników. Wyniki będą zapisywane w bazie danych habitatu.',
+  testsLive: 'Działa',
+  testsBattery: 'Bateria kognitywna: PVT · Go/No-Go · DSST. Działa na ekranie Badania, w porównaniu z własnym poziomem bazowym.',
+  testsOpenBattery: 'Otwórz testy kognitywne',
   testsColName: 'Test',
   testsColPurpose: 'Cel',
   testsColCadence: 'Częstotliwość',

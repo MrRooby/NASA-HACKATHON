@@ -45,10 +45,13 @@ describe('CognitivePage', () => {
     expect(within(pvt).getByText(/BUILDING BASELINE/)).toBeInTheDocument();
     const gng = screen.getByTestId('tile-gonogo');
     expect(gng).toHaveAttribute('data-status', 'caution');
-    expect(gng).toHaveTextContent('CAUTION');
+    expect(gng).toHaveAttribute('data-tone', 'caution');
+    expect(gng).toHaveTextContent('[ CAUT ]');
     expect(gng).toHaveTextContent('18 %');
-    expect(gng.querySelector('svg.spark polyline')).not.toBeNull();
+    expect(gng.querySelector('svg.cog-spark.cog-spark-caution polyline')).not.toBeNull();
     expect(screen.getByTestId('tile-dsst')).toHaveAttribute('data-status', 'alert');
+    expect(screen.getByTestId('tile-dsst')).toHaveTextContent('[ ALRT ]');
+    expect(pvt).toHaveTextContent('[ ---- ]');
     expect(screen.getByTestId('synthetic-label')).toBeInTheDocument();
     expect(screen.getByText(/not a diagnosis/i)).toBeInTheDocument();
     expect(screen.queryByText(/not reachable/i)).not.toBeInTheDocument();
@@ -90,6 +93,28 @@ describe('CognitivePage', () => {
     stubMother(route);
     render(<CognitivePage mother={{ subjects: SUBJECTS, selectedCode: 'SYN-02' }} />);
     await waitFor(() => expect(screen.getByRole('combobox', { name: 'Person' })).toHaveValue('SYN-02'));
+  });
+});
+
+describe('CognitivePage with a fixed person', () => {
+  it('pins the subject, hides the selector and does not touch the remembered choice', async () => {
+    window.localStorage.setItem('cognitive.subject', 'SYN-02');
+    const fetchMock = stubMother(route);
+    render(<CognitivePage fixedCode="SYN-01" personName="Ada" mother={{ subjects: SUBJECTS, selectedCode: 'SYN-02' }} />);
+    await waitFor(() => expect(screen.getByTestId('tile-pvt')).toHaveTextContent('Building your baseline (2/3)'));
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+    expect(screen.getByTestId('cog-person')).toHaveTextContent('Ada · SYN-01');
+    expect(requestedPaths(fetchMock)).not.toContain('/api/cognitive/SYN-02');
+    expect(window.localStorage.getItem('cognitive.subject')).toBe('SYN-02');
+    expect(screen.getByRole('button', { name: /quick test/i })).toBeEnabled();
+  });
+
+  it('read only: tiles without the start buttons', async () => {
+    stubMother(route);
+    render(<CognitivePage fixedCode="SYN-01" readOnly />);
+    await waitFor(() => expect(screen.getByTestId('tile-gonogo')).toHaveAttribute('data-status', 'caution'));
+    expect(screen.queryByRole('button', { name: /quick test/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /full battery/i })).not.toBeInTheDocument();
   });
 });
 

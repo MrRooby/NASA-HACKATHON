@@ -1,4 +1,5 @@
 import React from 'react';
+import { DataRow, Panel } from '../components/index.js';
 import { diagnose } from './engine/diagnostics.js';
 import { fmt } from './session.js';
 
@@ -26,18 +27,17 @@ export default function Diagnostics({ payload, demo = false }) {
   const d = diagnose(payload, { demo });
   const pct = d.ts_h.share == null ? '-' : `${Math.round(d.ts_h.share * 100)} %`;
   return (
-    <div className="cog-card cog-diag" data-testid="diagnostics">
-      <h2 className="cog-h2">Device diagnostics</h2>
+    <Panel className="cog-card cog-diag" title="Device diagnostics" data-testid="diagnostics">
       <Histogram hist={d.histogram} />
-      <dl className="cog-dl">
-        <dt>Trials stamped with the high-resolution clock ('h')</dt><dd data-testid="diag-h">{d.ts_h.n} of {d.ts_h.total} ({pct})</dd>
-        <dt>Screen refresh rate</dt><dd>{fmt(d.device.refresh_hz, 0, ' Hz')}</dd>
-        <dt>Frame jitter</dt><dd>{fmt(d.device.frame_jitter_ms, 2, ' ms')}</dd>
-        <dt>Timer resolution</dt><dd>{fmt(d.device.timer_resolution_ms, 2, ' ms')}</dd>
-        <dt>Focus lost</dt><dd>{fmt(d.device.focus_lost_ms, 0, ' ms')}</dd>
-        <dt>Actual vs planned interval (mean abs. difference)</dt>
-        <dd data-testid="diag-isi">{d.isi ? `${fmt(d.isi.mean_abs_diff_ms, 1, ' ms')} (${d.isi.n} trials)` : 'not available'}</dd>
-      </dl>
-    </div>
+      <div className="cog-rows">
+        <DataRow label="Trials stamped with the high-resolution clock ('h')" value={<span data-testid="diag-h">{d.ts_h.n} of {d.ts_h.total} ({pct})</span>} />
+        <DataRow label="Screen refresh rate" value={fmt(d.device.refresh_hz, 0, ' Hz')} />
+        <DataRow label="Frame jitter" value={fmt(d.device.frame_jitter_ms, 2, ' ms')} />
+        <DataRow label="Timer resolution" value={fmt(d.device.timer_resolution_ms, 2, ' ms')} />
+        <DataRow label="Focus lost" value={fmt(d.device.focus_lost_ms, 0, ' ms')} />
+        <DataRow label="Actual vs planned interval (mean abs. difference)"
+          value={<span data-testid="diag-isi">{d.isi ? `${fmt(d.isi.mean_abs_diff_ms, 1, ' ms')} (${d.isi.n} trials)` : 'not available'}</span>} />
+      </div>
+    </Panel>
   );
 }

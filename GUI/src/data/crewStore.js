@@ -60,6 +60,9 @@ export async function addNote(crewCode, note) {
 // use. Cadence and duration are TEAM ASSUMPTIONS for the demo (basis: 'team_assumption'),
 // not a NASA protocol. No questionnaire items are bundled: several of these instruments
 // are licensed, so the content has to come from the database / the medical team.
+/** The cognitive battery that already runs on the TESTS screen (not a questionnaire, not part of the planned tables). */
+export const COGNITIVE_BATTERY = { id: 'cognitive_battery', runner: 'cognitive', tests: ['pvt', 'gonogo', 'dsst'], available: true };
+
 export const PSYCH_TEST_CATALOG = [
   {
     id: 'mood_state',
@@ -98,7 +101,9 @@ export const PSYCH_TEST_CATALOG = [
     durationMin: 3,
     reference: '3-minute PVT-B (Basner, Mollicone & Dinges, 2011); Reaction Self-Test on the ISS; part of the NASA Cognition battery (Basner et al., 2015)',
     basis: 'team_assumption',
-    available: false,
+    // Real: runs on the TESTS screen (src/cognitive, backend /api/cognitive/*), together with Go/No-Go and DSST.
+    available: true,
+    runner: 'cognitive',
   },
   {
     id: 'sleep_quality',

@@ -102,13 +102,32 @@ describe('ProfileScreen: skeleton panels', () => {
     expect(within(notes).getByText(/will be stored in the base database/)).toBeInTheDocument();
   });
 
-  it('marks the psychological tests panel as not connected, every test disabled', async () => {
+  it('marks the questionnaires as not connected: only the PVT can be started', async () => {
     await renderProfile({ session: 'HAB-C2' });
     const tests = panel('Psychological tests');
     expect(within(tests).getByTestId('tests-todo')).toHaveTextContent('Not connected · TODO');
     const start = within(tests).getAllByRole('button', { name: /^Start/ });
     expect(start).toHaveLength(PSYCH_TEST_CATALOG.length);
-    for (const button of start) expect(button).toBeDisabled();
+    start.forEach((button, index) => {
+      if (PSYCH_TEST_CATALOG[index].id === 'pvt') expect(button).toBeEnabled();
+      else expect(button).toBeDisabled();
+    });
+  });
+
+  it('[ START ] of the PVT opens the tests screen', async () => {
+    const { navigate } = await renderProfile({ session: 'HAB-C2' });
+    const tests = panel('Psychological tests');
+    fireEvent.click(within(tests).getByRole('button', { name: 'Start: Psychomotor vigilance test (PVT, reaction time)' }));
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(navigate).toHaveBeenCalledWith('tests');
+  });
+
+  it('the cognitive battery line (PVT, Go/No-Go, DSST) opens the tests screen', async () => {
+    const { navigate } = await renderProfile({ session: 'HAB-C2' });
+    const battery = screen.getByTestId('cognitive-battery');
+    expect(battery).toHaveTextContent(/PVT · Go\/No-Go · DSST/);
+    fireEvent.click(within(battery).getByRole('button', { name: 'Open cognitive tests' }));
+    expect(navigate).toHaveBeenCalledWith('tests');
   });
 
   it('lists every catalogue test with purpose, cadence and empty results', async () => {
@@ -273,6 +292,8 @@ describe('ProfileScreen: another person (read only)', () => {
     expect(within(panel('Notes / diary')).getByText(/Diary entries are private/)).toBeInTheDocument();
     expect(screen.queryByLabelText('New entry')).not.toBeInTheDocument();
     expect(within(panel('Psychological tests')).getAllByRole('row')).toHaveLength(6);
+    // nobody starts a test for someone else
+    for (const button of within(panel('Psychological tests')).getAllByRole('button')) expect(button).toBeDisabled();
     expect(panel('Notifications')).toBeInTheDocument();
   });
 

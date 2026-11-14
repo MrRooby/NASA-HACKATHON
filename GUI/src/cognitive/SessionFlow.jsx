@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Button, Panel } from '../components/index.js';
 import Calibration from './Calibration.jsx';
 import ResultCard from './ResultCard.jsx';
 import Survey from './Survey.jsx';
@@ -128,11 +129,10 @@ export default function SessionFlow({ subject, mission = null, mode = 'quick', t
   if (lock === 'checking') return null;
   if (lock === 'busy') {
     return (
-      <div className="cog-card" role="alert">
-        <h2 className="cog-h2">A test is already running in another window</h2>
+      <Panel className="cog-card" tone="caution" title="A test is already running in another window" role="alert">
         <p className="cog-muted">Close it or wait for it to finish, then try again.</p>
-        <button type="button" className="btn-secondary cog-btn" onClick={() => onExit?.()}>BACK</button>
-      </div>
+        <div className="cog-actions"><Button className="cog-btn" onClick={() => onExit?.()}>BACK</Button></div>
+      </Panel>
     );
   }
 
@@ -146,13 +146,12 @@ export default function SessionFlow({ subject, mission = null, mode = 'quick', t
 
   if (stage === 'instructions') {
     return (
-      <div className="cog-card">
-        <h2 className="cog-h2">{label}{step}</h2>
+      <Panel className="cog-card" title={`${label}${step}`}>
         <ul className="cog-steps">{INSTRUCTIONS[test].map(s => <li key={s}>{s}</li>)}</ul>
         {demo && <p className="cog-warn" data-testid="demo-note">DEMO: shortened test, never counted in your baseline.</p>}
         <p className="cog-muted">First: {PRACTICE_NOTE[test]} with feedback. They are not scored.</p>
-        <button type="button" className="btn-primary cog-btn" onClick={() => setStage('practice')}>START PRACTICE</button>
-      </div>
+        <div className="cog-actions"><Button variant="primary" className="cog-btn" onClick={() => setStage('practice')}>START PRACTICE</Button></div>
+      </Panel>
     );
   }
   if (stage === 'practice') {
@@ -166,11 +165,10 @@ export default function SessionFlow({ subject, mission = null, mode = 'quick', t
   }
   if (stage === 'ready') {
     return (
-      <div className="cog-card">
-        <h2 className="cog-h2">Practice finished</h2>
+      <Panel className="cog-card" title="Practice finished">
         <p className="cog-muted">The real test starts now and is scored. Keep this window in front.</p>
-        <button type="button" className="btn-primary cog-btn" autoFocus onClick={() => { startedAt.current = Date.now(); setStage('run'); }}>START TEST</button>
-      </div>
+        <div className="cog-actions"><Button variant="primary" className="cog-btn" autoFocus onClick={() => { startedAt.current = Date.now(); setStage('run'); }}>START TEST</Button></div>
+      </Panel>
     );
   }
   if (stage === 'run') {
@@ -182,7 +180,7 @@ export default function SessionFlow({ subject, mission = null, mode = 'quick', t
         onComplete={res => finalize(res, false)} />
     );
   }
-  if (stage === 'saving') return <div className="cog-card" role="status"><h2 className="cog-h2">Saving...</h2></div>;
+  if (stage === 'saving') return <Panel className="cog-card" title="Saving..." role="status"><p className="cog-muted">Please wait<span className="cursor" /></p></Panel>;
   if (stage === 'result' && outcome) {
     return (
       <>

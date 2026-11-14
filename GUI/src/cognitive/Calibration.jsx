@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button, DataRow, Panel } from '../components/index.js';
 import { calibrateFrames, deviceWarnings, timerResolution } from './engine/clock.js';
 
 /** Measures the screen (120 frames) and the timer resolution, warns about slow devices. */
@@ -17,25 +18,23 @@ export default function Calibration({ onDone, frames = 120 }) {
 
   if (!result) {
     return (
-      <div className="cog-card" role="status">
-        <h2 className="cog-h2">Checking your screen...</h2>
-        <p className="cog-muted">This takes about two seconds. Please keep this window in front.</p>
-      </div>
+      <Panel className="cog-card" title="Checking your screen..." role="status">
+        <p className="cog-muted">This takes about two seconds. Please keep this window in front.<span className="cursor" /></p>
+      </Panel>
     );
   }
   const warnings = deviceWarnings(result);
   return (
-    <div className="cog-card">
-      <h2 className="cog-h2">Screen check</h2>
-      <dl className="cog-dl">
-        <dt>Refresh rate</dt><dd>{result.refresh_hz ?? '-'} Hz</dd>
-        <dt>Frame jitter</dt><dd>{result.frame_jitter_ms ?? '-'} ms</dd>
-        <dt>Timer resolution</dt><dd>{result.timer_resolution_ms ?? '-'} ms</dd>
-      </dl>
+    <Panel className="cog-card" title="Screen check" tone={warnings.length ? 'caution' : 'default'}>
+      <div className="cog-rows">
+        <DataRow label="Refresh rate" value={result.refresh_hz ?? '-'} unit="Hz" />
+        <DataRow label="Frame jitter" value={result.frame_jitter_ms ?? '-'} unit="ms" />
+        <DataRow label="Timer resolution" value={result.timer_resolution_ms ?? '-'} unit="ms" />
+      </div>
       {warnings.length === 0
         ? <p className="cog-muted">Your device looks suitable for timing tests.</p>
         : warnings.map(w => <p key={w} className="cog-warn" role="alert">{w}</p>)}
-      <button type="button" className="btn-primary cog-btn" onClick={() => onDone(result)}>CONTINUE</button>
-    </div>
+      <div className="cog-actions"><Button variant="primary" className="cog-btn" onClick={() => onDone(result)}>CONTINUE</Button></div>
+    </Panel>
   );
 }

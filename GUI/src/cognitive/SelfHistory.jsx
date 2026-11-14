@@ -1,4 +1,5 @@
 import React from 'react';
+import { Panel } from '../components/index.js';
 import { TrendSpark } from './Tiles.jsx';
 import { TEST_ORDER } from './engine/protocols.js';
 import { KEY_METRIC, LABELS } from './engine/localReport.js';
@@ -16,15 +17,13 @@ function keyText(test, m) {
 export default function SelfHistory({ sessions, report }) {
   const rows = [...sessions].reverse();
   return (
-    <section className="data-panel cog-history" data-testid="self-history">
-      <div className="panel-header"><span className="panel-title">MY SESSIONS</span></div>
-      <div className="cog-tile-body">
+    <Panel className="cog-history" title="MY SESSIONS" meta={rows.length} data-testid="self-history">
         <div className="cog-trends">
           {TEST_ORDER.map(id => {
             const tile = report.tests.find(t => t.test_id === id);
             return (
               <div key={id} className="cog-trend">
-                <span className="cog-muted">{LABELS[id]}</span>
+                <span className="label">{LABELS[id]}</span>
                 <TrendSpark values={tile.trend.map(p => p.value)} status={tile.status} />
               </div>
             );
@@ -32,7 +31,7 @@ export default function SelfHistory({ sessions, report }) {
         </div>
         {rows.length === 0 ? <p className="cog-muted">No sessions yet.</p> : (
           <div className="cog-table-wrap">
-            <table className="cog-table">
+            <table className="table cog-table">
               <thead><tr><th>Date</th><th>Test</th><th>No.</th><th>Result</th><th>Status</th><th>Quality</th><th>Counts</th></tr></thead>
               <tbody>
                 {rows.map(s => {
@@ -54,7 +53,6 @@ export default function SelfHistory({ sessions, report }) {
             </table>
           </div>
         )}
-      </div>
-    </section>
+    </Panel>
   );
 }
