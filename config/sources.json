@@ -302,6 +302,20 @@
       "url": "https://ntrs.nasa.gov/citations/20120010555",
       "checked": "2026-11-14"
     },
+    "csa_radiation": {
+      "title": "CSA — Monitoring radiation for astronaut health (2026): neutrons ~30% of total ISS radiation; CANS neutron spectrometer. Official challenge resource.",
+      "publisher": "Canadian Space Agency",
+      "type": "nasa_evidence",
+      "url": "https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp",
+      "checked": "2026-11-14"
+    },
+    "csa_why_science": {
+      "title": "CSA — Why do we conduct science experiments in space? Deep-space risks incl. less reliance on Earth for emergency medical help. Official challenge resource.",
+      "publisher": "Canadian Space Agency",
+      "type": "nasa_evidence",
+      "url": "https://www.asc-csa.gc.ca/eng/iss/science/why-do-we-conduct-science-experiments-in-space.asp",
+      "checked": "2026-11-14"
+    },
     "zwart_2014": {
       "title": "Zwart et al. 2014 — body mass on ISS (SLAMMD −2.8%, BMMD −4.4%)",
       "publisher": "peer-reviewed (NASA authors)",

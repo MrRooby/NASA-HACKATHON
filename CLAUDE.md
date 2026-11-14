@@ -6,6 +6,13 @@ Startujemy w **NASA Space Apps Challenge 2026** z wyzwaniem **"Create Health Mon
 Pełny, oryginalny opis wyzwania z linkami do zasobów: [CHALLENGE.md](CHALLENGE.md). To jest źródło prawdy o wymaganiach.
 Research danych NASA, harmonogram badań astronautów, progi z norm NASA i mapowanie ryzyko → wskaźnik → rekomendacja: [DATA_SOURCES.md](DATA_SOURCES.md). Pobrane prawdziwe dane (krew Inspiration4, ciśnienie w locie) są w `data/nasa/`.
 
+**Konfiguracja medyczna (`config/`):**
+- `thresholds.json`: progi dla 23 wskaźników (przedziały ok / caution / alert, komunikat, akcja, eskalacja), środowiska z dawką promieniowania i opóźnieniem łączności, limity dawek dla narządów.
+- `inflight_measurements.json`: badania, które astronauci na ISS na pewno mają w trakcie misji, z częstotliwością. Osobno lista rzeczy niepotwierdzonych.
+- `sources.json`: bibliografia, do której odwołują się oba pliki przez `sources: [id]`.
+- Każdy przedział progu ma pole `basis`: `source` (wartość z cytowanego źródła) albo `team_assumption` (nasza decyzja; trzeba ją tak opisać w UI i w pitchu).
+- Po każdej zmianie w `config/` uruchom `python3 scripts/validate_config.py`. Skrypt sprawdza składnię JSON, czy źródła istnieją i czy przedziały nie mają luk ani nakładek.
+
 **Kluczowy fakt o danych:** publiczne dane per astronauta to tylko badania krwi przed lotem i po locie (Inspiration4). Serie HR, BP, snu i nastroju generujemy syntetycznie, kalibrując na opublikowanych średnich, i oznaczamy w UI jako „simulated”.
 
 **Stan projektu (2026-11-14):** jest tylko analiza wyzwania. Kodu jeszcze nie ma, a stack, skład zespołu i deadline czekają na decyzję (sekcja „Otwarte pytania”). Ten plik aktualizujemy w miarę, jak przychodzą nowe informacje.

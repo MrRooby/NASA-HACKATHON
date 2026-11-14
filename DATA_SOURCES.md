@@ -13,6 +13,20 @@ Pobrane pliki CSV leżą w [`data/nasa/`](data/nasa/).
 
 ---
 
+## 0. Oficjalne zasoby wyzwania (zakładka Resources)
+
+Sprawdzone 2026-11-14 pod `?tab=resources`. Strona ostatnio aktualizowana 2026-11-13; na niej tylko te 5 linków, czyli to samo co w [CHALLENGE.md](CHALLENGE.md). **Warto je cytować w aplikacji i w pitchu, bo jury ich szuka.**
+
+| Zasób | Co z niego bierzemy | Gdzie w repo |
+|---|---|---|
+| [NASA HRP: 5 Hazards](https://www.nasa.gov/hrp/hazards/) | 5 zagrożeń, utrata kości 1–1,5%/mies., opóźnienie łączności z Marsem do 20 min | sekcje 4–5, `config/sources.json` (`hrp_hazard_gravity`) |
+| [NASA HRP: Risks](https://www.nasa.gov/hrp/risks/) | 17 ryzyk językiem przystępnym: utrata kondycji 10–12%, ćwiczenia 1,5 h/dzień, ~70% załóg z obrzękiem tarczy nerwu wzrokowego, wzrost +3% | sekcje 4–5, `hrp_risk_fitness` |
+| [NASA HRP: Ongoing Research](https://www.nasa.gov/hrp/ongoing-hrp-research/) | Katalog badań: Artemis II (ARCHeR, Immune Biomarkers, Standard Measures), CIPHER, Standard Measures, Tempus Pro (urządzenie telemedyczne) | sekcje 1, 5 |
+| [CSA: Monitoring Radiation for Astronaut Health](https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp) | **Neutrony to ~30% całego promieniowania na ISS** i są szczególnie szkodliwe biologicznie. Nowy przyrząd CANS mierzy je w sposób ciągły i autonomiczny. Wcześniejsze kanadyjskie detektory: [MOSFET](https://www.asc-csa.gc.ca/eng/astronauts/space-medicine/mosfet.asp), [EVARM](https://www.asc-csa.gc.ca/eng/iss/evarm.asp), [Radi-N2](https://www.asc-csa.gc.ca/eng/sciences/radi-n2.asp) (bubble detectors) | `csa_radiation` |
+| [CSA: Why do we conduct science experiments in space?](https://www.asc-csa.gc.ca/eng/iss/science/why-do-we-conduct-science-experiments-in-space.asp) | Ryzyka misji na Księżyc i Marsa w 5 punktach: dłużej w nieważkości, więcej promieniowania, izolacja, opóźnienia łączności, mniejsza możliwość polegania na Ziemi (jedzenie, materiały, **pomoc medyczna**). Zmiany w ciele w kosmosie przypominają przyspieszone starzenie i siedzący tryb życia. Argument „przydatne też na Ziemi”: seniorzy, osteoporoza, choroby serca, cukrzyca typu 2 | `csa_why_science` |
+
+---
+
 ## 1. Jakie badania robi się astronautom, jak często i co dają
 
 Oznaczenia: **L-x** = dni przed startem, **FD x** = dzień lotu, **R-x** = dni przed powrotem, **R+x** = dni po powrocie.

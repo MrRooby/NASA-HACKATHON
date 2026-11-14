@@ -1,0 +1,384 @@
+{
+  "_about": "Rules-engine thresholds. DEMO / EDUCATIONAL ONLY — not medical advice. Band semantics: 'min' inclusive, 'max' exclusive, omitted = unbounded; bands of one indicator must not overlap. status: ok | caution | alert. basis: 'source' = the edge comes from a cited source; 'team_assumption' = our design choice built on the cited context (say so in the UI/pitch). escalate: true = suggest reporting to flight surgeon / mission control. Source ids resolve in sources.json.",
+  "version": "2026-11-14",
+  "status_levels": ["ok", "caution", "alert"],
+
+  "indicators": [
+    {
+      "id": "bp_systolic",
+      "label": "Systolic blood pressure",
+      "unit": "mmHg",
+      "category": "cardiovascular",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 90, "status": "caution", "basis": "source", "message": "Low blood pressure.", "action": "Hydrate, re-measure seated; report dizziness or fainting.", "escalate": false },
+        { "min": 90, "max": 120, "status": "ok", "basis": "source", "message": "Normal." },
+        { "min": 120, "max": 130, "status": "caution", "basis": "source", "message": "Elevated blood pressure.", "action": "Re-measure after 5 min rest; review sleep, stress and CO2 exposure." },
+        { "min": 130, "max": 140, "status": "caution", "basis": "source", "message": "Stage 1 high blood pressure.", "action": "Track daily for 7 days; include in weekly medical report." },
+        { "min": 140, "max": 181, "status": "alert", "basis": "source", "message": "Stage 2 high blood pressure.", "action": "Re-measure; report to flight surgeon.", "escalate": true },
+        { "min": 181, "status": "alert", "basis": "source", "message": "Hypertensive crisis range (>180).", "action": "Immediate contact with flight surgeon / crew medical officer.", "escalate": true }
+      ],
+      "spaceflight_context": "In microgravity 24-h BP typically falls 8–10 mmHg vs preflight, so a reading that is 'normal' on Earth may already be high for this astronaut — also compare with personal in-flight baseline.",
+      "sources": ["medlineplus_bp", "medlineplus_low_bp", "norsk_2015"]
+    },
+    {
+      "id": "bp_diastolic",
+      "label": "Diastolic blood pressure",
+      "unit": "mmHg",
+      "category": "cardiovascular",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 60, "status": "caution", "basis": "source", "message": "Low diastolic pressure.", "action": "Hydrate, re-measure; report symptoms." },
+        { "min": 60, "max": 80, "status": "ok", "basis": "source", "message": "Normal." },
+        { "min": 80, "max": 90, "status": "caution", "basis": "source", "message": "Stage 1 high blood pressure.", "action": "Track daily for 7 days." },
+        { "min": 90, "max": 121, "status": "alert", "basis": "source", "message": "Stage 2 high blood pressure.", "action": "Report to flight surgeon.", "escalate": true },
+        { "min": 121, "status": "alert", "basis": "source", "message": "Hypertensive crisis range (>120).", "action": "Immediate medical contact.", "escalate": true }
+      ],
+      "sources": ["medlineplus_bp", "medlineplus_low_bp", "norsk_2015"]
+    },
+    {
+      "id": "heart_rate_resting",
+      "label": "Resting heart rate",
+      "unit": "bpm",
+      "category": "cardiovascular",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 40, "status": "caution", "basis": "team_assumption", "message": "Very low resting heart rate.", "action": "Re-measure; report if dizzy, faint or short of breath." },
+        { "min": 40, "max": 60, "status": "ok", "basis": "source", "message": "Low-normal — typical for well-trained athletes." },
+        { "min": 60, "max": 101, "status": "ok", "basis": "source", "message": "Normal." },
+        { "min": 101, "max": 121, "status": "caution", "basis": "source", "message": "Tachycardia at rest.", "action": "Rest 10 min and re-measure; check temperature, hydration, stress." },
+        { "min": 121, "status": "alert", "basis": "team_assumption", "message": "Marked tachycardia at rest.", "action": "Report to flight surgeon; record ECG if available.", "escalate": true }
+      ],
+      "spaceflight_context": "Resting HR is essentially unchanged in long-duration flight, so a sustained rise vs personal baseline is meaningful.",
+      "sources": ["medlineplus_pulse", "norsk_2015"]
+    },
+    {
+      "id": "glucose_fasting",
+      "label": "Fasting blood glucose",
+      "unit": "mg/dL",
+      "category": "metabolic",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 70, "status": "alert", "basis": "source", "message": "Low blood glucose (hypoglycemia).", "action": "Apply 15/15 rule: 15 g fast carbs, re-check in 15 min. Report if repeated.", "escalate": true },
+        { "min": 70, "max": 100, "status": "ok", "basis": "source", "message": "Normal fasting glucose." },
+        { "min": 100, "max": 126, "status": "caution", "basis": "source", "message": "Above normal fasting range (prediabetes range on Earth).", "action": "Re-test fasting next morning; review meals and exercise compliance." },
+        { "min": 126, "status": "alert", "basis": "source", "message": "Fasting glucose in diabetes range.", "action": "Confirm with repeat fasting test; report to flight surgeon.", "escalate": true }
+      ],
+      "spaceflight_context": "A single reading is not diagnostic. Inspiration4 crew lab reference range was 65–99 mg/dL (real values in data/nasa/osd575_inspiration4_cmp_long.csv).",
+      "sources": ["ada_diagnosis", "ada_hypoglycemia", "osdr_osd575"]
+    },
+    {
+      "id": "body_temperature",
+      "label": "Body temperature (oral)",
+      "unit": "°C",
+      "category": "immune",
+      "evaluation": "absolute_and_baseline",
+      "bands": [
+        { "max": 35.0, "status": "alert", "basis": "team_assumption", "message": "Abnormally low temperature.", "action": "Re-measure; warm up; report.", "escalate": true },
+        { "min": 35.0, "max": 36.0, "status": "caution", "basis": "team_assumption", "message": "Below usual range.", "action": "Re-measure with correct technique." },
+        { "min": 36.0, "max": 37.6, "status": "ok", "basis": "source", "message": "Normal." },
+        { "min": 37.6, "max": 38.5, "status": "caution", "basis": "source", "message": "Possible fever.", "action": "Re-measure in 1 h; log symptoms (fatigue, rash, cough)." },
+        { "min": 38.5, "max": 40.0, "status": "alert", "basis": "team_assumption", "message": "Fever.", "action": "Report to flight surgeon; isolate if infectious symptoms.", "escalate": true },
+        { "min": 40.0, "status": "alert", "basis": "source", "message": "Dangerous hyperthermia (>40 °C).", "action": "Stop activity, cool down, immediate medical contact.", "escalate": true }
+      ],
+      "baseline_rule": { "metric": "delta_vs_inflight_baseline_14d", "caution_above": 0.7, "alert_above": 1.2, "basis": "team_assumption" },
+      "spaceflight_context": "Core temperature at rest rises ~1 °C over ~2.5 months on ISS and can exceed 40 °C during exercise — so fever detection should also compare with the astronaut's own in-flight baseline.",
+      "sources": ["medlineplus_fever", "stahn_2017"]
+    },
+    {
+      "id": "spo2",
+      "label": "Blood oxygen saturation",
+      "unit": "%",
+      "category": "respiratory",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 90, "status": "alert", "basis": "team_assumption", "message": "Low oxygen saturation.", "action": "Check cabin O2; re-measure; report immediately.", "escalate": true },
+        { "min": 90, "max": 95, "status": "caution", "basis": "source", "message": "Below normal range.", "action": "Re-measure at rest; check cabin O2 partial pressure." },
+        { "min": 95, "max": 101, "status": "ok", "basis": "source", "message": "Normal." }
+      ],
+      "sources": ["medlineplus_spo2"]
+    },
+    {
+      "id": "sleep_hours",
+      "label": "Sleep duration (last night)",
+      "unit": "h",
+      "category": "sleep",
+      "evaluation": "absolute_and_rolling",
+      "bands": [
+        { "max": 5.0, "status": "alert", "basis": "team_assumption", "message": "Severely short sleep.", "action": "Avoid critical tasks/EVA planning without review; schedule recovery sleep." },
+        { "min": 5.0, "max": 7.0, "status": "caution", "basis": "team_assumption", "message": "Short sleep (typical in flight, but below plan).", "action": "Sleep hygiene: no caffeine within 6–12 h of sleep, dim light, check sleep-station airflow." },
+        { "min": 7.0, "max": 12.0, "status": "ok", "basis": "team_assumption", "message": "Adequate sleep." },
+        { "min": 12.0, "status": "caution", "basis": "team_assumption", "message": "Unusually long sleep.", "action": "Check for illness or low mood." }
+      ],
+      "rolling_rules": [
+        { "window_days": 3, "metric": "mean", "below": 6.0, "status": "caution", "basis": "team_assumption" },
+        { "window_days": 7, "metric": "mean", "below": 5.0, "status": "alert", "escalate": true, "basis": "team_assumption" }
+      ],
+      "spaceflight_context": "NASA schedules an 8.5 h sleep period, but crews average ~6 h in flight.",
+      "sources": ["nasa_std_3001_v1", "ochmo_tb_sleep", "hrr_er_sleep"]
+    },
+    {
+      "id": "mood",
+      "label": "Mood self-rating",
+      "unit": "score 1–5",
+      "category": "behavioral",
+      "evaluation": "absolute_and_rolling",
+      "bands": [
+        { "max": 3, "status": "caution", "basis": "team_assumption", "message": "Low mood today (1–2).", "action": "Take a break, contact family/crew; consider requesting a private psychological conference." },
+        { "min": 3, "max": 6, "status": "ok", "basis": "team_assumption", "message": "OK." }
+      ],
+      "rolling_rules": [
+        { "window_days": 5, "metric": "count_below", "below": 3, "count_at_least": 4, "status": "alert", "escalate": true, "basis": "team_assumption", "message": "Persistently low mood — request a private psychological conference." }
+      ],
+      "spaceflight_context": "Behavioral health is one of NASA's top risks; on ISS a private psychological conference is held every 2 weeks.",
+      "sources": ["ntrs_bhp_ops"]
+    },
+    {
+      "id": "cabin_co2",
+      "label": "Cabin CO2 partial pressure",
+      "unit": "mmHg",
+      "category": "environment",
+      "evaluation": "rolling",
+      "rolling_rules": [
+        { "window_hours": 168, "metric": "mean", "below": 2.5, "status": "ok", "basis": "source", "message": "7-day average keeps headache risk below 1%." },
+        { "window_hours": 168, "metric": "mean", "at_least": 2.5, "status": "caution", "basis": "source", "message": "7-day average above 2.5 mmHg — headache risk rising.", "action": "Improve ventilation; link to headache/sleep symptoms." },
+        { "window_hours": 1, "metric": "mean", "above": 3.0, "status": "alert", "basis": "source", "message": "1-hour average above NASA limit (3 mmHg).", "action": "Report to mission control; check CO2 scrubbing.", "escalate": true },
+        { "window_hours": 1, "metric": "mean", "above": 4.5, "status": "alert", "basis": "source", "message": "Fatigue, malaise, poor sleep and nausea possible above 4.5 mmHg.", "escalate": true }
+      ],
+      "spaceflight_context": "ISS has ranged 1–9 mmHg; each +1 mmHg roughly doubles the odds of a reported headache. 1 mmHg ≈ 1316 ppm at sea-level total pressure.",
+      "sources": ["nasa_std_3001_v2", "ochmo_tb_co2", "law_2014"]
+    },
+    {
+      "id": "cabin_ppo2",
+      "label": "Inspired O2 partial pressure",
+      "unit": "mmHg",
+      "category": "environment",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 122, "status": "alert", "basis": "source", "message": "Below absolute minimum inspired O2.", "action": "Emergency: report to mission control immediately.", "escalate": true },
+        { "min": 122, "max": 127, "status": "alert", "basis": "source", "message": "Below mild-hypoxia limit (127 mmHg, 1-h average).", "escalate": true },
+        { "min": 127, "max": 145, "status": "caution", "basis": "team_assumption", "message": "Below nominal target range." },
+        { "min": 145, "max": 156, "status": "ok", "basis": "source", "message": "Nominal target." },
+        { "min": 156, "max": 356, "status": "caution", "basis": "team_assumption", "message": "Above nominal target (fire-risk consideration)." },
+        { "min": 356, "status": "alert", "basis": "source", "message": "Above indefinite-exposure upper limit.", "escalate": true }
+      ],
+      "sources": ["nasa_std_3001_v2"]
+    },
+    {
+      "id": "cabin_temperature",
+      "label": "Cabin temperature",
+      "unit": "°C",
+      "category": "environment",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 18, "status": "alert", "basis": "source", "message": "Below habitable envelope." },
+        { "min": 18, "max": 20, "status": "caution", "basis": "source", "message": "Below performance zone." },
+        { "min": 20, "max": 25, "status": "ok", "basis": "source", "message": "Performance zone." },
+        { "min": 25, "max": 27, "status": "caution", "basis": "source", "message": "Above performance zone." },
+        { "min": 27, "status": "alert", "basis": "source", "message": "Above habitable envelope." }
+      ],
+      "sources": ["nasa_std_3001_v2"]
+    },
+    {
+      "id": "cabin_humidity",
+      "label": "Cabin relative humidity",
+      "unit": "%RH",
+      "category": "environment",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 25, "status": "alert", "basis": "source", "message": "Below 25% RH minimum." },
+        { "min": 25, "max": 30, "status": "caution", "basis": "source", "message": "Below performance zone." },
+        { "min": 30, "max": 60, "status": "ok", "basis": "source", "message": "Performance zone." },
+        { "min": 60, "max": 75, "status": "caution", "basis": "source", "message": "Above performance zone." },
+        { "min": 75, "status": "alert", "basis": "source", "message": "Above habitable envelope." }
+      ],
+      "sources": ["nasa_std_3001_v2"]
+    },
+    {
+      "id": "noise_24h",
+      "label": "24-hour noise exposure (equivalent level)",
+      "unit": "dBA",
+      "category": "environment",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 70, "status": "ok", "basis": "source", "message": "Within 24-h noise dose limit." },
+        { "min": 70, "max": 75, "status": "caution", "basis": "team_assumption", "message": "Above 24-h limit (70 dBA).", "action": "Use hearing protection; schedule quiet time." },
+        { "min": 75, "status": "alert", "basis": "team_assumption", "message": "Well above 24-h limit.", "action": "Hearing protection; report.", "escalate": true }
+      ],
+      "sources": ["nasa_std_3001_v2"]
+    },
+    {
+      "id": "radiation_career_mSv",
+      "label": "Cumulative career effective dose",
+      "unit": "mSv",
+      "category": "radiation",
+      "evaluation": "cumulative",
+      "limit": 600,
+      "bands": [
+        { "max": 300, "status": "ok", "basis": "team_assumption", "message": "Below 50% of career limit." },
+        { "min": 300, "max": 540, "status": "caution", "basis": "team_assumption", "message": "50–90% of career limit.", "action": "Minimize non-essential exposure (ALARA); plan EVAs carefully." },
+        { "min": 540, "max": 600, "status": "alert", "basis": "team_assumption", "message": "Above 90% of career limit.", "escalate": true },
+        { "min": 600, "status": "alert", "basis": "source", "message": "Career limit (600 mSv) exceeded.", "escalate": true }
+      ],
+      "sources": ["nasa_std_3001_v1", "ochmo_tb_radiation"]
+    },
+    {
+      "id": "radiation_daily_vs_environment",
+      "label": "Daily dose rate relative to environment baseline",
+      "unit": "× baseline",
+      "category": "radiation",
+      "evaluation": "ratio_to_environment",
+      "bands": [
+        { "max": 1.5, "status": "ok", "basis": "team_assumption", "message": "Typical for this environment." },
+        { "min": 1.5, "max": 5, "status": "caution", "basis": "team_assumption", "message": "Elevated dose rate.", "action": "Check space-weather alerts; prefer shielded areas." },
+        { "min": 5, "status": "alert", "basis": "team_assumption", "message": "Strongly elevated — possible solar particle event.", "action": "Go to storm shelter; postpone EVA.", "escalate": true }
+      ],
+      "baseline_from": "environments[].dose_equivalent_mSv_per_day",
+      "sources": ["artemis1_nature2024"]
+    },
+    {
+      "id": "solar_proton_flux_10MeV",
+      "label": "Solar proton flux ≥10 MeV (GOES, NOAA S-scale)",
+      "unit": "pfu",
+      "category": "radiation",
+      "evaluation": "absolute",
+      "bands": [
+        { "max": 10, "status": "ok", "basis": "source", "message": "No solar radiation storm." },
+        { "min": 10, "max": 1000, "status": "caution", "basis": "source", "message": "S1–S2 radiation storm: no direct astronaut hazard; monitor." },
+        { "min": 1000, "max": 10000, "status": "alert", "basis": "source", "message": "S3: radiation hazard avoidance recommended for EVA.", "action": "No EVA; outside LEO move to shelter.", "escalate": true },
+        { "min": 10000, "status": "alert", "basis": "source", "message": "S4–S5: unavoidable radiation hazard on EVA.", "action": "Storm shelter now.", "escalate": true }
+      ],
+      "live_feed": "https://services.swpc.noaa.gov/json/goes/primary/integral-protons-6-hour.json (take latest energy '>=10 MeV')",
+      "spaceflight_context": "Outside Earth's magnetosphere (Moon, transit, Mars) treat each level as more severe than on ISS — team assumption.",
+      "sources": ["noaa_scales", "nasa_std_3001_v1"]
+    },
+    {
+      "id": "body_mass_change_pct",
+      "label": "Body mass change vs preflight",
+      "unit": "%",
+      "category": "nutrition",
+      "evaluation": "baseline_percent_change",
+      "bands": [
+        { "max": -10, "status": "alert", "basis": "team_assumption", "message": "Lost more than 10% of body mass.", "action": "Increase energy intake; nutrition review.", "escalate": true },
+        { "min": -10, "max": -5, "status": "caution", "basis": "team_assumption", "message": "Lost 5–10% of body mass.", "action": "Check kcal intake vs target (+200 kcal per EVA hour)." },
+        { "min": -5, "max": 5, "status": "ok", "basis": "team_assumption", "message": "Stable (−2…5% loss in first month is typical)." },
+        { "min": 5, "status": "caution", "basis": "team_assumption", "message": "Gained more than 5%." }
+      ],
+      "spaceflight_context": "57% of ISS crew lost 5–10% and 3% lost >10%; most loss happens in the first 30 days.",
+      "sources": ["hrr_er_nutrition", "zwart_2014", "nasa_std_3001_v2"]
+    },
+    {
+      "id": "energy_intake_pct_target",
+      "label": "Energy intake vs individual target",
+      "unit": "% of target",
+      "category": "nutrition",
+      "evaluation": "absolute",
+      "default_target_kcal": 3035,
+      "eva_bonus_kcal_per_hour": 200,
+      "bands": [
+        { "max": 80, "status": "alert", "basis": "team_assumption", "message": "Large energy deficit." },
+        { "min": 80, "max": 95, "status": "caution", "basis": "team_assumption", "message": "Below energy target." },
+        { "min": 95, "status": "ok", "basis": "source", "message": "Meeting energy needs (standard requires 100% of calculated needs)." }
+      ],
+      "sources": ["nasa_std_3001_v1", "nasa_std_3001_v2"]
+    },
+    {
+      "id": "exercise_minutes_daily",
+      "label": "Countermeasure exercise today",
+      "unit": "min",
+      "category": "musculoskeletal",
+      "evaluation": "absolute_and_rolling",
+      "bands": [
+        { "max": 60, "status": "caution", "basis": "team_assumption", "message": "Below exercise prescription.", "action": "Complete resistive (ARED) + aerobic session; bone and muscle loss accelerate without it." },
+        { "min": 60, "max": 90, "status": "ok", "basis": "team_assumption", "message": "Close to prescription." },
+        { "min": 90, "status": "ok", "basis": "source", "message": "Prescription met (~1.5 h/day)." }
+      ],
+      "rolling_rules": [
+        { "window_days": 7, "metric": "sum", "below": 360, "status": "caution", "basis": "team_assumption", "message": "Weekly volume well below ~600 min/week typical prescription." }
+      ],
+      "sources": ["hrp_risk_fitness", "scott_2023"]
+    },
+    {
+      "id": "vo2max_pct_baseline",
+      "label": "Aerobic capacity (VO2max) vs preflight",
+      "unit": "% of baseline",
+      "category": "musculoskeletal",
+      "evaluation": "baseline_percent",
+      "bands": [
+        { "max": 80, "status": "alert", "basis": "source", "message": "Below 80% of preflight VO2max (NASA standard).", "action": "Adjust exercise prescription; review before EVA.", "escalate": true },
+        { "min": 80, "max": 85, "status": "caution", "basis": "team_assumption", "message": "Approaching NASA minimum." },
+        { "min": 85, "status": "ok", "basis": "source", "message": "Within standard." }
+      ],
+      "absolute_floors_ml_kg_min": { "microgravity_eva": 32.9, "surface_eva": 36.5 },
+      "sources": ["nasa_std_3001_v1"]
+    },
+    {
+      "id": "strength_pct_baseline",
+      "label": "Muscle strength vs preflight",
+      "unit": "% of baseline",
+      "category": "musculoskeletal",
+      "evaluation": "baseline_percent",
+      "bands": [
+        { "max": 80, "status": "alert", "basis": "source", "message": "Below 80% of preflight strength (NASA standard).", "escalate": true },
+        { "min": 80, "max": 85, "status": "caution", "basis": "team_assumption", "message": "Approaching NASA minimum." },
+        { "min": 85, "status": "ok", "basis": "source", "message": "Within standard." }
+      ],
+      "sources": ["nasa_std_3001_v1"]
+    },
+    {
+      "id": "bmd_hip_spine_pct_baseline",
+      "label": "Bone mineral density (hip/spine) vs preflight",
+      "unit": "% of baseline",
+      "category": "musculoskeletal",
+      "evaluation": "baseline_percent",
+      "bands": [
+        { "max": 95, "status": "alert", "basis": "source", "message": "Below 95% of preflight BMD (NASA standard).", "escalate": true },
+        { "min": 95, "max": 97, "status": "caution", "basis": "team_assumption", "message": "Approaching NASA minimum." },
+        { "min": 97, "status": "ok", "basis": "source", "message": "Within standard." }
+      ],
+      "projection": "BMD is not measured in flight — project it from mission day × loss rate: ~1–1.5%/month without countermeasures; with ARED ~0.64%/month (total hip), ~0.47%/month (spine).",
+      "sources": ["nasa_std_3001_v1", "ochmo_mtb_bone", "hrr_er_bone", "hrp_hazard_gravity"]
+    },
+    {
+      "id": "bmd_femoral_neck_pct_baseline",
+      "label": "Bone mineral density (femoral neck) vs preflight",
+      "unit": "% of baseline",
+      "category": "musculoskeletal",
+      "evaluation": "baseline_percent",
+      "bands": [
+        { "max": 90, "status": "alert", "basis": "source", "message": "Below 90% of preflight femoral-neck BMD (NASA standard).", "escalate": true },
+        { "min": 90, "max": 93, "status": "caution", "basis": "team_assumption", "message": "Approaching NASA minimum." },
+        { "min": 93, "status": "ok", "basis": "source", "message": "Within standard." }
+      ],
+      "projection": "With ARED ~0.32%/month femoral-neck loss.",
+      "sources": ["nasa_std_3001_v1", "hrr_er_bone"]
+    }
+  ],
+
+  "radiation_organ_limits_mGyEq": {
+    "_about": "NASA-STD-3001 Vol 1 Table 4.8-1 (30-day / 1-year / career). CNS in mGy.",
+    "blood_forming_organs": { "d30": 250, "y1": 500, "career": null },
+    "circulatory_system": { "d30": 250, "y1": 500, "career": 1000 },
+    "lens": { "d30": 1000, "y1": 2000, "career": 4000 },
+    "skin": { "d30": 1500, "y1": 3000, "career": 6000 },
+    "cns_mGy": { "d30": 500, "y1": 1000, "career": 1500 },
+    "single_spe_effective_mSv": 250,
+    "career_effective_mSv": 600,
+    "sources": ["nasa_std_3001_v1"]
+  },
+
+  "environments": [
+    { "id": "earth", "label": "Earth (reference)", "gravity_g": 1.0, "dose_equivalent_mSv_per_day": 0.001, "comm_delay_one_way_s": [0, 0], "magnetosphere_protected": true, "sources": ["artemis1_nature2024"] },
+    { "id": "iss", "label": "ISS (low Earth orbit)", "gravity_g": 0.0, "dose_equivalent_mSv_per_day": 0.68, "dose_range_mSv_per_day": [0.5, 0.73], "comm_delay_one_way_s": [0, 1], "magnetosphere_protected": true, "sources": ["artemis1_nature2024", "change4_2020", "lsah_2023"] },
+    { "id": "cislunar", "label": "Orion — cislunar space", "gravity_g": 0.0, "dose_equivalent_mSv_per_day": 1.1, "dose_range_mSv_per_day": [0.96, 1.24], "comm_delay_one_way_s": [1.3, 8.6], "magnetosphere_protected": false, "sources": ["artemis1_nature2024", "ntrs_comm_delay"] },
+    { "id": "lunar_surface", "label": "Lunar surface base", "gravity_g": 0.166, "dose_equivalent_mSv_per_day": 0.81, "dose_range_mSv_per_day": [0.5, 1.37], "comm_delay_one_way_s": [1.3, 8.6], "magnetosphere_protected": false, "note": "Sources disagree (NASA projection 0.5, Artemis I paper 0.81, Chang'e-4 measurement 1.37) — show as a range.", "sources": ["artemis1_nature2024", "change4_2020", "lsah_2023", "ntrs_comm_delay"] },
+    { "id": "mars_transit", "label": "Mars transit", "gravity_g": 0.0, "dose_equivalent_mSv_per_day": 1.7, "dose_range_mSv_per_day": [1.58, 1.84], "comm_delay_one_way_s": [180, 1320], "magnetosphere_protected": false, "sources": ["artemis1_nature2024", "jpl_cruise_dose", "nasa_mars_comm"] },
+    { "id": "mars_surface", "label": "Mars surface base", "gravity_g": 0.38, "dose_equivalent_mSv_per_day": 0.67, "dose_range_mSv_per_day": [0.64, 0.67], "comm_delay_one_way_s": [180, 1320], "magnetosphere_protected": false, "sources": ["nasa_curiosity_dose", "artemis1_nature2024", "nasa_mars_comm"] }
+  ],
+
+  "lab_panels": {
+    "_about": "For blood-panel analytes (CBC, CMP) use the per-row RANGE_MIN / RANGE_MAX shipped with the Inspiration4 data instead of hard-coding: in range = ok, outside = caution, repeated outside on 2 consecutive draws = alert (team assumption).",
+    "files": ["data/nasa/osd575_inspiration4_cmp_long.csv", "data/nasa/osd569_inspiration4_cbc_long.csv"],
+    "sources": ["osdr_osd575", "osdr_osd569"]
+  }
+}
