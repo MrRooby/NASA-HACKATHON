@@ -1,0 +1,327 @@
+{
+  "_about": "Bibliography for thresholds.json and inflight_measurements.json. Every threshold and measurement references ids from here. 'checked' = date the URL was opened and the cited value confirmed in the text (or by a research agent in this repo, see DATA_SOURCES.md).",
+  "sources": {
+    "nasa_std_3001_v1": {
+      "title": "NASA-STD-3001 Vol 1 Rev C — Crew Health",
+      "publisher": "NASA OCHMO",
+      "type": "nasa_standard",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/11/nasa-std-3001-vol-1-rev-c-with-signature.pdf",
+      "checked": "2026-11-14"
+    },
+    "nasa_std_3001_v2": {
+      "title": "NASA-STD-3001 Vol 2 Rev F — Human Factors, Habitability and Environmental Health",
+      "publisher": "NASA OCHMO",
+      "type": "nasa_standard",
+      "url": "https://www.nasa.gov/wp-content/uploads/2025/05/nasa-std-3001-vol-2.pdf",
+      "checked": "2026-11-14"
+    },
+    "ochmo_tb_co2": {
+      "title": "OCHMO Technical Brief TB-004 — Carbon Dioxide (Rev D)",
+      "publisher": "NASA OCHMO",
+      "type": "nasa_standard",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-004-carbon-dioxide.pdf",
+      "checked": "2026-11-14"
+    },
+    "ochmo_tb_radiation": {
+      "title": "OCHMO Technical Brief TB-020 — Radiation Protection (Rev G)",
+      "publisher": "NASA OCHMO",
+      "type": "nasa_standard",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-020-radiation-protection.pdf",
+      "checked": "2026-11-14"
+    },
+    "ochmo_tb_sleep": {
+      "title": "OCHMO Technical Brief TB-041 — Sleep Accommodations",
+      "publisher": "NASA OCHMO",
+      "type": "nasa_standard",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-041-sleep-accommodations.pdf",
+      "checked": "2026-11-14"
+    },
+    "ochmo_mtb_bone": {
+      "title": "OCHMO Medical Technical Brief MTB-013 — Bone Loss",
+      "publisher": "NASA OCHMO",
+      "type": "nasa_standard",
+      "url": "https://www.nasa.gov/wp-content/uploads/2026/02/ochmo-mtb-013-bone-loss.pdf",
+      "checked": "2026-11-14"
+    },
+    "hrp_hazard_gravity": {
+      "title": "HRP — Hazard: Gravity Fields (bone loss 1–1.5%/month)",
+      "publisher": "NASA HRP",
+      "type": "nasa_evidence",
+      "url": "https://www.nasa.gov/hrp/hazard-gravity-fields/",
+      "checked": "2026-11-14"
+    },
+    "hrp_risk_fitness": {
+      "title": "HRP — Risk of Reduced Cardiorespiratory and Musculoskeletal Fitness (10–12% average loss, 1.5 h/day exercise)",
+      "publisher": "NASA HRP",
+      "type": "nasa_evidence",
+      "url": "https://www.nasa.gov/reference/risk-of-reduced-cardiorespiratory-and-musculoskeletal-fitness/",
+      "checked": "2026-11-14"
+    },
+    "hrr_er_nutrition": {
+      "title": "HRP Evidence Report — Nutrition (human adaptation, 2020): body mass loss distribution",
+      "publisher": "NASA HRP",
+      "type": "nasa_evidence",
+      "url": "https://humanresearchroadmap.nasa.gov/evidence/other/Nutrition%20ER_human_adaptation_2020_final.pdf",
+      "checked": "2026-11-14"
+    },
+    "hrr_er_sleep": {
+      "title": "HRP Evidence Report — Sleep, Circadian Desynchronization, Fatigue and Work Overload",
+      "publisher": "NASA HRP",
+      "type": "nasa_evidence",
+      "url": "https://humanresearchroadmap.nasa.gov/evidence/reports/Sleep.pdf",
+      "checked": "2026-11-14"
+    },
+    "hrr_er_bone": {
+      "title": "HRP Evidence Report — Bone Fracture (2024): per-month BMD loss with/without ARED",
+      "publisher": "NASA HRP",
+      "type": "nasa_evidence",
+      "url": "https://humanresearchroadmap.nasa.gov/evidence/reports/Bone%20Fracture%20Evidence%20Report_07-18-2024.pdf",
+      "checked": "2026-11-14"
+    },
+    "hrr_er_sans": {
+      "title": "HRP Evidence Report — Spaceflight Associated Neuro-ocular Syndrome (2022)",
+      "publisher": "NASA HRP",
+      "type": "nasa_evidence",
+      "url": "https://humanresearchroadmap.nasa.gov/evidence/reports/SANS%20EB%202022%20FINAL_8-15-22.pdf",
+      "checked": "2026-11-14"
+    },
+    "norsk_2015": {
+      "title": "Norsk et al. 2015, J Physiol — 24-h BP falls 8–10 mmHg in flight, HR unchanged",
+      "publisher": "peer-reviewed (not NASA)",
+      "type": "peer_reviewed",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4324697/",
+      "checked": "2026-11-14"
+    },
+    "stahn_2017": {
+      "title": "Stahn et al. 2017, Sci Rep — core body temperature rises ~1 °C at rest over ~2.5 months on ISS; >40 °C during exercise in some crew",
+      "publisher": "peer-reviewed",
+      "type": "peer_reviewed",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5701078/",
+      "checked": "2026-11-14"
+    },
+    "medlineplus_bp": {
+      "title": "MedlinePlus — High Blood Pressure (categories: normal <120/<80, elevated, stage 1 130–139/80–89, stage 2 ≥140/≥90, crisis >180 and >120)",
+      "publisher": "NIH National Library of Medicine",
+      "type": "clinical_reference",
+      "url": "https://medlineplus.gov/highbloodpressure.html",
+      "checked": "2026-11-14"
+    },
+    "medlineplus_low_bp": {
+      "title": "MedlinePlus — Low Blood Pressure (90/60 or lower)",
+      "publisher": "NIH National Library of Medicine",
+      "type": "clinical_reference",
+      "url": "https://medlineplus.gov/lowbloodpressure.html",
+      "checked": "2026-11-14"
+    },
+    "medlineplus_pulse": {
+      "title": "MedlinePlus — Pulse (adults 60–100 bpm, well-trained athletes 40–60 bpm)",
+      "publisher": "NIH National Library of Medicine",
+      "type": "clinical_reference",
+      "url": "https://medlineplus.gov/ency/article/003399.htm",
+      "checked": "2026-11-14"
+    },
+    "medlineplus_fever": {
+      "title": "MedlinePlus — Fever (adult oral fever likely above 37.2–37.5 °C)",
+      "publisher": "NIH National Library of Medicine",
+      "type": "clinical_reference",
+      "url": "https://medlineplus.gov/ency/article/003090.htm",
+      "checked": "2026-11-14"
+    },
+    "medlineplus_spo2": {
+      "title": "MedlinePlus — Pulse Oximetry (normal 95–100%)",
+      "publisher": "NIH National Library of Medicine",
+      "type": "clinical_reference",
+      "url": "https://medlineplus.gov/lab-tests/pulse-oximetry/",
+      "checked": "2026-11-14"
+    },
+    "ada_diagnosis": {
+      "title": "ADA — Diagnosis (fasting glucose: normal <100, prediabetes 100–125, diabetes ≥126 mg/dL)",
+      "publisher": "American Diabetes Association",
+      "type": "clinical_reference",
+      "url": "https://diabetes.org/about-diabetes/diagnosis",
+      "checked": "2026-11-14"
+    },
+    "ada_hypoglycemia": {
+      "title": "ADA — Hypoglycemia (below 70 mg/dL; 15/15 rule)",
+      "publisher": "American Diabetes Association",
+      "type": "clinical_reference",
+      "url": "https://diabetes.org/living-with-diabetes/treatment-care/hypoglycemia-low-blood-glucose",
+      "checked": "2026-11-14"
+    },
+    "osdr_osd575": {
+      "title": "NASA OSDR OSD-575 — Inspiration4 Comprehensive Metabolic Panel with lab reference ranges (glucose 65–99 mg/dL); local copy data/nasa/osd575_inspiration4_cmp_long.csv",
+      "publisher": "NASA OSDR",
+      "type": "data",
+      "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-575",
+      "checked": "2026-11-14"
+    },
+    "osdr_osd569": {
+      "title": "NASA OSDR OSD-569 — Inspiration4 Complete Blood Count with lab reference ranges; local copy data/nasa/osd569_inspiration4_cbc_long.csv",
+      "publisher": "NASA OSDR",
+      "type": "data",
+      "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-569",
+      "checked": "2026-11-14"
+    },
+    "noaa_scales": {
+      "title": "NOAA SWPC — Space Weather Scales (S1–S5 by ≥10 MeV proton flux)",
+      "publisher": "NOAA SWPC",
+      "type": "clinical_reference",
+      "url": "https://www.swpc.noaa.gov/noaa-scales-explanation",
+      "checked": "2026-11-14"
+    },
+    "artemis1_nature2024": {
+      "title": "Space radiation measurements during the Artemis I lunar mission, Nature 2024 (Table 2 dose rates by environment)",
+      "publisher": "peer-reviewed (NASA/DLR)",
+      "type": "peer_reviewed",
+      "url": "https://www.osti.gov/pages/servlets/purl/2447574",
+      "checked": "2026-11-14"
+    },
+    "change4_2020": {
+      "title": "Zhang et al. 2020, Sci Adv — Chang'e-4 lunar surface dose 1369 µSv/day; ISS 731 µSv/day same period",
+      "publisher": "peer-reviewed (CNSA/Kiel)",
+      "type": "peer_reviewed",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7518862/",
+      "checked": "2026-11-14"
+    },
+    "nasa_curiosity_dose": {
+      "title": "NASA — Curiosity results: Mars surface 0.67 mSv/day",
+      "publisher": "NASA",
+      "type": "nasa_evidence",
+      "url": "https://www.nasa.gov/news-release/nasa-rover-results-include-first-age-measurement-on-mars-and-help-for-human-exploration/",
+      "checked": "2026-11-14"
+    },
+    "jpl_cruise_dose": {
+      "title": "JPL — Curiosity cruise radiation (~1.8 mSv/day)",
+      "publisher": "NASA JPL",
+      "type": "nasa_evidence",
+      "url": "https://www.jpl.nasa.gov/news/data-from-nasa-rovers-voyage-to-mars-aids-planning/",
+      "checked": "2026-11-14"
+    },
+    "lsah_2023": {
+      "title": "LSAH Newsletter 2023 Vol 28 Issue 2 — ISS ~0.5 mSv/day, lunar projection ~0.5 mSv/day",
+      "publisher": "NASA",
+      "type": "nasa_evidence",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/10/lsah-newsletter-2023-vol28-issue2.pdf",
+      "checked": "2026-11-14"
+    },
+    "nasa_mars_comm": {
+      "title": "NASA fact sheet — Mars communications disruption and delay (up to ~22 min one way)",
+      "publisher": "NASA",
+      "type": "nasa_evidence",
+      "url": "https://www.nasa.gov/wp-content/uploads/2024/01/mars-communications-disruption-and-delay.pdf",
+      "checked": "2026-11-14"
+    },
+    "ntrs_comm_delay": {
+      "title": "NASA/TM-20250003885 — communication delay (Moon ~1.3 s; Orion telemetry 5.9–8.6 s; Mars 3–22 min)",
+      "publisher": "NASA NTRS",
+      "type": "nasa_evidence",
+      "url": "https://ntrs.nasa.gov/citations/20250003885",
+      "checked": "2026-11-14"
+    },
+    "bmj_open_2026": {
+      "title": "BMJ Open 2026 — NASA astronaut cohort profile: weekly Private Medical Conference, annual physical",
+      "publisher": "peer-reviewed (NASA authors)",
+      "type": "nasa_operations",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13289012/",
+      "checked": "2026-11-14"
+    },
+    "ntrs_bhp_ops": {
+      "title": "NTRS 20170003866 — JSC Behavioral Health & Performance operations: PPC every 2 weeks, topic list, WinSCAT schedule",
+      "publisher": "NASA NTRS",
+      "type": "nasa_operations",
+      "url": "https://ntrs.nasa.gov/citations/20170003866",
+      "checked": "2026-11-14"
+    },
+    "ntrs_space_psych": {
+      "title": "NTRS 20230010798 — Space Psychology: PPC every two weeks, WinSCAT in-flight every 30 days",
+      "publisher": "NASA NTRS",
+      "type": "nasa_operations",
+      "url": "https://ntrs.nasa.gov/citations/20230010798",
+      "checked": "2026-11-14"
+    },
+    "petersen_2016": {
+      "title": "Petersen et al. 2016 — ISS exercise: Periodic Fitness Evaluation at FD15 then monthly, 2.5 h/day scheduled",
+      "publisher": "peer-reviewed (ESA)",
+      "type": "nasa_operations",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4971634/",
+      "checked": "2026-11-14"
+    },
+    "scott_2023": {
+      "title": "Scott et al. 2023, npj Microgravity — ARED/T2/CEVIS prescription: 1.5–2 h/day, ~6 days/week, ~600 min/week",
+      "publisher": "peer-reviewed (NASA authors)",
+      "type": "nasa_operations",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9898566/",
+      "checked": "2026-11-14"
+    },
+    "eye_2026_sans": {
+      "title": "Eye 2026 — SANS expert consensus: ocular exams on mission days 30 and 90 and 30 days before landing; OCT, ultrasound",
+      "publisher": "peer-reviewed (NASA authors)",
+      "type": "nasa_operations",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13462731/",
+      "checked": "2026-11-14"
+    },
+    "checs_catalog": {
+      "title": "NTRS 20110022379 — CHeCS ISS Medical Hardware Catalog: BP/ECG monitor, Crew Passive Dosimeter worn throughout flight, CO2 monitors, AED",
+      "publisher": "NASA NTRS",
+      "type": "nasa_operations",
+      "url": "https://ntrs.nasa.gov/citations/20110022379",
+      "checked": "2026-11-14"
+    },
+    "law_2014": {
+      "title": "Law et al. 2014, J Occup Environ Med — each +1 mmHg CO2 doubles odds of headache on ISS",
+      "publisher": "peer-reviewed (NASA authors)",
+      "type": "peer_reviewed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24806559/",
+      "checked": "2026-11-14"
+    },
+    "ntrs_standard_measures_2018": {
+      "title": "NTRS 20180002943 — Spaceflight Standard Measures (Zwart 2018): per-measure timeline",
+      "publisher": "NASA NTRS",
+      "type": "nasa_operations",
+      "url": "https://ntrs.nasa.gov/citations/20180002943",
+      "checked": "2026-11-14"
+    },
+    "ntrs_standard_measures_2023": {
+      "title": "NTRS 20230014025 — Standard Measures During Spaceflight: L-180, L-90, FD30, R-30",
+      "publisher": "NASA NTRS",
+      "type": "nasa_operations",
+      "url": "https://ntrs.nasa.gov/citations/20230014025",
+      "checked": "2026-11-14"
+    },
+    "basner_2024": {
+      "title": "Cognition battery on 6-month ISS missions (2024): 10 subtests, ~FD30 and ~R-30",
+      "publisher": "peer-reviewed (NASA-funded)",
+      "type": "nasa_operations",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11614644/",
+      "checked": "2026-11-14"
+    },
+    "ntrs_ooha_2012": {
+      "title": "NTRS 20120010555 — JSC audiology: On-Orbit Hearing Assessment within FD14 then every 60 days (2012)",
+      "publisher": "NASA NTRS",
+      "type": "nasa_operations",
+      "url": "https://ntrs.nasa.gov/citations/20120010555",
+      "checked": "2026-11-14"
+    },
+    "csa_radiation": {
+      "title": "CSA — Monitoring radiation for astronaut health (2026): neutrons ~30% of total ISS radiation; CANS neutron spectrometer. Official challenge resource.",
+      "publisher": "Canadian Space Agency",
+      "type": "nasa_evidence",
+      "url": "https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp",
+      "checked": "2026-11-14"
+    },
+    "csa_why_science": {
+      "title": "CSA — Why do we conduct science experiments in space? Deep-space risks incl. less reliance on Earth for emergency medical help. Official challenge resource.",
+      "publisher": "Canadian Space Agency",
+      "type": "nasa_evidence",
+      "url": "https://www.asc-csa.gc.ca/eng/iss/science/why-do-we-conduct-science-experiments-in-space.asp",
+      "checked": "2026-11-14"
+    },
+    "zwart_2014": {
+      "title": "Zwart et al. 2014 — body mass on ISS (SLAMMD −2.8%, BMMD −4.4%)",
+      "publisher": "peer-reviewed (NASA authors)",
+      "type": "peer_reviewed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25197887/",
+      "checked": "2026-11-14"
+    }
+  }
+}

@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MOTHER Data Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: one reading column; a wide dependency graph in its own horizontal scroller with a detail rail; inventory cards in an auto-fill grid. */
+:root{
+  --bg:#f4f6f9; --surface:#ffffff; --surface-2:#edf1f6; --ink:#0f1a2b; --muted:#5a6a80; --line:#d5dce7;
+  --accent:#2b62d9; --accent-soft:rgba(43,98,217,.12);
+  --real:#0e8f6f; --synth:#7556cc; --lit:#b9770b; --missing:#9aa5b5;
+  --display:"Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --text:"Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b111b; --surface:#121a27; --surface-2:#182336; --ink:#e5ecf6; --muted:#94a3b9; --line:#27354c;
+  --accent:#74a7ff; --accent-soft:rgba(116,167,255,.16);
+  --real:#38d1a6; --synth:#ab95ff; --lit:#f0b44e; --missing:#55637a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b111b; --surface:#121a27; --surface-2:#182336; --ink:#e5ecf6; --muted:#94a3b9; --line:#27354c;
+  --accent:#74a7ff; --accent-soft:rgba(116,167,255,.16);
+  --real:#38d1a6; --synth:#ab95ff; --lit:#f0b44e; --missing:#55637a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--text);margin:0}
+.wrap{max-width:1460px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:40px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,4vw,40px);letter-spacing:-.01em}
+h2{font-size:22px}
+h3{font-size:16px}
+p{margin:0;max-width:70ch}
+.muted{color:var(--muted)}
+code,.mono{font-family:var(--mono);font-size:12px}
+a{color:var(--accent)}
+.eyebrow{font:600 11px/1 var(--text);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+.stats{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:6px}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat b{font:600 24px/1.1 var(--display);font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)}
+.kinds{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12px;color:var(--muted)}
+.kd{display:inline-flex;align-items:center;gap:6px}
+.kd i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.k-real{background:var(--real)} .k-synth{background:var(--synth)} .k-lit{background:var(--lit)} .k-missing{background:var(--missing)}
+section{display:flex;flex-direction:column;gap:14px}
+.sechead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px}
+.controls{display:flex;flex-wrap:wrap;gap:6px}
+button{font:500 13px var(--text);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.on{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.graphgrid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px;align-items:start}
+.scroller{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+#graph{display:block}
+#graph text{font:12px var(--text);fill:var(--ink)}
+#graph .colhead{font:600 11px var(--text);letter-spacing:.1em;text-transform:uppercase;fill:var(--muted)}
+#graph .grphead{font:600 10.5px var(--text);letter-spacing:.06em;text-transform:uppercase;fill:var(--muted)}
+#graph .node{cursor:pointer}
+#graph .node rect{fill:var(--surface-2);stroke:var(--line);stroke-width:1}
+#graph .node.syn rect{fill:var(--accent-soft);stroke:var(--accent)}
+#graph .node.haz rect{fill:var(--ink)}
+#graph .node.haz text{fill:var(--bg);font-weight:600}
+#graph .node.miss rect{stroke-dasharray:4 3;fill:transparent;stroke:var(--missing)}
+#graph .node.miss text{fill:var(--muted)}
+#graph .node:hover rect{stroke:var(--accent);stroke-width:1.5}
+#graph .node.sel rect{stroke:var(--accent);stroke-width:2.5}
+#graph .node.dim{opacity:.18}
+#graph .edge{fill:none;stroke:var(--muted);stroke-width:1;opacity:.22}
+#graph .edge.skip{stroke-dasharray:3 4;opacity:.12}
+#graph .edge.hi{stroke:var(--accent);opacity:.95;stroke-width:1.6;stroke-dasharray:none}
+#graph .edge.dim{opacity:.03}
+.rail{position:sticky;top:max(12px, env(safe-area-inset-top, 0px));background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0;font-size:13.5px}
+.rail ul{margin:0;padding-left:18px}
+.rail .row{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);padding-block:4px}
+.chipset{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font:500 11px var(--text);border-radius:999px;padding:2px 8px;background:var(--surface-2);color:var(--muted)}
+.chip.real{color:var(--real)} .chip.synth{color:var(--synth)} .chip.lit{color:var(--lit)} .chip.missing{color:var(--muted);border:1px dashed var(--missing)}
+.hint{font-size:12.5px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.ind{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding-block:7px;border-top:1px solid var(--line)}
+.ind:first-of-type{border-top:0}
+.ind .name{font-weight:500}
+.ind .meta{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:var(--muted);align-items:center}
+.ind .count{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);text-align:right}
+.thr{color:var(--accent);font-size:11.5px;font-weight:600}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.toast{font-size:12.5px;color:var(--real)}
+@media (max-width:980px){.graphgrid{grid-template-columns:minmax(0,1fr)}.rail{position:static}}
+@media (max-width:420px){.cards{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:no-preference){#graph .edge,#graph .node{transition:opacity .15s}}
+#loader{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:var(--bg);padding:24px}
+#loader .box{max-width:460px;text-align:center;display:flex;flex-direction:column;gap:10px}
+#loader .err{color:#d64545}
+</style>
+<style>body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<div id="loader" hidden><div class="box"><h2>MOTHER Data Map</h2><div id="ld-msg">Reading the team database…</div><div class="muted" id="ld-sub" style="font-size:12px"></div></div></div>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">NASA Space Apps 2026 · astronaut health · team database</span>
+    <h1>MOTHER Data Map</h1>
+    <p class="muted">What the team MariaDB contains, organised by body system and sensor, and how each data source flows through MOTHER's reasoning into NASA Human Research Program risks and hazards. Built from the live database (<code>astro_api</code> views) on <span id="gen"></span>.</p>
+    <div class="stats" id="stats"></div>
+    <div class="kinds">
+      <span class="kd"><i class="k-real"></i>Real spaceflight, analog or environment data</span>
+      <span class="kd"><i class="k-synth"></i>Synthetic (seeded generator, labelled in UI)</span>
+      <span class="kd"><i class="k-lit"></i>Published group statistics</span>
+      <span class="kd"><i class="k-missing"></i>Needed by MOTHER, not in the database yet</span>
+    </div>
+  </header>
+
+  <section aria-labelledby="g-h">
+    <div class="sechead">
+      <div><h2 id="g-h">How everything connects</h2>
+        <p class="hint">Click any box to trace it: everything that feeds it lights up on the left, everything it influences on the right. Dashed lines skip MOTHER's reasoning column and link an indicator straight to a risk.</p></div>
+      <div class="controls" role="group" aria-label="Filter indicators by data kind">
+        <button id="f-all" class="on" data-f="all">All data</button>
+        <button data-f="real">Real only</button>
+        <button data-f="synthetic">Synthetic</button>
+        <button data-f="missing">Missing</button>
+        <button id="reset">Clear selection</button>
+      </div>
+    </div>
+    <div class="graphgrid">
+      <div class="scroller"><svg id="graph" role="img" aria-label="Dependency graph from data sources to hazards"></svg></div>
+      <aside class="rail" id="rail" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <section aria-labelledby="i-h">
+    <div class="sechead">
+      <div><h2 id="i-h">What is in the database, by body system</h2>
+        <p class="hint">Only indicators that have data. Codes match the database and <code>config/thresholds.json</code>; “thresholds” means MOTHER can colour the value ok / caution / alert.</p></div>
+      <div class="controls"><button id="copy">Copy list as JSON for the GUI</button><span class="toast" id="toast" hidden>Copied</span></div>
+    </div>
+    <textarea id="copyfallback" hidden rows="6" style="width:100%;font:12px var(--mono);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px"></textarea>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section aria-labelledby="m-h">
+    <h2 id="m-h">Gaps, names and sources</h2>
+    <div class="two">
+      <div class="card"><h3>Needed by MOTHER, not in the database yet</h3>
+        <p class="hint">Without these, the cross-domain checks (CO2 + headache, SANS, behavioural strain, EVA readiness) cannot run on database data.</p>
+        <div id="gaps"></div></div>
+      <div class="card"><h3>Name mapping MOTHER ↔ database</h3>
+        <p class="hint">Where MOTHER's internal id differs from the database code. Derived values (e.g. % of preflight) are computed by MOTHER from the raw code.</p>
+        <div class="tablewrap" style="border:0"><table id="naming"></table></div></div>
+    </div>
+    <div class="tablewrap"><table id="sources"></table></div>
+    <div class="tablewrap"><table id="missions"></table></div>
+  </section>
+</div>
+
+<script>
+const EMBEDDED = /*__DATA__*/null;
+(async function boot() {
+  if (EMBEDDED) return main(EMBEDDED);
+  const L = document.getElementById("loader"); L.hidden = false;
+  for (;;) {
+    try {
+      const j = await (await fetch("/api/data-map", {cache: "no-store"})).json();
+      if (j.status === "ready") { L.hidden = true; return main(j.data); }
+      document.getElementById("ld-msg").innerHTML = '<span class="err">' + j.message + '</span>';
+      document.getElementById("ld-sub").textContent = j.hint || "";
+    } catch (e) {
+      document.getElementById("ld-msg").innerHTML = '<span class="err">MOTHER server is not running.</span>';
+      document.getElementById("ld-sub").textContent = "Start it with start.bat (Windows) or ./start.sh (Mac/Linux).";
+    }
+    await new Promise(res => setTimeout(res, 2000));
+  }
+})();
+function main(D) {
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const nf = n => Number(n || 0).toLocaleString("en-US");
+const KIND = k => k === "synthetic" ? "synth" : k === "missing" ? "missing" : k === "literature_aggregate" ? "lit" : "real";
+const KIND_LABEL = {real_spaceflight: "real spaceflight", real_analog: "real analog (bed rest)", real_environment: "real environment",
+  literature_aggregate: "published groups", synthetic: "synthetic", missing: "not in DB"};
+
+/* ---------- header ---------- */
+$("gen").textContent = D.generated_at.replace("T", " ").replace("+00:00", " UTC");
+const realObs = D.sources.filter(s => s.kind !== "synthetic").reduce((a, s) => a + s.n_observations + s.n_env, 0);
+const synObs = D.sources.filter(s => s.kind === "synthetic").reduce((a, s) => a + s.n_observations + s.n_env, 0);
+$("stats").innerHTML = [
+  [D.inventory.length, "indicators with data"],
+  [D.systems.filter(s => D.inventory.some(i => i.body_system === s.code)).length, "body systems & sensor groups"],
+  [D.sources.length, "data sources"],
+  [nf(realObs), "real measurements"],
+  [nf(synObs), "synthetic measurements"],
+  [D.missions.length, "missions & campaigns"],
+].map(([v, l]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join("");
+
+/* ---------- graph ---------- */
+const G = D.graph, byId = Object.fromEntries(G.nodes.map(n => [n.id, n]));
+const outE = {}, inE = {};
+for (const [a, b] of G.edges) { (outE[a] ||= []).push(b); (inE[b] ||= []).push(a); }
+const COLX = [8, 212, 474, 714, 944], COLW = [194, 250, 228, 218, 150], NH = 24, GAP = 6, TOP = 44, GH = 22;
+const SYS_ORDER = D.systems.map(s => s.code).concat(["missing"]);
+let state = {sel: null, filter: "all"};
+
+function nodeKinds(n) {
+  if (n.col === 0) return [KIND(n.kind)];
+  if (n.col === 1) return (n.kinds || []).map(KIND);
+  return [];
+}
+function layout() {
+  const cols = [[], [], [], [], []];
+  G.nodes.forEach(n => cols[n.col].push(n));
+  // indicators: grouped by body system in database order
+  cols[1].sort((a, b) => SYS_ORDER.indexOf(a.system) - SYS_ORDER.indexOf(b.system) || b.n - a.n);
+  let y = TOP, lastSys = null; const heads = [];
+  for (const n of cols[1]) {
+    if (n.system !== lastSys) { y += lastSys ? 8 : 0; heads.push({y: y + 14, label: n.system_label}); y += GH; lastSys = n.system; }
+    n.y = y; y += NH + GAP;
+  }
+  const height = y + 20;
+  const mid = n => n.y + NH / 2;
+  const bary = (n, nbrs) => { const ys = nbrs.map(id => byId[id]).filter(m => m && m.y != null).map(mid); return ys.length ? ys.reduce((a, b) => a + b) / ys.length : 1e9; };
+  const place = (col, key) => {
+    // order by the average height of connected nodes, then place each box as close to that height as
+    // possible without overlapping the previous box or running out of room for the rest of the column
+    col.forEach(n => n._b = key(n)); col.sort((a, b) => a._b - b._b);
+    let yy = TOP + GH;
+    col.forEach((n, i) => {
+      const limit = height - (col.length - i) * (NH + GAP);
+      const want = n._b < 1e9 ? n._b - NH / 2 : yy;
+      n.y = Math.max(yy, Math.min(want, limit));
+      yy = n.y + NH + GAP;
+    });
+  };
+  place(cols[0], n => bary(n, outE[n.id] || []));
+  place(cols[2], n => bary(n, inE[n.id] || []));
+  place(cols[3], n => bary(n, (inE[n.id] || [])));
+  place(cols[4], n => bary(n, inE[n.id] || []));
+  const h = Math.max(height, ...G.nodes.map(n => n.y + NH + 20));
+  return {heads, height: h};
+}
+const L = layout();
+function clip(t, w) { const max = Math.floor((w - 16) / 6.7); return t.length > max ? t.slice(0, max - 1) + "…" : t; }
+function drawGraph() {
+  const svg = $("graph"), W = COLX[4] + COLW[4] + 12;
+  svg.setAttribute("viewBox", `0 0 ${W} ${L.height}`); svg.setAttribute("width", W); svg.setAttribute("height", L.height);
+  let g = G.columns.map((c, i) => `<text class="colhead" x="${COLX[i]}" y="22">${esc(c)}</text>`).join("");
+  g += L.heads.map(h => `<text class="grphead" x="${COLX[1]}" y="${h.y}">${esc(h.label)}</text>`).join("");
+  g += G.edges.map(([a, b]) => {
+    const A = byId[a], B = byId[b];
+    const x1 = COLX[A.col] + COLW[A.col], y1 = A.y + NH / 2, x2 = COLX[B.col], y2 = B.y + NH / 2, dx = (x2 - x1) * .5;
+    return `<path class="edge${B.col - A.col > 1 ? " skip" : ""}" data-a="${esc(a)}" data-b="${esc(b)}" d="M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}"/>`;
+  }).join("");
+  g += G.nodes.map(n => {
+    const cls = ["node", ["src", "ind", "syn", "risk", "haz"][n.col], n.missing || n.kind === "missing" ? "miss" : ""].join(" ");
+    const ks = nodeKinds(n).filter(k => k !== "missing");
+    const dots = ks.map((k, i) => `<circle cx="${COLX[n.col] + COLW[n.col] - 10 - i * 11}" cy="${n.y + NH / 2}" r="4" fill="var(--${k === "synth" ? "synth" : k === "lit" ? "lit" : "real"})"/>`).join("");
+    return `<g class="${cls}" data-id="${esc(n.id)}" tabindex="0" role="button" aria-label="${esc(n.label)}">
+      <rect x="${COLX[n.col]}" y="${n.y}" width="${COLW[n.col]}" height="${NH}" rx="6"/>
+      <text x="${COLX[n.col] + 9}" y="${n.y + 16}">${esc(clip(n.label, COLW[n.col] - ks.length * 11))}</text>${dots}<title>${esc(n.label)}</title></g>`;
+  }).join("");
+  svg.innerHTML = g;
+}
+function reach(start, adj) { const seen = new Set([start]), st = [start]; while (st.length) { const x = st.pop(); for (const y of adj[x] || []) if (!seen.has(y)) { seen.add(y); st.push(y); } } return seen; }
+function matchesFilter(n) {
+  if (state.filter === "all" || n.col !== 1) return true;
+  const ks = n.kinds || [];
+  if (state.filter === "real") return ks.some(k => k.startsWith("real"));
+  if (state.filter === "synthetic") return ks.includes("synthetic");
+  return ks.includes("missing");
+}
+function applyState() {
+  const svg = $("graph");
+  let lit = null;
+  if (state.sel) { const down = reach(state.sel, outE), up = reach(state.sel, inE); lit = new Set([...down, ...up]); state._down = down; state._up = up; }
+  svg.querySelectorAll(".node").forEach(el => {
+    const n = byId[el.dataset.id];
+    el.classList.toggle("sel", el.dataset.id === state.sel);
+    el.classList.toggle("dim", (lit && !lit.has(n.id)) || (!lit && !matchesFilter(n)));
+  });
+  svg.querySelectorAll(".edge").forEach(el => {
+    const a = el.dataset.a, b = el.dataset.b;
+    let hi = false;
+    if (lit) hi = (state._down.has(a) && state._down.has(b)) || (state._up.has(a) && state._up.has(b));
+    el.classList.toggle("hi", hi);
+    el.classList.toggle("dim", (lit && !hi) || (!lit && state.filter !== "all" && !(matchesFilter(byId[a]) && matchesFilter(byId[b]))));
+  });
+  renderRail();
+}
+function listOf(ids, col) { return ids.filter(id => byId[id] && byId[id].col === col).map(id => byId[id].label); }
+function renderRail() {
+  const r = $("rail");
+  if (!state.sel) {
+    r.innerHTML = `<span class="eyebrow">Selection</span><h3>Pick a box in the graph</h3>
+      <p class="hint">Try <b>Cabin CO2 partial pressure</b> to see how one habitat sensor reaches four risks, or <b>EVA GO / NO-GO</b> to see every input of that decision.</p>
+      <div class="row"><span>Nodes</span><b>${G.nodes.length}</b></div><div class="row"><span>Connections</span><b>${G.edges.length}</b></div>`;
+    return;
+  }
+  const n = byId[state.sel], up = [...state._up].filter(x => x !== n.id), down = [...state._down].filter(x => x !== n.id);
+  const sec = (t, items) => items.length ? `<div><span class="eyebrow">${t}</span><ul>${[...new Set(items)].slice(0, 14).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : "";
+  let body = `<span class="eyebrow">${esc(G.columns[n.col])}</span><h3>${esc(n.label)}</h3>`;
+  if (n.col === 0) {
+    body += `<div class="chipset"><span class="chip ${KIND(n.kind)}">${esc(KIND_LABEL[n.kind] || n.kind)}</span><span class="chip mono">${esc(n.code)}</span></div>`;
+    if (n.publisher) body += `<div class="hint">${esc(n.publisher)}</div>`;
+    body += `<div class="row"><span>Measurements</span><b>${nf(n.n)}</b></div>`;
+    if (n.url) body += `<a href="${esc(n.url)}" target="_blank" rel="noopener">Open source</a>`;
+    body += sec("Feeds indicators", listOf(down, 1)) + sec("Reaches risks", listOf(down, 3));
+  } else if (n.col === 1) {
+    body += `<div class="chipset">${(n.kinds || []).map(k => `<span class="chip ${KIND(k)}">${esc(KIND_LABEL[k] || k)}</span>`).join("")}</div>
+      <div class="row"><span>Body system</span><b>${esc(n.system_label)}</b></div>
+      <div class="row"><span>Unit</span><b>${esc(n.unit || "-")}</b></div>
+      <div class="row"><span>Measurements</span><b>${nf(n.n)}</b></div>
+      ${n.threshold ? `<div class="row"><span>Thresholds</span><b class="thr">${esc(n.threshold)}</b></div>` : ""}
+      <div class="hint">Codes: ${n.members.slice(0, 8).map(c => `<code>${esc(c)}</code>`).join(", ")}${n.members.length > 8 ? ` +${n.members.length - 8} more` : ""}</div>`;
+    if (n.missing) body += `<p class="hint">MOTHER uses this, but the database has no rows for it yet. It needs an app check-in or test result written to <code>astro_core.observation</code>.</p>`;
+    body += sec("Comes from", listOf(up, 0)) + sec("Used by MOTHER for", listOf(down, 2)) + sec("Risks", listOf(down, 3));
+  } else if (n.col === 2) {
+    body += `<p class="hint">A MOTHER rule that combines several indicators into one conclusion.</p>` + sec("Inputs", listOf(up, 1)) + sec("Risks", listOf(down, 3)) + sec("Hazards", listOf(down, 4));
+  } else if (n.col === 3) {
+    body += (n.countermeasures ? `<div><span class="eyebrow">Countermeasures</span><ul>${n.countermeasures.map(c => `<li>${esc(c)}</li>`).join("")}</ul></div>` : "")
+      + sec("Hazards", listOf(down, 4)) + sec("MOTHER reasoning", listOf(up, 2)) + sec("Indicators", listOf(up, 1))
+      + (n.links || []).map(l => `<a href="${esc(l)}" target="_blank" rel="noopener">HRP evidence</a>`).join(" ");
+  } else {
+    body += sec("Risks", listOf(up, 3)) + sec("Indicators", listOf(up, 1)) + (n.link ? `<a href="${esc(n.link)}" target="_blank" rel="noopener">NASA HRP page</a>` : "");
+  }
+  r.innerHTML = body;
+}
+drawGraph();
+$("graph").addEventListener("click", e => { const g = e.target.closest(".node"); if (!g) return; state.sel = state.sel === g.dataset.id ? null : g.dataset.id; applyState(); });
+$("graph").addEventListener("keydown", e => { if (e.key !== "Enter" && e.key !== " ") return; const g = e.target.closest(".node"); if (!g) return; e.preventDefault(); state.sel = g.dataset.id; applyState(); });
+document.querySelector(".controls").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.id === "reset") { state.sel = null; applyState(); return; }
+  state.filter = b.dataset.f; state.sel = null;
+  document.querySelectorAll("[data-f]").forEach(x => x.classList.toggle("on", x === b)); applyState();
+});
+applyState();
+
+/* ---------- inventory cards ---------- */
+const sysLabel = Object.fromEntries(D.systems.map(s => [s.code, s]));
+const bySys = {};
+for (const i of D.inventory) (bySys[i.body_system] ||= []).push(i);
+const order = D.systems.map(s => s.code).filter(c => bySys[c]);
+$("cards").innerHTML = order.map(c => {
+  const s = sysLabel[c], items = bySys[c].sort((a, b) => a.category.localeCompare(b.category) || a.label.localeCompare(b.label));
+  const big = items.length > 12;
+  const shown = big ? collapse(items) : items;
+  return `<article class="card"><div class="top"><h3>${esc(s.label)}</h3><span class="mono muted">${esc(c)} · region <b>${esc(s.body_region)}</b></span></div>
+    <div>${shown.map(i => `<div class="ind"><span class="name">${esc(i.label)}</span><span class="count">${nf(i.n_observations + i.n_env_observations)}</span>
+      <div class="meta"><code>${esc(i.code)}</code><span>${esc(i.unit || "")}</span>${(i.data_kinds || []).map(k => `<span class="chip ${KIND(k)}">${esc(KIND_LABEL[k] || k)}</span>`).join("")}
+      ${i.threshold_id ? `<span class="thr">thresholds</span>` : ""}${i.env_series && i.env_series.length ? `<span>${i.env_series.map(e => `${esc(e.environment)} ${e.from.slice(0, 4)}–${e.to.slice(0, 4)}`).join(", ")}</span>` : ""}</div></div>`).join("")}</div></article>`;
+}).join("");
+function collapse(items) {  // fold long lab lists into one row per category
+  const groups = {};
+  for (const i of items) (groups[i.category] ||= []).push(i);
+  return Object.entries(groups).flatMap(([cat, arr]) => arr.length > 6 ? [{
+    label: `${arr.length} analytes · ${cat.replace("lab_", "").toUpperCase()}`, code: arr.slice(0, 4).map(a => a.code).join(", ") + ", …",
+    unit: "", n_observations: arr.reduce((a, x) => a + x.n_observations, 0), n_env_observations: 0,
+    data_kinds: [...new Set(arr.flatMap(a => a.data_kinds))], category: cat}] : arr);
+}
+
+/* ---------- copy JSON ---------- */
+function guiJson() {
+  return JSON.stringify({generated_at: D.generated_at, body_systems: order.map(c => ({code: c, label: sysLabel[c].label, body_region: sysLabel[c].body_region,
+    indicators: bySys[c].map(i => ({code: i.code, label: i.label, unit: i.unit, category: i.category, n_observations: i.n_observations + i.n_env_observations,
+      data_kinds: i.data_kinds, has_thresholds: !!i.threshold_id, sources: i.sources}))})),
+    not_in_database_yet: D.missing}, null, 2);
+}
+$("copy").addEventListener("click", () => {
+  const txt = guiJson();
+  const done = () => { $("toast").hidden = false; setTimeout(() => $("toast").hidden = true, 1800); };
+  try {
+    navigator.clipboard.writeText(txt).then(done, () => fallback(txt));
+  } catch (e) { fallback(txt); }
+});
+function fallback(txt) { const t = $("copyfallback"); t.hidden = false; t.value = txt; t.focus(); t.select(); }
+
+/* ---------- gaps, naming, sources, missions ---------- */
+$("gaps").innerHTML = D.missing.map(m => `<div class="ind"><span class="name">${esc(m.label)}</span><span class="count">${esc(m.unit)}</span><div class="meta"><code>${esc(m.code)}</code><span class="chip missing">not in DB</span></div></div>`).join("");
+$("naming").innerHTML = `<tr><th>MOTHER id</th><th>Database code</th></tr>` + D.naming.map(r => `<tr><td><code>${esc(r.mother)}</code></td><td><code>${esc(r.database.replace("grp:", "group: "))}</code></td></tr>`).join("");
+$("sources").innerHTML = `<tr><th>Data source</th><th>Kind</th><th>Subjects</th><th>Measurements</th><th>Environment</th><th>Groups</th></tr>` +
+  D.sources.sort((a, b) => (b.n_observations + b.n_env) - (a.n_observations + a.n_env)).map(s => `<tr><td>${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>` : esc(s.title)}<div class="mono muted">${esc(s.id)}</div></td>
+    <td><span class="chip ${KIND(s.kind)}">${esc(KIND_LABEL[s.kind] || s.kind)}</span></td><td class="num">${nf(s.n_subjects)}</td><td class="num">${nf(s.n_observations)}</td><td class="num">${nf(s.n_env)}</td><td class="num">${nf(s.n_cohorts)}</td></tr>`).join("");
+$("missions").innerHTML = `<tr><th>Mission / campaign</th><th>Environment</th><th>Days</th><th>People</th><th>Kind</th></tr>` +
+  D.missions.map(m => `<tr><td>${esc(m.mission_name)}<div class="mono muted">${esc(m.mission_code)}</div></td><td>${esc(m.environment)}</td><td class="num">${m.duration_days ?? "–"}</td><td class="num">${m.n_subjects}</td>
+    <td><span class="chip ${m.is_synthetic ? "synth" : "real"}">${m.is_synthetic ? "synthetic" : "real"}</span></td></tr>`).join("");
+}
+</script>
+
+</body>
+</html>
