@@ -1,0 +1,4 @@
+environment_code,location,indicator_code,source_id,measured_at,aggregation,value,unit,is_synthetic
+iss,US Lab,test_cabin_co2,test_canonical,2030-01-02 00:00:00,hourly_mean,2.6,mmHg,1
+iss,US Lab,test_cabin_co2,test_canonical,2030-01-02 01:00:00,hourly_mean,2.9,mmHg,1
+iss,US Lab,test_cabin_co2,test_canonical,2030-01-02 02:00:00,hourly_mean,3.1,kPa,1

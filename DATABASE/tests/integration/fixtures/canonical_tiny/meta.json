@@ -1,0 +1,18 @@
+{
+ "source": {"id": "test_canonical", "title": "Integration-test fixture (tests/integration)", "publisher": "tests",
+            "data_kind": "synthetic", "access_status": "generated", "notes": "NOT real data."},
+ "indicators": [
+  {"code": "test_hr", "label": "Test heart rate", "category": "vitals", "body_system_code": "cardiovascular",
+   "canonical_unit": "bpm"},
+  {"code": "test_cabin_co2", "label": "Test cabin ppCO2", "category": "environment", "canonical_unit": "mmHg",
+   "scope": "environment", "clinical_use": "environment_context"}
+ ],
+ "missions": [{"code": "TST-ISS-10", "name": "Test mission", "environment_code": "iss",
+               "source_id": "test_canonical", "start_date": "2030-01-01", "end_date": "2030-01-11",
+               "duration_days": 10, "is_synthetic": true}],
+ "subjects": [
+  {"code": "TST-01", "source_subject_code": "01", "source_id": "test_canonical", "sex": "F", "is_synthetic": true},
+  {"code": "TST-02", "source_subject_code": "02", "source_id": "test_canonical", "sex": "M", "is_synthetic": true}
+ ],
+ "participations": [{"subject_code": "TST-01", "mission_code": "TST-ISS-10", "role": "synthetic_crew"}]
+}

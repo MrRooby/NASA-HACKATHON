@@ -1,0 +1,7 @@
+source_id,subject_code,mission_code,indicator_code,timepoint_label,anchor,day_offset,time_is_approx,measured_at,replicate,value,unit,ref_min,ref_max,sample_type,is_synthetic,raw_name,raw_value,raw_unit
+test_canonical,TST-01,TST-ISS-10,test_hr,L-5,launch,-5,0,,1,62,bpm,,,wearable,1,,,
+test_canonical,TST-01,TST-ISS-10,test_hr,FD3,launch,3,0,2030-01-04 07:00:00,1,64,bpm,40,100,wearable,1,HR,64,bpm
+test_canonical,TST-01,TST-ISS-10,test_hr,R+2,landing,2,1,,1,71,bpm,,,manual_device,1,,,
+test_canonical,TST-01,TST-ISS-10,unknown_thing,FD4,launch,4,0,,1,1,bpm,,,wearable,1,,,
+test_canonical,TST-01,TST-ISS-10,test_hr,FD5,launch,5,0,,1,65,beats/min,,,wearable,1,,,
+test_canonical,TST-02,TST-ISS-10,test_hr,FD5,launch,5,0,,1,66,bpm,,,wearable,1,,,

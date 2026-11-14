@@ -1,0 +1,6 @@
+# Test dependencies for DATABASE/ (unit + integration tests).
+# Install into a venv OUTSIDE the repo, e.g.:
+#   python3 -m venv ~/.local/share/nasa-hackathon-venvs/database
+#   ~/.local/share/nasa-hackathon-venvs/database/bin/pip install -r DATABASE/requirements-dev.txt
+pymysql==1.1.1
+pytest>=8,<10
