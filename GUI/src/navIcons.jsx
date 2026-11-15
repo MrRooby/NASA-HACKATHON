@@ -37,6 +37,24 @@ export const NAV_GLYPHS = {
   report: '\u{F0909}', // nf-md-satellite_uplink
   box: '\u{F0131}', // nf-md-checkbox_blank_outline
   boxChecked: '\u{F0132}', // nf-md-checkbox_marked
+  notebook: '\u{F082E}', // nf-md-notebook
+  idcard: '\u{F05D2}', // nf-md-card_account_details
+  thermometer: '\u{F050F}', // nf-md-thermometer
+  water: '\u{F058C}', // nf-md-water
+  flash: '\u{F0241}', // nf-md-flash
+  wind: '\u{F059D}', // nf-md-weather_windy
+  list: '\u{F0279}', // nf-md-format_list_bulleted
+  lightbulb: '\u{F0335}', // nf-md-lightbulb
+  airfilter: '\u{F0D43}', // nf-md-air_filter
+  minus: '\u{F0374}', // nf-md-minus
+  plus: '\u{F0415}', // nf-md-plus
+  eye: '\u{F0208}', // nf-md-eye
+  blood: '\u{F0CEC}', // nf-md-blood_bag
+  bone: '\u{F00B9}', // nf-md-bone
+  stomach: '\u{F1093}', // nf-md-stomach
+  kidneys: '\u{F01AB}', // nf-md-cup_water
+  brain: '\u{F09D1}', // nf-md-brain
+  fileimport: '\u{F0220}', // nf-md-file_import
 };
 export const NAV_ICONS = Object.keys(NAV_GLYPHS);
 

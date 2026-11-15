@@ -168,18 +168,18 @@ export default function ProfileScreen({ mother, session, viewedCode, setViewedCo
   const tiles = [
     isOwn && { id: 'checkin', icon: 'checkin', label: t('profile.checkinTitle'), info: committed ? t('profile.tileDoneAt', { time: committed.at.slice(11, 16) }) : t('profile.tileToDo') },
     isOwn && { id: 'report', icon: 'report', label: t('profile.reportTile') },
-    { id: 'notes', icon: 'history', label: t('profile.notesTitle') },
+    { id: 'notes', icon: 'notebook', label: t('profile.notesTitle') },
     { id: 'tests', icon: 'tests', label: t('profile.testsTitle') },
     { id: 'notifs', icon: 'bell', label: t('profile.notificationsTitle'), info: <span data-testid="profile-notification-count">{notifications.length}</span> },
-    { id: 'data', icon: 'person', label: t('profile.dataTitle') },
+    { id: 'data', icon: 'idcard', label: t('profile.dataTitle') },
   ].filter(Boolean);
 
   const dialogs = {
     report: { title: t('profile.reportTitle'), icon: 'report', body: <SurgeonReportPanel profile={profile} biometrics={biometrics} symptoms={committed?.symptoms ?? null} mother={mother} sol={sol} /> },
-    notes: { title: t('profile.notesTitle'), icon: 'history', body: <NotesPanel crewCode={profile.code} isOwn={isOwn} sol={sol} /> },
+    notes: { title: t('profile.notesTitle'), icon: 'notebook', body: <NotesPanel crewCode={profile.code} isOwn={isOwn} sol={sol} /> },
     tests: { title: t('profile.testsTitle'), icon: 'tests', body: <PsychTestsPanel crewCode={profile.code} isOwn={isOwn} onStart={startTest} /> },
     notifs: { title: t('profile.notificationsTitle'), icon: 'bell', body: <NotificationsBody items={notifications} onOpen={openTarget} /> },
-    data: { title: t('profile.dataTitle'), icon: 'person', body: <PersonalData profile={profile} habitat={habitat} /> },
+    data: { title: t('profile.dataTitle'), icon: 'idcard', body: <PersonalData profile={profile} habitat={habitat} /> },
   };
   const dialog = open && dialogs[open] && (open !== 'report' || isOwn) ? dialogs[open] : null;
 

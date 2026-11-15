@@ -321,9 +321,9 @@ export default function BaseScreen({ mother, navigate }) {
           </div>
         </div>
         <div className="base-sol">
-          <button type="button" className="base-sol-step" aria-label={t('base.solPrev')} disabled={Number(current) <= 1} onClick={() => step(-1)}>−</button>
+          <button type="button" className="base-sol-step" aria-label={t('base.solPrev')} disabled={Number(current) <= 1} onClick={() => step(-1)}><NavIcon name="minus" /></button>
           <SolControl value={sol} max={latestSol} latest={shownSol ?? undefined} onChange={setSol} />
-          <button type="button" className="base-sol-step" aria-label={t('base.solNext')} disabled={Number(current) >= latestSol} onClick={() => step(1)}>+</button>
+          <button type="button" className="base-sol-step" aria-label={t('base.solNext')} disabled={Number(current) >= latestSol} onClick={() => step(1)}><NavIcon name="plus" /></button>
         </div>
       </header>
 
@@ -358,7 +358,7 @@ export default function BaseScreen({ mother, navigate }) {
           disabled={!data}
           onClick={() => setDialog('exterior')}
         >
-          <NavIcon name="gauge" className="base-big-icon" />
+          <NavIcon name="wind" className="base-big-icon" />
           <span className="base-big-text">
             <span className="base-big-label">{t('base.exterior')}</span>
             <span className="base-big-sub">{t('base.exteriorCount', { n: model.exterior.length, flagged: exteriorFlagged })}</span>
@@ -372,7 +372,7 @@ export default function BaseScreen({ mother, navigate }) {
           disabled={!data}
           onClick={() => setDialog('events')}
         >
-          <NavIcon name="history" className="base-big-icon" />
+          <NavIcon name="list" className="base-big-icon" />
           <span className="base-big-text">
             <span className="base-big-label">{t('base.events')}</span>
             <span className="base-big-sub">{t('base.eventCount', { n: notable.length })}</span>

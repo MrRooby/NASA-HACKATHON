@@ -31,14 +31,14 @@ export const REGIONS = [
 
 // Closest NavIcon for each organ card (no eye / blood / bone / kidney glyphs yet).
 const ORGAN_ICONS = {
-  brain: 'tests',
-  eyes: 'body',
+  brain: 'brain',
+  eyes: 'eye',
   heart: 'heart',
   lungs: 'lungs',
-  blood: 'organs',
-  kidneys: 'glucose',
-  gut: 'glucose',
-  musculoskeletal: 'body',
+  blood: 'blood',
+  kidneys: 'kidneys',
+  gut: 'stomach',
+  musculoskeletal: 'bone',
   limbs: 'leg',
   exposure: 'radiation',
 };

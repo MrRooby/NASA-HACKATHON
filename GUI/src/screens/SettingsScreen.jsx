@@ -143,7 +143,7 @@ export default function SettingsScreen({ mother }) {
               <ConnectionBadge mode={mother?.mode} error={mother?.error} />
             </header>
             <button type="button" className="settings-big" data-open="link" onClick={() => setLinkOpen(true)}>
-              <NavIcon name="report" className="settings-big-icon" />
+              <NavIcon name="fileimport" className="settings-big-icon" />
               <span>{t('settings.linkDetails')}</span>
             </button>
           </section>

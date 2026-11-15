@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'AwernasaNerdIcons2';
-  src: url('./assets/fonts/nerd-icons-000c2c1d.woff2') format('woff2');
+  src: url('./assets/fonts/nerd-icons-1c55d4ad.woff2') format('woff2');
   font-display: block;
   unicode-range: U+F0000-F1FFFF;
 }
@@ -48,6 +48,22 @@
 .nf-icon[data-icon='dialpad'] { --icon-color: #b39ddb; }
 .nf-icon[data-icon='info'] { --icon-color: #7fb3d5; }
 .nf-icon[data-icon='stats'] { --icon-color: #e3c56b; }
+.nf-icon[data-icon='notebook'] { --icon-color: #e3c56b; }
+.nf-icon[data-icon='idcard'] { --icon-color: #7fb3d5; }
+.nf-icon[data-icon='thermometer'] { --icon-color: #e8a45a; }
+.nf-icon[data-icon='water'] { --icon-color: #6fa8dc; }
+.nf-icon[data-icon='flash'] { --icon-color: #e8d36a; }
+.nf-icon[data-icon='wind'] { --icon-color: #9fb7c0; }
+.nf-icon[data-icon='list'] { --icon-color: #b0b6bd; }
+.nf-icon[data-icon='lightbulb'] { --icon-color: #e3c56b; }
+.nf-icon[data-icon='airfilter'] { --icon-color: #9fb7c0; }
+.nf-icon[data-icon='eye'] { --icon-color: #7fb3d5; }
+.nf-icon[data-icon='blood'] { --icon-color: #e0565b; }
+.nf-icon[data-icon='bone'] { --icon-color: #d8cab8; }
+.nf-icon[data-icon='stomach'] { --icon-color: #e5a06a; }
+.nf-icon[data-icon='kidneys'] { --icon-color: #e8d36a; }
+.nf-icon[data-icon='brain'] { --icon-color: #c49be0; }
+.nf-icon[data-icon='fileimport'] { --icon-color: #81c784; }
 /* on an accent / inverse background the icon takes the text colour */
 .navtab[aria-current='page'] .nf-icon,
 .dlg-close .nf-icon,
