@@ -238,14 +238,14 @@
 .wear-dlg-why { margin: 0; color: var(--dim); font-size: 14px; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; }
 .wear-dlg-why .label { margin-right: 6px; font-size: 14px; color: var(--accent); }
 
-.wear-checks { display: grid; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--border); }
+.wear-checks { display: grid; flex: 1 1 auto; align-content: start; min-height: 0; overflow: hidden; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--border); }
 .wear-check {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: baseline;
   column-gap: 16px;
   min-height: 64px;
-  padding: 6px 0;
+  padding: 3px 0;
   border-bottom: 1px solid var(--border);
 }
 .wear-check-label { min-width: 0; overflow: hidden; font-size: 17px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }

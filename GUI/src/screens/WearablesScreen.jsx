@@ -11,6 +11,7 @@ import { clearPendingFocus, peekPendingFocus } from '../home/focus.js';
 import { formatValue, words } from '../home/format.js';
 import { limbsFromReport } from '../home/limbData.js';
 import { useCrewReport } from '../home/useCrewReport.js';
+import useFitRows from '../profile/useFitRows.js';
 import './wearables.css';
 
 export const SOL_MAX = 600;
@@ -136,9 +137,10 @@ function OrganBody({ card }) {
   const checks = Array.isArray(card.checks) && card.checks.length
     ? card.checks
     : (card.metrics || []).map(metric => ({ label: metric.name, value: metric.value, unit: metric.unit, status: metric.status }));
-  const pages = Math.max(1, Math.ceil(checks.length / CHECKS_PER_PAGE));
+  const fit = useFitRows(CHECKS_PER_PAGE, ':scope > li');
+  const pages = Math.max(1, Math.ceil(checks.length / fit.count));
   const safe = Math.min(page, pages - 1);
-  const slice = checks.slice(safe * CHECKS_PER_PAGE, safe * CHECKS_PER_PAGE + CHECKS_PER_PAGE);
+  const slice = checks.slice(safe * fit.count, safe * fit.count + fit.count);
   return (
     <div className="wear-dlg" data-organ={card.organ}>
       <p className="wear-dlg-headline">{card.headline}</p>
@@ -146,7 +148,7 @@ function OrganBody({ card }) {
         <p className="wear-dlg-action"><span aria-hidden="true">&gt; </span>{card.action}</p>
       ) : null}
       {checks.length ? (
-        <ul className="wear-checks" aria-label={t('wearables.checks')}>
+        <ul ref={fit.ref} className="wear-checks" aria-label={t('wearables.checks')}>
           {slice.map(check => (
             <li key={check.code || check.label} className={cx('wear-check', `wear-check-${check.status ?? 'no_data'}`)} data-status={check.status ?? 'no_data'}>
               <span className="wear-check-label">{check.label}</span>

@@ -14,6 +14,7 @@ import { findLocation } from '../crew/crewStatus.js';
 import PersonalData, { CrewHeader } from '../profile/CrewFilePanel.jsx';
 import NotesPanel from '../profile/NotesPanel.jsx';
 import PsychTestsPanel from '../profile/PsychTestsPanel.jsx';
+import useFitRows from '../profile/useFitRows.js';
 import SurgeonReportPanel from '../profile/SurgeonReportPanel.jsx';
 import './home.css'; // DataDialog and Pager styles
 import './profile.css';
@@ -37,16 +38,19 @@ export function personalNotifications(items, zones = []) {
 function NotificationsBody({ items, onOpen }) {
   const t = useT();
   const [page, setPage] = useState(0);
-  const pages = Math.max(1, Math.ceil(items.length / NOTIFS_PER_PAGE));
+  const fit = useFitRows(NOTIFS_PER_PAGE, '.notif');
+  const pages = Math.max(1, Math.ceil(items.length / fit.count));
   const safe = Math.min(page, pages - 1);
   return (
     <div className="pf-notifs">
-      <NotificationList
-        className="pf-notif-list"
-        items={items.slice(safe * NOTIFS_PER_PAGE, safe * NOTIFS_PER_PAGE + NOTIFS_PER_PAGE)}
-        emptyText={t('profile.notificationsEmpty')}
-        onOpen={onOpen}
-      />
+      <div ref={fit.ref} className="pf-notif-fit">
+        <NotificationList
+          className="pf-notif-list"
+          items={items.slice(safe * fit.count, safe * fit.count + fit.count)}
+          emptyText={t('profile.notificationsEmpty')}
+          onOpen={onOpen}
+        />
+      </div>
       <Pager page={safe} pages={pages} onPage={setPage} />
     </div>
   );

@@ -241,6 +241,7 @@
 
 /* notifications */
 .pf-notifs { display: grid; gap: 12px; }
+.pf-notif-fit { flex: 1 1 auto; min-height: 0; overflow: hidden; }
 .pf-notif-list .notif-title { font-size: 17px; }
 .pf-notif-list .notif-source { font-size: 14px; }
 .pf-notif-list .notif-detail, .pf-notif-list .notif-action { font-size: 16px; }
