@@ -73,7 +73,7 @@ export function Tile({ tile }) {
 /* ── Big touch tiles of the [ TESTS ] screen ─────────────────────────────── */
 
 /** NavIcon per test (closest existing glyphs). */
-export const TEST_ICONS = { pvt: 'gauge', gonogo: 'boxChecked', dsst: 'tests' };
+export const TEST_ICONS = { pvt: 'timer', gonogo: 'traffic', dsst: 'dialpad' };
 
 /** Last result as one big number: [value, unit] or null. */
 export function bigValue(tile) {

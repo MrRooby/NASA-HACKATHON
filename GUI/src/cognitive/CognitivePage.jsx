@@ -142,7 +142,7 @@ export default function CognitivePage({ mother = null, onRunningChange, fixedCod
             </label>
           )}
         <button type="button" className="cog-about-btn" onClick={() => setAbout(true)} data-testid="about-open">
-          <NavIcon name="checkin" className="cog-about-icon" />
+          <NavIcon name="info" className="cog-about-icon" />
           <span>{t('tests.about')}</span>
         </button>
       </header>
@@ -166,14 +166,14 @@ export default function CognitivePage({ mother = null, onRunningChange, fixedCod
       {!readOnly && (
         <div className="cog-starts">
           <button type="button" className="cog-start cog-start-primary" disabled={!code} onClick={() => setFlow({ mode: 'quick' })}>
-            <NavIcon name="gauge" className="cog-start-icon" />
+            <NavIcon name="play" className="cog-start-icon" />
             <span className="cog-start-text">
               <span className="cog-start-label">{t('tests.quick')}</span>
               <span className="cog-start-time">{t('tests.quickTime')}</span>
             </span>
           </button>
           <button type="button" className="cog-start" disabled={!code} onClick={() => setFlow({ mode: 'full' })}>
-            <NavIcon name="tests" className="cog-start-icon" />
+            <NavIcon name="play" className="cog-start-icon" />
             <span className="cog-start-text">
               <span className="cog-start-label">{t('tests.full')}</span>
               <span className="cog-start-time">{t('tests.fullTime')}</span>
@@ -191,7 +191,7 @@ export default function CognitivePage({ mother = null, onRunningChange, fixedCod
         </DataDialog>
       )}
       {about && (
-        <DataDialog title={t('tests.aboutTitle')} icon="checkin" onClose={closeAbout}>
+        <DataDialog title={t('tests.aboutTitle')} icon="info" onClose={closeAbout}>
           <div className="cog-about" data-testid="about-dialog">
             <ul className="cog-steps">
               <li>{t('tests.about1')}</li>

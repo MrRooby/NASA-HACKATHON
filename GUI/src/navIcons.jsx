@@ -10,6 +10,12 @@ export const NAV_GLYPHS = {
   crew: '\u{F0849}', // nf-md-account_group
   tests: '\u{F133C}', // nf-md-head_cog
   calendar: '\u{F0E17}', // nf-md-calendar_month
+  timer: '\u{F051B}', // nf-md-timer_outline (PVT)
+  traffic: '\u{F052B}', // nf-md-traffic_light (Go/No-Go)
+  dialpad: '\u{F061C}', // nf-md-dialpad (DSST)
+  info: '\u{F02FD}', // nf-md-information_outline
+  play: '\u{F040A}', // nf-md-play
+  stats: '\u{F154E}', // nf-md-chart_box_outline
   settings: '\u{F0493}', // nf-md-cog
   logout: '\u{F0343}', // nf-md-logout
   leg: '\u{F0F52}', // nf-md-foot_print

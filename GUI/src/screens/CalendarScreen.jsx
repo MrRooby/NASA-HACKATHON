@@ -169,7 +169,7 @@ function StatusDialog({ status, range, isMonth, onClose }) {
   };
   const note = item => (item.state === 'partial' ? t('calendar.partialData') : item.state === 'empty' ? t('calendar.noData') : t('calendar.average'));
   return (
-    <DataDialog title={t(isMonth ? 'calendar.monthSummaryTitle' : 'calendar.summaryTitle')} icon="gauge" onClose={onClose}>
+    <DataDialog title={t(isMonth ? 'calendar.monthSummaryTitle' : 'calendar.summaryTitle')} icon="stats" onClose={onClose}>
       <div className="cal-dlg">
         <p className="cal-dlg-range">{range}</p>
         <div className="cal-dlg-stats cal-dlg-stats-big">
@@ -247,7 +247,7 @@ export default function CalendarScreen() {
           ))}
         </div>
         <button type="button" className="cal-btn" data-open="status" onClick={() => setStatusOpen(true)}>
-          <NavIcon name="gauge" className="cal-btn-glyph" />
+          <NavIcon name="stats" className="cal-btn-glyph" />
           <span>{t('calendar.statusButton')}</span>
         </button>
       </div>

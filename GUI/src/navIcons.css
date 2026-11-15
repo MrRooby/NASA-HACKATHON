@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'AwernasaNerdIcons2';
-  src: url('./assets/fonts/nerd-icons-c6a2435f.woff2') format('woff2');
+  src: url('./assets/fonts/nerd-icons-000c2c1d.woff2') format('woff2');
   font-display: block;
   unicode-range: U+F0000-F1FFFF;
 }
@@ -43,6 +43,11 @@
 .nf-icon[data-icon='history'] { --icon-color: #b39ddb; }
 .nf-icon[data-icon='checkin'] { --icon-color: #81c784; }
 .nf-icon[data-icon='report'] { --icon-color: #4fc3f7; }
+.nf-icon[data-icon='timer'] { --icon-color: #6fd3c1; }
+.nf-icon[data-icon='traffic'] { --icon-color: #e8a45a; }
+.nf-icon[data-icon='dialpad'] { --icon-color: #b39ddb; }
+.nf-icon[data-icon='info'] { --icon-color: #7fb3d5; }
+.nf-icon[data-icon='stats'] { --icon-color: #e3c56b; }
 /* on an accent / inverse background the icon takes the text colour */
 .navtab[aria-current='page'] .nf-icon,
 .dlg-close .nf-icon,
