@@ -18,7 +18,7 @@ import SurgeonReportPanel from '../profile/SurgeonReportPanel.jsx';
 import './home.css'; // DataDialog and Pager styles
 import './profile.css';
 
-const NOTIFS_PER_PAGE = 3;
+const NOTIFS_PER_PAGE = 4;
 
 /**
  * Notifications that concern one person: their organs and wearables, plus habitat zones and

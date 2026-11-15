@@ -106,11 +106,11 @@ describe('WearablesScreen: organ tiles', () => {
     expect(within(dlg).getByText('Stone risk: urine volume 1.73 L/d (< 2.5).', { selector: '.wear-dlg-headline' })).toBeInTheDocument();
     expect(dlg.querySelector('.wear-dlg-action')).toHaveTextContent(/^> Drink to ≥2\.5 L urine\/day/);
     const kidneys = habC4Sol142.organs.find(card => card.organ === 'kidneys');
-    expect(dlg.querySelectorAll('.wear-check')).toHaveLength(4);
+    expect(dlg.querySelectorAll('.wear-check')).toHaveLength(6);
     expect(within(dlg).getByText('Hydration').closest('.wear-check')).toHaveTextContent('Hydration1.01SG[ OK ]Well hydrated.');
     expect(within(dlg).getByText(/1 \/ 2|1\/2/)).toBeInTheDocument();
     fireEvent.click(within(dlg).getByRole('button', { name: 'Next page' }));
-    expect(dlg.querySelectorAll('.wear-check')).toHaveLength(kidneys.checks.length - 4);
+    expect(dlg.querySelectorAll('.wear-check')).toHaveLength(kidneys.checks.length - 6);
     expect(dlg.querySelector('.wear-dlg-why')).toHaveTextContent(kidneys.why);
     closeDialog();
     expect(dialog()).toBeNull();

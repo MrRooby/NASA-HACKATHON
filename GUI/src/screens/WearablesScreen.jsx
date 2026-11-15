@@ -15,7 +15,7 @@ import './wearables.css';
 
 export const SOL_MAX = 600;
 const DAY_MAX = 400;
-const CHECKS_PER_PAGE = 4;
+const CHECKS_PER_PAGE = 6;
 
 // Body regions of the 3D model. Left / right are the astronaut's own sides, as in MOTHER.
 export const REGIONS = [

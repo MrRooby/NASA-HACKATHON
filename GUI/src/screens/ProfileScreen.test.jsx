@@ -150,7 +150,6 @@ describe('ProfileScreen: not connected parts', () => {
   it('[ START ] of the PVT opens the tests screen', async () => {
     const { navigate } = await renderProfile({ session: 'HAB-C2' });
     const tests = open('tests', 'Psych tests');
-    fireEvent.click(tests.getByRole('button', { name: 'Next page' }));
     fireEvent.click(tests.getByRole('button', { name: 'Start: Psychomotor vigilance test (PVT, reaction time)' }));
     expect(navigate).toHaveBeenCalledTimes(1);
     expect(navigate).toHaveBeenCalledWith('tests');
@@ -389,7 +388,7 @@ describe('ProfileScreen: Polish', () => {
     const tests = open('tests', 'Testy psych.');
     expect(tests.getAllByText(/Co tydzień/).length).toBeGreaterThan(0);
     fireEvent.click(tests.getByRole('button', { name: 'Następna strona' }));
-    expect(tests.getByText(PSYCH_TEST_CATALOG[2].name.pl)).toBeInTheDocument();
+    expect(tests.getByText(PSYCH_TEST_CATALOG[3].name.pl)).toBeInTheDocument();
   });
 });
 

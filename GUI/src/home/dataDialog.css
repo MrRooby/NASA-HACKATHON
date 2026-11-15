@@ -12,7 +12,8 @@
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   width: min(1100px, 100%);
-  max-height: 100%;
+  /* Fixed size: the popup never jumps when its content or page changes (tablet rule). */
+  height: min(880px, 100%);
   min-height: 0;
   overflow: hidden;
   background: var(--panel);
@@ -54,8 +55,8 @@
 }
 .dlg-close:active { background: var(--accent-bright); }
 .dlg-body {
-  display: grid;
-  align-content: start;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
   min-height: 0;
   padding: 16px 18px 18px;
@@ -63,6 +64,11 @@
   font-size: 16px;
 }
 .dlg-stack { display: grid; gap: 12px; min-height: 0; }
+/* The block that holds a Pager fills the popup and keeps the Pager on the bottom edge,
+   so the arrows stay in the same place on every page. */
+.dlg-body > :has(.pager) { flex: 1 1 auto; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.dlg-body :has(> .pager) { display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto; min-height: 0; }
+.dlg-body .pager { margin-top: auto; padding-top: 4px; }
 .dlg .btn { min-height: 52px; padding: 0 16px; font-size: 16px; touch-action: manipulation; }
 
 .pager { display: flex; align-items: center; justify-content: center; gap: 24px; }

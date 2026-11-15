@@ -6,7 +6,7 @@ import { COGNITIVE_BATTERY, PSYCH_TEST_CATALOG, listPsychResults, listPsychTests
 import { localized } from '../crew/crewStatus.js';
 import { useStoreList } from './useStoreList.js';
 
-const PER_PAGE = 2;
+const PER_PAGE = 3;
 
 /** Latest result per test id (highest sol). */
 function latestByTest(results) {
