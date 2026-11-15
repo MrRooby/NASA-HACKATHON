@@ -25,14 +25,14 @@ export const ROOMS = [
     id: 'airlock_1', zone: 'airlock_A', subZones: [], simulated: false,
     labelKey: 'base.roomAirlock1',
     path: ROOM_PATHS.airlock_1,
-    label: { x: 112, y: 303, rotate: 81, small: true }, // along the slanted airlock walls
+    label: { x: 114.6, y: 292.7, rotate: 81, small: true }, // along the slanted airlock walls
     crew: { x: 119, y: 283, cols: 1 },
   },
   {
     id: 'airlock_2', zone: 'airlock_B', subZones: [], simulated: false,
     labelKey: 'base.roomAirlock2',
     path: ROOM_PATHS.airlock_2,
-    label: { x: 193, y: 305, rotate: 79, small: true },
+    label: { x: 191.4, y: 278.2, rotate: 79, small: true }, // centred on the room area
     crew: { x: 198, y: 264, cols: 1 },
   },
   {
