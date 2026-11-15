@@ -129,7 +129,7 @@
   font-weight: 700;
   line-height: 1.15;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   overflow-wrap: anywhere;
 }
 .login-role, .login-body {
@@ -139,7 +139,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
-.login-role { color: var(--accent); font-size: 13px; }
+.login-role { color: var(--accent); font-size: 13px; letter-spacing: 0.02em; }
 .login-body { color: var(--dim); font-size: 13px; }
 
 /* pressed feedback does not depend on hover (touch) */

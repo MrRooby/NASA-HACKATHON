@@ -182,7 +182,7 @@
 .base-big-icon { flex: 0 0 auto; color: var(--accent); font-size: 40px; }
 .base-big-text { display: grid; flex: 1 1 auto; min-width: 0; }
 .base-big-label { overflow: hidden; font-size: 22px; font-weight: 700; letter-spacing: 0.06em; text-overflow: ellipsis; white-space: nowrap; }
-.base-big-sub { overflow: hidden; color: var(--dim); font-size: 14px; letter-spacing: 0.06em; text-overflow: ellipsis; white-space: nowrap; }
+.base-big-sub { overflow: hidden; color: var(--dim); font-size: 14px; letter-spacing: 0.02em; text-overflow: ellipsis; white-space: nowrap; }
 .base-big .stag { flex: 0 0 auto; font-size: 20px; }
 
 .base-dim { color: var(--dim); }
@@ -396,7 +396,7 @@ span.base-event-zone { color: var(--dim); font-size: 16px; }
 @media (max-width: 1400px) {
   .base-head-facts { gap: 2px 16px; }
   .base-sol .solctl-label { display: none; }
-  .base-foot { grid-template-columns: minmax(0, 1fr) minmax(0, 360px) minmax(0, 360px); }
+  .base-foot { grid-template-columns: minmax(0, 1fr) minmax(0, 390px) minmax(0, 390px); }
   .base-big-icon { font-size: 32px; }
 }
 
