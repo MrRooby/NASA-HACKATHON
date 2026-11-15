@@ -214,10 +214,14 @@ function ViewSwitch({ mode, onMode, bones }) {
       </div>
       {mode === 'skeleton' && bones ? (
         <div className="viewer-bones" data-testid="viewer-bones" onClick={event => event.stopPropagation()}>
-          <span className="viewer-bones-title">{t('common.boneDensity')}</span>
-          <span className="viewer-bones-row"><StatusTag status={bones.hip} /> {t('common.bmdHip')} <strong>{fmtPct(bones.bmd.hip)}</strong></span>
-          <span className="viewer-bones-row"><StatusTag status={bones.femoral} /> {t('common.bmdFemoral')} <strong>{fmtPct(bones.bmd.femoral)}</strong></span>
-          <span className="viewer-bones-note">{t('common.bmdNote')}</span>
+          <span className="viewer-bones-head">
+            <span className="viewer-bones-title">{t('common.boneDensity')}</span>
+            <span className="viewer-bones-note">{t('common.bmdNote')}</span>
+          </span>
+          <span className="viewer-bones-rows">
+            <span className="viewer-bones-row"><StatusTag status={bones.hip} /> {t('common.bmdHip')} <strong>{fmtPct(bones.bmd.hip)}</strong></span>
+            <span className="viewer-bones-row"><StatusTag status={bones.femoral} /> {t('common.bmdFemoral')} <strong>{fmtPct(bones.bmd.femoral)}</strong></span>
+          </span>
         </div>
       ) : null}
     </>
@@ -231,7 +235,7 @@ export default function AstronautViewer({ model = null, sol = null, frontView = 
   const bones = useMemo(() => (code ? boneStatus(code, sol) : null), [code, sol]);
   const canSkeleton = Boolean(code);
   return (
-    <div className={`astronaut-viewer${frontView ? ' astronaut-viewer-front' : ''}`} aria-label="Front-facing astronaut health model">
+    <div className={`astronaut-viewer${frontView ? ' astronaut-viewer-front' : ''}${canSkeleton ? ' has-switch' : ''}${mode === 'skeleton' && bones ? ' is-skeleton' : ''}`} aria-label="Front-facing astronaut health model">
       <ModelErrorBoundary key={model || DEFAULT_MODEL} path={modelPath(model)}>
         <Canvas camera={{ position: [0, 0, 5], fov: frontView ? 28 : 35 }} dpr={[1, 2]} gl={{ antialias: true }}>
           <Lights />

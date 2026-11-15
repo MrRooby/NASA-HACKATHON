@@ -408,19 +408,23 @@ html[data-crt='on'] :is(h1, h2, .glow, .topbar-brand, .topbar-sol) {
 .viewer-switch-btn + .viewer-switch-btn { border-left: 0; }
 .viewer-switch-btn[aria-pressed='true'] { color: var(--bg); background: var(--accent); border-color: var(--accent); }
 .viewer-bones {
-  position: absolute;
-  left: 8px;
-  top: 64px; /* under the switch row, clear of the legs */
-  z-index: 2;
+  /* a strip under the 3D view (the canvas shrinks), so it never covers the skeleton */
+  flex: 0 0 auto;
   display: grid;
-  gap: 2px;
-  max-width: calc(100% - 16px);
+  gap: 4px;
   padding: 8px 10px;
-  background: color-mix(in srgb, var(--bg) 85%, transparent);
-  border: 1px solid var(--border);
-  font-size: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 15px;
 }
+.astronaut-viewer.has-switch { display: flex; flex-direction: column; container-type: inline-size; }
+.astronaut-viewer.has-switch > div:not(.viewer-switch):not(.viewer-bones) { flex: 1 1 0; min-height: 0; height: auto !important; }
+/* a narrow viewer keeps a row for the switch, so it never covers the head */
+@container (max-width: 520px) {
+  .viewer-switch { position: static; order: -1; align-self: flex-end; margin: 8px 8px 0; }
+}
+.viewer-bones-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
 .viewer-bones-title { color: var(--accent-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.viewer-bones-rows { display: flex; flex-wrap: wrap; gap: 4px 24px; }
 .viewer-bones-row { white-space: nowrap; }
 .viewer-bones-row strong { font-variant-numeric: tabular-nums; }
 .viewer-bones-note { color: var(--dim); font-size: 13px; }
