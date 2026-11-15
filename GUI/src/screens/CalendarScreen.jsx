@@ -13,7 +13,7 @@ import './calendar.css';
 
 const TODAY = new Date();
 const WEEK_EVENT_LIMIT = 3;
-const DIALOG_PAGE_SIZE = 5;
+const DIALOG_PAGE_SIZE = 12; // two columns of 6: a normal day fits on one page
 const KINDS = ['base', 'crew', 'mission'];
 
 const localeOf = lang => (lang === 'pl' ? 'pl-PL' : 'en-US');
