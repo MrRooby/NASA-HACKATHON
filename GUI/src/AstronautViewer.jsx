@@ -13,8 +13,8 @@ import { useT } from './i18n/index.js';
 import { StatusTag } from './components/index.js';
 
 export const DEFAULT_MODEL = 'anny_astronaut_bone_segmented';
-/** '/models/<name>.glb'; every crew member has a model generated for their body (crewProfiles.model). */
-export const modelPath = name => `/models/${name || DEFAULT_MODEL}.glb`;
+/** '<BASE_URL>models/<name>.glb' (BASE_URL is '/' except on GitHub Pages); every crew member has a model generated for their body (crewProfiles.model). */
+export const modelPath = name => `${import.meta.env.BASE_URL}models/${name || DEFAULT_MODEL}.glb`;
 
 /**
  * segmentStatus: optional { anatomicalSegment: 'ok' | 'caution' | 'alert' | 'no_data' } (see organSegments.js;

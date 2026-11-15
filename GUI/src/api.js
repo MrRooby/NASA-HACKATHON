@@ -8,6 +8,11 @@ import { scenarioHabitat, scenarioOverview, scenarioReport } from './data/scenar
 
 export const API_BASE = String(import.meta.env.VITE_API_BASE ?? '').replace(/\/+$/, '');
 
+// Static demo build (GitHub Pages, no MOTHER behind it): VITE_STATIC_DEMO=1 at build time.
+// Every call then fails as "network" right away, so each screen shows its built-in demo data
+// instead of asking a host that answers /api/* with an HTML 404 page.
+export const STATIC_DEMO = ['1', 'true'].includes(String(import.meta.env.VITE_STATIC_DEMO ?? '').toLowerCase());
+
 export const DEFAULT_TIMEOUT_MS = 10000;
 // /api/organs assesses every person in the database; give it more room.
 export const OVERVIEW_TIMEOUT_MS = 20000;
@@ -51,6 +56,7 @@ export function isOfflineError(error) {
  */
 export async function request(path, { timeoutMs = DEFAULT_TIMEOUT_MS, signal, method = 'GET', body } = {}) {
   const url = `${API_BASE}${path}`;
+  if (STATIC_DEMO) throw new ApiError('Static demo build: no MOTHER backend', { kind: 'network', url });
   const controller = new AbortController();
   let timedOut = false;
   const timer = setTimeout(() => { timedOut = true; controller.abort(); }, timeoutMs);

@@ -113,3 +113,24 @@ describe('POST helper', () => {
     expect(await postSession({}).catch(e => e)).toMatchObject({ kind: 'http', status: 422, message: 'bad trial' });
   });
 });
+
+describe('static demo build (VITE_STATIC_DEMO)', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+    vi.resetModules();
+  });
+
+  it('never calls fetch and fails as offline, so screens fall back to demo data', async () => {
+    vi.stubEnv('VITE_STATIC_DEMO', '1');
+    vi.resetModules();
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    const api = await import('./api.js');
+    const err = await api.request('/api/habitat').catch(e => e);
+    expect(err).toBeInstanceOf(api.ApiError);
+    expect(err.kind).toBe('network');
+    expect(api.isOfflineError(err)).toBe(true);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+});

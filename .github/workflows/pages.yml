@@ -1,0 +1,63 @@
+name: Pages
+
+# Publishes the GUI as a static demo on GitHub Pages: https://<owner>.github.io/<repo>/
+# There is no MOTHER backend on Pages, so the bundle is built with VITE_STATIC_DEMO=1
+# and every screen shows its built-in demo data (badge "OFFLINE · DEMO").
+#
+# One-time setup: Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "GUI/**"
+      - "config/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build static demo
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: GUI
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # git tags -> version shown in the GUI
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: GUI/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - name: Build
+        env:
+          VITE_BASE: /${{ github.event.repository.name }}/
+          VITE_STATIC_DEMO: "1"
+        run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: GUI/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

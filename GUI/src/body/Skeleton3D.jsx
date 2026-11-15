@@ -7,7 +7,7 @@ import { getCurrentTheme, subscribeTheme } from '../theme/index.js';
 // (public/models/<model>.skeleton.json, written by scripts/generate_crew_models.py), a skull and
 // the rib cage. Each piece belongs to an anatomical segment and is coloured by bone status.
 
-export const skeletonPath = model => `/models/${model}.skeleton.json`;
+export const skeletonPath = model => `${import.meta.env.BASE_URL}models/${model}.skeleton.json`;
 const BONE_IVORY = '#d9cfbd';
 const UP = new Vector3(0, 1, 0);
 const RIB_TILT = 0.55; // rad, rib cage slope in the model's Z-up frame

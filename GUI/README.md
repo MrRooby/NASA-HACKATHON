@@ -39,7 +39,7 @@ The dashboard asks the MOTHER backend for real data (`/api/status`, `/api/subjec
 MOTHER_URL=http://127.0.0.1:8000 npm run dev
 ```
 
-`VITE_API_BASE` (build time) overrides the base URL. If MOTHER or its database is unreachable, the app falls back to the built-in demo data and shows an `OFFLINE · DEMO` badge. Records with `data_kind: "synthetic"` are labelled `SYNTHETIC`.
+`VITE_API_BASE` (build time) overrides the base URL. `VITE_STATIC_DEMO=1` (build time) never calls the API and always shows demo data; `VITE_BASE` sets the public path. GitHub Pages uses both (`.github/workflows/pages.yml`). If MOTHER or its database is unreachable, the app falls back to the built-in demo data and shows an `OFFLINE · DEMO` badge. Records with `data_kind: "synthetic"` are labelled `SYNTHETIC`.
 
 Tests (`npm test`) never contact a backend: they replay recorded MOTHER responses from `src/test/fixtures/`.
 

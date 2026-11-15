@@ -30,7 +30,12 @@ export function appVersion() {
   return JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')).version;
 }
 
+// Public path of the bundle: '/' for Docker/nginx and dev, '/<repo>/' for GitHub Pages
+// (set by .github/workflows/pages.yml as VITE_BASE=/NASA-HACKATHON/).
+const base = process.env.VITE_BASE || '/';
+
 export default defineConfig({
+  base,
   esbuild: { jsx: 'automatic' },
   define: { __APP_VERSION__: JSON.stringify(appVersion()) },
   build: { rollupOptions: { input: { main: page('./index.html'), cognitive: page('./cognitive.html') } } },
