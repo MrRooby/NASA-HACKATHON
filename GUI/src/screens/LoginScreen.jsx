@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { version } from '../../package.json';
+import { version as packageVersion } from '../../package.json';
 import { Avatar, Badge, ConnectionBadge, LangFlags } from '../components/index.js';
 import { CREW_PROFILES, localize } from '../data/crewProfiles.js';
 import { getCrewPhoto } from '../data/crewPhotos.js';
@@ -7,7 +7,9 @@ import { demoReport } from '../data/demoReports.js';
 import { useI18n } from '../i18n/index.js';
 import './login.css';
 
-export const APP_VERSION = version;
+// Set at build time from the latest git tag (vite.config.js appVersion); package.json as fallback.
+// eslint-disable-next-line no-undef
+export const APP_VERSION = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : packageVersion;
 
 /**
  * Latest sol known before login. useMother() already loads the report of its default subject
