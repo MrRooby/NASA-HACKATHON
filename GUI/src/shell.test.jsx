@@ -64,7 +64,7 @@ describe('app shell', () => {
     expect(screen.getByTestId('screen-name')).toHaveTextContent('Home');
     const nav = screen.getByRole('navigation', { name: /main navigation/i });
     expect(within(nav).getAllByRole('button').map(button => button.getAttribute('data-nav')))
-      .toEqual(['home', 'profile', 'base', 'crew', 'tests', 'settings']);
+      .toEqual(['home', 'profile', 'base', 'crew', 'calendar', 'tests', 'settings']);
     expect(within(nav).getByRole('button', { name: 'Bogusława Grzegrzułkiewicz' })).toBeInTheDocument();
     expect(within(nav).getByRole('button', { name: 'Settings' })).toContainElement(document.querySelector('[data-nav="settings"] .nf-icon'));
     expect(screen.getByTestId('topbar-sol')).toHaveTextContent('SOL 600'); // offline: the sol of the built-in demo record
@@ -74,8 +74,8 @@ describe('app shell', () => {
 
   it('navigates between all screens and marks the active tab with aria-current', () => {
     renderApp();
-    expect(SCREENS).toEqual(['home', 'wearables', 'base', 'profile', 'crew', 'tests', 'settings']);
-    const names = { home: 'Home', profile: 'Crew profile', base: 'Base', crew: 'Crew', settings: 'Settings' };
+    expect(SCREENS).toEqual(['home', 'wearables', 'base', 'profile', 'crew', 'tests', 'settings', 'calendar']);
+    const names = { home: 'Home', profile: 'Crew profile', base: 'Base', crew: 'Crew', settings: 'Settings', calendar: 'Calendar' };
     for (const id of ['profile', 'base', 'crew', 'settings', 'home']) {
       fireEvent.click(navButton(id));
       expect(currentScreen()).toBe(id);
