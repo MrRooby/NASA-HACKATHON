@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { renderWithProviders } from '../test/renderApp.jsx';
 import CalendarScreen from './CalendarScreen.jsx';
@@ -12,30 +12,36 @@ describe('CalendarScreen', () => {
     expect(screen.getAllByRole('button', { name: /Select/ }).length).toBeGreaterThanOrEqual(28);
   });
 
-  it('navigates periods with large labelled buttons and changes the header', () => {
+  it('navigates periods with icon buttons and changes the header', () => {
     renderWithProviders(<CalendarScreen />);
     const heading = screen.getByRole('heading', { level: 1 });
     const before = heading.textContent;
     fireEvent.click(screen.getByRole('button', { name: 'Next period' }));
     expect(heading.textContent).not.toBe(before);
-    expect(screen.getByRole('button', { name: 'Previous period' })).toHaveClass('calendar-nav-button');
+    fireEvent.click(screen.getByRole('button', { name: 'Previous period' }));
+    expect(heading.textContent).toBe(before);
   });
 
-  it('selects a day in month view and keeps a weekly summary visible', () => {
+  it('opens the period status in a popup with both averages', () => {
     renderWithProviders(<CalendarScreen />);
+    expect(screen.queryByText('Crew wellbeing')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Status' }));
+    const dialog = screen.getByRole('dialog', { name: 'Week status' });
+    expect(within(dialog).getByText('Base status')).toBeInTheDocument();
+    expect(within(dialog).getByText('Crew wellbeing')).toBeInTheDocument();
+    fireEvent.click(within(dialog).getByRole('button', { name: /close/i }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
     fireEvent.click(screen.getByRole('button', { name: 'Month' }));
-    fireEvent.click(screen.getAllByRole('button', { name: /Select/ })[10]);
-    expect(screen.getByRole('heading', { name: 'Monthly status' })).toBeInTheDocument();
-    expect(screen.getAllByText('Base status average').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Crew wellbeing average').length).toBeGreaterThanOrEqual(1);
+    fireEvent.click(screen.getByRole('button', { name: 'Status' }));
+    expect(screen.getByRole('dialog', { name: 'Month status' })).toBeInTheDocument();
   });
 
-  it('opens day details when a day tile is clicked in either view', () => {
+  it('opens day details when a day is tapped in either view', () => {
     renderWithProviders(<CalendarScreen />);
     fireEvent.click(screen.getAllByRole('button', { name: /Select/ })[0]);
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByRole('dialog').querySelector('h2')).toHaveTextContent('2026');
-    fireEvent.click(screen.getByRole('button', { name: 'Close day details' }));
+    expect(screen.getByRole('dialog')).toHaveTextContent('2026');
+    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /close/i }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Month' }));
@@ -43,22 +49,24 @@ describe('CalendarScreen', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
-  it('shows a bounded event list with large scroll controls', () => {
-    renderWithProviders(<CalendarScreen />);
-    fireEvent.click(screen.getByRole('button', { name: 'Next period' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Next period' }));
-    const day = screen.getByRole('button', { name: 'Select 2026-11-25' });
-    fireEvent.click(day);
-    expect(screen.getByRole('button', { name: 'Show previous events' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Show next events' })).toBeInTheDocument();
-  });
-
-  it('reports hidden events by count instead of rendering all event names', () => {
+  it('shows at most three events per day and a +N count for the rest', () => {
     renderWithProviders(<CalendarScreen />);
     fireEvent.click(screen.getByRole('button', { name: 'Next period' }));
     const crowdedDay = screen.getByRole('button', { name: 'Select 2026-11-19' });
-    expect(crowdedDay).toHaveTextContent('+17 events');
-    expect(crowdedDay).not.toHaveTextContent('Zadanie operacyjne 1');
+    expect(crowdedDay.querySelectorAll('.cal-event')).toHaveLength(3);
+    expect(crowdedDay).toHaveTextContent('+14 more');
     expect(crowdedDay).not.toHaveTextContent('Zadanie operacyjne 17');
+  });
+
+  it('pages a long day list in the popup instead of scrolling', () => {
+    renderWithProviders(<CalendarScreen />);
+    fireEvent.click(screen.getByRole('button', { name: 'Next period' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Select 2026-11-19' }));
+    const dialog = screen.getByRole('dialog');
+    expect(dialog.querySelectorAll('.cal-dlg-event')).toHaveLength(5);
+    expect(dialog).toHaveTextContent('Zadanie operacyjne 1');
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Next page' }));
+    expect(dialog).toHaveTextContent('Zadanie operacyjne 6');
+    expect(dialog).not.toHaveTextContent('Zadanie operacyjne 5');
   });
 });

@@ -1,7 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Panel, StatusTag, cx } from '../components/index.js';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { cx } from '../components/index.js';
 import { getCalendar } from '../api.js';
 import { useI18n } from '../i18n/index.js';
+import NavIcon from '../navIcons.jsx';
+import DataDialog, { Pager } from '../home/DataDialog.jsx';
 import {
   addDays, aggregateStatus, dayLabel, endOfMonth, endOfWeek, formatMonth, formatRange, isoDate,
   monthGrid, sameDay, shiftMonth, startOfMonth, startOfWeek,
@@ -10,65 +12,52 @@ import { getCalendarData } from './calendarData.js';
 import './calendar.css';
 
 const TODAY = new Date();
+const WEEK_EVENT_LIMIT = 3;
+const DIALOG_PAGE_SIZE = 5;
+const KINDS = ['base', 'crew', 'mission'];
 
-function StatusSummary({ status, weekStart, weekEnd, isMonth }) {
-  const { t, lang } = useI18n();
-  const item = (label, value, key) => (
-    <div className="calendar-summary-item" data-status-state={value.state}>
-      <span className="calendar-summary-label">{label}</span>
-      <strong>{value.kind === 'category'
-        ? <StatusTag status={value.value} />
-        : value.value == null ? t('calendar.noData') : `${value.value}${key === 'crew' ? (value.value <= 5 ? ' / 5' : '%') : '%'}`}</strong>
-      <span className="calendar-summary-meta">
-        {value.state === 'partial' ? t('calendar.partialData') : value.state === 'empty' || value.value === 'no_data' ? t('calendar.noData') : t(`calendar.status_${key}`)}
-      </span>
-    </div>
-  );
-  return (
-    <Panel className="calendar-summary" title={t(isMonth ? 'calendar.monthSummaryTitle' : 'calendar.summaryTitle')} meta={formatRange(weekStart, weekEnd, lang === 'pl' ? 'pl-PL' : 'en-US')}>
-      <p className="calendar-summary-period">{t('calendar.summaryFor', { range: formatRange(weekStart, weekEnd, lang === 'pl' ? 'pl-PL' : 'en-US') })}</p>
-      <div className="calendar-summary-grid">
-        {item(t('calendar.baseStatus'), status.base, 'base')}
-        {item(t('calendar.crewWellbeing'), status.crew, 'crew')}
-      </div>
-    </Panel>
-  );
+const localeOf = lang => (lang === 'pl' ? 'pl-PL' : 'en-US');
+const percentOrScore = value => `${value}${value <= 5 ? ' / 5' : '%'}`;
+
+function eventsOn(events, day) {
+  const key = isoDate(day);
+  return events.filter(event => event.date === key);
 }
 
-function EventList({ date, events, limit = 3 }) {
-  const { t } = useI18n();
-  const dayEvents = events.filter(event => event.date === isoDate(date));
-  if (!dayEvents.length) return <span className="calendar-empty">{t('calendar.noEvents')}</span>;
-  if (dayEvents.length > limit) {
-    return (
-      <ul className="calendar-events" aria-label={t('calendar.eventsFor', { date: isoDate(date) })}>
-        <li className="calendar-more">{t('calendar.moreEvents', { count: dayEvents.length })}</li>
-      </ul>
-    );
-  }
-  return (
-    <ul className="calendar-events" aria-label={t('calendar.eventsFor', { date: isoDate(date) })}>
-      {dayEvents.map(event => <li key={event.id} data-kind={event.kind}>{event.title}</li>)}
-    </ul>
-  );
+/** One event line: coloured bar by kind + short title. */
+function EventLine({ event }) {
+  return <li className="cal-event" data-kind={event.kind}>{event.title}</li>;
 }
 
-function WeekView({ date, events, onSelect }) {
+function WeekView({ date, events, status, onSelect }) {
   const { t, lang } = useI18n();
   const start = startOfWeek(date);
   return (
-    <div className="calendar-week-grid" role="grid" aria-label={t('calendar.weekView')}>
+    <div className="cal-week" role="grid" aria-label={t('calendar.weekView')}>
       {Array.from({ length: 7 }, (_, index) => {
         const day = addDays(start, index);
-        const today = sameDay(day, TODAY);
+        const dayEvents = eventsOn(events, day);
+        const shown = dayEvents.slice(0, WEEK_EVENT_LIMIT);
+        const hidden = dayEvents.length - shown.length;
         return (
-          <div className={cx('calendar-day', today && 'is-today')} key={isoDate(day)} role="gridcell" data-date={isoDate(day)}>
-            <button type="button" className="calendar-day-button" onClick={() => onSelect(day)} aria-label={t('calendar.selectDay', { date: isoDate(day) })}>
-              <div className="calendar-day-head">
-                <span>{dayLabel(day, lang === 'pl' ? 'pl-PL' : 'en-US')}</span>
-                <strong>{day.getDate()}</strong>
-              </div>
-              <EventList date={day} events={events} limit={4} />
+          <div role="gridcell" className="cal-week-cell" key={isoDate(day)} data-date={isoDate(day)}>
+            <button
+              type="button"
+              className={cx('cal-day', sameDay(day, TODAY) && 'is-today')}
+              aria-label={t('calendar.selectDay', { date: isoDate(day) })}
+              onClick={() => onSelect(day)}
+            >
+              <span className="cal-day-head">
+                <span className="cal-day-name">{dayLabel(day, localeOf(lang))}</span>
+                <span className="cal-day-num">{day.getDate()}</span>
+              </span>
+              {dayEvents.length ? (
+                <ul className="cal-events">
+                  {shown.map(event => <EventLine key={event.id} event={event} />)}
+                  {hidden > 0 ? <li className="cal-more">{t('calendar.more', { count: hidden })}</li> : null}
+                </ul>
+              ) : <span className="cal-empty">—</span>}
+              <DayStats record={status.find(record => record.date === isoDate(day))} />
             </button>
           </div>
         );
@@ -77,35 +66,56 @@ function WeekView({ date, events, onSelect }) {
   );
 }
 
-function MonthView({ date, events, selectedDate, onSelect }) {
+/** Bottom of a week column: the day's base and crew numbers. */
+function DayStats({ record }) {
+  const { t } = useI18n();
+  const row = (label, value) => (
+    <span className="cal-day-stat">
+      <span className="cal-day-stat-label">{label}</span>
+      <span className="cal-day-stat-value">{value == null ? '—' : percentOrScore(value)}</span>
+    </span>
+  );
+  return (
+    <span className="cal-day-stats">
+      {row(t('calendar.kind_base'), record?.baseStatus)}
+      {row(t('calendar.kind_crew'), record?.crewWellbeing)}
+    </span>
+  );
+}
+
+function MonthView({ date, events, onSelect }) {
   const { t, lang } = useI18n();
   const month = startOfMonth(date);
   const days = monthGrid(month);
-  const weekCount = Math.ceil(days.length / 7);
-  const weekdayStart = month.getDay() === 0 ? 6 : month.getDay() - 1;
+  const weekStart = startOfWeek(month);
   return (
-    <div className="calendar-month" role="grid" aria-label={t('calendar.monthView')}>
-      <div className="calendar-weekdays" role="row">
+    <div className="cal-month" role="grid" aria-label={t('calendar.monthView')}>
+      <div className="cal-weekdays" role="row">
         {Array.from({ length: 7 }, (_, index) => (
-          <span role="columnheader" key={index}>
-            {dayLabel(addDays(startOfWeek(month), (weekdayStart + index) % 7), lang === 'pl' ? 'pl-PL' : 'en-US')}
-          </span>
+          <span role="columnheader" key={index}>{dayLabel(addDays(weekStart, index), localeOf(lang))}</span>
         ))}
       </div>
-      <div className="calendar-month-grid" style={{ '--calendar-weeks': weekCount }}>
+      <div className="cal-month-grid" style={{ '--cal-weeks': Math.ceil(days.length / 7) }}>
         {days.map(day => {
-          const selected = sameDay(day, selectedDate);
+          const dayEvents = eventsOn(events, day);
+          const kinds = KINDS.filter(kind => dayEvents.some(event => event.kind === kind));
           return (
             <button
               type="button"
-              className={cx('calendar-month-day', sameDay(day, TODAY) && 'is-today', selected && 'is-selected')}
               key={isoDate(day)}
+              className={cx('cal-mday', sameDay(day, TODAY) && 'is-today', day.getMonth() !== month.getMonth() && 'is-outside')}
               aria-label={t('calendar.selectDay', { date: isoDate(day) })}
-              aria-pressed={selected}
               onClick={() => onSelect(day)}
             >
-              <span className="calendar-month-number">{day.getDate()}</span>
-              <EventList date={day} events={events} limit={2} />
+              <span className="cal-mday-num">{day.getDate()}</span>
+              {dayEvents.length ? (
+                <span className="cal-mday-info">
+                  <span className="cal-mday-dots" aria-hidden="true">
+                    {kinds.map(kind => <span key={kind} className="cal-dot" data-kind={kind} />)}
+                  </span>
+                  <span className="cal-mday-count">{dayEvents.length}</span>
+                </span>
+              ) : null}
             </button>
           );
         })}
@@ -114,64 +124,88 @@ function MonthView({ date, events, selectedDate, onSelect }) {
   );
 }
 
-function DayDetails({ date, events, status, onClose }) {
+function DayDialog({ date, events, status, onClose }) {
   const { t, lang } = useI18n();
-  const dayEvents = events.filter(event => event.date === isoDate(date));
+  const dayEvents = eventsOn(events, date);
   const dayStatus = status.find(record => record.date === isoDate(date));
-  const locale = lang === 'pl' ? 'pl-PL' : 'en-US';
-  const [eventOffset, setEventOffset] = useState(0);
-  const pageSize = 5;
-  const maxOffset = Math.max(0, dayEvents.length - pageSize);
-  const visibleEvents = dayEvents.slice(eventOffset, eventOffset + pageSize);
+  const [page, setPage] = useState(0);
+  const pages = Math.max(1, Math.ceil(dayEvents.length / DIALOG_PAGE_SIZE));
+  const slice = dayEvents.slice(page * DIALOG_PAGE_SIZE, (page + 1) * DIALOG_PAGE_SIZE);
+  const title = date.toLocaleDateString(localeOf(lang), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   return (
-    <div className="calendar-dialog-backdrop" role="presentation" onMouseDown={event => event.target === event.currentTarget && onClose()}>
-      <section className="calendar-dialog" role="dialog" aria-modal="true" aria-labelledby="calendar-day-details-title">
-        <div className="calendar-dialog-header">
-          <div>
-            <span className="calendar-dialog-kicker">{t('calendar.dayDetails')}</span>
-            <h2 id="calendar-day-details-title">{date.toLocaleDateString(locale, { dateStyle: 'full' })}</h2>
+    <DataDialog title={title} icon="calendar" onClose={onClose}>
+      <div className="cal-dlg">
+        <div className="cal-dlg-stats">
+          <div className="cal-stat">
+            <span className="cal-stat-label">{t('calendar.baseStatus')}</span>
+            <strong className="cal-stat-value">{dayStatus?.baseStatus == null ? t('calendar.noData') : percentOrScore(dayStatus.baseStatus)}</strong>
           </div>
-          <Button className="calendar-dialog-close" aria-label={t('calendar.closeDetails')} onClick={onClose}>X</Button>
+          <div className="cal-stat">
+            <span className="cal-stat-label">{t('calendar.crewWellbeing')}</span>
+            <strong className="cal-stat-value">{dayStatus?.crewWellbeing == null ? t('calendar.noData') : percentOrScore(dayStatus.crewWellbeing)}</strong>
+          </div>
         </div>
-        <div className="calendar-dialog-status">
-          <div><span>{t('calendar.baseStatus')}</span><strong>{dayStatus?.baseStatus ?? t('calendar.noData')}</strong></div>
-          <div><span>{t('calendar.crewWellbeing')}</span><strong>{dayStatus?.crewWellbeing == null ? t('calendar.noData') : `${dayStatus.crewWellbeing}${dayStatus.crewWellbeing <= 5 ? ' / 5' : '%'}`}</strong></div>
-        </div>
-        <h3>{t('calendar.dayEvents')}</h3>
         {dayEvents.length ? (
-          <div className="calendar-dialog-event-browser">
-            <Button className="calendar-dialog-scroll" aria-label={t('calendar.scrollUp')} disabled={eventOffset === 0} onClick={() => setEventOffset(offset => Math.max(0, offset - 1))}>▲</Button>
-            <ul className="calendar-dialog-events">
-              {visibleEvents.map(event => <li key={event.id}><strong>{event.title}</strong><span>{event.startsAt || event.kind}</span></li>)}
-            </ul>
-            <Button className="calendar-dialog-scroll" aria-label={t('calendar.scrollDown')} disabled={eventOffset === maxOffset} onClick={() => setEventOffset(offset => Math.min(maxOffset, offset + 1))}>▼</Button>
-          </div>
-        ) : <p className="calendar-empty">{t('calendar.noEvents')}</p>}
-      </section>
-    </div>
+          <ul className="cal-dlg-events" aria-label={t('calendar.dayEvents')}>
+            {slice.map(event => (
+              <li key={event.id} className="cal-dlg-event" data-kind={event.kind}>
+                <span className="cal-dlg-event-title">{event.title}</span>
+                <span className="cal-dlg-event-kind">{event.startsAt ? `${event.startsAt} · ` : ''}{t(`calendar.kind_${event.kind}`)}</span>
+              </li>
+            ))}
+          </ul>
+        ) : <p className="cal-dlg-empty">{t('calendar.noEvents')}</p>}
+        <Pager page={page} pages={pages} onPage={setPage} />
+      </div>
+    </DataDialog>
+  );
+}
+
+function StatusDialog({ status, range, isMonth, onClose }) {
+  const { t } = useI18n();
+  const value = item => {
+    if (item.value == null || item.value === 'no_data') return t('calendar.noData');
+    return item.kind === 'category' ? item.value.toUpperCase() : percentOrScore(item.value);
+  };
+  const note = item => (item.state === 'partial' ? t('calendar.partialData') : item.state === 'empty' ? t('calendar.noData') : t('calendar.average'));
+  return (
+    <DataDialog title={t(isMonth ? 'calendar.monthSummaryTitle' : 'calendar.summaryTitle')} icon="gauge" onClose={onClose}>
+      <div className="cal-dlg">
+        <p className="cal-dlg-range">{range}</p>
+        <div className="cal-dlg-stats cal-dlg-stats-big">
+          {[['base', 'calendar.baseStatus'], ['crew', 'calendar.crewWellbeing']].map(([key, label]) => (
+            <div className="cal-stat" key={key} data-status-state={status[key].state}>
+              <span className="cal-stat-label">{t(label)}</span>
+              <strong className="cal-stat-value">{value(status[key])}</strong>
+              <span className="cal-stat-note">{note(status[key])}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </DataDialog>
   );
 }
 
 export default function CalendarScreen() {
   const { t, lang } = useI18n();
+  const locale = localeOf(lang);
   const [view, setView] = useState('week');
   const [anchorDate, setAnchorDate] = useState(() => startOfWeek(TODAY));
-  const [selectedDate, setSelectedDate] = useState(TODAY);
   const [detailDate, setDetailDate] = useState(null);
+  const [statusOpen, setStatusOpen] = useState(false);
   const demoData = useMemo(() => getCalendarData(anchorDate), [anchorDate]);
   const [liveData, setLiveData] = useState(null);
-  const visibleStart = view === 'week' ? startOfWeek(anchorDate) : startOfMonth(anchorDate);
-  const summaryStart = view === 'week' ? visibleStart : visibleStart;
-  const summaryEnd = view === 'week' ? endOfWeek(summaryStart) : endOfMonth(summaryStart);
-  const periodLabel = view === 'week'
-    ? formatRange(visibleStart, endOfWeek(visibleStart), lang === 'pl' ? 'pl-PL' : 'en-US')
-    : formatMonth(visibleStart, lang === 'pl' ? 'pl-PL' : 'en-US');
+  const closeDay = useCallback(() => setDetailDate(null), []);
+  const closeStatus = useCallback(() => setStatusOpen(false), []);
 
-  const grid = view === 'week' ? null : monthGrid(visibleStart);
-  const requestStart = view === 'week' ? visibleStart : grid[0];
-  const requestEnd = view === 'week' ? endOfWeek(visibleStart) : grid.at(-1);
-  const requestStartKey = isoDate(requestStart);
-  const requestEndKey = isoDate(requestEnd);
+  const isWeek = view === 'week';
+  const periodStart = isWeek ? startOfWeek(anchorDate) : startOfMonth(anchorDate);
+  const periodEnd = isWeek ? endOfWeek(periodStart) : endOfMonth(periodStart);
+  const periodLabel = isWeek ? formatRange(periodStart, periodEnd, locale) : formatMonth(periodStart, locale);
+  const grid = isWeek ? null : monthGrid(periodStart);
+  const requestStartKey = isoDate(isWeek ? periodStart : grid[0]);
+  const requestEndKey = isoDate(isWeek ? periodEnd : grid.at(-1));
+
   useEffect(() => {
     let active = true;
     getCalendar({ start: requestStartKey, end: requestEndKey })
@@ -179,49 +213,51 @@ export default function CalendarScreen() {
       .catch(() => { if (active) setLiveData(null); });
     return () => { active = false; };
   }, [requestStartKey, requestEndKey]);
-  const data = liveData?.source === 'mother' ? liveData : demoData;
-  const status = aggregateStatus(data.status, summaryStart, summaryEnd);
 
-  const move = amount => {
-    const next = view === 'week' ? addDays(anchorDate, amount * 7) : shiftMonth(anchorDate, amount);
-    setAnchorDate(next);
-    setSelectedDate(next);
+  const data = liveData?.source === 'mother' ? liveData : demoData;
+  const status = aggregateStatus(data.status, periodStart, periodEnd);
+
+  const move = amount => setAnchorDate(isWeek ? addDays(anchorDate, amount * 7) : shiftMonth(anchorDate, amount));
+  const changeView = next => {
+    if (next === view) return;
+    setView(next);
+    setAnchorDate(next === 'week' ? startOfWeek(anchorDate) : startOfMonth(anchorDate));
   };
-  const changeView = nextView => {
-    setView(nextView);
-    setAnchorDate(nextView === 'week' ? startOfWeek(selectedDate) : startOfMonth(anchorDate));
-  };
-  const goToToday = () => {
-    setSelectedDate(TODAY);
-    setAnchorDate(view === 'month' ? startOfMonth(TODAY) : startOfWeek(TODAY));
-  };
-  const selectDay = day => {
-    setSelectedDate(day);
-    setAnchorDate(view === 'month' ? startOfMonth(day) : day);
-    setDetailDate(day);
-  };
+  const goToToday = () => setAnchorDate(isWeek ? startOfWeek(TODAY) : startOfMonth(TODAY));
 
   return (
-    <div className="calendar-screen">
-      <Panel className="calendar-panel" title={t('calendar.title')}>
-        <div className="calendar-toolbar">
-          <Button className="calendar-nav-button" aria-label={t('calendar.previous')} onClick={() => move(-1)}>{t('calendar.previous')}</Button>
-          <h1 className="calendar-period" aria-live="polite">{periodLabel}</h1>
-          <Button className="calendar-nav-button" aria-label={t('calendar.next')} onClick={() => move(1)}>{t('calendar.next')}</Button>
+    <div className="cal-screen">
+      <div className="cal-bar">
+        <button type="button" className="cal-btn cal-btn-icon" aria-label={t('calendar.previous')} onClick={() => move(-1)}>
+          <NavIcon name="prev" />
+        </button>
+        <h1 className="cal-period" aria-live="polite">{periodLabel}</h1>
+        <button type="button" className="cal-btn cal-btn-icon" aria-label={t('calendar.next')} onClick={() => move(1)}>
+          <NavIcon name="next" />
+        </button>
+        <button type="button" className="cal-btn" onClick={goToToday}>
+          <NavIcon name="calendar" className="cal-btn-glyph" />
+          <span>{t('calendar.today')}</span>
+        </button>
+        <div className="cal-switch" role="group" aria-label={t('calendar.viewLabel')}>
+          {['week', 'month'].map(id => (
+            <button key={id} type="button" className={cx('cal-btn', view === id && 'is-active')} aria-pressed={view === id} onClick={() => changeView(id)}>
+              {t(`calendar.${id}`)}
+            </button>
+          ))}
         </div>
-        <div className="calendar-top-controls">
-          <Button className="calendar-today-button" onClick={goToToday}>{t('calendar.today')}</Button>
-          <div className="calendar-view-switch" role="group" aria-label={t('calendar.viewLabel')}>
-          <Button active={view === 'week'} aria-pressed={view === 'week'} onClick={() => changeView('week')}>{t('calendar.week')}</Button>
-          <Button active={view === 'month'} aria-pressed={view === 'month'} onClick={() => changeView('month')}>{t('calendar.month')}</Button>
-          </div>
-        </div>
-        {view === 'week'
-          ? <WeekView date={anchorDate} events={data.events} onSelect={selectDay} />
-          : <MonthView date={anchorDate} events={data.events} selectedDate={selectedDate} onSelect={selectDay} />}
-      </Panel>
-      <StatusSummary status={status} weekStart={summaryStart} weekEnd={summaryEnd} isMonth={view === 'month'} />
-      {detailDate && <DayDetails date={detailDate} events={data.events} status={data.status} onClose={() => setDetailDate(null)} />}
+        <button type="button" className="cal-btn" data-open="status" onClick={() => setStatusOpen(true)}>
+          <NavIcon name="gauge" className="cal-btn-glyph" />
+          <span>{t('calendar.statusButton')}</span>
+        </button>
+      </div>
+      {isWeek
+        ? <WeekView date={anchorDate} events={data.events} status={data.status} onSelect={setDetailDate} />
+        : <MonthView date={anchorDate} events={data.events} onSelect={setDetailDate} />}
+      {detailDate ? <DayDialog key={isoDate(detailDate)} date={detailDate} events={data.events} status={data.status} onClose={closeDay} /> : null}
+      {statusOpen ? (
+        <StatusDialog status={status} range={formatRange(periodStart, periodEnd, locale)} isMonth={!isWeek} onClose={closeStatus} />
+      ) : null}
     </div>
   );
 }
