@@ -116,7 +116,7 @@ function RoomDialog({ room, history, navigate, onClose }) {
         <div className="base-facts">
           <p className="base-fact">
             <span className="base-fact-key">{t('base.zone')}</span>
-            {room.simulated
+            {room.simulated && !room.zone
               ? <span>{t('base.simulatedZone')}</span>
               : <span className="base-fact-text">{sub ? `${sub.code} · ${sub.label}` : `${room.zone}${room.zoneLabel ? ` · ${room.zoneLabel}` : ''}`}</span>}
           </p>
