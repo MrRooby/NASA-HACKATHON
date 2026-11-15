@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Panel, StatusTag } from '../components/index.js';
 import { useT } from '../i18n/index.js';
 import NavIcon from '../navIcons.jsx';
@@ -70,7 +70,7 @@ function Tile({ id, icon, label, info, onOpen }) {
  * and the flight-surgeon report; another person's profile is read-only.
  * props (shared by every screen): { mother, session, viewedCode, setViewedCode, navigate, profile }
  */
-export default function ProfileScreen({ mother, session, viewedCode, setViewedCode, navigate, profile }) {
+export default function ProfileScreen({ mother, session, viewedCode, setViewedCode, navigate, profile, route = null }) {
   const t = useT();
   const isOwn = viewedCode === session;
   // Same sources as the home screen: the live report of viewedCode, or the built-in demo
@@ -88,7 +88,9 @@ export default function ProfileScreen({ mother, session, viewedCode, setViewedCo
   }, [report, habitat, profile]);
 
   // which popup / sub-view is open: null | 'checkin' | 'report' | 'notes' | 'tests' | 'notifs' | 'data'
-  const [open, setOpen] = useState(null);
+  const [open, setOpen] = useState(route?.open ?? null);
+  // A new navigate('profile', { open }) (e.g. Home's CHECK-IN tile) opens that popup.
+  useEffect(() => { if (route?.open) setOpen(route.open); }, [route?.key, route?.open]);
   const close = useCallback(() => setOpen(null), []);
 
   // Same hand-over as the home screen: the wearables screen opens on the organ / band.

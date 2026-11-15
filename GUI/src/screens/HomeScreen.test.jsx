@@ -86,7 +86,7 @@ describe('HomeScreen: layout from the team sketch (HAB-C4, sol 142)', () => {
     fireEvent.click(tile('tests'));
     expect(props.navigate).toHaveBeenLastCalledWith('tests');
     fireEvent.click(tile('checkin'));
-    expect(props.navigate).toHaveBeenLastCalledWith('profile', { viewedCode: 'HAB-C4' });
+    expect(props.navigate).toHaveBeenLastCalledWith('profile', { viewedCode: 'HAB-C4', open: 'checkin' });
   });
 
   it('check-in and report are off when viewing another person', () => {

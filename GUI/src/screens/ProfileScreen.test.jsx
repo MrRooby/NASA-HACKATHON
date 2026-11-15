@@ -392,3 +392,4 @@ describe('ProfileScreen: Polish', () => {
     expect(tests.getByText(PSYCH_TEST_CATALOG[2].name.pl)).toBeInTheDocument();
   });
 });
+

@@ -275,8 +275,8 @@ export default function HomeScreen({ mother, session, viewedCode, navigate, prof
     { id: 'history', icon: 'history', label: t('home.tileHistory'), onClick: () => setDialog('history'), disabled: kind !== 'sol' },
     { id: 'organs', icon: 'organs', label: t('home.tileOrgans'), onClick: () => setDialog('organs') },
     { id: 'tests', icon: 'tests', label: t('home.tileTests'), onClick: () => navigate?.('tests') },
-    { id: 'checkin', icon: 'checkin', label: t('home.tileCheckin'), onClick: () => navigate?.('profile', { viewedCode }), disabled: !own },
-    { id: 'report', icon: 'report', label: t('home.tileReport'), onClick: () => navigate?.('profile', { viewedCode }), disabled: !own },
+    { id: 'checkin', icon: 'checkin', label: t('home.tileCheckin'), onClick: () => navigate?.('profile', { viewedCode, open: 'checkin' }), disabled: !own },
+    { id: 'report', icon: 'report', label: t('home.tileReport'), onClick: () => navigate?.('profile', { viewedCode, open: 'report' }), disabled: !own },
   ];
 
   return (

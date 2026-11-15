@@ -152,6 +152,7 @@ export default function App() {
   const [screen, setScreen] = useState('home');
   const [viewedOverride, setViewedOverride] = useState(null);
   const [chromeHidden, setChromeHiddenState] = useState(false);
+  const [route, setRoute] = useState({ screen: 'home', open: null, key: 0 });
   const viewedCode = viewedOverride ?? session;
 
   const { selectSubject, setPeriod } = mother;
@@ -175,6 +176,8 @@ export default function App() {
   const navigate = useCallback((next, opts) => {
     if (!SCREENS.includes(next)) return;
     if (opts && 'viewedCode' in opts) setViewedOverride(opts.viewedCode || null);
+    // `open` asks the target screen to open one of its popups right away (e.g. the check-in).
+    setRoute({ screen: next, open: opts?.open ?? null, key: Date.now() });
     setScreen(next);
   }, []);
 
@@ -194,7 +197,7 @@ export default function App() {
   if (!session) return <LoginScreen mother={mother} onLogin={login} />;
 
   const Screen = SCREEN_COMPONENTS[screen];
-  const screenProps = { mother, session, viewedCode, setViewedCode, navigate, profile: getProfile(viewedCode), setChromeHidden };
+  const screenProps = { mother, session, viewedCode, setViewedCode, navigate, profile: getProfile(viewedCode), setChromeHidden, route: route.screen === screen ? route : null };
 
   return (
     <div className={chromeHidden ? 'shell shell-bare' : 'shell'}>
