@@ -1,0 +1,89 @@
+/* Shared popup with a big X, and the Pager (src/home/DataDialog.jsx): used by every screen. */
+.dlg-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: clamp(8px, 3vw, 40px);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+}
+.dlg {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(1100px, 100%);
+  max-height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--panel);
+  border: 2px solid var(--accent);
+}
+.dlg-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 0 0 18px;
+  border-bottom: 1px solid var(--border);
+}
+.dlg-icon { font-size: 40px; color: var(--accent); }
+.dlg-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--accent-bright);
+  font-size: clamp(18px, 2.2vw, 28px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dlg-status { font-size: 18px; }
+.dlg-close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 88px;
+  height: 88px;
+  color: var(--bg);
+  background: var(--accent);
+  border: 0;
+  border-left: 1px solid var(--border);
+  font-size: 56px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.dlg-close:active { background: var(--accent-bright); }
+.dlg-body {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: 0;
+  padding: 16px 18px 18px;
+  overflow: hidden;
+  font-size: 16px;
+}
+.dlg-stack { display: grid; gap: 12px; min-height: 0; }
+.dlg .btn { min-height: 52px; padding: 0 16px; font-size: 16px; touch-action: manipulation; }
+
+.pager { display: flex; align-items: center; justify-content: center; gap: 24px; }
+.pager-btn {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 56px;
+  color: var(--accent-bright);
+  background: var(--raised);
+  border: 1px solid var(--accent);
+  font-size: 36px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.pager-btn:disabled { color: var(--dim); border-color: var(--border); cursor: default; }
+.pager-pos { min-width: 8ch; text-align: center; font-size: 18px; font-weight: 700; letter-spacing: 0.08em; }
+
+@media (max-width: 1000px) {
+  .dlg-close { width: 72px; height: 72px; font-size: 44px; }
+}
+@media (max-height: 500px) {
+  .dlg-close { width: 56px; height: 56px; font-size: 36px; }
+}

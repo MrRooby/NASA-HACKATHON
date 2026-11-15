@@ -149,6 +149,9 @@
   .navtab { flex-direction: column; gap: 4px; padding: 4px; }
   .navtab-label { text-align: center; font-size: clamp(13px, 1.8vw, 18px); }
   .navtab-icon { font-size: calc(var(--tab-h) * 0.38); }
+  /* the person tab keeps the icon beside the name: two text lines need the full height */
+  .navtab[data-nav='profile'] { flex-direction: row; gap: 8px; }
+  .navtab[data-nav='profile'] .navtab-label { font-size: clamp(13px, 1.2vw, 17px); text-align: left; }
 }
 @media (max-width: 900px) {
   .topbar-tabs, .topbar-nav { gap: 4px; }

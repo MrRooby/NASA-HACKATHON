@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { StatusTag } from '../components/index.js';
 import { useT } from '../i18n/index.js';
 import NavIcon from '../navIcons.jsx';
+import './dataDialog.css';
 
 /**
  * Full-window data dialog for a touch screen: title bar with a big X, content that must fit
