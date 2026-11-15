@@ -1,11 +1,21 @@
 #!/usr/bin/env python3
-"""Idempotent importer for data/synthetic/wearables_demo."""
+"""Idempotent importer for data/synthetic/wearables_demo.
+
+  python DATABASE/etl/load_wearables.py [DIR] [--workers N]
+
+--workers N (default 1 = one transaction for everything, as before): every table except sample_minute is loaded and
+committed first, then N processes insert sample_minute in parallel (devices split between them, each with its own
+connection, committing every 100k rows, progress printed). Faster on large data sets; if a worker fails, run the
+loader again (it deletes this mission's wearables data first).
+"""
 from __future__ import annotations
 
 import csv
 import gzip
 import json
+import multiprocessing as mp
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -24,8 +34,61 @@ def rows(path):
         yield from csv.DictReader(f)
 
 
+MINUTE_SQL = """INSERT INTO astro_wearables.sample_minute
+                   (device_id,minute_utc,sol,n_samples,heart_rate_mean,spo2_mean,skin_temperature_mean,
+                    perfusion_index_mean,battery_min,n_suspect,n_fault)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+
+
+def minute_row(device_ids, r):
+    return (device_ids[r["device_code"]], r["minute_utc"], r["sol"], r["n_samples"],
+            r["heart_rate_mean"], r["spo2_mean"], r["skin_temperature_mean"],
+            r["perfusion_index_mean"], r["battery_min"], r["n_suspect"], r["n_fault"])
+
+
+def minute_worker(k, workers, path, device_ids, out):
+    """Inserts sample_minute rows of the devices assigned to worker k (device order index % workers == k)."""
+    mine = {code for i, code in enumerate(device_ids) if i % workers == k}
+    con = connect()
+    count, batch, t0 = 0, [], time.time()
+    try:
+        with con.cursor() as cur:
+            for r in rows(path):
+                if r["device_code"] not in mine:
+                    continue
+                batch.append(minute_row(device_ids, r))
+                if len(batch) >= 5000:
+                    cur.executemany(MINUTE_SQL, batch)
+                    count += len(batch)
+                    batch.clear()
+                    if count % 100000 == 0:
+                        con.commit()
+                    if count % 1000000 == 0:
+                        print(f"  worker {k}: {count:,} minute rows ({time.time() - t0:.0f} s)", flush=True)
+            if batch:
+                cur.executemany(MINUTE_SQL, batch)
+                count += len(batch)
+        con.commit()
+        out.put((k, count, None))
+    except Exception as e:  # reported by the parent
+        con.rollback()
+        out.put((k, count, repr(e)))
+    finally:
+        con.close()
+
+
+def parse_args(argv):
+    args = list(argv if argv is not None else sys.argv[1:])
+    workers = 1
+    if "--workers" in args:
+        i = args.index("--workers")
+        workers = max(1, int(args[i + 1]))
+        del args[i:i + 2]
+    return Path(args[0] if args else ROOT / "data/synthetic/wearables_demo"), workers
+
+
 def main(argv=None):
-    directory = Path((argv or sys.argv[1:] or [ROOT / "data/synthetic/wearables_demo"])[0])
+    directory, workers = parse_args(argv)
     meta = json.loads((directory / "meta.json").read_text())
     if meta.get("mission") != "SYN-MARS-HAB-600":
         raise RuntimeError("wearables data must target SYN-MARS-HAB-600")
@@ -86,14 +149,9 @@ def main(argv=None):
                 lambda r: (device_ids[r["device_code"]], r["ts_utc"], r["sol"], r["heart_rate_bpm"],
                            r["spo2_pct"], r["skin_temperature_c"], r["perfusion_index"], r["eeg_band"],
                            r["battery_pct"], r["connection_state"], r["quality"]))
-            nmin = insert_file(directory / "sample_minutes.csv.gz",
-                """INSERT INTO astro_wearables.sample_minute
-                   (device_id,minute_utc,sol,n_samples,heart_rate_mean,spo2_mean,skin_temperature_mean,
-                    perfusion_index_mean,battery_min,n_suspect,n_fault)
-                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
-                lambda r: (device_ids[r["device_code"]], r["minute_utc"], r["sol"], r["n_samples"],
-                           r["heart_rate_mean"], r["spo2_mean"], r["skin_temperature_mean"],
-                           r["perfusion_index_mean"], r["battery_min"], r["n_suspect"], r["n_fault"]))
+            nmin = 0
+            if workers == 1:
+                nmin = insert_file(directory / "sample_minutes.csv.gz", MINUTE_SQL, lambda r: minute_row(device_ids, r))
             nhour = insert_file(directory / "sample_hours.csv.gz",
                 """INSERT INTO astro_wearables.sample_hour
                    (device_id,hour_utc,sol,n_minutes,heart_rate_mean,spo2_mean,skin_temperature_mean,
@@ -124,6 +182,22 @@ def main(argv=None):
                     (mission_id, s["code"], s["name"], s["subject_code"], s["limb"],
                      s["start_sol"], s["end_sol"], s["expected_reaction"]))
             con.commit()
+            if workers > 1:
+                print(f"wearables: samples={n} hours={nhour} states={nstate} sleep={nsleep} committed; "
+                      f"sample_minute with {workers} workers...", flush=True)
+                out = mp.get_context("spawn").Queue()
+                procs = [mp.get_context("spawn").Process(target=minute_worker,
+                         args=(k, workers, directory / "sample_minutes.csv.gz", device_ids, out))
+                         for k in range(workers)]
+                for pr in procs:
+                    pr.start()
+                results = [out.get() for _ in procs]
+                for pr in procs:
+                    pr.join()
+                errors = [f"worker {k}: {err}" for k, _, err in results if err]
+                if errors:
+                    raise RuntimeError("sample_minute load failed (run the loader again): " + "; ".join(errors))
+                nmin = sum(c for _, c, _ in results)
             print(f"wearables: samples={n} minutes={nmin} hours={nhour} states={nstate} sleep={nsleep}")
     except Exception:
         con.rollback()

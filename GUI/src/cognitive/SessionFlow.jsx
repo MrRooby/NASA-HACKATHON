@@ -18,17 +18,17 @@ const TASKS = { pvt: PvtTask, gonogo: GoNoGoTask, dsst: DsstTask };
 const INSTRUCTIONS = {
   pvt: [
     'A red counter will appear at random moments.',
-    'As soon as it appears, press Space (or tap the field) as fast as you can.',
+    'As soon as it appears, tap anywhere on the screen (or press Space) as fast as you can.',
     'Do not press before it appears. The test lasts 3 minutes.',
   ],
   gonogo: [
     'Shapes appear one at a time in the middle of the screen.',
-    'When you see a circle, press Space (or tap) as fast as you can.',
+    'When you see a circle, tap anywhere on the screen (or press Space) as fast as you can.',
     'When you see a square, do nothing.',
   ],
   dsst: [
     'Each symbol has a digit. The key is always shown at the top.',
-    'Press the digit that matches the symbol you see (keyboard 1-9, numpad, or the on-screen keypad).',
+    'Tap the digit that matches the symbol you see on the on-screen keypad (or press keys 1-9).',
     'Answer as fast and as accurately as you can. The test lasts 90 seconds.',
   ],
 };

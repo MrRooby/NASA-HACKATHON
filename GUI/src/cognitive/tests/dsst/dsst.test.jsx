@@ -94,6 +94,21 @@ describe('DsstTask', () => {
     expect(shown()).not.toBeNull();
   });
 
+  it('keypad: numpad order (7-8-9 on top), digits only, a tap on the digit text answers', () => {
+    const { shown, trials, container } = setup();
+    const keys = [...container.querySelectorAll('.cog-keypad-btn')];
+    expect(keys.map(k => k.dataset.digit)).toEqual(['7', '8', '9', '4', '5', '6', '1', '2', '3']);
+    expect(container.querySelectorAll('.cog-keypad .cog-symbol')).toHaveLength(0);
+    wait(shown);
+    const d = shown();
+    const btn = screen.getByRole('button', { name: `Digit ${d}` });
+    tap(btn);
+    expect(btn).toHaveClass('is-pressed');
+    expect(trials()[0]).toMatchObject({ event_type: 'correct', actual: String(d) });
+    tap(screen.getByRole('button', { name: 'STOP' }));
+    expect(trials()).toHaveLength(1);
+  });
+
   it('ends after 90 s and ignores answers stamped after the deadline', () => {
     const { shown, trials, onComplete } = setup();
     wait(shown);

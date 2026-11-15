@@ -24,7 +24,11 @@ import random
 import re
 import statistics
 from collections import defaultdict
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from crew_ext import NEW_CREW, stream_seed  # noqa: E402  (works under `python -I` and importlib loading too)
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = "synthetic_v1"
@@ -361,6 +365,9 @@ MARS_PROFILES = [
     dict(code="SYN-03", crew="C3", sex="M", age_band="50-59", mass=80.0),
     dict(code="SYN-04", crew="C4", sex="F", age_band="40-49", mass=65.0),
 ]
+# C5..C10 (crew_ext.py): appended after the original four; each has its own random stream (see generate_mars)
+MARS_NEW_PROFILES = [dict(code=p["code"], crew=p["crew"], sex=p["sex"], age_band=p["age_band"], mass=p["mass"])
+                     for p in NEW_CREW]
 
 MARS_INDICATORS = [
     ("body_mass", "Body mass", "nutrition", "nutrition", "kg"),
@@ -424,7 +431,7 @@ def _mars_indicator_meta():
 
 def generate_mars(seed, out):
     """Generate the shared Mars health dataset without changing the legacy demo."""
-    rng = random.Random(seed)
+    base_rng = random.Random(seed)
     epoch = dt.datetime(2039, 1, 1)
     sol_seconds = 88775.244
     obs = []
@@ -438,7 +445,10 @@ def generate_mars(seed, out):
                         replicate=1, value=round(value, nd), unit=unit, ref_min="", ref_max="",
                         sample_type=sample, is_synthetic=1, raw_name="", raw_value="", raw_unit=""))
 
-    for p in MARS_PROFILES:
+    crew = MARS_PROFILES + MARS_NEW_PROFILES
+    for p in crew:
+        # the original four share the seed stream (unchanged data); every added person has an own stream
+        rng = base_rng if p in MARS_PROFILES else random.Random(stream_seed(seed, p["code"], "mars"))
         for sol in range(0, 601):
             in_flight = sol >= 1
             # Daily vitals and the required daily symptom/sleep streams.
@@ -504,9 +514,9 @@ def generate_mars(seed, out):
             data_kind="synthetic", access_status="generated"),
         missions=[dict(MARS_MISSION, end_date="2040-08-22", source_id=SOURCE, is_synthetic=True)],
         subjects=[dict(code=p["code"], source_subject_code=p["code"], source_id=SOURCE, sex=p["sex"],
-                       age_band_code=p["age_band"], is_synthetic=True) for p in MARS_PROFILES],
+                       age_band_code=p["age_band"], is_synthetic=True) for p in crew],
         participations=[dict(subject_code=p["code"], mission_code=MARS_MISSION["code"],
-                             role="synthetic_crew", group_label=p["crew"]) for p in MARS_PROFILES],
+                             role="synthetic_crew", group_label=p["crew"]) for p in crew],
         indicators=_mars_indicator_meta(),
         clinical_schedule={"daily": ["CBC core", "glucose", "electrolytes", "sleep", "symptoms"],
                            "weekly": ["CMP", "cortisol", "PVT"], "sol_30": ["vitamins", "vision", "IOP", "spirometry", "grip", "BIA"]},

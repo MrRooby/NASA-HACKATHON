@@ -60,7 +60,8 @@ export function useTrialRunner(factory) {
 /**
  * Native input wiring shared by the tasks (no React synthetic events: plan section 3.3).
  * `onPress(info)` is called for keydown of `keys` (matched on e.code) and pointerdown on `pointerEl`
- * (or inside `pointerEl` for elements matched by `pointerSelector`). Auto-repeat is ignored.
+ * (filtered by `pointerFilter`). Auto-repeat, non-primary mouse buttons and taps on [data-cog-stop] are ignored;
+ * the context menu (long press) is blocked inside `pointerEl`.
  */
 export function attachInput({ pointerEl, keys, onKey, onPointer, onEscape, pointerFilter }) {
   const keyHandler = e => {
@@ -71,14 +72,19 @@ export function attachInput({ pointerEl, keys, onKey, onPointer, onEscape, point
     onKey(e);
   };
   const pointerHandler = e => {
+    if (e.pointerType === 'mouse' && e.button > 0) return; // right / middle click is not a response
+    if (e.target?.closest?.('[data-cog-stop]')) return; // the STOP control never counts as a response
     if (pointerFilter && !pointerFilter(e)) return;
     onPointer(e);
   };
+  const menuHandler = e => e.preventDefault(); // long press on a tablet must not open a context menu
   window.addEventListener('keydown', keyHandler);
   pointerEl?.addEventListener('pointerdown', pointerHandler, { passive: true });
+  pointerEl?.addEventListener('contextmenu', menuHandler);
   return () => {
     window.removeEventListener('keydown', keyHandler);
     pointerEl?.removeEventListener('pointerdown', pointerHandler);
+    pointerEl?.removeEventListener('contextmenu', menuHandler);
   };
 }
 

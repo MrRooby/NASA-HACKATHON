@@ -3,6 +3,7 @@ import { inputTime, onsetViaRaf, now } from '../../engine/clock.js';
 import { mulberry32 } from '../../engine/prng.js';
 import { attachInput, makeTrial, useTrialRunner } from '../../engine/runner.js';
 import { createTaskKit } from '../../engine/taskKit.js';
+import StopButton from '../../StopButton.jsx';
 import { drawIsi } from './sequence.js';
 import { PVT_TIMEOUT_MS, classifyPvt } from './scoring.js';
 
@@ -170,7 +171,8 @@ export default function PvtTask({ seed, practice = false, durationMs = PVT_DURAT
   });
 
   return (
-    <div className="cog-field" ref={fieldRef} tabIndex={-1} data-testid="cog-field" role="application" aria-label="Reaction time test: press Space or tap when the counter appears">
+    <div className="cog-field" ref={fieldRef} tabIndex={-1} data-testid="cog-field" role="application" aria-label="Reaction time test: press Space or tap anywhere when the counter appears">
+      <StopButton onStop={() => props.current.onEscape?.()} />
       <div className="cog-pvt-counter" ref={counterRef} data-testid="pvt-counter" style={{ visibility: 'hidden' }}>0</div>
       <div className="cog-hint" ref={hintRef} aria-live="polite" data-testid="pvt-hint" />
     </div>

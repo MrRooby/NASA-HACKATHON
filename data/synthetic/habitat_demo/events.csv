@@ -516,3 +516,477 @@ evt-000514,waste_dump,2040-05-28 09:40:30.252,2040-05-28 10:11:19.736,500,airloc
 evt-000515,waste_dump,2040-06-28 05:28:07.572,2040-06-28 05:58:57.056,530,airlock_B,,info,{}
 evt-000516,waste_dump,2040-07-29 01:15:44.892,2040-07-29 01:46:34.376,560,airlock_B,,info,{}
 evt-000517,waste_dump,2040-08-28 21:03:22.212,2040-08-28 21:34:11.696,590,airlock_B,,info,{}
+evt-000518,eva_start,2039-01-13 17:40:43.128,,13,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000519,eva_end,2039-01-13 21:47:19.002,,13,surface,C7,info,{}
+evt-000520,eva_start,2039-01-13 17:40:43.128,,13,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000521,eva_end,2039-01-13 21:47:19.002,,13,surface,C5,info,{}
+evt-000522,airlock_cycle,2039-01-13 17:30:43.128,2039-01-13 17:45:43.128,13,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000523,airlock_cycle,2039-01-13 21:57:19.002,2039-01-13 22:12:19.002,13,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000524,eva_start,2039-01-20 22:17:49.836,,20,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000525,eva_end,2039-01-21 02:24:25.710,,20,surface,C6,info,{}
+evt-000526,eva_start,2039-01-20 22:17:49.836,,20,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000527,eva_end,2039-01-21 02:24:25.710,,20,surface,C10,info,{}
+evt-000528,airlock_cycle,2039-01-20 22:07:49.836,2039-01-20 22:22:49.836,20,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000529,airlock_cycle,2039-01-21 02:34:25.710,2039-01-21 02:49:25.710,20,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000530,eva_start,2039-01-28 02:54:56.544,,27,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000531,eva_end,2039-01-28 07:01:32.418,,27,surface,C7,info,{}
+evt-000532,eva_start,2039-01-28 02:54:56.544,,27,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000533,eva_end,2039-01-28 07:01:32.418,,27,surface,C8,info,{}
+evt-000534,airlock_cycle,2039-01-28 02:44:56.544,2039-01-28 02:59:56.544,27,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000535,airlock_cycle,2039-01-28 07:11:32.418,2039-01-28 07:26:32.418,27,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000536,eva_start,2039-02-04 07:32:03.252,,34,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000537,eva_end,2039-02-04 11:38:39.126,,34,surface,C9,info,{}
+evt-000538,eva_start,2039-02-04 07:32:03.252,,34,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000539,eva_end,2039-02-04 11:38:39.126,,34,surface,C6,info,{}
+evt-000540,airlock_cycle,2039-02-04 07:22:03.252,2039-02-04 07:37:03.252,34,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000541,airlock_cycle,2039-02-04 11:48:39.126,2039-02-04 12:03:39.126,34,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000542,eva_start,2039-02-11 12:09:09.960,,41,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000543,eva_end,2039-02-11 16:15:45.834,,41,surface,C7,info,{}
+evt-000544,eva_start,2039-02-11 12:09:09.960,,41,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000545,eva_end,2039-02-11 16:15:45.834,,41,surface,C10,info,{}
+evt-000546,airlock_cycle,2039-02-11 11:59:09.960,2039-02-11 12:14:09.960,41,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000547,airlock_cycle,2039-02-11 16:25:45.834,2039-02-11 16:40:45.834,41,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000548,eva_start,2039-02-18 16:46:16.668,,48,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000549,eva_end,2039-02-18 20:52:52.542,,48,surface,C5,info,{}
+evt-000550,eva_start,2039-02-18 16:46:16.668,,48,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000551,eva_end,2039-02-18 20:52:52.542,,48,surface,C8,info,{}
+evt-000552,airlock_cycle,2039-02-18 16:36:16.668,2039-02-18 16:51:16.668,48,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000553,airlock_cycle,2039-02-18 21:02:52.542,2039-02-18 21:17:52.542,48,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000554,eva_start,2039-02-25 21:23:23.376,,55,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000555,eva_end,2039-02-26 01:29:59.250,,55,surface,C7,info,{}
+evt-000556,eva_start,2039-02-25 21:23:23.376,,55,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000557,eva_end,2039-02-26 01:29:59.250,,55,surface,C5,info,{}
+evt-000558,airlock_cycle,2039-02-25 21:13:23.376,2039-02-25 21:28:23.376,55,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000559,airlock_cycle,2039-02-26 01:39:59.250,2039-02-26 01:54:59.250,55,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000560,eva_start,2039-03-05 02:00:30.084,,62,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000561,eva_end,2039-03-05 06:07:05.958,,62,surface,C6,info,{}
+evt-000562,eva_start,2039-03-05 02:00:30.084,,62,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000563,eva_end,2039-03-05 06:07:05.958,,62,surface,C10,info,{}
+evt-000564,airlock_cycle,2039-03-05 01:50:30.084,2039-03-05 02:05:30.084,62,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000565,airlock_cycle,2039-03-05 06:17:05.958,2039-03-05 06:32:05.958,62,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000566,eva_start,2039-03-12 06:37:36.792,,69,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000567,eva_end,2039-03-12 10:44:12.666,,69,surface,C7,info,{}
+evt-000568,eva_start,2039-03-12 06:37:36.792,,69,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000569,eva_end,2039-03-12 10:44:12.666,,69,surface,C8,info,{}
+evt-000570,airlock_cycle,2039-03-12 06:27:36.792,2039-03-12 06:42:36.792,69,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000571,airlock_cycle,2039-03-12 10:54:12.666,2039-03-12 11:09:12.666,69,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000572,eva_start,2039-03-19 11:14:43.500,,76,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000573,eva_end,2039-03-19 15:21:19.374,,76,surface,C9,info,{}
+evt-000574,eva_start,2039-03-19 11:14:43.500,,76,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000575,eva_end,2039-03-19 15:21:19.374,,76,surface,C6,info,{}
+evt-000576,airlock_cycle,2039-03-19 11:04:43.500,2039-03-19 11:19:43.500,76,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000577,airlock_cycle,2039-03-19 15:31:19.374,2039-03-19 15:46:19.374,76,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000578,eva_start,2039-03-26 15:51:50.208,,83,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000579,eva_end,2039-03-26 19:58:26.082,,83,surface,C7,info,{}
+evt-000580,eva_start,2039-03-26 15:51:50.208,,83,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000581,eva_end,2039-03-26 19:58:26.082,,83,surface,C10,info,{}
+evt-000582,airlock_cycle,2039-03-26 15:41:50.208,2039-03-26 15:56:50.208,83,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000583,airlock_cycle,2039-03-26 20:08:26.082,2039-03-26 20:23:26.082,83,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000584,eva_start,2039-04-02 20:28:56.916,,90,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000585,eva_end,2039-04-03 00:35:32.790,,90,surface,C5,info,{}
+evt-000586,eva_start,2039-04-02 20:28:56.916,,90,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000587,eva_end,2039-04-03 00:35:32.790,,90,surface,C8,info,{}
+evt-000588,airlock_cycle,2039-04-02 20:18:56.916,2039-04-02 20:33:56.916,90,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000589,airlock_cycle,2039-04-03 00:45:32.790,2039-04-03 01:00:32.790,90,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000590,eva_start,2039-04-10 01:06:03.624,,97,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000591,eva_end,2039-04-10 05:12:39.498,,97,surface,C7,info,{}
+evt-000592,eva_start,2039-04-10 01:06:03.624,,97,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000593,eva_end,2039-04-10 05:12:39.498,,97,surface,C5,info,{}
+evt-000594,airlock_cycle,2039-04-10 00:56:03.624,2039-04-10 01:11:03.624,97,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000595,airlock_cycle,2039-04-10 05:22:39.498,2039-04-10 05:37:39.498,97,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000596,eva_start,2039-04-17 05:43:10.332,,104,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000597,eva_end,2039-04-17 09:49:46.206,,104,surface,C6,info,{}
+evt-000598,eva_start,2039-04-17 05:43:10.332,,104,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000599,eva_end,2039-04-17 09:49:46.206,,104,surface,C10,info,{}
+evt-000600,airlock_cycle,2039-04-17 05:33:10.332,2039-04-17 05:48:10.332,104,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000601,airlock_cycle,2039-04-17 09:59:46.206,2039-04-17 10:14:46.206,104,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000602,eva_start,2039-04-24 10:20:17.040,,111,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000603,eva_end,2039-04-24 14:26:52.914,,111,surface,C7,info,{}
+evt-000604,eva_start,2039-04-24 10:20:17.040,,111,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000605,eva_end,2039-04-24 14:26:52.914,,111,surface,C8,info,{}
+evt-000606,airlock_cycle,2039-04-24 10:10:17.040,2039-04-24 10:25:17.040,111,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000607,airlock_cycle,2039-04-24 14:36:52.914,2039-04-24 14:51:52.914,111,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000608,eva_start,2039-05-01 14:57:23.748,,118,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000609,eva_end,2039-05-01 19:03:59.622,,118,surface,C9,info,{}
+evt-000610,eva_start,2039-05-01 14:57:23.748,,118,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000611,eva_end,2039-05-01 19:03:59.622,,118,surface,C6,info,{}
+evt-000612,airlock_cycle,2039-05-01 14:47:23.748,2039-05-01 15:02:23.748,118,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000613,airlock_cycle,2039-05-01 19:13:59.622,2039-05-01 19:28:59.622,118,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000614,eva_start,2039-05-08 19:34:30.456,,125,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000615,eva_end,2039-05-08 23:41:06.330,,125,surface,C7,info,{}
+evt-000616,eva_start,2039-05-08 19:34:30.456,,125,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000617,eva_end,2039-05-08 23:41:06.330,,125,surface,C10,info,{}
+evt-000618,airlock_cycle,2039-05-08 19:24:30.456,2039-05-08 19:39:30.456,125,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000619,airlock_cycle,2039-05-08 23:51:06.330,2039-05-09 00:06:06.330,125,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000620,eva_start,2039-05-16 00:11:37.164,,132,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000621,eva_end,2039-05-16 04:18:13.038,,132,surface,C5,info,{}
+evt-000622,eva_start,2039-05-16 00:11:37.164,,132,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000623,eva_end,2039-05-16 04:18:13.038,,132,surface,C8,info,{}
+evt-000624,airlock_cycle,2039-05-16 00:01:37.164,2039-05-16 00:16:37.164,132,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000625,airlock_cycle,2039-05-16 04:28:13.038,2039-05-16 04:43:13.038,132,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000626,eva_start,2039-05-23 04:48:43.872,,139,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000627,eva_end,2039-05-23 08:55:19.746,,139,surface,C7,info,{}
+evt-000628,eva_start,2039-05-23 04:48:43.872,,139,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000629,eva_end,2039-05-23 08:55:19.746,,139,surface,C5,info,{}
+evt-000630,airlock_cycle,2039-05-23 04:38:43.872,2039-05-23 04:53:43.872,139,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000631,airlock_cycle,2039-05-23 09:05:19.746,2039-05-23 09:20:19.746,139,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000632,eva_start,2039-05-30 09:25:50.580,,146,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000633,eva_end,2039-05-30 13:32:26.454,,146,surface,C6,info,{}
+evt-000634,eva_start,2039-05-30 09:25:50.580,,146,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000635,eva_end,2039-05-30 13:32:26.454,,146,surface,C10,info,{}
+evt-000636,airlock_cycle,2039-05-30 09:15:50.580,2039-05-30 09:30:50.580,146,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000637,airlock_cycle,2039-05-30 13:42:26.454,2039-05-30 13:57:26.454,146,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000638,eva_start,2039-06-06 14:02:57.288,,153,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000639,eva_end,2039-06-06 18:09:33.162,,153,surface,C7,info,{}
+evt-000640,eva_start,2039-06-06 14:02:57.288,,153,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000641,eva_end,2039-06-06 18:09:33.162,,153,surface,C8,info,{}
+evt-000642,airlock_cycle,2039-06-06 13:52:57.288,2039-06-06 14:07:57.288,153,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000643,airlock_cycle,2039-06-06 18:19:33.162,2039-06-06 18:34:33.162,153,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000644,eva_start,2039-06-13 18:40:03.996,,160,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000645,eva_end,2039-06-13 22:46:39.870,,160,surface,C9,info,{}
+evt-000646,eva_start,2039-06-13 18:40:03.996,,160,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000647,eva_end,2039-06-13 22:46:39.870,,160,surface,C6,info,{}
+evt-000648,airlock_cycle,2039-06-13 18:30:03.996,2039-06-13 18:45:03.996,160,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000649,airlock_cycle,2039-06-13 22:56:39.870,2039-06-13 23:11:39.870,160,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000650,eva_start,2039-06-20 23:17:10.704,,167,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000651,eva_end,2039-06-21 03:23:46.578,,167,surface,C7,info,{}
+evt-000652,eva_start,2039-06-20 23:17:10.704,,167,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000653,eva_end,2039-06-21 03:23:46.578,,167,surface,C10,info,{}
+evt-000654,airlock_cycle,2039-06-20 23:07:10.704,2039-06-20 23:22:10.704,167,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000655,airlock_cycle,2039-06-21 03:33:46.578,2039-06-21 03:48:46.578,167,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000656,eva_start,2039-06-28 03:54:17.412,,174,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000657,eva_end,2039-06-28 08:00:53.286,,174,surface,C5,info,{}
+evt-000658,eva_start,2039-06-28 03:54:17.412,,174,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000659,eva_end,2039-06-28 08:00:53.286,,174,surface,C8,info,{}
+evt-000660,airlock_cycle,2039-06-28 03:44:17.412,2039-06-28 03:59:17.412,174,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000661,airlock_cycle,2039-06-28 08:10:53.286,2039-06-28 08:25:53.286,174,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000662,eva_start,2039-07-05 08:31:24.120,,181,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000663,eva_end,2039-07-05 12:37:59.994,,181,surface,C7,info,{}
+evt-000664,eva_start,2039-07-05 08:31:24.120,,181,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000665,eva_end,2039-07-05 12:37:59.994,,181,surface,C5,info,{}
+evt-000666,airlock_cycle,2039-07-05 08:21:24.120,2039-07-05 08:36:24.120,181,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000667,airlock_cycle,2039-07-05 12:47:59.994,2039-07-05 13:02:59.994,181,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000668,eva_start,2039-07-12 13:08:30.828,,188,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000669,eva_end,2039-07-12 17:15:06.702,,188,surface,C6,info,{}
+evt-000670,eva_start,2039-07-12 13:08:30.828,,188,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000671,eva_end,2039-07-12 17:15:06.702,,188,surface,C10,info,{}
+evt-000672,airlock_cycle,2039-07-12 12:58:30.828,2039-07-12 13:13:30.828,188,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000673,airlock_cycle,2039-07-12 17:25:06.702,2039-07-12 17:40:06.702,188,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000674,eva_start,2039-07-19 17:45:37.536,,195,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000675,eva_end,2039-07-19 21:52:13.410,,195,surface,C7,info,{}
+evt-000676,eva_start,2039-07-19 17:45:37.536,,195,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000677,eva_end,2039-07-19 21:52:13.410,,195,surface,C8,info,{}
+evt-000678,airlock_cycle,2039-07-19 17:35:37.536,2039-07-19 17:50:37.536,195,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000679,airlock_cycle,2039-07-19 22:02:13.410,2039-07-19 22:17:13.410,195,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000680,eva_start,2039-07-26 22:22:44.244,,202,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000681,eva_end,2039-07-27 02:29:20.118,,202,surface,C9,info,{}
+evt-000682,eva_start,2039-07-26 22:22:44.244,,202,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000683,eva_end,2039-07-27 02:29:20.118,,202,surface,C6,info,{}
+evt-000684,airlock_cycle,2039-07-26 22:12:44.244,2039-07-26 22:27:44.244,202,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000685,airlock_cycle,2039-07-27 02:39:20.118,2039-07-27 02:54:20.118,202,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000686,eva_start,2039-08-03 02:59:50.952,,209,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000687,eva_end,2039-08-03 07:06:26.826,,209,surface,C7,info,{}
+evt-000688,eva_start,2039-08-03 02:59:50.952,,209,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000689,eva_end,2039-08-03 07:06:26.826,,209,surface,C10,info,{}
+evt-000690,airlock_cycle,2039-08-03 02:49:50.952,2039-08-03 03:04:50.952,209,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000691,airlock_cycle,2039-08-03 07:16:26.826,2039-08-03 07:31:26.826,209,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000692,eva_start,2039-08-10 07:36:57.660,,216,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000693,eva_end,2039-08-10 11:43:33.534,,216,surface,C5,info,{}
+evt-000694,eva_start,2039-08-10 07:36:57.660,,216,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000695,eva_end,2039-08-10 11:43:33.534,,216,surface,C8,info,{}
+evt-000696,airlock_cycle,2039-08-10 07:26:57.660,2039-08-10 07:41:57.660,216,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000697,airlock_cycle,2039-08-10 11:53:33.534,2039-08-10 12:08:33.534,216,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000698,eva_start,2039-08-17 12:14:04.368,,223,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000699,eva_end,2039-08-17 16:20:40.242,,223,surface,C7,info,{}
+evt-000700,eva_start,2039-08-17 12:14:04.368,,223,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000701,eva_end,2039-08-17 16:20:40.242,,223,surface,C5,info,{}
+evt-000702,airlock_cycle,2039-08-17 12:04:04.368,2039-08-17 12:19:04.368,223,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000703,airlock_cycle,2039-08-17 16:30:40.242,2039-08-17 16:45:40.242,223,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000704,eva_start,2039-08-24 16:51:11.076,,230,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000705,eva_end,2039-08-24 20:57:46.950,,230,surface,C6,info,{}
+evt-000706,eva_start,2039-08-24 16:51:11.076,,230,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000707,eva_end,2039-08-24 20:57:46.950,,230,surface,C10,info,{}
+evt-000708,airlock_cycle,2039-08-24 16:41:11.076,2039-08-24 16:56:11.076,230,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000709,airlock_cycle,2039-08-24 21:07:46.950,2039-08-24 21:22:46.950,230,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000710,eva_start,2039-08-31 21:28:17.784,,237,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000711,eva_end,2039-09-01 01:34:53.658,,237,surface,C7,info,{}
+evt-000712,eva_start,2039-08-31 21:28:17.784,,237,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000713,eva_end,2039-09-01 01:34:53.658,,237,surface,C8,info,{}
+evt-000714,airlock_cycle,2039-08-31 21:18:17.784,2039-08-31 21:33:17.784,237,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000715,airlock_cycle,2039-09-01 01:44:53.658,2039-09-01 01:59:53.658,237,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000716,eva_start,2039-09-08 02:05:24.492,,244,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000717,eva_end,2039-09-08 06:12:00.366,,244,surface,C9,info,{}
+evt-000718,eva_start,2039-09-08 02:05:24.492,,244,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000719,eva_end,2039-09-08 06:12:00.366,,244,surface,C6,info,{}
+evt-000720,airlock_cycle,2039-09-08 01:55:24.492,2039-09-08 02:10:24.492,244,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000721,airlock_cycle,2039-09-08 06:22:00.366,2039-09-08 06:37:00.366,244,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000722,eva_start,2039-09-15 06:42:31.200,,251,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000723,eva_end,2039-09-15 10:49:07.074,,251,surface,C7,info,{}
+evt-000724,eva_start,2039-09-15 06:42:31.200,,251,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000725,eva_end,2039-09-15 10:49:07.074,,251,surface,C10,info,{}
+evt-000726,airlock_cycle,2039-09-15 06:32:31.200,2039-09-15 06:47:31.200,251,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000727,airlock_cycle,2039-09-15 10:59:07.074,2039-09-15 11:14:07.074,251,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000728,eva_start,2039-09-22 11:19:37.908,,258,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000729,eva_end,2039-09-22 15:26:13.782,,258,surface,C5,info,{}
+evt-000730,eva_start,2039-09-22 11:19:37.908,,258,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000731,eva_end,2039-09-22 15:26:13.782,,258,surface,C8,info,{}
+evt-000732,airlock_cycle,2039-09-22 11:09:37.908,2039-09-22 11:24:37.908,258,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000733,airlock_cycle,2039-09-22 15:36:13.782,2039-09-22 15:51:13.782,258,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000734,eva_start,2039-09-29 15:56:44.616,,265,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000735,eva_end,2039-09-29 20:03:20.490,,265,surface,C7,info,{}
+evt-000736,eva_start,2039-09-29 15:56:44.616,,265,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000737,eva_end,2039-09-29 20:03:20.490,,265,surface,C5,info,{}
+evt-000738,airlock_cycle,2039-09-29 15:46:44.616,2039-09-29 16:01:44.616,265,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000739,airlock_cycle,2039-09-29 20:13:20.490,2039-09-29 20:28:20.490,265,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000740,eva_start,2039-10-06 20:33:51.324,,272,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000741,eva_end,2039-10-07 00:40:27.198,,272,surface,C6,info,{}
+evt-000742,eva_start,2039-10-06 20:33:51.324,,272,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000743,eva_end,2039-10-07 00:40:27.198,,272,surface,C10,info,{}
+evt-000744,airlock_cycle,2039-10-06 20:23:51.324,2039-10-06 20:38:51.324,272,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000745,airlock_cycle,2039-10-07 00:50:27.198,2039-10-07 01:05:27.198,272,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000746,eva_start,2039-10-14 01:10:58.032,,279,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000747,eva_end,2039-10-14 05:17:33.906,,279,surface,C7,info,{}
+evt-000748,eva_start,2039-10-14 01:10:58.032,,279,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000749,eva_end,2039-10-14 05:17:33.906,,279,surface,C8,info,{}
+evt-000750,airlock_cycle,2039-10-14 01:00:58.032,2039-10-14 01:15:58.032,279,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000751,airlock_cycle,2039-10-14 05:27:33.906,2039-10-14 05:42:33.906,279,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000752,eva_start,2039-10-21 05:48:04.740,,286,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000753,eva_end,2039-10-21 09:54:40.614,,286,surface,C9,info,{}
+evt-000754,eva_start,2039-10-21 05:48:04.740,,286,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000755,eva_end,2039-10-21 09:54:40.614,,286,surface,C6,info,{}
+evt-000756,airlock_cycle,2039-10-21 05:38:04.740,2039-10-21 05:53:04.740,286,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000757,airlock_cycle,2039-10-21 10:04:40.614,2039-10-21 10:19:40.614,286,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000758,eva_start,2039-10-28 10:25:11.448,,293,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000759,eva_end,2039-10-28 14:31:47.322,,293,surface,C7,info,{}
+evt-000760,eva_start,2039-10-28 10:25:11.448,,293,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000761,eva_end,2039-10-28 14:31:47.322,,293,surface,C10,info,{}
+evt-000762,airlock_cycle,2039-10-28 10:15:11.448,2039-10-28 10:30:11.448,293,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000763,airlock_cycle,2039-10-28 14:41:47.322,2039-10-28 14:56:47.322,293,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000764,eva_start,2039-11-04 15:02:18.156,,300,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000765,eva_end,2039-11-04 19:08:54.030,,300,surface,C5,info,{}
+evt-000766,eva_start,2039-11-04 15:02:18.156,,300,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000767,eva_end,2039-11-04 19:08:54.030,,300,surface,C8,info,{}
+evt-000768,airlock_cycle,2039-11-04 14:52:18.156,2039-11-04 15:07:18.156,300,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000769,airlock_cycle,2039-11-04 19:18:54.030,2039-11-04 19:33:54.030,300,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000770,eva_start,2039-11-11 19:39:24.864,,307,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000771,eva_end,2039-11-11 23:46:00.738,,307,surface,C7,info,{}
+evt-000772,eva_start,2039-11-11 19:39:24.864,,307,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000773,eva_end,2039-11-11 23:46:00.738,,307,surface,C5,info,{}
+evt-000774,airlock_cycle,2039-11-11 19:29:24.864,2039-11-11 19:44:24.864,307,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000775,airlock_cycle,2039-11-11 23:56:00.738,2039-11-12 00:11:00.738,307,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000776,eva_start,2039-11-19 00:16:31.572,,314,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000777,eva_end,2039-11-19 04:23:07.446,,314,surface,C6,info,{}
+evt-000778,eva_start,2039-11-19 00:16:31.572,,314,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000779,eva_end,2039-11-19 04:23:07.446,,314,surface,C10,info,{}
+evt-000780,airlock_cycle,2039-11-19 00:06:31.572,2039-11-19 00:21:31.572,314,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000781,airlock_cycle,2039-11-19 04:33:07.446,2039-11-19 04:48:07.446,314,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000782,eva_start,2039-11-26 04:53:38.280,,321,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000783,eva_end,2039-11-26 09:00:14.154,,321,surface,C7,info,{}
+evt-000784,eva_start,2039-11-26 04:53:38.280,,321,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000785,eva_end,2039-11-26 09:00:14.154,,321,surface,C8,info,{}
+evt-000786,airlock_cycle,2039-11-26 04:43:38.280,2039-11-26 04:58:38.280,321,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000787,airlock_cycle,2039-11-26 09:10:14.154,2039-11-26 09:25:14.154,321,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000788,eva_start,2039-12-03 09:30:44.988,,328,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000789,eva_end,2039-12-03 13:37:20.862,,328,surface,C9,info,{}
+evt-000790,eva_start,2039-12-03 09:30:44.988,,328,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000791,eva_end,2039-12-03 13:37:20.862,,328,surface,C6,info,{}
+evt-000792,airlock_cycle,2039-12-03 09:20:44.988,2039-12-03 09:35:44.988,328,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000793,airlock_cycle,2039-12-03 13:47:20.862,2039-12-03 14:02:20.862,328,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000794,eva_start,2039-12-10 14:07:51.696,,335,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000795,eva_end,2039-12-10 18:14:27.570,,335,surface,C7,info,{}
+evt-000796,eva_start,2039-12-10 14:07:51.696,,335,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000797,eva_end,2039-12-10 18:14:27.570,,335,surface,C10,info,{}
+evt-000798,airlock_cycle,2039-12-10 13:57:51.696,2039-12-10 14:12:51.696,335,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000799,airlock_cycle,2039-12-10 18:24:27.570,2039-12-10 18:39:27.570,335,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000800,eva_start,2039-12-17 18:44:58.404,,342,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000801,eva_end,2039-12-17 22:51:34.278,,342,surface,C5,info,{}
+evt-000802,eva_start,2039-12-17 18:44:58.404,,342,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000803,eva_end,2039-12-17 22:51:34.278,,342,surface,C8,info,{}
+evt-000804,airlock_cycle,2039-12-17 18:34:58.404,2039-12-17 18:49:58.404,342,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000805,airlock_cycle,2039-12-17 23:01:34.278,2039-12-17 23:16:34.278,342,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000806,eva_start,2039-12-24 23:22:05.112,,349,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000807,eva_end,2039-12-25 03:28:40.986,,349,surface,C7,info,{}
+evt-000808,eva_start,2039-12-24 23:22:05.112,,349,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000809,eva_end,2039-12-25 03:28:40.986,,349,surface,C5,info,{}
+evt-000810,airlock_cycle,2039-12-24 23:12:05.112,2039-12-24 23:27:05.112,349,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000811,airlock_cycle,2039-12-25 03:38:40.986,2039-12-25 03:53:40.986,349,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000812,eva_start,2040-01-01 03:59:11.820,,356,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000813,eva_end,2040-01-01 08:05:47.694,,356,surface,C6,info,{}
+evt-000814,eva_start,2040-01-01 03:59:11.820,,356,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000815,eva_end,2040-01-01 08:05:47.694,,356,surface,C10,info,{}
+evt-000816,airlock_cycle,2040-01-01 03:49:11.820,2040-01-01 04:04:11.820,356,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000817,airlock_cycle,2040-01-01 08:15:47.694,2040-01-01 08:30:47.694,356,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000818,eva_start,2040-01-08 08:36:18.528,,363,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000819,eva_end,2040-01-08 12:42:54.402,,363,surface,C7,info,{}
+evt-000820,eva_start,2040-01-08 08:36:18.528,,363,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000821,eva_end,2040-01-08 12:42:54.402,,363,surface,C8,info,{}
+evt-000822,airlock_cycle,2040-01-08 08:26:18.528,2040-01-08 08:41:18.528,363,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000823,airlock_cycle,2040-01-08 12:52:54.402,2040-01-08 13:07:54.402,363,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000824,eva_start,2040-01-15 13:13:25.236,,370,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000825,eva_end,2040-01-15 17:20:01.110,,370,surface,C9,info,{}
+evt-000826,eva_start,2040-01-15 13:13:25.236,,370,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000827,eva_end,2040-01-15 17:20:01.110,,370,surface,C6,info,{}
+evt-000828,airlock_cycle,2040-01-15 13:03:25.236,2040-01-15 13:18:25.236,370,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000829,airlock_cycle,2040-01-15 17:30:01.110,2040-01-15 17:45:01.110,370,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000830,eva_start,2040-01-22 17:50:31.944,,377,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000831,eva_end,2040-01-22 21:57:07.818,,377,surface,C7,info,{}
+evt-000832,eva_start,2040-01-22 17:50:31.944,,377,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000833,eva_end,2040-01-22 21:57:07.818,,377,surface,C10,info,{}
+evt-000834,airlock_cycle,2040-01-22 17:40:31.944,2040-01-22 17:55:31.944,377,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000835,airlock_cycle,2040-01-22 22:07:07.818,2040-01-22 22:22:07.818,377,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000836,eva_start,2040-01-29 22:27:38.652,,384,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000837,eva_end,2040-01-30 02:34:14.526,,384,surface,C5,info,{}
+evt-000838,eva_start,2040-01-29 22:27:38.652,,384,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000839,eva_end,2040-01-30 02:34:14.526,,384,surface,C8,info,{}
+evt-000840,airlock_cycle,2040-01-29 22:17:38.652,2040-01-29 22:32:38.652,384,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000841,airlock_cycle,2040-01-30 02:44:14.526,2040-01-30 02:59:14.526,384,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000842,eva_start,2040-02-06 03:04:45.360,,391,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000843,eva_end,2040-02-06 07:11:21.234,,391,surface,C7,info,{}
+evt-000844,eva_start,2040-02-06 03:04:45.360,,391,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000845,eva_end,2040-02-06 07:11:21.234,,391,surface,C5,info,{}
+evt-000846,airlock_cycle,2040-02-06 02:54:45.360,2040-02-06 03:09:45.360,391,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000847,airlock_cycle,2040-02-06 07:21:21.234,2040-02-06 07:36:21.234,391,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000848,eva_start,2040-02-13 07:41:52.068,,398,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000849,eva_end,2040-02-13 11:48:27.942,,398,surface,C6,info,{}
+evt-000850,eva_start,2040-02-13 07:41:52.068,,398,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000851,eva_end,2040-02-13 11:48:27.942,,398,surface,C10,info,{}
+evt-000852,airlock_cycle,2040-02-13 07:31:52.068,2040-02-13 07:46:52.068,398,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000853,airlock_cycle,2040-02-13 11:58:27.942,2040-02-13 12:13:27.942,398,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000854,eva_start,2040-02-20 12:18:58.776,,405,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000855,eva_end,2040-02-20 16:25:34.650,,405,surface,C7,info,{}
+evt-000856,eva_start,2040-02-20 12:18:58.776,,405,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000857,eva_end,2040-02-20 16:25:34.650,,405,surface,C8,info,{}
+evt-000858,airlock_cycle,2040-02-20 12:08:58.776,2040-02-20 12:23:58.776,405,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000859,airlock_cycle,2040-02-20 16:35:34.650,2040-02-20 16:50:34.650,405,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000860,eva_start,2040-02-27 16:56:05.484,,412,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000861,eva_end,2040-02-27 21:02:41.358,,412,surface,C9,info,{}
+evt-000862,eva_start,2040-02-27 16:56:05.484,,412,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000863,eva_end,2040-02-27 21:02:41.358,,412,surface,C6,info,{}
+evt-000864,airlock_cycle,2040-02-27 16:46:05.484,2040-02-27 17:01:05.484,412,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000865,airlock_cycle,2040-02-27 21:12:41.358,2040-02-27 21:27:41.358,412,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000866,eva_start,2040-03-05 21:33:12.192,,419,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000867,eva_end,2040-03-06 01:39:48.066,,419,surface,C7,info,{}
+evt-000868,eva_start,2040-03-05 21:33:12.192,,419,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000869,eva_end,2040-03-06 01:39:48.066,,419,surface,C10,info,{}
+evt-000870,airlock_cycle,2040-03-05 21:23:12.192,2040-03-05 21:38:12.192,419,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000871,airlock_cycle,2040-03-06 01:49:48.066,2040-03-06 02:04:48.066,419,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000872,eva_start,2040-03-13 02:10:18.900,,426,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000873,eva_end,2040-03-13 06:16:54.774,,426,surface,C5,info,{}
+evt-000874,eva_start,2040-03-13 02:10:18.900,,426,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000875,eva_end,2040-03-13 06:16:54.774,,426,surface,C8,info,{}
+evt-000876,airlock_cycle,2040-03-13 02:00:18.900,2040-03-13 02:15:18.900,426,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000877,airlock_cycle,2040-03-13 06:26:54.774,2040-03-13 06:41:54.774,426,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000878,eva_start,2040-03-20 06:47:25.608,,433,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000879,eva_end,2040-03-20 10:54:01.482,,433,surface,C7,info,{}
+evt-000880,eva_start,2040-03-20 06:47:25.608,,433,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000881,eva_end,2040-03-20 10:54:01.482,,433,surface,C5,info,{}
+evt-000882,airlock_cycle,2040-03-20 06:37:25.608,2040-03-20 06:52:25.608,433,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000883,airlock_cycle,2040-03-20 11:04:01.482,2040-03-20 11:19:01.482,433,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000884,eva_start,2040-03-27 11:24:32.316,,440,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000885,eva_end,2040-03-27 15:31:08.190,,440,surface,C6,info,{}
+evt-000886,eva_start,2040-03-27 11:24:32.316,,440,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000887,eva_end,2040-03-27 15:31:08.190,,440,surface,C10,info,{}
+evt-000888,airlock_cycle,2040-03-27 11:14:32.316,2040-03-27 11:29:32.316,440,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000889,airlock_cycle,2040-03-27 15:41:08.190,2040-03-27 15:56:08.190,440,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000890,eva_start,2040-04-03 16:01:39.024,,447,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000891,eva_end,2040-04-03 20:08:14.898,,447,surface,C7,info,{}
+evt-000892,eva_start,2040-04-03 16:01:39.024,,447,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000893,eva_end,2040-04-03 20:08:14.898,,447,surface,C8,info,{}
+evt-000894,airlock_cycle,2040-04-03 15:51:39.024,2040-04-03 16:06:39.024,447,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000895,airlock_cycle,2040-04-03 20:18:14.898,2040-04-03 20:33:14.898,447,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000896,eva_start,2040-04-10 20:38:45.732,,454,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000897,eva_end,2040-04-11 00:45:21.606,,454,surface,C9,info,{}
+evt-000898,eva_start,2040-04-10 20:38:45.732,,454,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000899,eva_end,2040-04-11 00:45:21.606,,454,surface,C6,info,{}
+evt-000900,airlock_cycle,2040-04-10 20:28:45.732,2040-04-10 20:43:45.732,454,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000901,airlock_cycle,2040-04-11 00:55:21.606,2040-04-11 01:10:21.606,454,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000902,eva_start,2040-04-18 01:15:52.440,,461,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000903,eva_end,2040-04-18 05:22:28.314,,461,surface,C7,info,{}
+evt-000904,eva_start,2040-04-18 01:15:52.440,,461,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000905,eva_end,2040-04-18 05:22:28.314,,461,surface,C10,info,{}
+evt-000906,airlock_cycle,2040-04-18 01:05:52.440,2040-04-18 01:20:52.440,461,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000907,airlock_cycle,2040-04-18 05:32:28.314,2040-04-18 05:47:28.314,461,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000908,eva_start,2040-04-25 05:52:59.148,,468,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000909,eva_end,2040-04-25 09:59:35.022,,468,surface,C5,info,{}
+evt-000910,eva_start,2040-04-25 05:52:59.148,,468,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000911,eva_end,2040-04-25 09:59:35.022,,468,surface,C8,info,{}
+evt-000912,airlock_cycle,2040-04-25 05:42:59.148,2040-04-25 05:57:59.148,468,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000913,airlock_cycle,2040-04-25 10:09:35.022,2040-04-25 10:24:35.022,468,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000914,eva_start,2040-04-30 09:10:55.368,,473,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000915,eva_end,2040-04-30 13:17:31.242,,473,surface,C7,info,{}
+evt-000916,eva_start,2040-04-30 09:10:55.368,,473,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000917,eva_end,2040-04-30 13:17:31.242,,473,surface,C5,info,{}
+evt-000918,airlock_cycle,2040-04-30 09:00:55.368,2040-04-30 09:15:55.368,473,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000919,airlock_cycle,2040-04-30 13:27:31.242,2040-04-30 13:42:31.242,473,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000920,eva_start,2040-05-02 10:30:05.856,,475,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000921,eva_end,2040-05-02 14:36:41.730,,475,surface,C6,info,{}
+evt-000922,eva_start,2040-05-02 10:30:05.856,,475,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000923,eva_end,2040-05-02 14:36:41.730,,475,surface,C10,info,{}
+evt-000924,airlock_cycle,2040-05-02 10:20:05.856,2040-05-02 10:35:05.856,475,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000925,airlock_cycle,2040-05-02 14:46:41.730,2040-05-02 15:01:41.730,475,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000926,eva_start,2040-05-09 15:07:12.564,,482,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000927,eva_end,2040-05-09 19:13:48.438,,482,surface,C7,info,{}
+evt-000928,eva_start,2040-05-09 15:07:12.564,,482,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000929,eva_end,2040-05-09 19:13:48.438,,482,surface,C8,info,{}
+evt-000930,airlock_cycle,2040-05-09 14:57:12.564,2040-05-09 15:12:12.564,482,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000931,airlock_cycle,2040-05-09 19:23:48.438,2040-05-09 19:38:48.438,482,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000932,eva_start,2040-05-16 19:44:19.272,,489,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000933,eva_end,2040-05-16 23:50:55.146,,489,surface,C9,info,{}
+evt-000934,eva_start,2040-05-16 19:44:19.272,,489,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000935,eva_end,2040-05-16 23:50:55.146,,489,surface,C6,info,{}
+evt-000936,airlock_cycle,2040-05-16 19:34:19.272,2040-05-16 19:49:19.272,489,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000937,airlock_cycle,2040-05-17 00:00:55.146,2040-05-17 00:15:55.146,489,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000938,eva_start,2040-05-24 00:21:25.980,,496,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000939,eva_end,2040-05-24 04:28:01.854,,496,surface,C7,info,{}
+evt-000940,eva_start,2040-05-24 00:21:25.980,,496,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000941,eva_end,2040-05-24 04:28:01.854,,496,surface,C10,info,{}
+evt-000942,airlock_cycle,2040-05-24 00:11:25.980,2040-05-24 00:26:25.980,496,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000943,airlock_cycle,2040-05-24 04:38:01.854,2040-05-24 04:53:01.854,496,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000944,eva_start,2040-07-13 08:41:12.936,,545,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000945,eva_end,2040-07-13 12:47:48.810,,545,surface,C5,info,{}
+evt-000946,eva_start,2040-07-13 08:41:12.936,,545,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000947,eva_end,2040-07-13 12:47:48.810,,545,surface,C8,info,{}
+evt-000948,airlock_cycle,2040-07-13 08:31:12.936,2040-07-13 08:46:12.936,545,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000949,airlock_cycle,2040-07-13 12:57:48.810,2040-07-13 13:12:48.810,545,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000950,eva_start,2040-07-20 13:18:19.644,,552,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000951,eva_end,2040-07-20 17:24:55.518,,552,surface,C7,info,{}
+evt-000952,eva_start,2040-07-20 13:18:19.644,,552,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000953,eva_end,2040-07-20 17:24:55.518,,552,surface,C5,info,{}
+evt-000954,airlock_cycle,2040-07-20 13:08:19.644,2040-07-20 13:23:19.644,552,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000955,airlock_cycle,2040-07-20 17:34:55.518,2040-07-20 17:49:55.518,552,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"
+evt-000956,eva_start,2040-07-27 17:55:26.352,,559,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000957,eva_end,2040-07-27 22:02:02.226,,559,surface,C6,info,{}
+evt-000958,eva_start,2040-07-27 17:55:26.352,,559,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000959,eva_end,2040-07-27 22:02:02.226,,559,surface,C10,info,{}
+evt-000960,airlock_cycle,2040-07-27 17:45:26.352,2040-07-27 18:00:26.352,559,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C6"", ""C10""]}"
+evt-000961,airlock_cycle,2040-07-27 22:12:02.226,2040-07-27 22:27:02.226,559,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C6"", ""C10""]}"
+evt-000962,eva_start,2040-08-03 22:32:33.060,,566,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000963,eva_end,2040-08-04 02:39:08.934,,566,surface,C7,info,{}
+evt-000964,eva_start,2040-08-03 22:32:33.060,,566,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000965,eva_end,2040-08-04 02:39:08.934,,566,surface,C8,info,{}
+evt-000966,airlock_cycle,2040-08-03 22:22:33.060,2040-08-03 22:37:33.060,566,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C8""]}"
+evt-000967,airlock_cycle,2040-08-04 02:49:08.934,2040-08-04 03:04:08.934,566,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C8""]}"
+evt-000968,eva_start,2040-08-11 03:09:39.768,,573,surface,C9,info,"{""airlock"": ""airlock_A""}"
+evt-000969,eva_end,2040-08-11 07:16:15.642,,573,surface,C9,info,{}
+evt-000970,eva_start,2040-08-11 03:09:39.768,,573,surface,C6,info,"{""airlock"": ""airlock_A""}"
+evt-000971,eva_end,2040-08-11 07:16:15.642,,573,surface,C6,info,{}
+evt-000972,airlock_cycle,2040-08-11 02:59:39.768,2040-08-11 03:14:39.768,573,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C9"", ""C6""]}"
+evt-000973,airlock_cycle,2040-08-11 07:26:15.642,2040-08-11 07:41:15.642,573,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C9"", ""C6""]}"
+evt-000974,eva_start,2040-08-18 07:46:46.476,,580,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000975,eva_end,2040-08-18 11:53:22.350,,580,surface,C7,info,{}
+evt-000976,eva_start,2040-08-18 07:46:46.476,,580,surface,C10,info,"{""airlock"": ""airlock_A""}"
+evt-000977,eva_end,2040-08-18 11:53:22.350,,580,surface,C10,info,{}
+evt-000978,airlock_cycle,2040-08-18 07:36:46.476,2040-08-18 07:51:46.476,580,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C10""]}"
+evt-000979,airlock_cycle,2040-08-18 12:03:22.350,2040-08-18 12:18:22.350,580,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C10""]}"
+evt-000980,eva_start,2040-08-25 12:23:53.184,,587,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000981,eva_end,2040-08-25 16:30:29.058,,587,surface,C5,info,{}
+evt-000982,eva_start,2040-08-25 12:23:53.184,,587,surface,C8,info,"{""airlock"": ""airlock_A""}"
+evt-000983,eva_end,2040-08-25 16:30:29.058,,587,surface,C8,info,{}
+evt-000984,airlock_cycle,2040-08-25 12:13:53.184,2040-08-25 12:28:53.184,587,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C5"", ""C8""]}"
+evt-000985,airlock_cycle,2040-08-25 16:40:29.058,2040-08-25 16:55:29.058,587,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C5"", ""C8""]}"
+evt-000986,eva_start,2040-09-01 17:00:59.892,,594,surface,C7,info,"{""airlock"": ""airlock_A""}"
+evt-000987,eva_end,2040-09-01 21:07:35.766,,594,surface,C7,info,{}
+evt-000988,eva_start,2040-09-01 17:00:59.892,,594,surface,C5,info,"{""airlock"": ""airlock_A""}"
+evt-000989,eva_end,2040-09-01 21:07:35.766,,594,surface,C5,info,{}
+evt-000990,airlock_cycle,2040-09-01 16:50:59.892,2040-09-01 17:05:59.892,594,airlock_A,,info,"{""direction"": ""egress"", ""crew"": [""C7"", ""C5""]}"
+evt-000991,airlock_cycle,2040-09-01 21:17:35.766,2040-09-01 21:32:35.766,594,airlock_A,,info,"{""direction"": ""ingress"", ""crew"": [""C7"", ""C5""]}"

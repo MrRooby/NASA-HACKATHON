@@ -7,8 +7,12 @@ import csv
 import gzip
 import json
 import random
+import sys
 from datetime import datetime, timedelta
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from crew_ext import NEW_CREW, NEW_CREW_CODES, stream_seed  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "data" / "synthetic" / "wearables_demo"
@@ -16,6 +20,8 @@ EPOCH = datetime(2039, 1, 1)
 SOL_SECONDS = 88775.244
 PROFILES = [("C1", "SYN-02", "module_M1"), ("C2", "SYN-01", "module_M2"),
             ("C3", "SYN-03", "module_M1"), ("C4", "SYN-04", "module_M2")]
+# C5..C10 (crew_ext.py), appended: devices SN-0021.., rows after the original crew, own random streams
+PROFILES += [(p["crew"], p["code"], p["home"]) for p in NEW_CREW]
 LIMBS = ("left_arm", "right_arm", "left_leg", "right_leg", "head_eeg")
 
 
@@ -73,10 +79,12 @@ def main():
                      "connection_state", "quality", "location_code"]
     samples = []
     windows = [(142, 143), (250, 251), (470, 471), (555, 556), (600, 600)]
+    base_rng = rng
     for code, ident in did.items():
         crew = code.split("-")[1]
         limb = code[len(f"W-{crew}-"):]
         location = next(p[2] for p in PROFILES if p[0] == crew)
+        rng = random.Random(stream_seed(a.seed, code, "samples")) if crew in NEW_CREW_CODES else base_rng
         for start, end in windows:
             if start == end:
                 offsets = range(-6 * 3600, 0, 10)
@@ -167,6 +175,7 @@ def main():
     sleeps = []
     for crew, subject, _ in PROFILES:
         code = f"W-{crew}-head_eeg"
+        rng = random.Random(stream_seed(a.seed, code, "sleep")) if crew in NEW_CREW_CODES else base_rng
         for sol in range(0, 601):
             start = ts(sol, 20 * 3600)
             sleeps.append(dict(device_code=code, subject_code=subject, sol=sol,

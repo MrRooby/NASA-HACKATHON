@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import TestsScreen from './TestsScreen.jsx';
+import { fillSurvey } from '../cognitive/helpers.js';
 import { I18nProvider } from '../i18n/index.js';
 import { getProfile } from '../data/crewProfiles.js';
 import { onlineMother } from '../profile/testUtils.jsx';
@@ -85,9 +86,7 @@ describe('TestsScreen', () => {
     const { setChromeHidden, unmount } = renderTests({ session: 'HAB-C1' });
     fireEvent.click(await screen.findByRole('button', { name: /quick test/i }));
     expect(screen.getByRole('heading', { name: /before you start/i })).toBeInTheDocument();
-    for (const [label, value] of [['Hours of sleep last night', '7.5'], ['Sleep quality', '7'], ['Fatigue now', '3'], ['Sleepiness (KSS)', '3'], ['Stress now', '2']]) {
-      fireEvent.change(screen.getByLabelText(label), { target: { value } });
-    }
+    fillSurvey();
     fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
     // screen check: 120 animation frames
     expect(await screen.findByRole('heading', { name: /screen check/i }, { timeout: 8000 })).toBeInTheDocument();

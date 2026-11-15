@@ -53,6 +53,54 @@
    "sex": "F",
    "age_band_code": "40-49",
    "is_synthetic": true
+  },
+  {
+   "code": "SYN-05",
+   "source_subject_code": "SYN-05",
+   "source_id": "synthetic_v1",
+   "sex": "F",
+   "age_band_code": "50-59",
+   "is_synthetic": true
+  },
+  {
+   "code": "SYN-06",
+   "source_subject_code": "SYN-06",
+   "source_id": "synthetic_v1",
+   "sex": "M",
+   "age_band_code": "50-59",
+   "is_synthetic": true
+  },
+  {
+   "code": "SYN-07",
+   "source_subject_code": "SYN-07",
+   "source_id": "synthetic_v1",
+   "sex": "M",
+   "age_band_code": "50-59",
+   "is_synthetic": true
+  },
+  {
+   "code": "SYN-08",
+   "source_subject_code": "SYN-08",
+   "source_id": "synthetic_v1",
+   "sex": "M",
+   "age_band_code": "50-59",
+   "is_synthetic": true
+  },
+  {
+   "code": "SYN-09",
+   "source_subject_code": "SYN-09",
+   "source_id": "synthetic_v1",
+   "sex": "F",
+   "age_band_code": "50-59",
+   "is_synthetic": true
+  },
+  {
+   "code": "SYN-10",
+   "source_subject_code": "SYN-10",
+   "source_id": "synthetic_v1",
+   "sex": "F",
+   "age_band_code": "40-49",
+   "is_synthetic": true
   }
  ],
  "participations": [
@@ -79,6 +127,42 @@
    "mission_code": "SYN-MARS-HAB-600",
    "role": "synthetic_crew",
    "group_label": "C4"
+  },
+  {
+   "subject_code": "SYN-05",
+   "mission_code": "SYN-MARS-HAB-600",
+   "role": "synthetic_crew",
+   "group_label": "C5"
+  },
+  {
+   "subject_code": "SYN-06",
+   "mission_code": "SYN-MARS-HAB-600",
+   "role": "synthetic_crew",
+   "group_label": "C6"
+  },
+  {
+   "subject_code": "SYN-07",
+   "mission_code": "SYN-MARS-HAB-600",
+   "role": "synthetic_crew",
+   "group_label": "C7"
+  },
+  {
+   "subject_code": "SYN-08",
+   "mission_code": "SYN-MARS-HAB-600",
+   "role": "synthetic_crew",
+   "group_label": "C8"
+  },
+  {
+   "subject_code": "SYN-09",
+   "mission_code": "SYN-MARS-HAB-600",
+   "role": "synthetic_crew",
+   "group_label": "C9"
+  },
+  {
+   "subject_code": "SYN-10",
+   "mission_code": "SYN-MARS-HAB-600",
+   "role": "synthetic_crew",
+   "group_label": "C10"
   }
  ],
  "indicators": [

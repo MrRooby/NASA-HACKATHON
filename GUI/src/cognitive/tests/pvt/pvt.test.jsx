@@ -133,6 +133,22 @@ describe('PvtTask', () => {
     expect(onFirstInput).toHaveBeenCalledWith('touch');
   });
 
+  it('tablet: a tap on the hint (anywhere in the full-screen field) counts; STOP and right clicks do not', () => {
+    const onEscape = vi.fn();
+    const { controlRef, counter, getByTestId, getByRole } = setup({ onEscape });
+    expect(getByTestId('cog-field')).toHaveClass('cog-field'); // position: fixed; inset: 0 in cognitive.css
+    stepUntil(() => counter().style.visibility === 'visible');
+    act(() => { vi.advanceTimersByTime(300); });
+    const stop = getByRole('button', { name: 'STOP' });
+    tap(stop);
+    tap(getByTestId('cog-field'), { pointerType: 'mouse', button: 2 });
+    expect(controlRef.current.snapshot().trials).toHaveLength(0);
+    act(() => { stop.click(); });
+    expect(onEscape).toHaveBeenCalledTimes(1);
+    tap(getByTestId('pvt-hint'));
+    expect(controlRef.current.snapshot().trials[0].event_type).toBe('response');
+  });
+
   it('30 s without a reaction is a timeout lapse', () => {
     const { controlRef, counter } = setup();
     stepUntil(() => counter().style.visibility === 'visible');

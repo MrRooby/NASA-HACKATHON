@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { inputTime, onsetViaRaf } from '../../engine/clock.js';
 import { attachInput, makeTrial, useTrialRunner } from '../../engine/runner.js';
 import { createTaskKit } from '../../engine/taskKit.js';
+import StopButton from '../../StopButton.jsx';
 import { GONOGO_ANTICIPATION_MS } from './scoring.js';
 import { goNoGoPractice, goNoGoSequence, goNoGoShort } from './sequence.js';
 
@@ -120,7 +121,8 @@ export default function GoNoGoTask({ seed, practice = false, shortTrials = null,
   });
 
   return (
-    <div className="cog-field" ref={fieldRef} tabIndex={-1} data-testid="cog-field" role="application" aria-label="Go/No-Go test: press Space or tap for the circle, do nothing for the square">
+    <div className="cog-field" ref={fieldRef} tabIndex={-1} data-testid="cog-field" role="application" aria-label="Go/No-Go test: press Space or tap anywhere for the circle, do nothing for the square">
+      <StopButton onStop={() => props.current.onEscape?.()} />
       <div className="cog-gng">
         <div className="cog-shape cog-shape-circle" ref={goRef} data-testid="gng-circle" style={{ visibility: 'hidden' }} />
         <div className="cog-shape cog-shape-square" ref={nogoRef} data-testid="gng-square" style={{ visibility: 'hidden' }} />

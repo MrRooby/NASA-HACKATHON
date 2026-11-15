@@ -26,8 +26,12 @@ import io
 import json
 import math
 import random
+import sys
 from collections import defaultdict
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from crew_ext import NEW_CREW, NEW_CREW_CODES, NEW_EVA_OFFSET, NEW_EVA_PAIRS, stream_seed  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = "habitat_sim_v1"
@@ -48,6 +52,13 @@ SHIELD = {"surface": 1.0, "airlock_A": 0.6, "airlock_B": 0.6, "cupola_1": 0.5, "
 SURFACE_UGY_H = 10.0          # ~0.24 mGy/d absorbed (Curiosity RAD w bazie: 0.237 mGy/d)
 DOSE_EQ_PER_UGY = 2.8e-3      # mSv per µGy  (0.67 mSv/d / 0.24 mGy/d)
 CAREER_START_MSV = {"C1": 45.0, "C2": 12.0, "C3": 80.0, "C4": 25.0}     # [ZAŁ] dawka z wcześniejszych misji
+# C5..C10 (crew_ext.py). The original four keep the shared seed stream; each added person draws from an own stream,
+# so C1..C4 personal data and locations stay identical. Zone readings change only through the extra occupants.
+BASE_CREW = list(CREW)
+CREW = BASE_CREW + NEW_CREW_CODES
+for _p in NEW_CREW:
+    SEX[_p["crew"]], HOME[_p["crew"]], WORK[_p["crew"]] = _p["sex"], _p["home"], tuple(_p["work"])
+    GYM_SLOT[_p["crew"]], CAREER_START_MSV[_p["crew"]] = _p["gym"], _p["career_msv"]
 
 # ---------------------------------------------------------------- czas
 def ts_of(sol: float, lst_h: float = 0.0) -> float:
@@ -181,16 +192,40 @@ def eva_plan():
 EVA = eva_plan()
 
 
-def build_locations(rng):
+def new_eva_plan():
+    """EVA of the added crew: own pair rotation, NEW_EVA_OFFSET sols after the original crew's EVA days.
+    Skips the dust storm and the SPE shelter (H8)."""
+    out = {}
+    k = 0
+    for s in sorted(EVA):
+        d = s + NEW_EVA_OFFSET
+        if d > LAST_SOL or SC["H9"]["start"] <= d <= SC["H9"]["end"] or abs(d - SC["H8"]["sol"]) <= 1:
+            continue
+        out[d] = NEW_EVA_PAIRS[k % len(NEW_EVA_PAIRS)]
+        k += 1
+    return out
+
+
+EVA_NEW = new_eva_plan()
+
+
+def eva_crew(s):
+    """crew members on EVA on sol s (original and added rotation)."""
+    return tuple(EVA.get(s, ())) + tuple(EVA_NEW.get(s, ()))
+
+
+def build_locations(rng, seed=None):
     """lista przedziałów (crew, from_t, to_t, zone), posortowana."""
     segs = []
+    own = {c: random.Random(stream_seed(seed, c, "locations")) for c in NEW_CREW_CODES}
     for s in range(1, LAST_SOL + 1):
         for c in CREW:
+            r = own.get(c, rng)
             wa, wb = WORK[c]
-            if rng.random() < 0.2:
+            if r.random() < 0.2:
                 wa, wb = wb, wa
             day = []
-            if s in EVA and c in EVA[s]:
+            if c in eva_crew(s):
                 day = [(0, 8.5, HOME[c]), (8.5, 9.5, "airlock_A"), (9.5, 13.5, "surface"), (13.5, 14.5, "airlock_A"),
                        (14.5, 15.5, HOME[c]), (15.5, 21.5, wb), (21.5, 24.0, HOME[c])]
                 if s == SC["H8"]["sol"]:      # SPE: przerwane EVA, potem schron
@@ -259,7 +294,7 @@ class Model:
     def __init__(self, where: Where, rng):
         self.w = where
         self.rng = rng
-        self.eva_ends = sorted(ts_of(s, 14.5 if s != SC["H8"]["sol"] else 11.75) for s in EVA)
+        self.eva_ends = sorted(ts_of(s, 14.5 if s != SC["H8"]["sol"] else 11.75) for s in (*EVA, *EVA_NEW))
 
     def occupancy(self, z, t, minute):
         return float(self.w.count(z, t)) if minute else self.w.occ.get((z, math.floor(t / 3600)), 0.0)
@@ -457,6 +492,7 @@ def windows():
 # ---------------------------------------------------------------- generator
 class Gen:
     def __init__(self, seed):
+        self.seed = seed
         self.rng = random.Random(seed)
         self.readings = []
         self.hourly = {}
@@ -548,11 +584,12 @@ class Gen:
 
     # -- osobowe: woda, mocz, kał
     def personal(self):
-        rng = self.rng
+        own = {c: random.Random(stream_seed(self.seed, c, "personal")) for c in NEW_CREW_CODES}
         for s in range(1, LAST_SOL + 1):
             for c in CREW:
+                rng = own.get(c, self.rng)
                 home = HOME[c]
-                eva_h = 4.0 if (s in EVA and c in EVA[s]) else 0.0
+                eva_h = 4.0 if c in eva_crew(s) else 0.0
                 early = math.exp(-s / 15)                  # pierwsze ~30 soli: mniej moczu, niższe pH, mniej cytrynianu
                 intake = rng.gauss(2.7, 0.25) + 0.24 * eva_h
                 h4 = c == "C2" and SC["H4"]["start"] <= s <= SC["H4"]["end"]
@@ -602,8 +639,9 @@ class Gen:
         # pojemniki na kał per moduł (~13 użyć na pojemnik)
         for m in ("module_M1", "module_M2"):
             fill = 0.0
+            residents = sum(1 for c in CREW if HOME[c] == m)     # one use per resident per sol
             for s in range(1, LAST_SOL + 1):
-                for _ in range(2):
+                for _ in range(residents):
                     fill += 100 / 13
                     if fill > 100:
                         fill = 100 / 13
@@ -727,6 +765,17 @@ class Gen:
         for s in range(20, LAST_SOL + 1, 30):
             e("waste_dump", ts_of(s, 16), ts_of(s, 16.5), "airlock_B")
             r(ts_of(s, 16), "airlock_B", "waste_dump_event", "", 1)
+        # EVA of the added crew (C5..C10): own stream, appended after every original event
+        rng_new = random.Random(stream_seed(self.seed, "EVA_NEW", "happenings"))
+        for s, pair in sorted(EVA_NEW.items()):
+            a, b = ts_of(s, 9.5), ts_of(s, 13.5)
+            for c in pair:
+                e("eva_start", a, None, "surface", c, details={"airlock": "airlock_A"})
+                e("eva_end", b, None, "surface", c, "info", {})
+            for tc, kind in ((a - 600, "egress"), (b + 600, "ingress")):
+                e("airlock_cycle", tc, tc + 900, "airlock_A", details={"direction": kind, "crew": list(pair)})
+                r(tc, "airlock_A", "airlock_cycle", "", 1)
+                r(tc, "airlock_A", "airlock_gas_loss", "kg/cycle", round(rng_new.gauss(0.30, 0.04), 3))
 
 
 def gz_text(path: Path):
@@ -753,7 +802,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
 
     g = Gen(a.seed)
-    segs = build_locations(g.rng)
+    segs = build_locations(g.rng, a.seed)
     where = Where(segs)
     model = Model(where, g.rng)
     loc_rows = g.locations(segs)

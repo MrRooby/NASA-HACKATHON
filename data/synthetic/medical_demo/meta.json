@@ -6,7 +6,13 @@
     "C1": "SYN-02",
     "C2": "SYN-01",
     "C3": "SYN-03",
-    "C4": "SYN-04"
+    "C4": "SYN-04",
+    "C5": "SYN-05",
+    "C6": "SYN-06",
+    "C7": "SYN-07",
+    "C8": "SYN-08",
+    "C9": "SYN-09",
+    "C10": "SYN-10"
   },
   "events": [
     {
@@ -1702,6 +1708,114 @@
         "risk": "SANS",
         "requested_review": true
       }
+    },
+    {
+      "event_code": "MED-C5-SOL422",
+      "event_type": "procedure",
+      "sol": 422,
+      "subject_code": "SYN-05",
+      "crew_code": "C5",
+      "title": "Minor hand laceration during maintenance (C5)",
+      "severity": "minor",
+      "report_kind": "none",
+      "value_num": null,
+      "value_text": "laceration 2 cm, closed with strips",
+      "unit": null,
+      "is_drill": false,
+      "details": {
+        "episode": "random_draw",
+        "role": "Pilot / flight engineer"
+      }
+    },
+    {
+      "event_code": "MED-C6-SOL552",
+      "event_type": "symptom",
+      "sol": 552,
+      "subject_code": "SYN-06",
+      "crew_code": "C6",
+      "title": "Lower back pain after EVA (C6)",
+      "severity": "major",
+      "report_kind": "none",
+      "value_num": null,
+      "value_text": "pain 6/10, limited trunk flexion",
+      "unit": null,
+      "is_drill": false,
+      "details": {
+        "episode": "random_draw",
+        "role": "ISRU & power engineer"
+      }
+    },
+    {
+      "event_code": "MED-C7-SOL107",
+      "event_type": "symptom",
+      "sol": 107,
+      "subject_code": "SYN-07",
+      "crew_code": "C7",
+      "title": "Contact dermatitis on forearms (C7)",
+      "severity": "minor",
+      "report_kind": "none",
+      "value_num": null,
+      "value_text": "itchy erythema, suspected glove material",
+      "unit": null,
+      "is_drill": false,
+      "details": {
+        "episode": "random_draw",
+        "role": "EVA specialist"
+      }
+    },
+    {
+      "event_code": "MED-C8-SOL331",
+      "event_type": "symptom",
+      "sol": 331,
+      "subject_code": "SYN-08",
+      "crew_code": "C8",
+      "title": "Nasal congestion and sinus pressure (C8)",
+      "severity": "minor",
+      "report_kind": "none",
+      "value_num": null,
+      "value_text": "fluid shift symptoms, no fever",
+      "unit": null,
+      "is_drill": false,
+      "details": {
+        "episode": "random_draw",
+        "role": "Habitat botanist"
+      }
+    },
+    {
+      "event_code": "MED-C9-SOL320",
+      "event_type": "symptom",
+      "sol": 320,
+      "subject_code": "SYN-09",
+      "crew_code": "C9",
+      "title": "Insomnia: sleep onset > 60 min for 5 sols (C9)",
+      "severity": "minor",
+      "report_kind": "none",
+      "value_num": null,
+      "value_text": "sleep onset latency 60-90 min",
+      "unit": null,
+      "is_drill": false,
+      "details": {
+        "episode": "random_draw",
+        "role": "Psychologist"
+      }
+    },
+    {
+      "event_code": "MED-C10-SOL116",
+      "event_type": "symptom",
+      "sol": 116,
+      "subject_code": "SYN-10",
+      "crew_code": "C10",
+      "title": "Contact dermatitis on forearms (C10)",
+      "severity": "minor",
+      "report_kind": "none",
+      "value_num": null,
+      "value_text": "itchy erythema, suspected glove material",
+      "unit": null,
+      "is_drill": false,
+      "details": {
+        "episode": "random_draw",
+        "role": "Robotics engineer"
+      }
     }
   ],
   "attachments": [
@@ -2682,6 +2796,66 @@
       "event_code": "SANS-C3-IMAGING",
       "payload_type": "attachment",
       "priority": "urgent",
+      "status": "queued",
+      "blackout_start_sol": null,
+      "blackout_end_sol": null,
+      "notes": null
+    },
+    {
+      "transmission_code": "TX-MED-C5-SOL422",
+      "event_code": "MED-C5-SOL422",
+      "payload_type": "event",
+      "priority": "routine",
+      "status": "queued",
+      "blackout_start_sol": null,
+      "blackout_end_sol": null,
+      "notes": null
+    },
+    {
+      "transmission_code": "TX-MED-C6-SOL552",
+      "event_code": "MED-C6-SOL552",
+      "payload_type": "event",
+      "priority": "urgent",
+      "status": "queued",
+      "blackout_start_sol": null,
+      "blackout_end_sol": null,
+      "notes": null
+    },
+    {
+      "transmission_code": "TX-MED-C7-SOL107",
+      "event_code": "MED-C7-SOL107",
+      "payload_type": "event",
+      "priority": "routine",
+      "status": "queued",
+      "blackout_start_sol": null,
+      "blackout_end_sol": null,
+      "notes": null
+    },
+    {
+      "transmission_code": "TX-MED-C8-SOL331",
+      "event_code": "MED-C8-SOL331",
+      "payload_type": "event",
+      "priority": "routine",
+      "status": "queued",
+      "blackout_start_sol": null,
+      "blackout_end_sol": null,
+      "notes": null
+    },
+    {
+      "transmission_code": "TX-MED-C9-SOL320",
+      "event_code": "MED-C9-SOL320",
+      "payload_type": "event",
+      "priority": "routine",
+      "status": "queued",
+      "blackout_start_sol": null,
+      "blackout_end_sol": null,
+      "notes": null
+    },
+    {
+      "transmission_code": "TX-MED-C10-SOL116",
+      "event_code": "MED-C10-SOL116",
+      "payload_type": "event",
+      "priority": "routine",
       "status": "queued",
       "blackout_start_sol": null,
       "blackout_end_sol": null,

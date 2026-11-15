@@ -1,4 +1,4 @@
-import { act } from '@testing-library/react';
+import { act, fireEvent, screen, within } from '@testing-library/react';
 import { vi } from 'vitest';
 
 export const FAKE = ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'Date', 'requestAnimationFrame', 'cancelAnimationFrame', 'performance'];
@@ -14,9 +14,10 @@ export const press = (code, { repeat = false, at } = {}) => {
   act(() => { window.dispatchEvent(ev); });
   return ev;
 };
-export const tap = (el, { at, pointerType = 'touch' } = {}) => {
+export const tap = (el, { at, pointerType = 'touch', button = 0 } = {}) => {
   const ev = new Event('pointerdown', { bubbles: true });
   Object.defineProperty(ev, 'pointerType', { value: pointerType });
+  Object.defineProperty(ev, 'button', { value: button });
   stamp(ev, at);
   act(() => { el.dispatchEvent(ev); });
   return ev;
@@ -31,4 +32,12 @@ export function stepUntil(cond, { step = 5, limit = 40000 } = {}) {
   }
   if (!cond()) throw new Error(`condition not met within ${limit} ms`);
   return waited;
+}
+
+/** Fill the pre-test survey: sleep hours in the select, the 1-N scales by tapping one radio cell each. */
+export function fillSurvey({ sleep = '7.5', sleepQuality = '7', fatigue = '3', kss = '3', stress = '2' } = {}) {
+  fireEvent.change(screen.getByLabelText('Hours of sleep last night'), { target: { value: sleep } });
+  for (const [name, value] of [['Sleep quality', sleepQuality], ['Fatigue now', fatigue], ['Sleepiness (KSS)', kss], ['Stress now', stress]]) {
+    fireEvent.click(within(screen.getByRole('radiogroup', { name })).getByRole('radio', { name: value }));
+  }
 }
