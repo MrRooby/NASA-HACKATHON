@@ -24,9 +24,13 @@ function eventsOn(events, day) {
   return events.filter(event => event.date === key);
 }
 
+/** Event title in the UI language (demo events carry an i18n key; live ones only a title). */
+const eventTitle = (t, event) => (event.titleKey ? t(event.titleKey, event.titleParams) : event.title);
+
 /** One event line: coloured bar by kind + short title. */
 function EventLine({ event }) {
-  return <li className="cal-event" data-kind={event.kind}>{event.title}</li>;
+  const { t } = useI18n();
+  return <li className="cal-event" data-kind={event.kind}>{eventTitle(t, event)}</li>;
 }
 
 function WeekView({ date, events, status, onSelect }) {
@@ -149,7 +153,7 @@ function DayDialog({ date, events, status, onClose }) {
           <ul className="cal-dlg-events" aria-label={t('calendar.dayEvents')}>
             {slice.map(event => (
               <li key={event.id} className="cal-dlg-event" data-kind={event.kind}>
-                <span className="cal-dlg-event-title">{event.title}</span>
+                <span className="cal-dlg-event-title">{eventTitle(t, event)}</span>
                 <span className="cal-dlg-event-kind">{event.startsAt ? `${event.startsAt} · ` : ''}{t(`calendar.kind_${event.kind}`)}</span>
               </li>
             ))}

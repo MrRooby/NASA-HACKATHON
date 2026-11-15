@@ -8,12 +8,12 @@ import { addDays, isoDate, startOfWeek } from './calendar.js';
 export const CALENDAR_DATA_SOURCE = 'demo';
 
 const EVENT_TEMPLATES = [
-  { offset: 0, title: 'Kontrola systemów habitatu', kind: 'base' },
-  { offset: 1, title: 'Trening ARED', kind: 'crew' },
-  { offset: 2, title: 'Przegląd zapasów', kind: 'base' },
-  { offset: 3, title: 'Badanie dobrostanu załogi', kind: 'crew' },
-  { offset: 5, title: 'Okno komunikacyjne', kind: 'mission' },
-  { offset: 6, title: 'Planowanie kolejnego tygodnia', kind: 'mission' },
+  { offset: 0, title: 'Kontrola systemów habitatu', titleKey: 'calendar.evHabitatCheck', kind: 'base' },
+  { offset: 1, title: 'Trening ARED', titleKey: 'calendar.evAred', kind: 'crew' },
+  { offset: 2, title: 'Przegląd zapasów', titleKey: 'calendar.evSupplies', kind: 'base' },
+  { offset: 3, title: 'Badanie dobrostanu załogi', titleKey: 'calendar.evWellbeing', kind: 'crew' },
+  { offset: 5, title: 'Okno komunikacyjne', titleKey: 'calendar.evCommWindow', kind: 'mission' },
+  { offset: 6, title: 'Planowanie kolejnego tygodnia', titleKey: 'calendar.evWeekPlan', kind: 'mission' },
 ];
 
 function demoStatus(date, offset) {
@@ -38,6 +38,25 @@ export function getCalendarData(referenceDate) {
   const todayKey = isoDate(new Date());
   const nextWeekKey = isoDate(addDays(startOfWeek(new Date()), 9));
   const crowdedKey = isoDate(addDays(startOfWeek(referenceDate), 3));
+  // Demo titles are Polish source text; titleKey shows them in the UI language.
+  const TITLE_KEYS = {
+    'Kontrola systemów habitatu': 'calendar.evHabitatCheck',
+    'Trening ARED': 'calendar.evAred',
+    'Przegląd zapasów tlenu': 'calendar.evOxygenStock',
+    'Przegląd zapasów': 'calendar.evSupplies',
+    'Badanie dobrostanu załogi': 'calendar.evWellbeing',
+    'Okno komunikacyjne': 'calendar.evCommWindow',
+    'Planowanie kolejnego tygodnia': 'calendar.evWeekPlan',
+    'Kontrola szczelności śluzy': 'calendar.evAirlockLeak',
+    'Kalibracja sensorów': 'calendar.evSensorCal',
+    'Raport medyczny załogi': 'calendar.evMedReport',
+    'Ćwiczenia awaryjne': 'calendar.evDrill',
+    'Synchronizacja komunikacji': 'calendar.evCommSync',
+    'Inspekcja modułu mieszkalnego': 'calendar.evHabInspect',
+    'Test łazika': 'calendar.evRoverTest',
+    'Pomiar promieniowania': 'calendar.evRadiation',
+    'Odprawa załogi': 'calendar.evBriefing',
+  };
   const testEvents = [
     'Kontrola szczelności śluzy',
     'Kalibracja sensorów',
@@ -56,18 +75,22 @@ export function getCalendarData(referenceDate) {
     id: `${todayKey}-test-${index}`,
     date: todayKey,
     title,
+    titleKey: TITLE_KEYS[title],
     kind: ['base', 'mission', 'base', 'crew', 'mission', 'crew', 'base'][index],
   })),
   nextWeekEvents.map((title, index) => ({
     id: `${nextWeekKey}-test-${index}`,
     date: nextWeekKey,
     title,
+    titleKey: TITLE_KEYS[title],
     kind: ['mission', 'crew', 'base', 'mission'][index],
   })),
   crowdedEvents.map((title, index) => ({
     id: `${crowdedKey}-test-${index}`,
     date: crowdedKey,
     title,
+    titleKey: 'calendar.evTask',
+    titleParams: { n: index + 1 },
     kind: ['base', 'crew', 'mission'][index % 3],
   }))));
   return {

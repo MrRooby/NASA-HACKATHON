@@ -55,7 +55,7 @@ describe('CalendarScreen', () => {
     const crowdedDay = screen.getByRole('button', { name: 'Select 2026-11-19' });
     expect(crowdedDay.querySelectorAll('.cal-event')).toHaveLength(3);
     expect(crowdedDay).toHaveTextContent('+14 more');
-    expect(crowdedDay).not.toHaveTextContent('Zadanie operacyjne 17');
+    expect(crowdedDay).not.toHaveTextContent('Operational task 17');
   });
 
   it('shows a normal day on one page and pages only a very long day', () => {
@@ -66,7 +66,7 @@ describe('CalendarScreen', () => {
     expect(dialog.querySelectorAll('.cal-dlg-event')).toHaveLength(12);
     fireEvent.click(within(dialog).getByRole('button', { name: 'Next page' }));
     expect(dialog.querySelectorAll('.cal-dlg-event')).toHaveLength(dialog.querySelectorAll('.cal-dlg-event').length);
-    expect(dialog).toHaveTextContent('Zadanie operacyjne 13');
-    expect(dialog).not.toHaveTextContent('Zadanie operacyjne 12');
+    expect(dialog).toHaveTextContent('Operational task 13');
+    expect(dialog).not.toHaveTextContent('Operational task 12');
   });
 });
