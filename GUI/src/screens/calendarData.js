@@ -57,7 +57,9 @@ export function getCalendarData(referenceDate) {
     'Pomiar promieniowania': 'calendar.evRadiation',
     'Odprawa załogi': 'calendar.evBriefing',
   };
+  // Today is the scripted demo day: the wellbeing check comes first and opens the crew view.
   const testEvents = [
+    'Badanie dobrostanu załogi',
     'Kontrola szczelności śluzy',
     'Kalibracja sensorów',
     'Przegląd zapasów tlenu',
@@ -76,7 +78,7 @@ export function getCalendarData(referenceDate) {
     date: todayKey,
     title,
     titleKey: TITLE_KEYS[title],
-    kind: ['base', 'mission', 'base', 'crew', 'mission', 'crew', 'base'][index],
+    kind: ['crew', 'base', 'mission', 'base', 'crew', 'mission', 'crew', 'base'][index],
   })),
   nextWeekEvents.map((title, index) => ({
     id: `${nextWeekKey}-test-${index}`,
@@ -93,6 +95,9 @@ export function getCalendarData(referenceDate) {
     titleParams: { n: index + 1 },
     kind: ['base', 'crew', 'mission'][index % 3],
   }))));
+  // today's score matches the scripted crew view (two cautions, one alert)
+  const todayStatus = status.find(record => record.date === todayKey);
+  if (todayStatus) todayStatus.crewWellbeing = 78;
   return {
     source: CALENDAR_DATA_SOURCE,
     events,

@@ -9,6 +9,7 @@ import {
   monthGrid, sameDay, shiftMonth, startOfMonth, startOfWeek,
 } from './calendar.js';
 import { getCalendarData } from './calendarData.js';
+import CrewWellbeingView from './CrewWellbeingView.jsx';
 import './calendar.css';
 
 const TODAY = new Date();
@@ -26,6 +27,9 @@ function eventsOn(events, day) {
 
 /** Event title in the UI language (demo events carry an i18n key; live ones only a title). */
 const eventTitle = (t, event) => (event.titleKey ? t(event.titleKey, event.titleParams) : event.title);
+
+/** The crew wellbeing check opens the per-person view of that day. */
+const isWellbeingEvent = event => event.titleKey === 'calendar.evWellbeing';
 
 /** One event line: coloured bar by kind + short title. */
 function EventLine({ event }) {
@@ -133,11 +137,13 @@ function DayDialog({ date, events, status, onClose }) {
   const dayEvents = eventsOn(events, date);
   const dayStatus = status.find(record => record.date === isoDate(date));
   const [page, setPage] = useState(0);
+  const [crewView, setCrewView] = useState(false);
   const pages = Math.max(1, Math.ceil(dayEvents.length / DIALOG_PAGE_SIZE));
   const slice = dayEvents.slice(page * DIALOG_PAGE_SIZE, (page + 1) * DIALOG_PAGE_SIZE);
   const title = date.toLocaleDateString(localeOf(lang), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   return (
     <DataDialog title={title} icon="calendar" onClose={onClose}>
+      {crewView ? <CrewWellbeingView date={date} onBack={() => setCrewView(false)} /> : (
       <div className="cal-dlg">
         <div className="cal-dlg-stats">
           <div className="cal-stat">
@@ -151,16 +157,29 @@ function DayDialog({ date, events, status, onClose }) {
         </div>
         {dayEvents.length ? (
           <ul className="cal-dlg-events" aria-label={t('calendar.dayEvents')}>
-            {slice.map(event => (
-              <li key={event.id} className="cal-dlg-event" data-kind={event.kind}>
-                <span className="cal-dlg-event-title">{eventTitle(t, event)}</span>
-                <span className="cal-dlg-event-kind">{event.startsAt ? `${event.startsAt} · ` : ''}{t(`calendar.kind_${event.kind}`)}</span>
-              </li>
-            ))}
+            {slice.map(event => {
+              const content = (
+                <>
+                  <span className="cal-dlg-event-title">{eventTitle(t, event)}</span>
+                  <span className="cal-dlg-event-kind">{event.startsAt ? `${event.startsAt} · ` : ''}{t(`calendar.kind_${event.kind}`)}</span>
+                </>
+              );
+              return isWellbeingEvent(event) ? (
+                <li key={event.id} className="cal-dlg-event cal-dlg-event-open" data-kind={event.kind}>
+                  <button type="button" className="cal-dlg-event-btn" data-open="wellbeing" title={t('calendar.openWellbeing')} onClick={() => setCrewView(true)}>
+                    <span className="cal-dlg-event-text">{content}</span>
+                    <NavIcon name="next" className="cal-dlg-event-go" />
+                  </button>
+                </li>
+              ) : (
+                <li key={event.id} className="cal-dlg-event" data-kind={event.kind}>{content}</li>
+              );
+            })}
           </ul>
         ) : <p className="cal-dlg-empty">{t('calendar.noEvents')}</p>}
         <Pager page={page} pages={pages} onPage={setPage} />
       </div>
+      )}
     </DataDialog>
   );
 }

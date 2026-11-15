@@ -2,6 +2,7 @@ import { fireEvent, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { renderWithProviders } from '../test/renderApp.jsx';
 import CalendarScreen from './CalendarScreen.jsx';
+import { isoDate } from './calendar.js';
 
 describe('CalendarScreen', () => {
   it('renders all seven days and switches between week and month', () => {
@@ -68,5 +69,36 @@ describe('CalendarScreen', () => {
     expect(dialog.querySelectorAll('.cal-dlg-event')).toHaveLength(dialog.querySelectorAll('.cal-dlg-event').length);
     expect(dialog).toHaveTextContent('Operational task 13');
     expect(dialog).not.toHaveTextContent('Operational task 12');
+  });
+
+  it('opens every crew member from the wellbeing check of today and goes back', () => {
+    renderWithProviders(<CalendarScreen />);
+    fireEvent.click(screen.getByRole('button', { name: `Select ${isoDate(new Date())}` }));
+    const dialog = screen.getByRole('dialog');
+    fireEvent.click(within(dialog).getByRole('button', { name: /Crew wellbeing check/ }));
+    const list = within(dialog).getByRole('list', { name: 'Crew members' });
+    const rows = within(list).getAllByRole('listitem');
+    expect(rows).toHaveLength(10);
+    expect(list).toHaveTextContent('Aleksander Polkowski');
+    expect(list).not.toHaveTextContent('HAB-C');
+    // one status tag per person, no repeated status words
+    for (const row of rows) expect(row.querySelectorAll('.stag')).toHaveLength(1);
+    expect(list.querySelectorAll('.stag-alert')).toHaveLength(1);
+    expect(list.querySelectorAll('.stag-caution')).toHaveLength(2);
+    expect(dialog).toHaveTextContent('3 of 10 need attention');
+    expect(dialog).toHaveTextContent('Flight surgeon notified');
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Back' }));
+    expect(within(dialog).queryByRole('list', { name: 'Crew members' })).not.toBeInTheDocument();
+    expect(within(dialog).getByRole('list', { name: 'Events' })).toBeInTheDocument();
+  });
+
+  it('shows the crew wellbeing view in Polish', () => {
+    renderWithProviders(<CalendarScreen />, { lang: 'pl' });
+    fireEvent.click(screen.getByRole('button', { name: `Wybierz ${isoDate(new Date())}` }));
+    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /Badanie dobrostanu/ }));
+    const dialog = screen.getByRole('dialog');
+    expect(within(dialog).getAllByRole('listitem')).toHaveLength(10);
+    expect(dialog).toHaveTextContent('Nastrój');
+    expect(within(dialog).getByRole('button', { name: 'Wstecz' })).toBeInTheDocument();
   });
 });
