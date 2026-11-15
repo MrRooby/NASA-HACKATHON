@@ -5,19 +5,18 @@ export default {
 
   // Nagłówek
   overall: 'HABITAT',
-  offlineNote: 'Brak połączenia z MOTHER: pokazuję wbudowany habitat demo (sol {n}). Wybór sola nie działa, dopóki łącze nie wróci.',
+  offlineNote: 'Brak połączenia z MOTHER · wbudowany habitat, sol {n}',
   loadError: 'Nie wczytano danych habitatu: {message}',
   refreshing: 'ODŚWIEŻANIE…',
-  disclaimer: 'Syntetyczne dane habitatu · progi są demonstracyjne, to nie limity operacyjne.',
+  disclaimer: 'Progi są demonstracyjne, to nie limity operacyjne.',
 
   // Mapa
   mapTitle: 'MAPA HABITATU',
   mapAria: 'Mapa habitatu: wybierz pomieszczenie',
-  mapHint: 'WYBIERZ POMIESZCZENIE · KLIK ALBO TAB + ENTER',
+  mapHint: 'DOTKNIJ POMIESZCZENIA',
   simulated: 'SYMULOWANE',
   crewHere: 'załoga: {codes}',
-  legendSimulated: '- - - POMIESZCZENIE SYMULOWANE (BRAK CZUJNIKÓW W BAZIE)',
-  legendCrew: 'C1–C4 OBECNA ZAŁOGA',
+  legendCrew: 'C# = ZAŁOGA W POMIESZCZENIU',
 
   // Pomieszczenia (pełne nazwy) i krótsze napisy na mapie
   roomAirlock1: 'ŚLUZA 1',
@@ -44,26 +43,19 @@ export default {
 
   // Wybrane pomieszczenie
   zone: 'STREFA',
-  statusSol: 'NAJGORSZY W TYM SOLU',
-  statusNow: 'OSTATNI ODCZYT',
+  statusNow: 'TERAZ',
   crewPresent: 'OBECNA ZAŁOGA',
   crewNone: 'NIKT',
   openProfile: 'Otwórz profil: {name}',
-  subZones: 'PODSTREFY',
   readingsOf: 'Odczyty: {name}',
   noReadings: 'Brak odczytów w tym solu.',
   noZoneData: 'Ta strefa nie przysłała danych w tym solu.',
   simulatedZone: 'brak w bazie danych',
-  simulatedNote: 'To pomieszczenie nie ma czujników w bazie MOTHER. Wiersze oznaczone SYMULOWANE generuje GUI ze stałego ziarna i numeru sola; to wartości zastępcze, nie pomiary.',
-  fromMother: 'MOTHER · {zone}',
 
   // Tabela odczytów
-  colChannel: 'KANAŁ',
-  colValue: 'OSTATNI',
   colRange: 'MIN – MAX SOLA',
   colNormal: 'NORMA',
-  colStatus: 'STATUS',
-  colTime: 'UTC',
+  colTime: 'CZAS (UTC)',
   unrated: 'INFO',
   unratedHint: 'Kanał informacyjny: bez progu, nie jest oceniany',
   peakNow: 'SZCZYT {peak} · {now}',
@@ -72,7 +64,6 @@ export default {
   nowCaution: 'TERAZ UWAGA',
   nowAlert: 'TERAZ ALARM',
   outsideNormal: 'POZA ZAKRESEM NORMY (INFORMACYJNIE)',
-  sensors: 'CZUJNIKI {values}',
   qualitySuspect: 'CZUJNIK NIEPEWNY',
   qualityFault: 'AWARIA CZUJNIKA',
   qualityOther: 'JAKOŚĆ: {quality}',
@@ -97,10 +88,24 @@ export default {
 
   // Otoczenie i zdarzenia
   exterior: 'OTOCZENIE',
-  exteriorMeta: 'POWIERZCHNIA · KOPUŁY',
   eventLog: 'DZIENNIK ZDARZEŃ',
   eventCount: 'NIERUTYNOWE: {n}',
   noEvents: 'Brak nierutynowych zdarzeń w tym solu.',
   eventOpen: 'TRWA',
   evaRoutine: 'RUTYNOWE, NIEWYMIENIONE: {starts} WYJŚĆ EVA · {ends} POWROTÓW EVA',
+
+  // Touch layout
+  solPrev: 'Poprzedni sol',
+  solNext: 'Następny sol',
+  events: 'ZDARZENIA',
+  exteriorCount: 'STREF: {n} · UWAGA: {flagged}',
+  back: 'WSTECZ',
+  colGroup: 'GRUPA',
+  colSensors: 'CZUJNIKI',
+  colQuality: 'JAKOŚĆ',
+  trendTitle: 'OSTATNIE {n} SOLI',
+  trendOf: 'Trend: {name}',
+  noHistory: 'Brak historii: MOTHER jest offline.',
+  noTrend: 'Brak trendu dla wartości tekstowej.',
+  historyLoading: 'WCZYTYWANIE…',
 };

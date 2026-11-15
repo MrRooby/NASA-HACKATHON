@@ -18,7 +18,7 @@ const STATUS_WORD_KEYS = {
 export const mapStatus = status => (STATUSES.includes(status) ? status : 'no_data');
 
 const GRID = 51.2;
-const CREW_W = 26;
+const CREW_W = 32;
 const CREW_H = 17;
 const CREW_GAP = 4;
 const MARK_H = 20;

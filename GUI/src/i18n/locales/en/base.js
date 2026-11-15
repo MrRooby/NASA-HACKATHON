@@ -5,19 +5,18 @@ export default {
 
   // Header
   overall: 'HABITAT',
-  offlineNote: 'MOTHER unreachable: showing the built-in demo habitat (sol {n}). The sol control has no effect until the link is back.',
+  offlineNote: 'MOTHER unreachable · built-in habitat, sol {n}',
   loadError: 'Habitat data not loaded: {message}',
   refreshing: 'REFRESHING…',
-  disclaimer: 'Synthetic habitat data · thresholds are demonstrative, not operational limits.',
+  disclaimer: 'Thresholds are demonstrative, not operational limits.',
 
   // Map
   mapTitle: 'HABITAT MAP',
   mapAria: 'Habitat map: select a room',
-  mapHint: 'SELECT A ROOM · CLICK OR TAB + ENTER',
+  mapHint: 'TAP A ROOM',
   simulated: 'SIMULATED',
   crewHere: 'crew: {codes}',
-  legendSimulated: '- - - SIMULATED ROOM (NO SENSORS IN THE DATABASE)',
-  legendCrew: 'C1–C4 CREW PRESENT',
+  legendCrew: 'C# = CREW IN ROOM',
 
   // Rooms (full names) and the shorter texts drawn on the map
   roomAirlock1: 'AIRLOCK 1',
@@ -44,26 +43,19 @@ export default {
 
   // Selected room
   zone: 'ZONE',
-  statusSol: 'WORST THIS SOL',
-  statusNow: 'LATEST READING',
+  statusNow: 'NOW',
   crewPresent: 'CREW PRESENT',
   crewNone: 'NOBODY',
   openProfile: 'Open the profile of {name}',
-  subZones: 'SUB-ZONES',
   readingsOf: 'Readings: {name}',
   noReadings: 'No readings in this sol.',
   noZoneData: 'This zone sent no data in this sol.',
   simulatedZone: 'none in the database',
-  simulatedNote: 'This room has no sensors in the MOTHER database. Rows marked SIMULATED are generated in the GUI from a fixed seed and the sol number; they are placeholders, not measurements.',
-  fromMother: 'MOTHER · {zone}',
 
   // Readings table
-  colChannel: 'CHANNEL',
-  colValue: 'LATEST',
   colRange: 'SOL MIN – MAX',
   colNormal: 'NORMAL',
-  colStatus: 'STATUS',
-  colTime: 'UTC',
+  colTime: 'TIME (UTC)',
   unrated: 'INFO',
   unratedHint: 'Informative channel: no threshold, not rated',
   peakNow: 'PEAK {peak} · {now}',
@@ -72,7 +64,6 @@ export default {
   nowCaution: 'NOW CAUTION',
   nowAlert: 'NOW ALERT',
   outsideNormal: 'OUTSIDE NORMAL RANGE (INFORMATIVE)',
-  sensors: 'SENSORS {values}',
   qualitySuspect: 'SENSOR SUSPECT',
   qualityFault: 'SENSOR FAULT',
   qualityOther: 'QUALITY: {quality}',
@@ -97,10 +88,24 @@ export default {
 
   // Exterior and events
   exterior: 'EXTERIOR',
-  exteriorMeta: 'SURFACE · CUPOLAS',
   eventLog: 'EVENT LOG',
   eventCount: 'NON-ROUTINE: {n}',
   noEvents: 'No non-routine events in this sol.',
   eventOpen: 'OPEN',
   evaRoutine: 'ROUTINE, NOT LISTED: {starts} EVA STARTS · {ends} EVA ENDS',
+
+  // Touch layout
+  solPrev: 'Previous sol',
+  solNext: 'Next sol',
+  events: 'EVENTS',
+  exteriorCount: '{n} ZONES · {flagged} FLAGGED',
+  back: 'BACK',
+  colGroup: 'GROUP',
+  colSensors: 'SENSORS',
+  colQuality: 'QUALITY',
+  trendTitle: 'LAST {n} SOLS',
+  trendOf: 'Trend: {name}',
+  noHistory: 'No history: MOTHER is offline.',
+  noTrend: 'No trend for a text value.',
+  historyLoading: 'LOADING…',
 };

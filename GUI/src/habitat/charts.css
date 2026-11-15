@@ -1,0 +1,23 @@
+/* Charts of the base screen (charts.jsx). Theme variables only; no rounded corners. */
+.chart-range { display: block; overflow: visible; }
+.chart-track { fill: var(--border); }
+.chart-band { fill: var(--ok); fill-opacity: 0.18; }
+.chart-solrange { fill: var(--fg); fill-opacity: 0.55; }
+.chart-marker { stroke: var(--fg); stroke-width: 4; }
+.chart-marker.is-caution { stroke: var(--caution); }
+.chart-marker.is-alert { stroke: var(--alert); }
+
+.chart-trend-box { position: relative; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: hidden; }
+.chart-trend { position: absolute; inset: 0; display: block; }
+.chart-grid { stroke: var(--border); stroke-width: 1; stroke-dasharray: 3 5; }
+.chart-axis-line { stroke: var(--dim); stroke-width: 1; }
+.chart-axis { fill: var(--dim); font-family: inherit; font-size: 14px; letter-spacing: 0.04em; }
+.chart-unit { fill: var(--accent); }
+.chart-line { fill: none; stroke: var(--accent-bright); stroke-width: 3; stroke-linejoin: round; }
+.chart-dot { fill: var(--accent-bright); stroke: var(--panel); stroke-width: 2; }
+.chart-dot.is-last { fill: var(--fg); }
+.chart-dot.is-last.is-caution { fill: var(--caution); }
+.chart-dot.is-last.is-alert { fill: var(--alert); }
+
+.chart-spark { display: block; width: 100%; height: 100%; }
+.chart-spark .chart-line { stroke-width: 2; }
