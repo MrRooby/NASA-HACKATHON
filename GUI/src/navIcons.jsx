@@ -9,6 +9,7 @@ export const NAV_GLYPHS = {
   base: '\u{F1383}', // nf-md-space_station
   crew: '\u{F0849}', // nf-md-account_group
   tests: '\u{F133C}', // nf-md-head_cog
+  calendar: '\u{F0E17}', // nf-md-calendar_month
   settings: '\u{F0493}', // nf-md-cog
   logout: '\u{F0343}', // nf-md-logout
   leg: '\u{F0F52}', // nf-md-foot_print

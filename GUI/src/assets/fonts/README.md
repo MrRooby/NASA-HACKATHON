@@ -1,4 +1,4 @@
-# nerd-icons-ab1e8f03.woff2
+# nerd-icons-c6a2435f.woff2
 
 Subset of **JetBrainsMono Nerd Font Propo** (Nerd Fonts, https://www.nerdfonts.com) with only the icons
 the app uses, all from the Material Design Icons set (`nf-md-*`). The list lives in `src/navIcons.jsx`.
@@ -10,6 +10,7 @@ the app uses, all from the Material Design Icons set (`nf-md-*`). The list lives
 | `base` | `nf-md-space_station` | U+F1383 | base tab |
 | `crew` | `nf-md-account_group` | U+F0849 | crew tab |
 | `tests` | `nf-md-head_cog` | U+F133C | tests tab / tile |
+| `calendar` | `nf-md-calendar_month` | U+F0E17 | calendar tab |
 | `settings` | `nf-md-cog` | U+F0493 | settings |
 | `logout` | `nf-md-logout` | U+F0343 | log out |
 | `leg` | `nf-md-foot_print` | U+F0F52 | limb circulation |
@@ -38,7 +39,7 @@ Regenerate (needs `fonttools` and `brotli`):
 
 ```bash
 pyftsubset JetBrainsMonoNerdFontPropo-Regular.ttf \
-  --unicodes=U+F02DC,U+F0004,U+F1383,U+F0849,U+F133C,U+F0493,U+F0343,U+F0F52,U+F009A,U+F05F6,U+F0897,U+F064D,U+F1398,U+F0141,U+F0142,U+F02D1,U+F1084,U+F029A,U+F1126,U+F04B2,U+F043C,U+F02DA,U+F014E,U+F0909,U+F0131,U+F0132 \
+  --unicodes=U+F02DC,U+F0004,U+F1383,U+F0849,U+F133C,U+F0E17,U+F0493,U+F0343,U+F0F52,U+F009A,U+F05F6,U+F0897,U+F064D,U+F1398,U+F0141,U+F0142,U+F02D1,U+F1084,U+F029A,U+F1126,U+F04B2,U+F043C,U+F02DA,U+F014E,U+F0909,U+F0131,U+F0132 \
   --flavor=woff2 --layout-features='' --no-hinting --desubroutinize \
   --output-file=nerd-icons.woff2
 # then rename it to nerd-icons-<first 8 hex of its sha256>.woff2 and update src/navIcons.css,
