@@ -38,5 +38,5 @@ export const NAV_ICONS = Object.keys(NAV_GLYPHS);
 export default function NavIcon({ name, className }) {
   const glyph = NAV_GLYPHS[name];
   if (!glyph) return null;
-  return <span className={['nf-icon', className].filter(Boolean).join(' ')} aria-hidden="true">{glyph}</span>;
+  return <span className={['nf-icon', className].filter(Boolean).join(' ')} data-icon={name} aria-hidden="true">{glyph}</span>;
 }

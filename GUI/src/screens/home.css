@@ -108,15 +108,8 @@
 .home-vital-alert { --tone: var(--alert); background: color-mix(in srgb, var(--alert) 16%, transparent); }
 .home-vital-no_data { --tone: var(--dim); }
 .home-vital-head { display: flex; align-items: center; gap: 6px; min-width: 0; color: var(--dim); }
-.home-vital-icon { flex: 0 0 auto; font-size: clamp(16px, min(1.4vw, 2.4vh), 22px); color: var(--icon, var(--accent)); }
-/* each reading has its own icon colour (like the thing it measures); status is shown by the
-   value colour and the row background, never by the icon */
-.home-vital[data-vital='hr'] { --icon: #e0565b; }
-.home-vital[data-vital='spo2'] { --icon: #6fa8dc; }
-.home-vital[data-vital='map'] { --icon: #c678dd; }
-.home-vital[data-vital='glucose'] { --icon: #e8d36a; }
-.home-vital[data-vital='sleep'] { --icon: #8f9cf0; }
-.home-vital[data-vital='dose'] { --icon: #9fd356; }
+.home-vital-icon { flex: 0 0 auto; font-size: clamp(16px, min(1.4vw, 2.4vh), 22px); }
+/* icon colours: src/navIcons.css (one calm colour per icon; status is shown by the value) */
 .home-vital-label { overflow: hidden; font-size: clamp(13px, min(1vw, 1.8vh), 15px); text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
 .home-vital-value {
   overflow: hidden;
@@ -154,7 +147,7 @@
   border-bottom: 1px solid var(--border);
 }
 .home-panel-head h2 { margin: 0; color: var(--accent-bright); font-size: clamp(16px, min(1.5vw, 2.6vh), 24px); letter-spacing: 0.08em; white-space: nowrap; }
-.home-panel-icon { font-size: clamp(20px, min(1.8vw, 3vh), 28px); color: var(--accent); }
+.home-panel-icon { font-size: clamp(20px, min(1.8vw, 3vh), 28px); }
 .home-panel-count { padding: 0 8px; color: var(--bg); background: var(--alert); font-weight: 700; }
 .home-panel-count.is-zero { background: var(--dim); }
 .home-panel-note { overflow: hidden; color: var(--caution); font-size: 13px; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
@@ -246,7 +239,7 @@
   .home-tile:hover:not(:disabled) { border-color: var(--accent); }
 }
 .home-tile:disabled { color: var(--dim); border-style: dashed; cursor: default; }
-.home-tile-icon { font-size: clamp(30px, min(3.2vw, 5.6vh), 60px); color: var(--accent); }
+.home-tile-icon { font-size: clamp(30px, min(3.2vw, 5.6vh), 60px); }
 .home-tile:disabled .home-tile-icon { color: var(--dim); }
 .home-tile-label { max-width: 100%; overflow: hidden; font-size: clamp(16px, min(1.75vw, 3vh), 30px); font-weight: 700; text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
 
