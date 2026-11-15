@@ -35,6 +35,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "MOTHER" / "mother"))
 import cognitive_scoring as cs  # noqa: E402  (stdlib-only module, source of truth for classification/scoring)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from crew_ext import NEW_SUBJECT_CODES, stream_seed  # noqa: E402
 
 VERSION = "cognitive_synthetic_v1"
 SOURCE = "synthetic_v1"
@@ -47,6 +49,15 @@ DEGRADE_START, DEGRADE_FULL = 90, 120          # mission days: ramp of the SYN-0
 APP_VERSION = "0.2.0-synthetic"
 TESTS = ("pvt", "gonogo", "dsst")
 BASELINE_DAYS = [-14, -10, -7, -3]             # session 1 = practice, sessions 2-4 = baseline
+# --dataset mars: the whole 10-person crew (SYN-01..SYN-10) in SYN-MARS-HAB-600; day = sol (88775.244 s), sol 1 starts
+# at 2039-01-01 00:00 UTC (habitat.sol_epoch_utc). One added person, drawn from the seed, degrades over sols 300-360.
+# SYN-01..04 keep their person parameters from the ISS data set but get own session streams and UUIDs (salted with
+# the mission), so their Mars sessions neither repeat nor collide with the ISS ones. The default dataset (iss) is unchanged.
+MARS_MISSION_CODE = "SYN-MARS-HAB-600"
+MARS_EPOCH = dt.datetime(2039, 1, 1)
+MARS_SOL_S = 88775.244
+MARS_DURATION = 600
+MARS_DEGRADE_START, MARS_DEGRADE_FULL = 300, 360
 LEARNING = {"pvt": [1.10, 1.05, 1.02, 1.0], "gonogo": [1.30, 1.15, 1.05, 1.0], "dsst": [0.85, 0.92, 0.97, 1.0]}
 
 SESSION_FIELDS = ["session_uuid", "subject_code", "mission_code", "test_id", "protocol_version", "app_version",
@@ -70,16 +81,28 @@ def stimulus_set(session_no: int) -> str:
     return "ABCD"[(session_no - 1) % 4]
 
 
-def degradation(subject: str, day: int) -> float:
+def degradation(subject: str, day: int, cfg=None) -> float:
     """0 = healthy, 1 = fully degraded (SYN-04 only, ramp over the second half of the mission)."""
-    if subject != DEGRADED_SUBJECT or day < DEGRADE_START:
+    deg_subject, a, b = (cfg["degraded"], cfg["degrade_start"], cfg["degrade_full"]) if cfg else \
+        (DEGRADED_SUBJECT, DEGRADE_START, DEGRADE_FULL)
+    if subject != deg_subject or day < a:
         return 0.0
-    return min(1.0, (day - DEGRADE_START) / (DEGRADE_FULL - DEGRADE_START))
+    return min(1.0, (day - a) / (b - a))
 
 
-def schedule(test: str) -> list[int]:
+def schedule(test: str, duration: int = DURATION_DAYS) -> list[int]:
     step = 7 if test == "pvt" else 14
-    return BASELINE_DAYS + list(range(step, DURATION_DAYS, step))
+    return BASELINE_DAYS + list(range(step, duration, step))
+
+
+def dataset_config(name: str, seed: int) -> dict:
+    if name == "iss":
+        return dict(mission=MISSION_CODE, start=LAUNCH.isoformat(), duration=DURATION_DAYS, subjects=SUBJECTS,
+                    degraded=DEGRADED_SUBJECT, degrade_start=DEGRADE_START, degrade_full=DEGRADE_FULL, mars=False)
+    degraded = random.Random(stream_seed(seed, "MARS", "cognitive_degraded")).choice(NEW_SUBJECT_CODES)
+    return dict(mission=MARS_MISSION_CODE, start=MARS_EPOCH.date().isoformat(), duration=MARS_DURATION,
+                subjects=SUBJECTS + NEW_SUBJECT_CODES, degraded=degraded, degrade_start=MARS_DEGRADE_START,
+                degrade_full=MARS_DEGRADE_FULL, mars=True)
 
 
 def person_params(seed: int, subject: str) -> dict:
@@ -250,26 +273,33 @@ DURATION_S = {"pvt": 180, "gonogo": 150, "dsst": 90}
 
 
 # ------------------------------------------------------------------ sessions
-def build(seed: int):
+def build(seed: int, cfg=None):
+    cfg = cfg or dataset_config("iss", seed)
     sessions, trials_out = [], []
-    for subject in SUBJECTS:
+    for subject in cfg["subjects"]:
         person = person_params(seed, subject)
         for test in TESTS:
-            for session_no, day in enumerate(schedule(test), start=1):
-                deg = degradation(subject, day)
-                rng = random.Random(f"{seed}|{subject}|{test}|{session_no}")
+            for session_no, day in enumerate(schedule(test, cfg["duration"]), start=1):
+                deg = degradation(subject, day, cfg)
+                salt = f"|{cfg['mission']}" if cfg["mars"] and subject in SUBJECTS else ""
+                rng = random.Random(f"{seed}|{subject}|{test}|{session_no}{salt}")
                 sset = stimulus_set(session_no)
                 trials = GENERATORS[test](rng, person, session_no, deg)
                 key = f"{subject}|{test}|{sset}|{session_no}"
-                suid = str(uuid.uuid5(uuid.NAMESPACE_URL, f"awernasa-cognitive:{seed}:{key}"))
-                start = dt.datetime.combine(LAUNCH + dt.timedelta(days=day), dt.time(8 + TESTS.index(test) * 0,
-                        person["minute"] % 60, rng.randrange(0, 60), rng.randrange(0, 1000) * 1000))
+                suid = str(uuid.uuid5(uuid.NAMESPACE_URL, f"awernasa-cognitive:{seed}:{key}{salt}"))
+                if cfg["mars"]:                                  # 08:mm local sol time of that sol
+                    start = MARS_EPOCH + dt.timedelta(seconds=(day - 1 + 8 / 24) * MARS_SOL_S) + dt.timedelta(
+                        minutes=person["minute"] % 60, seconds=rng.randrange(0, 60), microseconds=rng.randrange(0, 1000) * 1000)
+                    start = start.replace(microsecond=start.microsecond // 1000 * 1000)
+                else:
+                    start = dt.datetime.combine(LAUNCH + dt.timedelta(days=day), dt.time(8 + TESTS.index(test) * 0,
+                            person["minute"] % 60, rng.randrange(0, 60), rng.randrange(0, 1000) * 1000))
                 start += dt.timedelta(minutes=10 * TESTS.index(test))
                 dur = DURATION_S[test]
                 sleep = min(9.0, max(4.5, rng.gauss(7.2 - 1.2 * deg, 0.6)))
                 fatigue = int(min(10, max(1, round(rng.gauss(3 + 3 * deg, 1.0)))))
                 sessions.append({
-                    "session_uuid": suid, "subject_code": subject, "mission_code": MISSION_CODE, "test_id": test,
+                    "session_uuid": suid, "subject_code": subject, "mission_code": cfg["mission"], "test_id": test,
                     "protocol_version": cs.PROTOCOLS[test], "app_version": APP_VERSION, "stimulus_set": sset,
                     "seed": fnv1a32(key), "session_no": session_no, "is_practice": int(session_no == 1),
                     "started_at": start.isoformat(timespec="milliseconds"),
@@ -303,16 +333,20 @@ def write_csv(path: Path, fields, rows):
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", type=Path, default=ROOT / "data" / "synthetic" / "cognitive_demo")
+    ap.add_argument("--dataset", choices=["iss", "mars"], default="iss",
+                    help="iss = SYN-01..04 in SYN-ISS-180 (default); mars = added crew SYN-05..10 in SYN-MARS-HAB-600")
+    ap.add_argument("--out", type=Path, default=None)
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args(argv)
-    sessions, trials = build(args.seed)
+    cfg = dataset_config(args.dataset, args.seed)
+    args.out = args.out or ROOT / "data" / "synthetic" / ("cognitive_demo" if args.dataset == "iss" else "cognitive_mars_demo")
+    sessions, trials = build(args.seed, cfg)
     args.out.mkdir(parents=True, exist_ok=True)
     meta = {
-        "generator": VERSION, "seed": args.seed, "source_id": SOURCE, "mission_code": MISSION_CODE,
-        "mission_start_date": LAUNCH.isoformat(), "subjects": SUBJECTS, "scoring_version": cs.SCORING_VERSION,
-        "protocols": cs.PROTOCOLS, "schedule_days": {t: schedule(t) for t in TESTS},
-        "scenario": {"subject": DEGRADED_SUBJECT, "degrade_start_day": DEGRADE_START, "degrade_full_day": DEGRADE_FULL,
+        "generator": VERSION, "seed": args.seed, "source_id": SOURCE, "mission_code": cfg["mission"],
+        "mission_start_date": cfg["start"], "subjects": cfg["subjects"], "scoring_version": cs.SCORING_VERSION,
+        "protocols": cs.PROTOCOLS, "schedule_days": {t: schedule(t, cfg["duration"]) for t in TESTS},
+        "scenario": {"subject": cfg["degraded"], "degrade_start_day": cfg["degrade_start"], "degrade_full_day": cfg["degrade_full"],
                      "description": "PVT median +15 %, lapses >= 6, commission rate up, DSST throughput down"},
         "n_sessions": len(sessions), "n_trials": len(trials),
         "note": "SYNTHETIC data, not real astronaut measurements.",

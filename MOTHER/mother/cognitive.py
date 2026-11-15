@@ -319,25 +319,46 @@ def save_session(writer, payload: CognitiveSession, now: datetime | None = None)
         raise
 
 
+HAB_CREW_SQL = ("SELECT s.code AS subject_code, m.code AS mission_code FROM astro_habitat.crew c "
+                "JOIN astro_core.subject s ON s.id = c.subject_id JOIN astro_habitat.habitat h ON h.id = c.habitat_id "
+                "LEFT JOIN astro_core.mission m ON m.id = h.mission_id WHERE c.code = %s LIMIT 1")
+
+
+def is_habitat_code(code: str) -> bool:
+    """'HAB-C1'.. = habitat crew code of the GUI (organs.py uses the same prefix)."""
+    return code.startswith("HAB-")
+
+
 def _insert_session(cur, p: CognitiveSession) -> dict[str, Any]:
-    cur.execute("SELECT id, is_synthetic FROM astro_core.subject WHERE code = %s", (p.subject_code,))
+    subject_code, mission_code = p.subject_code, p.mission_code
+    if is_habitat_code(subject_code):
+        # GUI crew code -> the health subject linked to that crew member, in the habitat's mission
+        cur.execute(HAB_CREW_SQL, (subject_code[4:],))
+        link = cur.fetchone()
+        if not link:
+            raise SessionNotFound(f"Unknown person {p.subject_code!r}")
+        subject_code, mission_code = link["subject_code"], mission_code or link["mission_code"]
+    cur.execute("SELECT id, is_synthetic FROM astro_core.subject WHERE code = %s", (subject_code,))
     subj = cur.fetchone()
     if not subj:
         raise SessionNotFound(f"Unknown person {p.subject_code!r}")
-    if p.mission_code:
+    if mission_code:
         cur.execute("SELECT m.id, m.start_date FROM astro_core.participation pa JOIN astro_core.mission m "
-                    "ON m.id = pa.mission_id WHERE pa.subject_id = %s AND m.code = %s", (subj["id"], p.mission_code))
+                    "ON m.id = pa.mission_id WHERE pa.subject_id = %s AND m.code = %s", (subj["id"], mission_code))
     else:
         cur.execute("SELECT m.id, m.start_date FROM astro_core.participation pa JOIN astro_core.mission m "
                     "ON m.id = pa.mission_id WHERE pa.subject_id = %s ORDER BY m.start_date DESC, m.id DESC LIMIT 1",
                     (subj["id"],))
     mis = cur.fetchone()
     if not mis:
-        raise SessionNotFound(f"{p.subject_code!r} does not take part in mission {p.mission_code!r}"
-                              if p.mission_code else f"{p.subject_code!r} has no mission participation")
+        raise SessionNotFound(f"{p.subject_code!r} does not take part in mission {mission_code!r}"
+                              if mission_code else f"{p.subject_code!r} has no mission participation")
 
-    cur.execute("SELECT COUNT(*) AS n, COALESCE(MAX(session_no), 0) AS max_no, COALESCE(SUM(status = 'complete'), 0) AS n_ok "
-                "FROM astro_cognitive.test_session WHERE subject_id = %s AND test_id = %s", (subj["id"], p.test_id))
+    # session_no continues within the mission (a person can have sessions from several missions);
+    # n_ok counts every mission: the very first session of a person and test is the practice one
+    cur.execute("SELECT COUNT(*) AS n, COALESCE(MAX(CASE WHEN mission_id = %s THEN session_no END), 0) AS max_no, "
+                "COALESCE(SUM(status = 'complete'), 0) AS n_ok "
+                "FROM astro_cognitive.test_session WHERE subject_id = %s AND test_id = %s", (mis["id"], subj["id"], p.test_id))
     prev = cur.fetchone() or {}
     session_no = p.session_no or int(prev.get("max_no") or 0) + 1
     # the very first session per person and test is practice (learning effect) and never enters the baseline
@@ -475,15 +496,18 @@ def _status(test: str, metrics: dict[str, Any], z: dict[str, float | None], pct:
     return st, text
 
 
-def _fetch(db, subject_code: str) -> tuple[dict[str, Any], list[dict[str, Any]], dict[int, dict[str, float | None]]]:
+def _fetch(db, subject_code: str, mission_code: str | None = None
+           ) -> tuple[dict[str, Any], list[dict[str, Any]], dict[int, dict[str, float | None]]]:
+    """Sessions and metrics of one person; with mission_code only that mission's sessions (baseline per mission)."""
     subj = db._q("SELECT data_kind FROM astro_api.subjects WHERE subject_code = %s LIMIT 1", (subject_code,))
     if not subj:
         raise KeyError(subject_code)
+    where, args = ("subject_code = %s AND mission_code = %s", (subject_code, mission_code)) if mission_code \
+        else ("subject_code = %s", (subject_code,))
     sessions = db._q("SELECT session_id, test_id, session_no, stimulus_set, status, quality, is_practice, started_at, "
-                     "device_class FROM astro_api.cognitive_sessions WHERE subject_code = %s "
-                     "ORDER BY started_at, session_id", (subject_code,))
-    rows = db._q("SELECT session_id, metric_code, value FROM astro_api.cognitive_metrics WHERE subject_code = %s",
-                 (subject_code,))
+                     f"device_class FROM astro_api.cognitive_sessions WHERE {where} "
+                     "ORDER BY started_at, session_id", args)
+    rows = db._q(f"SELECT session_id, metric_code, value FROM astro_api.cognitive_metrics WHERE {where}", args)
     metrics: dict[int, dict[str, float | None]] = {}
     for r in rows:
         metrics.setdefault(int(r["session_id"]), {})[r["metric_code"]] = _num(r["value"])
@@ -536,8 +560,15 @@ def _test_block(test: str, sessions: list[dict[str, Any]], metrics: dict[int, di
 
 
 def cognitive_report(db, subject_code: str) -> dict[str, Any]:
-    """GET /api/cognitive/{subject}. Raises KeyError for an unknown person (-> 404)."""
-    subj, sessions, metrics = _fetch(db, subject_code)
+    """GET /api/cognitive/{subject}. Raises KeyError for an unknown person (-> 404).
+    A habitat crew code (HAB-C1..) reads the linked health subject's sessions of the habitat's mission."""
+    if is_habitat_code(subject_code):
+        link = db._q(HAB_CREW_SQL, (subject_code[4:],))
+        if not link:
+            raise KeyError(subject_code)
+        subj, sessions, metrics = _fetch(db, link[0]["subject_code"], link[0]["mission_code"])
+    else:
+        subj, sessions, metrics = _fetch(db, subject_code)
     tests, zs = [], []
     for t in TESTS:
         block, z_key = _test_block(t, sessions, metrics)

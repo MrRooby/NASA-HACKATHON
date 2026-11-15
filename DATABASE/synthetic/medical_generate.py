@@ -5,13 +5,32 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import random
 import struct
+import sys
 import zlib
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from crew_ext import NEW_CREW, stream_seed  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 MISSION = "SYN-MARS-HAB-600"
 CREW = {"C1": "SYN-02", "C2": "SYN-01", "C3": "SYN-03", "C4": "SYN-04"}
+CREW.update({p["crew"]: p["code"] for p in NEW_CREW})          # C5..C10 (crew_ext.py)
+
+# Medical episodes of the added crew: one drawn per person (own stream), sol and severity drawn too.
+# Everything is appended after the original events/transmissions, so the original records stay identical.
+NEW_EPISODES = [
+    ("procedure", "Minor hand laceration during maintenance", "minor", "laceration 2 cm, closed with strips"),
+    ("symptom", "Insomnia: sleep onset > 60 min for 5 sols", "minor", "sleep onset latency 60-90 min"),
+    ("symptom", "Contact dermatitis on forearms", "minor", "itchy erythema, suspected glove material"),
+    ("symptom", "Lower back pain after EVA", "major", "pain 6/10, limited trunk flexion"),
+    ("symptom", "Dental pain, suspected cracked filling", "major", "pain on chewing, tooth 36"),
+    ("symptom", "Nasal congestion and sinus pressure", "minor", "fluid shift symptoms, no fever"),
+    ("diagnosis", "Kidney stone risk: low urine volume trend", "major", "urine volume < 1.5 L/d for 7 sols"),
+    ("symptom", "Muscle strain, right calf, treadmill session", "minor", "pain 4/10, no swelling"),
+]
 
 
 def png(path: Path, label: str) -> None:
@@ -65,6 +84,17 @@ def main() -> None:
     add("SANS-C3-IMAGING", "imaging", 201, "SANS ocular ultrasound and fundus photo", "C3", "major",
         details={"risk": "SANS", "requested_review": True})
 
+    new_events = []
+    for p in NEW_CREW:
+        r = random.Random(stream_seed(args.seed, p["crew"], "medical"))
+        typ, title, sev, text = r.choice(NEW_EPISODES)
+        sol = r.randrange(30, 590)
+        n_before = len(events)
+        add(f"MED-{p['crew']}-SOL{sol}", typ, sol, f"{title} ({p['crew']})", p["crew"], sev, text=text,
+            details={"episode": "random_draw", "role": p["role"]})
+        new_events += events[n_before:]
+        del events[n_before:]
+
     attachments = []
     for code, filename, kind, event_code, ext in [
         ("ATT-SANS-C3-US", "sans_c3_sol201_ultrasound.svg", "ultrasound", "SANS-C3-IMAGING", "svg"),
@@ -92,9 +122,19 @@ def main() -> None:
                               "blackout_start_sol": 280 if blackout else None,
                               "blackout_end_sol": 294 if blackout else None,
                               "notes": "H13 solar-conjunction blackout; queued for first available window" if blackout else None})
-    transmissions += [{"transmission_code": f"TX-{a['attachment_code']}", "event_code": a["event_code"],
+    original_attachment_tx = [{"transmission_code": f"TX-{a['attachment_code']}", "event_code": a["event_code"],
                        "payload_type": "attachment", "priority": "urgent", "status": "queued",
                        "blackout_start_sol": None, "blackout_end_sol": None, "notes": None} for a in attachments]
+    transmissions += original_attachment_tx
+    for e in new_events:                                        # added crew: after every original record
+        blackout = 280 <= e["sol"] <= 293
+        transmissions.append({"transmission_code": f"TX-{e['event_code']}", "event_code": e["event_code"],
+                              "payload_type": "event", "priority": "routine" if e["severity"] == "minor" else "urgent",
+                              "status": "held_blackout" if blackout else "queued",
+                              "blackout_start_sol": 280 if blackout else None,
+                              "blackout_end_sol": 294 if blackout else None,
+                              "notes": "H13 solar-conjunction blackout; queued for first available window" if blackout else None})
+    events += new_events
 
     alerts = [
         {"alert_code": "ALT-H1-C1", "severity": "alert", "title": "H1 CO2 exposure", "message": "C1 exposure linked to habitat scrubber fault.", "crew_code": "C1", "source_kind": "habitat_event", "habitat_event_code": "evt-H1-scrubber-fault", "medical_event_code": "H1-CO2-ESC"},

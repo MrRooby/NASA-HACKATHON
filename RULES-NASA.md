@@ -165,7 +165,7 @@ Zasada dotyczy **udziału, współpracy i koordynacji z podmiotami chińskimi**,
 - **Grafiki i wideo z SI:** widoczny znak wodny. **Nigdy logo NASA** w treściach z SI.
 
 ### 9.5 Pozostałe rzeczy do odhaczenia
-- [ ] Plik `LICENSE` w repo (np. Apache-2.0 lub MIT; jeśli go nie dodamy, NASA i tak przyjmie Apache 2.0).
+- [x] Plik `LICENSE` w repo: **AGPL-3.0-only** (licencja OSI, copyleft także dla usług sieciowych).
 - [ ] Sekcja „Data sources & licenses” w README z każdą licencją (MMASH ODbL, LifeSnaps CC BY itd.).
 - [ ] Demo: 30 s wideo z angielskimi napisami albo ≤ 7 slajdów po angielsku.
 - [ ] Publiczne linki bez logowania (repo, demo).

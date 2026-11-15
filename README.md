@@ -114,3 +114,16 @@ Testy działają bez bazy i bez sieci. Test integracyjny bazy (`DATABASE/tests/i
 - Wszystkie dane osób w bazie są **syntetyczne** albo pochodzą z publicznych zbiorów (Inspiration4/OSDR, LSDA). GUI oznacza dane syntetyczne etykietą **SYNTHETIC**.
 - Zasady Space Apps (licencje, cytowania, użycie narzędzi SI, ograniczenia dotyczące Chin) opisuje [RULES-NASA.md](RULES-NASA.md).
 - To demo edukacyjne, **nie porada medyczna**.
+
+## ⚖️ Licencja
+Copyright (C) 2026 the AWERNASA contributors.
+
+Kod tego repozytorium (GUI, MOTHER, DATABASE, HABITAT, scripts, deploy) jest udostępniany na licencji **GNU Affero General Public License v3.0 only** (`SPDX-License-Identifier: AGPL-3.0-only`). Pełny tekst: [LICENSE](LICENSE).
+
+- Każdy, kto rozpowszechnia ten kod albo jego przeróbki, musi udostępnić pełne źródła na tej samej licencji.
+- Dotyczy to także uruchamiania zmienionej wersji jako usługi sieciowej (AGPL §13): użytkownicy usługi mają prawo do jej kodu źródłowego.
+- Program jest dostarczany **bez żadnej gwarancji** (AGPL §15–16).
+
+Materiały osób trzecich zachowują własne licencje i nie są objęte AGPL:
+- zbiory danych w `data/public/` (np. MMASH na ODbL 1.0, zob. [data/public/human/raw/mmash/LICENSE.txt](data/public/human/raw/mmash/LICENSE.txt)); pełna lista źródeł i licencji: [DATA_SOURCES.md](DATA_SOURCES.md) i [RULES-NASA.md](RULES-NASA.md);
+- zależności npm i Python (na licencjach MIT, BSD lub Apache-2.0) oraz fonty JetBrains Mono i Pixelify Sans (SIL OFL 1.1).

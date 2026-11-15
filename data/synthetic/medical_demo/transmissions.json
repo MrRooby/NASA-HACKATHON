@@ -958,5 +958,65 @@
     "blackout_start_sol": null,
     "blackout_end_sol": null,
     "notes": null
+  },
+  {
+    "transmission_code": "TX-MED-C5-SOL422",
+    "event_code": "MED-C5-SOL422",
+    "payload_type": "event",
+    "priority": "routine",
+    "status": "queued",
+    "blackout_start_sol": null,
+    "blackout_end_sol": null,
+    "notes": null
+  },
+  {
+    "transmission_code": "TX-MED-C6-SOL552",
+    "event_code": "MED-C6-SOL552",
+    "payload_type": "event",
+    "priority": "urgent",
+    "status": "queued",
+    "blackout_start_sol": null,
+    "blackout_end_sol": null,
+    "notes": null
+  },
+  {
+    "transmission_code": "TX-MED-C7-SOL107",
+    "event_code": "MED-C7-SOL107",
+    "payload_type": "event",
+    "priority": "routine",
+    "status": "queued",
+    "blackout_start_sol": null,
+    "blackout_end_sol": null,
+    "notes": null
+  },
+  {
+    "transmission_code": "TX-MED-C8-SOL331",
+    "event_code": "MED-C8-SOL331",
+    "payload_type": "event",
+    "priority": "routine",
+    "status": "queued",
+    "blackout_start_sol": null,
+    "blackout_end_sol": null,
+    "notes": null
+  },
+  {
+    "transmission_code": "TX-MED-C9-SOL320",
+    "event_code": "MED-C9-SOL320",
+    "payload_type": "event",
+    "priority": "routine",
+    "status": "queued",
+    "blackout_start_sol": null,
+    "blackout_end_sol": null,
+    "notes": null
+  },
+  {
+    "transmission_code": "TX-MED-C10-SOL116",
+    "event_code": "MED-C10-SOL116",
+    "payload_type": "event",
+    "priority": "routine",
+    "status": "queued",
+    "blackout_start_sol": null,
+    "blackout_end_sol": null,
+    "notes": null
   }
 ]

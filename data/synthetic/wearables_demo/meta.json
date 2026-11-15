@@ -2,9 +2,9 @@
   "generator": "wearables_sim_v1",
   "seed": 7,
   "mission": "SYN-MARS-HAB-600",
-  "samples": 753440,
-  "devices": 20,
-  "minutes": 17308800,
-  "hours": 288480,
-  "sleep_sessions": 2404
+  "samples": 1883600,
+  "devices": 50,
+  "minutes": 43272000,
+  "hours": 721200,
+  "sleep_sessions": 6010
 }

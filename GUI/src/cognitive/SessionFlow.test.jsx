@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import SessionFlow from './SessionFlow.jsx';
 import { acquireTabLock } from './engine/tabLock.js';
 import { assess, batteryFor, buildPayload, sessionStatus, uuid4 } from './session.js';
-import { useFake } from './helpers.js';
+import { fillSurvey, useFake } from './helpers.js';
 import { score } from './engine/score.js';
 
 describe('session payload (CONTRACT section 3)', () => {
@@ -73,9 +73,7 @@ describe('SessionFlow', () => {
     render(<SessionFlow subject="SYN-01" mode="quick" onRunningChange={running} onExit={() => {}} />);
     expect(screen.getByRole('heading', { name: /before you start/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'CONTINUE' })).toBeDisabled();
-    for (const [label, value] of [['Hours of sleep last night', '7.5'], ['Sleep quality', '7'], ['Fatigue now', '3'], ['Sleepiness (KSS)', '3'], ['Stress now', '2']]) {
-      fireEvent.change(screen.getByLabelText(label), { target: { value } });
-    }
+    fillSurvey();
     fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
     expect(screen.getByRole('heading', { name: /checking your screen/i })).toBeInTheDocument();
     await act(async () => { await vi.advanceTimersByTimeAsync(3000); });

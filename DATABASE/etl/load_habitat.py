@@ -66,6 +66,21 @@ def main(argv):
             cur.execute("SELECT code FROM astro_habitat.crew WHERE habitat_id=%s", (hab,))
             crew = {r[0] for r in cur.fetchall()}
 
+            # astro_medical.alert wskazuje na odczyty/zdarzenia habitatu (fk_alert_reading, fk_alert_hab_event):
+            # odpinamy te wskazania, inaczej DELETE niżej łamie klucz obcy. load_medical.py tworzy alerty od nowa
+            # i podpina je do nowych odczytów, więc po tym imporcie trzeba uruchomić load_medical.py.
+            cur.execute("""UPDATE astro_medical.alert a
+                           JOIN astro_habitat.reading r ON r.id = a.habitat_reading_id
+                           SET a.habitat_reading_id = NULL
+                           WHERE r.habitat_id = %s AND r.source_flag = 'simulated'""", (hab,))
+            detached = cur.rowcount
+            cur.execute("""UPDATE astro_medical.alert a
+                           JOIN astro_habitat.event e ON e.id = a.habitat_event_id
+                           SET a.habitat_event_id = NULL
+                           WHERE e.habitat_id = %s AND e.source_flag = 'simulated'""", (hab,))
+            detached += cur.rowcount
+            if detached:
+                print(f"odpięto {detached} powiązań alertów medycznych; uruchom potem load_medical.py")
             # zastąpienie poprzedniej symulacji
             for tbl in ("reading", "reading_hourly", "event", "crew_location"):
                 cur.execute(f"DELETE FROM astro_habitat.{tbl} WHERE habitat_id=%s AND source_flag='simulated'", (hab,))

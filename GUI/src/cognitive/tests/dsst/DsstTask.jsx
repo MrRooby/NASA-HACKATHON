@@ -3,10 +3,14 @@ import { inputTime, onsetViaRaf } from '../../engine/clock.js';
 import { mulberry32 } from '../../engine/prng.js';
 import { attachInput, makeTrial, useTrialRunner } from '../../engine/runner.js';
 import { createTaskKit } from '../../engine/taskKit.js';
+import StopButton from '../../StopButton.jsx';
 import { DSST_DURATION_S, createDsstStream, dsstPractice, shapeFor, stimulusId } from './sequence.js';
 import { Symbol as ShapeSymbol } from './symbols.jsx';
 
 const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+// On-screen keypad in numpad order (7-8-9 on top), digits only: the symbol key is read from the strip at the top,
+// exactly as with a physical keyboard, so touch and keyboard runs measure the same thing.
+export const KEYPAD_ORDER = [7, 8, 9, 4, 5, 6, 1, 2, 3];
 export const digitFromCode = code => {
   const m = /^(?:Digit|Numpad)([1-9])$/.exec(code || '');
   return m ? Number(m[1]) : null;
@@ -97,7 +101,11 @@ export default function DsstTask({ seed, set = 'A', practice = false, durationS 
       onKey: e => answer(digitFromCode(e.code), e),
       onPointer: e => {
         const el = e.target?.closest?.('[data-digit]');
-        if (el) answer(Number(el.dataset.digit), e);
+        if (!el) return;
+        // pressed-state feedback that also works on touch screens (:active is unreliable there)
+        el.classList.add('is-pressed');
+        sched.setTimeout(() => el.classList.remove('is-pressed'), 120);
+        answer(Number(el.dataset.digit), e);
       },
       onEscape: () => props.current.onEscape?.(),
     });
@@ -111,7 +119,8 @@ export default function DsstTask({ seed, set = 'A', practice = false, durationS 
   });
 
   return (
-    <div className="cog-field cog-field-dsst" ref={fieldRef} tabIndex={-1} data-testid="cog-field" role="application" aria-label="Symbol-digit test: press the digit key that matches the symbol">
+    <div className="cog-field cog-field-dsst" ref={fieldRef} tabIndex={-1} data-testid="cog-field" role="application" aria-label="Symbol-digit test: press the digit that matches the symbol">
+      <StopButton onStop={() => props.current.onEscape?.()} />
       <div className="cog-key" aria-label="Symbol key">
         {DIGITS.map(d => (
           <div className="cog-key-cell" key={d}>
@@ -120,21 +129,24 @@ export default function DsstTask({ seed, set = 'A', practice = false, durationS 
           </div>
         ))}
       </div>
-      <div className="cog-stim-box" ref={stimRef} data-testid="dsst-stimulus">
-        {Array.from({ length: 9 }, (_, shape) => (
-          <div key={shape} data-shape={shape} style={{ display: 'none' }}>
-            <ShapeSymbol shape={shape} size={96} />
+      <div className="cog-dsst-main">
+        <div className="cog-dsst-stim">
+          <div className="cog-stim-box" ref={stimRef} data-testid="dsst-stimulus">
+            {Array.from({ length: 9 }, (_, shape) => (
+              <div key={shape} data-shape={shape} style={{ display: 'none' }}>
+                <ShapeSymbol shape={shape} size={96} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="cog-hint" ref={hintRef} aria-live="polite" />
-      <div className="cog-keypad" role="group" aria-label="On-screen keypad">
-        {DIGITS.map(d => (
-          <button type="button" key={d} data-digit={d} className="cog-keypad-btn" tabIndex={-1} aria-label={`Digit ${d}`}>
-            <ShapeSymbol shape={shapeFor(set, d)} size={22} />
-            <span>{d}</span>
-          </button>
-        ))}
+          <div className="cog-hint" ref={hintRef} aria-live="polite" />
+        </div>
+        <div className="cog-keypad" role="group" aria-label="On-screen keypad">
+          {KEYPAD_ORDER.map(d => (
+            <button type="button" key={d} data-digit={d} className="cog-keypad-btn" tabIndex={-1} aria-label={`Digit ${d}`}>
+              {d}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

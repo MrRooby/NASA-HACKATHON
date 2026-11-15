@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import StandaloneApp, { isDemo } from './standalone.jsx';
-import { useFake } from './helpers.js';
+import { fillSurvey, useFake } from './helpers.js';
 import { DEMO_OVERRIDES } from './engine/protocols.js';
 import { diagnose } from './engine/diagnostics.js';
 import { KEY_METRIC, localReport, pyFixed, testBlock } from './engine/localReport.js';
@@ -198,9 +198,7 @@ describe('standalone page', () => {
     render(<StandaloneApp demo />);
     expect(screen.getByTestId('demo-banner')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /quick test/i }));
-    for (const [label, value] of [['Hours of sleep last night', '7.5'], ['Sleep quality', '7'], ['Fatigue now', '3'], ['Sleepiness (KSS)', '3'], ['Stress now', '2']]) {
-      fireEvent.change(screen.getByLabelText(label), { target: { value } });
-    }
+    fillSurvey();
     fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
     await act(async () => { await vi.advanceTimersByTimeAsync(3000); });
     fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));

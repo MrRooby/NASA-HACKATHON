@@ -303,8 +303,8 @@ def test_save_session_converts_timezone_to_utc():
 def fake_report(monkeypatch):
     holder = {}
 
-    def make(sessions, metrics):
-        holder["db"] = report_db(sessions, metrics)
+    def make(sessions, metrics, crew=None):
+        holder["db"] = report_db(sessions, metrics, crew=crew)
     import mother.db_source
     monkeypatch.setattr(mother.db_source, "TeamDatabase", lambda: TeamDatabase(conn=holder["db"]))
     return make
@@ -469,3 +469,45 @@ def test_report_latest_session_is_not_in_its_own_baseline(client, fake_report):
     d = client.get("/api/cognitive/SYN-01").json()["tests"][2]
     assert d["baseline"]["n"] == 4 and d["status"] == "alert"
     assert d["latest"]["z"]["dsst_throughput_per_min"] < -3
+
+
+# ------------------------------------------------------------------ habitat crew codes (HAB-C1.. used by the GUI)
+def _on(mission, item):
+    session, metrics = item
+    return {**session, "mission_code": mission}, metrics
+
+
+def test_report_habitat_code_reads_linked_subject_in_habitat_mission(client, fake_report):
+    iss = [_on("SYN-ISS-180", _pvt(i, 400, practice=i == 1)) for i in range(1, 6)]          # older mission, slow
+    mars = [_on("SYN-MARS-HAB-600", _pvt(i, 280, practice=i == 6, day=100 + i)) for i in range(6, 11)]
+    fake_report(*_build(iss + mars), crew={"C2": ("SYN-01", "SYN-MARS-HAB-600")})
+    r = client.get("/api/cognitive/HAB-C2")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["subject"]["code"] == "HAB-C2"
+    pvt = body["tests"][0]
+    assert pvt["baseline"]["ready"] and pvt["status"] == "ok"           # baseline from the Mars sessions only
+    assert pvt["latest"]["session_id"] == 10 and pvt["next"]["session_no"] == 11
+    assert all(t["value"] == 280 for t in pvt["trend"])                 # no ISS session in the trend
+
+
+def test_report_unknown_habitat_code_404(client, fake_report):
+    fake_report([], {}, crew={"C2": ("SYN-01", "SYN-MARS-HAB-600")})
+    assert client.get("/api/cognitive/HAB-C99").status_code == 404
+
+
+def test_save_habitat_code_maps_to_linked_subject_and_mission(client, monkeypatch):
+    w = FakeWriter(missions={1: [("SYN-ISS-180", 5, None), ("SYN-MARS-HAB-600", 7, None)]},
+                   crew={"C2": ("SYN-01", "SYN-MARS-HAB-600")})
+    monkeypatch.setattr(db_writer, "connect", lambda: w)
+    body = payload(subject_code="HAB-C2", mission_code=None, session_no=None)
+    r = post(client, body)
+    assert r.status_code == 201, r.text
+    saved = w.all("sessions")[-1]
+    assert saved["subject_id"] == 1 and saved["mission_id"] == 7
+
+
+def test_save_unknown_habitat_code_404(client, monkeypatch):
+    w = FakeWriter(crew={})
+    monkeypatch.setattr(db_writer, "connect", lambda: w)
+    assert post(client, payload(subject_code="HAB-C99", mission_code=None)).status_code == 404
