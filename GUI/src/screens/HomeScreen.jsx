@@ -323,7 +323,7 @@ export default function HomeScreen({ mother, session, viewedCode, navigate, prof
                 }
               }}
             >
-              <AstronautViewer model={profile?.model} frontView segmentStatus={segmentStatus} />
+              <AstronautViewer model={profile?.model} frontView segmentStatus={segmentStatus} sol={kind === 'sol' ? asOf : null} />
             </div>
             <ul className="home-vitals" aria-label={t('home.vitalsLabel')}>
               {vitals.map(row => <VitalRow key={row.id} row={row} />)}

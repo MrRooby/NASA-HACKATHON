@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import AstronautViewer from './AstronautViewer.jsx';
 
@@ -22,12 +22,27 @@ describe('AstronautViewer (WebGL mocked)', () => {
     expect(screen.getByTestId('r3f-canvas')).toBeInTheDocument();
     expect(container.firstChild).toHaveClass('astronaut-viewer');
     expect(container.firstChild).not.toHaveClass('astronaut-viewer-front');
-    expect(screen.getByText(/l-drag rotate/i)).toBeInTheDocument();
+    expect(screen.queryByText(/l-drag rotate/i)).not.toBeInTheDocument(); // no mouse hint on a touch tablet
   });
 
   it('renders the front view without the orbit hint', () => {
     const { container } = render(<AstronautViewer frontView />);
     expect(container.firstChild).toHaveClass('astronaut-viewer-front');
     expect(screen.queryByText(/l-drag rotate/i)).not.toBeInTheDocument();
+  });
+
+  it('offers a BODY / SKELETON switch for a crew model and shows the projected bone density', () => {
+    render(<AstronautViewer model="crew_C4" sol={600} frontView />);
+    const skeleton = screen.getByRole('button', { name: 'Skeleton' });
+    expect(screen.getByRole('button', { name: 'Body' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.queryByTestId('viewer-bones')).toBeNull();
+    fireEvent.click(skeleton);
+    expect(skeleton).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByTestId('viewer-bones')).toHaveTextContent(/Hip \/ spine\s*\d+\.\d %/);
+  });
+
+  it('has no switch for a model that is not a crew member', () => {
+    render(<AstronautViewer frontView />);
+    expect(screen.queryByRole('button', { name: 'Skeleton' })).toBeNull();
   });
 });

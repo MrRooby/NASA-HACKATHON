@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useLayoutEffect, useRef, useSyncExternalStore } from 'react';
+import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Center, Html, OrbitControls, useGLTF } from '@react-three/drei';
 import { Box3, MOUSE, Vector3 } from 'three';
@@ -7,6 +7,10 @@ import { paintSegments } from './segmentTint.js';
 import { prepareBody } from './bodyShading.js';
 import { segmentForMesh } from './organSegments.js';
 import { getCurrentTheme, subscribeTheme } from './theme/index.js';
+import Skeleton3D, { useSkeleton } from './body/Skeleton3D.jsx';
+import { boneStatus } from './body/boneStatus.js';
+import { useT } from './i18n/index.js';
+import { StatusTag } from './components/index.js';
 
 export const DEFAULT_MODEL = 'anny_astronaut_bone_segmented';
 /** '/models/<name>.glb'; every crew member has a model generated for their body (crewProfiles.model). */
@@ -168,14 +172,18 @@ class ModelErrorBoundary extends React.Component {
   }
 }
 
-function FittedModel({ frontView, ...modelProps }) {
+function FittedModel({ frontView, skeleton = null, bones = null, ...modelProps }) {
   const group = useRef();
   const controls = useThree(state => state.controls);
   return (
     <>
-      <group ref={group}>
+      <group ref={group} key={skeleton ? 'skeleton' : 'body'}>
         <Center>
-          <AstronautModel {...modelProps} />
+          {skeleton ? (
+            <group rotation={[-Math.PI / 2, 0, 0]}>
+              <Skeleton3D data={skeleton} status={bones} onSegmentHover={modelProps.onSegmentHover} onSegmentClick={modelProps.onSegmentClick} />
+            </group>
+          ) : <AstronautModel {...modelProps} />}
         </Center>
       </group>
       <FitCamera target={group} margin={frontView ? 1.02 : 1.2} controls={controls || false} />
@@ -183,7 +191,45 @@ function FittedModel({ frontView, ...modelProps }) {
   );
 }
 
-export default function AstronautViewer({ model = null, frontView = false, onModelFrame, segmentStatus, onSegmentHover, onSegmentClick }) {
+const fmtPct = v => (v == null ? '—' : `${v.toFixed(1)} %`);
+
+/** BODY / SKELETON switch and, in the skeleton view, the projected bone density line. */
+function ViewSwitch({ mode, onMode, bones }) {
+  const t = useT();
+  return (
+    <>
+      <div className="viewer-switch" role="group" aria-label={t('common.viewMode')}>
+        {['body', 'skeleton'].map(id => (
+          <button
+            key={id}
+            type="button"
+            className="viewer-switch-btn"
+            aria-pressed={mode === id}
+            onClick={event => { event.stopPropagation(); onMode(id); }}
+            onKeyDown={event => event.stopPropagation()}
+          >
+            {t(id === 'body' ? 'common.viewBody' : 'common.viewSkeleton')}
+          </button>
+        ))}
+      </div>
+      {mode === 'skeleton' && bones ? (
+        <div className="viewer-bones" data-testid="viewer-bones" onClick={event => event.stopPropagation()}>
+          <span className="viewer-bones-title">{t('common.boneDensity')}</span>
+          <span className="viewer-bones-row"><StatusTag status={bones.hip} /> {t('common.bmdHip')} <strong>{fmtPct(bones.bmd.hip)}</strong></span>
+          <span className="viewer-bones-row"><StatusTag status={bones.femoral} /> {t('common.bmdFemoral')} <strong>{fmtPct(bones.bmd.femoral)}</strong></span>
+          <span className="viewer-bones-note">{t('common.bmdNote')}</span>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+export default function AstronautViewer({ model = null, sol = null, frontView = false, onModelFrame, segmentStatus, onSegmentHover, onSegmentClick }) {
+  const [mode, setMode] = useState('body');
+  const skeleton = useSkeleton(mode === 'skeleton' ? model : null);
+  const code = model && /^crew_(C\d+)$/.test(model) ? `HAB-${model.slice(5)}` : null;
+  const bones = useMemo(() => (code ? boneStatus(code, sol) : null), [code, sol]);
+  const canSkeleton = Boolean(code);
   return (
     <div className={`astronaut-viewer${frontView ? ' astronaut-viewer-front' : ''}`} aria-label="Front-facing astronaut health model">
       <ModelErrorBoundary key={model || DEFAULT_MODEL} path={modelPath(model)}>
@@ -193,6 +239,8 @@ export default function AstronautViewer({ model = null, frontView = false, onMod
             <FittedModel
               key={model || DEFAULT_MODEL}
               model={model}
+              skeleton={mode === 'skeleton' ? skeleton : null}
+              bones={bones?.segments ?? null}
               frontView={frontView}
               onModelFrame={onModelFrame}
               segmentStatus={segmentStatus}
@@ -214,7 +262,7 @@ export default function AstronautViewer({ model = null, frontView = false, onMod
           />}
         </Canvas>
       </ModelErrorBoundary>
-      {!frontView && <span className="model-viewer-hint">L-DRAG ROTATE · R-DRAG PAN · SCROLL ZOOM · HOVER TO HIGHLIGHT</span>}
+      {canSkeleton ? <ViewSwitch mode={mode} onMode={setMode} bones={bones} /> : null}
     </div>
   );
 }

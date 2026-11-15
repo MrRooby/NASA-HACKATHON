@@ -63,4 +63,11 @@ export default {
   footerDemo: 'No link to MOTHER · built-in demo data',
   disclaimer: 'Demonstration only · not medical advice',
   credit: 'NASA Space Apps 2026',
+  viewMode: 'Model view',
+  viewBody: 'Body',
+  viewSkeleton: 'Skeleton',
+  boneDensity: 'Bone density',
+  bmdHip: 'Hip / spine',
+  bmdFemoral: 'Femoral neck',
+  bmdNote: '% of pre-flight · projected from mission time',
 };

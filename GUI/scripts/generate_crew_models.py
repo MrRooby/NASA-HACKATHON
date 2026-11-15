@@ -103,7 +103,42 @@ class Body:
         height = float(rest[:, 2].max() - rest[:, 2].min())
         v0, v1, v2 = rest[self.tri[:, 0]], rest[self.tri[:, 1]], rest[self.tri[:, 2]]
         mass = float((torch.cross(v0, v1, dim=-1) * v2).sum(-1).sum().abs() / 6) * 980.0
+        self.last_heads = out['bone_poses'][0][:, :3, 3].numpy()
         return out['vertices'][0].numpy(), height, mass
+
+
+
+# Skeleton view: bones drawn as capsules between Anny joints (posed frame = the GLB frame), one
+# anatomical segment each (src/organSegments.js names), so the GUI can colour them by bone status.
+BONES = [
+    # segment, from joint, to joint, radius (m)
+    ('left_thigh', 'upperleg01.L', 'lowerleg01.L', 0.024), ('right_thigh', 'upperleg01.R', 'lowerleg01.R', 0.024),
+    ('left_lower_leg', 'lowerleg01.L', 'foot.L', 0.019), ('right_lower_leg', 'lowerleg01.R', 'foot.R', 0.019),
+    ('left_foot', 'foot.L', 'toe3-1.L', 0.015), ('right_foot', 'foot.R', 'toe3-1.R', 0.015),
+    ('abdomen', 'spine05', 'spine03', 0.022), ('chest', 'spine03', 'neck01', 0.02),
+    ('neck', 'neck01', 'head', 0.016),
+    ('chest', 'clavicle.L', 'upperarm01.L', 0.011), ('chest', 'clavicle.R', 'upperarm01.R', 0.011),
+    ('left_upper_arm', 'upperarm01.L', 'lowerarm01.L', 0.019), ('right_upper_arm', 'upperarm01.R', 'lowerarm01.R', 0.019),
+    ('left_forearm', 'lowerarm01.L', 'wrist.L', 0.014), ('right_forearm', 'lowerarm01.R', 'wrist.R', 0.014),
+    ('left_hand', 'wrist.L', 'finger3-1.L', 0.012), ('right_hand', 'wrist.R', 'finger3-1.R', 0.012),
+    ('pelvis', 'upperleg01.L', 'upperleg01.R', 0.024),
+    ('pelvis', 'spine05', 'upperleg01.L', 0.02), ('pelvis', 'spine05', 'upperleg01.R', 0.02),
+]
+
+
+def skeleton_json(labels, heads, height):
+    at = {name: [round(float(v), 4) for v in heads[labels.index(name)]] for name in labels}
+    bones = [{'seg': seg, 'a': at[a], 'b': at[b], 'r': r} for seg, a, b, r in BONES]
+    head = at['head']; neck = at['neck01']; chest_top = at['neck01']; chest_low = at['spine03']
+    half_w = abs(at['upperarm01.L'][0] - at['upperarm01.R'][0]) / 2
+    skull = {'seg': 'head', 'c': [head[0], head[1] - 0.005, round(head[2] + 0.075, 4)], 'r': round(0.095 * height / 1.65, 4)}
+    rings = []  # rib cage: five ellipses between spine03 and neck01, widest in the middle
+    for i in range(5):
+        f = (i + 0.5) / 5
+        z = chest_low[2] + (chest_top[2] - chest_low[2]) * (0.1 + 0.8 * f)
+        width = half_w * (0.62 + 0.25 * (1 - abs(f - 0.45) * 2))
+        rings.append({'seg': 'chest', 'c': [0.0, round(chest_low[1] - 0.045, 4), round(z, 4)], 'rx': round(width, 4), 'ry': round(width * 0.62, 4), 'r': 0.007})
+    return {'height': round(height, 3), 'bones': bones, 'skull': skull, 'ribs': rings}
 
 
 def phenotype_for(body, sex, height_cm, mass_kg):
@@ -158,6 +193,9 @@ def main():
         if not args.check:
             write(vertices, out)
             print(f'   wrote {out.relative_to(GUI)} ({out.stat().st_size // 1024} kB)')
+            skel_out = OUT_DIR / f"{p['model']}.skeleton.json"
+            skel_out.write_text(json.dumps(skeleton_json(body.model.bone_labels, body.last_heads, h)))
+            print(f'   wrote {skel_out.relative_to(GUI)}')
 
 
 if __name__ == '__main__':

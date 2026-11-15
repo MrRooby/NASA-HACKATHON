@@ -370,6 +370,7 @@ export default function WearablesScreen({ mother, session, viewedCode, navigate,
         <section className="wear-figure" aria-label={t('wearables.bodyMap')} title={t('wearables.bodyMapHint')}>
           <AstronautViewer
             model={profile?.model}
+            sol={kind === 'sol' ? asOf : null}
             segmentStatus={segmentStatus}
             onSegmentHover={setHoverSegment}
             onSegmentClick={openSegment}

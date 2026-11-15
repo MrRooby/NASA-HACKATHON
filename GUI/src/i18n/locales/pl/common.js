@@ -63,4 +63,11 @@ export default {
   footerDemo: 'Brak łącza z MOTHER · wbudowane dane demo',
   disclaimer: 'Tylko demonstracja · to nie jest porada medyczna',
   credit: 'NASA Space Apps 2026',
+  viewMode: 'Widok modelu',
+  viewBody: 'Ciało',
+  viewSkeleton: 'Szkielet',
+  boneDensity: 'Gęstość kości',
+  bmdHip: 'Biodro / kręgosłup',
+  bmdFemoral: 'Szyjka udowa',
+  bmdNote: '% stanu sprzed lotu · szacunek z czasu misji',
 };

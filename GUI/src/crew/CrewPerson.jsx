@@ -424,7 +424,7 @@ export default function CrewPerson({ code, mother, session, habitat, onBack }) {
           </header>
           <div className="home-body">
             <div className="home-figure crew-person-figure">
-              <AstronautViewer model={profile.model} frontView segmentStatus={segmentStatus} />
+              <AstronautViewer model={profile.model} frontView segmentStatus={segmentStatus} sol={report?.as_of?.sol ?? null} />
             </div>
             <ul className="home-vitals" aria-label={t('crew.chartsTitle')}>
               {vitals.map(row => <VitalRow key={row.id} row={row} onOpen={id => setSelected({ kind: 'metric', id })} />)}

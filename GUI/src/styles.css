@@ -386,3 +386,41 @@ html[data-crt='on'] :is(h1, h2, .glow, .topbar-brand, .topbar-sol) {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── 3D viewer: BODY / SKELETON switch and bone density line (src/AstronautViewer.jsx) ── */
+.astronaut-viewer { position: relative; }
+.viewer-switch { position: absolute; top: 8px; right: 8px; z-index: 2; display: flex; }
+.viewer-switch-btn {
+  min-width: 96px;
+  min-height: 48px;
+  padding: 0 14px;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.viewer-switch-btn + .viewer-switch-btn { border-left: 0; }
+.viewer-switch-btn[aria-pressed='true'] { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+.viewer-bones {
+  position: absolute;
+  left: 8px;
+  top: 64px; /* under the switch row, clear of the legs */
+  z-index: 2;
+  display: grid;
+  gap: 2px;
+  max-width: calc(100% - 16px);
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  border: 1px solid var(--border);
+  font-size: 14px;
+}
+.viewer-bones-title { color: var(--accent-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.viewer-bones-row { white-space: nowrap; }
+.viewer-bones-row strong { font-variant-numeric: tabular-nums; }
+.viewer-bones-note { color: var(--dim); font-size: 13px; }
