@@ -233,6 +233,14 @@ describe('HomeScreen: Polish', () => {
   });
 });
 
+describe('HomeScreen: profile link', () => {
+  it('the photo opens the profile of the viewed person (there is no person tab)', () => {
+    const { props } = renderHome();
+    fireEvent.click(screen.getByRole('button', { name: 'Open the profile of Grażyna Brzęczyszczykiewicz' }));
+    expect(props.navigate).toHaveBeenLastCalledWith('profile', { viewedCode: 'HAB-C4' });
+  });
+});
+
 describe('HomeScreen: no duplicated sol', () => {
   it('shows only the name above the figure: no sol, status tag or data badge', () => {
     renderHome();

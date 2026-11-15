@@ -296,11 +296,17 @@ export default function HomeScreen({ mother, session, viewedCode, navigate, prof
                 </span>
               ) : null}
             </span>
-            <span className="home-photo" data-testid="home-photo">
+            <button
+              type="button"
+              className="home-photo"
+              data-testid="home-photo"
+              aria-label={t('home.openProfile', { name: fullName })}
+              onClick={() => navigate?.('profile', { viewedCode })}
+            >
               {photo
-                ? <img src={photo} alt={fullName} draggable="false" />
+                ? <img src={photo} alt="" draggable="false" />
                 : <Avatar code={viewedCode} size={96} title={fullName} />}
-            </span>
+            </button>
           </header>
           <div className="home-body">
             <div

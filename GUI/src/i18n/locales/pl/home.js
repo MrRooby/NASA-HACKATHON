@@ -86,4 +86,5 @@ export default {
   historyOffline: 'Historia wymaga połączenia z MOTHER.',
   historyError: 'MOTHER nie zwrócił historii.',
   bodySize: '{h} cm · {m} kg',
+  openProfile: 'Otwórz profil: {name}',
 };
