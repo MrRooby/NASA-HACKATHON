@@ -75,7 +75,7 @@ describe('TestsScreen', () => {
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
     expect(requestedPaths(fetchMock)).not.toContain('/api/cognitive/HAB-C1');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Back to my tests' }));
+    fireEvent.click(screen.getByRole('button', { name: 'My tests' }));
     expect(setViewedCode).toHaveBeenCalledWith('HAB-C1');
     expect(navigate).toHaveBeenCalledWith('tests');
   });
@@ -85,9 +85,18 @@ describe('TestsScreen', () => {
     const { setChromeHidden, unmount } = renderTests({ session: 'HAB-C1' });
     fireEvent.click(await screen.findByRole('button', { name: /quick test/i }));
     expect(screen.getByRole('heading', { name: /before you start/i })).toBeInTheDocument();
-    for (const [label, value] of [['Hours of sleep last night', '7.5'], ['Sleep quality', '7'], ['Fatigue now', '3'], ['Sleepiness (KSS)', '3'], ['Stress now', '2']]) {
-      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    // the survey is answered with big touch buttons
+    expect(screen.getByRole('button', { name: 'CONTINUE' })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: 'Hours of sleep last night +0.5' })); // first tap: 7 h
+    fireEvent.click(screen.getByRole('button', { name: 'Hours of sleep last night +0.5' }));
+    expect(screen.getByLabelText('Hours of sleep last night')).toHaveValue('7.5');
+    for (const [label, value] of [['Sleep quality', 7], ['Fatigue now', 3], ['Sleepiness (KSS)', 3], ['Stress now', 2]]) {
+      const btn = screen.getByRole('button', { name: `${label}: ${value}` });
+      fireEvent.click(btn);
+      expect(btn).toHaveAttribute('aria-pressed', 'true');
     }
+    fireEvent.click(screen.getByText('YES'));
+    expect(screen.getByRole('radio', { name: 'YES' })).toBeChecked();
     fireEvent.click(screen.getByRole('button', { name: 'CONTINUE' }));
     // screen check: 120 animation frames
     expect(await screen.findByRole('heading', { name: /screen check/i }, { timeout: 8000 })).toBeInTheDocument();
@@ -109,5 +118,10 @@ describe('TestsScreen', () => {
     expect(screen.getByTestId('read-only-banner')).toHaveTextContent('PODGLĄD: BOGUSŁAWA GRZEGRZUŁKIEWICZ — TYLKO DO ODCZYTU');
     expect(await screen.findByRole('heading', { level: 1, name: 'Testy kognitywne' })).toBeInTheDocument();
     await waitFor(() => expect(screen.getByTestId('tile-dsst')).toHaveTextContent('BUDOWANIE POZIOMU BAZOWEGO'));
+    expect(screen.getByTestId('tile-dsst')).toHaveTextContent('Tempo przetwarzania');
+    expect(screen.queryByRole('button', { name: /szybki test/i })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('tile-gonogo'));
+    expect(screen.getByRole('dialog')).toHaveTextContent('Jak to działa');
+    expect(screen.getByRole('dialog')).toHaveTextContent('Kwadrat: nic nie rób.');
   });
 });

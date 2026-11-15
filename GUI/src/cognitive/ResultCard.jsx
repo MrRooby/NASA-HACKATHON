@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, DataRow, Panel, StatusTag } from '../components/index.js';
+import { useT } from '../i18n/index.js';
 import { DISCLAIMER, PROTOCOLS } from './engine/protocols.js';
 import { metricLines } from './session.js';
 
@@ -7,6 +8,7 @@ const TONES = ['ok', 'caution', 'alert'];
 
 /** Result of one test: status as [ OK ] / [ CAUT ] / [ ALRT ] / [ ---- ] AND text, key metrics, disclaimer. */
 export default function ResultCard({ test, scored, assessment, saveState, hasNext, onNext, onRepeat, saveMessages = null }) {
+  const t = useT();
   const saveText = {
     sent: 'Saved to MOTHER.',
     queued: 'Saved on this device. It will be sent when MOTHER is reachable.',
@@ -18,15 +20,15 @@ export default function ResultCard({ test, scored, assessment, saveState, hasNex
       <p className={`cog-status cog-status-${assessment.status}`} data-status={assessment.status}>
         <StatusTag status={assessment.status} /> {assessment.text}
       </p>
-      <div className="cog-rows">
+      <div className="cog-rows cog-rows-big">
         {metricLines(test, scored.metrics).map(([k, v]) => <DataRow key={k} label={k} value={v} />)}
       </div>
       <p className="cog-muted">{assessment.note}</p>
       {saveText && <p className="cog-muted" data-testid="save-state">{saveText}</p>}
       <p className="cog-disclaimer">{DISCLAIMER}</p>
-      <div className="cog-actions">
-        {assessment.repeat && onRepeat && <Button className="cog-btn" onClick={onRepeat}>REPEAT TEST</Button>}
-        <Button variant="primary" className="cog-btn" onClick={onNext}>{hasNext ? 'NEXT TEST' : 'FINISH'}</Button>
+      <div className="cog-actions cog-actions-big">
+        {assessment.repeat && onRepeat && <Button className="cog-btn cog-btn-big" onClick={onRepeat}>{t('tests.repeat')}</Button>}
+        <Button variant="primary" className="cog-btn cog-btn-big" onClick={onNext}>{hasNext ? t('tests.nextTest') : t('tests.finish')}</Button>
       </div>
     </Panel>
   );

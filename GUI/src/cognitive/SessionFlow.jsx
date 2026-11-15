@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Button, Panel } from '../components/index.js';
+import { useT } from '../i18n/index.js';
+import NavIcon from '../navIcons.jsx';
 import Calibration from './Calibration.jsx';
 import ResultCard from './ResultCard.jsx';
 import Survey from './Survey.jsx';
@@ -14,26 +16,9 @@ import GoNoGoTask from './tests/gonogo/GoNoGoTask.jsx';
 import PvtTask from './tests/pvt/PvtTask.jsx';
 
 const TASKS = { pvt: PvtTask, gonogo: GoNoGoTask, dsst: DsstTask };
+const TEST_ICON = { pvt: 'gauge', gonogo: 'boxChecked', dsst: 'tests' };
 
-const INSTRUCTIONS = {
-  pvt: [
-    'A red counter will appear at random moments.',
-    'As soon as it appears, press Space (or tap the field) as fast as you can.',
-    'Do not press before it appears. The test lasts 3 minutes.',
-  ],
-  gonogo: [
-    'Shapes appear one at a time in the middle of the screen.',
-    'When you see a circle, press Space (or tap) as fast as you can.',
-    'When you see a square, do nothing.',
-  ],
-  dsst: [
-    'Each symbol has a digit. The key is always shown at the top.',
-    'Press the digit that matches the symbol you see (keyboard 1-9, numpad, or the on-screen keypad).',
-    'Answer as fast and as accurately as you can. The test lasts 90 seconds.',
-  ],
-};
-
-const PRACTICE_NOTE = { pvt: '3 practice trials', gonogo: '10 practice trials', dsst: '9 practice trials' };
+// Instructions and practice notes: i18n keys tests.how_<test>_1..3 and tests.practice (also shown in the tile details).
 
 /**
  * `sink` decides where a finished session goes (default: MOTHER via apiSink). `demo` runs shortened protocols and marks
@@ -42,6 +27,7 @@ const PRACTICE_NOTE = { pvt: '3 practice trials', gonogo: '10 practice trials', 
  * survey -> calibrate -> per test: instructions -> practice -> ready -> test -> result.
  */
 export default function SessionFlow({ subject, mission = null, mode = 'quick', tiles = null, sink = apiSink, demo = false, resultExtra = null, onExit, onRunningChange, onSaved }) {
+  const t = useT();
   const tileOf = id => (tiles || []).find(t => t.test_id === id) || null;
   const order = useMemo(() => {
     const pvtNo = tileOf('pvt')?.next?.session_no ?? localSessionNo(subject, 'pvt');
@@ -129,9 +115,9 @@ export default function SessionFlow({ subject, mission = null, mode = 'quick', t
   if (lock === 'checking') return null;
   if (lock === 'busy') {
     return (
-      <Panel className="cog-card" tone="caution" title="A test is already running in another window" role="alert">
-        <p className="cog-muted">Close it or wait for it to finish, then try again.</p>
-        <div className="cog-actions"><Button className="cog-btn" onClick={() => onExit?.()}>BACK</Button></div>
+      <Panel className="cog-card" tone="caution" title={t('tests.busyTitle')} role="alert">
+        <p className="cog-lead">{t('tests.busyText')}</p>
+        <div className="cog-actions cog-actions-big"><Button className="cog-btn cog-btn-big" onClick={() => onExit?.()}>{t('tests.back')}</Button></div>
       </Panel>
     );
   }
@@ -142,15 +128,18 @@ export default function SessionFlow({ subject, mission = null, mode = 'quick', t
   const Task = TASKS[test];
   const overrides = demo ? DEMO_OVERRIDES[test] : null; // applied to the scored run only, never to practice
   const label = PROTOCOLS[test].label;
-  const step = order.length > 1 ? ` (${pos + 1} of ${order.length})` : '';
+  const step = order.length > 1 ? ` (${t('tests.stepOf', { n: pos + 1, total: order.length })})` : '';
 
   if (stage === 'instructions') {
     return (
-      <Panel className="cog-card" title={`${label}${step}`}>
-        <ul className="cog-steps">{INSTRUCTIONS[test].map(s => <li key={s}>{s}</li>)}</ul>
-        {demo && <p className="cog-warn" data-testid="demo-note">DEMO: shortened test, never counted in your baseline.</p>}
-        <p className="cog-muted">First: {PRACTICE_NOTE[test]} with feedback. They are not scored.</p>
-        <div className="cog-actions"><Button variant="primary" className="cog-btn" onClick={() => setStage('practice')}>START PRACTICE</Button></div>
+      <Panel className="cog-card cog-instr" title={`${label}${step}`}>
+        <div className="cog-instr-body">
+          <NavIcon name={TEST_ICON[test]} className="cog-instr-icon" />
+          <ol className="cog-big-steps">{[1, 2, 3].map(i => <li key={i}>{t(`tests.how_${test}_${i}`)}</li>)}</ol>
+        </div>
+        {demo && <p className="cog-warn" data-testid="demo-note">{t('tests.demoNote')}</p>}
+        <p className="cog-lead cog-dim">{t('tests.practice', { n: PROTOCOLS[test].practice_trials })}</p>
+        <div className="cog-actions cog-actions-big"><Button variant="primary" className="cog-btn cog-btn-big" onClick={() => setStage('practice')}>{t('tests.startPractice')}</Button></div>
       </Panel>
     );
   }
@@ -165,9 +154,9 @@ export default function SessionFlow({ subject, mission = null, mode = 'quick', t
   }
   if (stage === 'ready') {
     return (
-      <Panel className="cog-card" title="Practice finished">
-        <p className="cog-muted">The real test starts now and is scored. Keep this window in front.</p>
-        <div className="cog-actions"><Button variant="primary" className="cog-btn" autoFocus onClick={() => { startedAt.current = Date.now(); setStage('run'); }}>START TEST</Button></div>
+      <Panel className="cog-card" title={t('tests.readyTitle')}>
+        <p className="cog-lead">{t('tests.readyText')}</p>
+        <div className="cog-actions cog-actions-big"><Button variant="primary" className="cog-btn cog-btn-big" autoFocus onClick={() => { startedAt.current = Date.now(); setStage('run'); }}>{t('tests.startTest')}</Button></div>
       </Panel>
     );
   }
@@ -180,7 +169,7 @@ export default function SessionFlow({ subject, mission = null, mode = 'quick', t
         onComplete={res => finalize(res, false)} />
     );
   }
-  if (stage === 'saving') return <Panel className="cog-card" title="Saving..." role="status"><p className="cog-muted">Please wait<span className="cursor" /></p></Panel>;
+  if (stage === 'saving') return <Panel className="cog-card" title={t('tests.saving')} role="status"><p className="cog-lead">{t('tests.wait')}<span className="cursor" /></p></Panel>;
   if (stage === 'result' && outcome) {
     return (
       <>

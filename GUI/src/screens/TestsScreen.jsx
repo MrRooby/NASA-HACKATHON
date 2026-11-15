@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { Button, Panel } from '../components/index.js';
+import { Panel } from '../components/index.js';
+import NavIcon from '../navIcons.jsx';
 import { useT } from '../i18n/index.js';
 import './tests.css';
 
@@ -31,7 +32,10 @@ export default function TestsScreen({ mother, session, viewedCode, setViewedCode
         <div className="tests-readonly" role="status" data-testid="read-only-banner">
           <span className="tests-readonly-text">{t('tests.readOnly', { name: String(name).toUpperCase() })}</span>
           <span className="tests-readonly-hint">{t('tests.readOnlyHint')}</span>
-          <Button onClick={backToOwn}>{t('tests.backToOwn')}</Button>
+          <button type="button" className="tests-back" onClick={backToOwn}>
+            <NavIcon name="prev" className="tests-back-icon" />
+            <span>{t('tests.backToOwn')}</span>
+          </button>
         </div>
       ) : null}
 

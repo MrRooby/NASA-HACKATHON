@@ -1,14 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getSubjects, isOfflineError } from '../api.js';
-import { Button } from '../components/index.js';
+import DataDialog from '../home/DataDialog.jsx';
+import NavIcon from '../navIcons.jsx';
 import { useT } from '../i18n/index.js';
 import SessionFlow from './SessionFlow.jsx';
 import { getCognitive } from './engine/api.js';
 import { DISCLAIMER, TEST_ORDER } from './engine/protocols.js';
-import { Tile, TrendSpark, emptyTile } from './Tiles.jsx';
+import { BigTile, TEST_ICONS, TileDetail, TrendSpark, emptyTile } from './Tiles.jsx';
 import { pendingCount, startAutoFlush, subscribe } from './engine/queue.js';
 import { fmt } from './session.js';
 import './cognitive.css';
+
+const STATUSES = ['ok', 'caution', 'alert', 'no_data'];
+const safeStatus = status => (STATUSES.includes(status) ? status : 'no_data');
 
 const SUBJECT_KEY = 'cognitive.subject';
 // standalone local-only page (GUI/cognitive.html); BASE_URL keeps it working when the app is served from a sub-path
@@ -57,6 +61,10 @@ export default function CognitivePage({ mother = null, onRunningChange, fixedCod
   const [queued, setQueued] = useState(() => pendingCount());
   const [flow, setFlow] = useState(null); // { mode }
   const [reloadTick, setReloadTick] = useState(0);
+  const [open, setOpen] = useState(null); // test id whose details are shown
+  const [about, setAbout] = useState(false);
+  const closeTile = useCallback(() => setOpen(null), []);
+  const closeAbout = useCallback(() => setAbout(false), []);
 
   // Subject: remembered choice, else the app's current person, else the first one.
   useEffect(() => {
@@ -108,15 +116,12 @@ export default function CognitivePage({ mother = null, onRunningChange, fixedCod
     );
   }
 
-  const synthetic = (data?.subject?.data_kind || subject?.data_kind) === 'synthetic' || subject?.synthetic === true;
+  const openTile = open ? tiles.find(item => item.test_id === open) : null;
 
   return (
     <div className="cog-page" data-readonly={readOnly ? 'true' : 'false'}>
       <header className="cog-head">
-        <div>
-          <p className="cog-eyebrow">{t('tests.eyebrow')}</p>
-          <h1>{t('tests.title')}</h1>
-        </div>
+        <h1>{t('tests.title')}</h1>
         {fixedCode
           ? (
             <p className="cog-select" data-testid="cog-person">
@@ -136,6 +141,10 @@ export default function CognitivePage({ mother = null, onRunningChange, fixedCod
                 : <input value={code} onChange={e => choose(e.target.value.trim())} placeholder={t('tests.personPlaceholder')} aria-label={t('tests.personCode')} />}
             </label>
           )}
+        <button type="button" className="cog-about-btn" onClick={() => setAbout(true)} data-testid="about-open">
+          <NavIcon name="checkin" className="cog-about-icon" />
+          <span>{t('tests.about')}</span>
+        </button>
       </header>
 
       {offline && (
@@ -149,26 +158,55 @@ export default function CognitivePage({ mother = null, onRunningChange, fixedCod
         </p>
       )}
       {error && <p className="cog-banner cog-banner-offline" role="alert">{error.status === 404 ? t('tests.noData') : error.message}</p>}
-      {synthetic && <p className="cog-banner cog-banner-synth" data-testid="synthetic-label">{t('tests.synthetic')}</p>}
 
-      {!readOnly && (
-        <div className="cog-actions">
-          <Button variant="primary" className="cog-btn" disabled={!code} onClick={() => setFlow({ mode: 'quick' })}>{t('tests.quick')}</Button>
-          <Button className="cog-btn" disabled={!code} onClick={() => setFlow({ mode: 'full' })}>{t('tests.full')}</Button>
-        </div>
-      )}
-      <p className="cog-muted cog-self-link">
-        {t('tests.selfIntro')}{' '}
-        <a href={SELF_TEST_URL} target="_blank" rel="noopener" data-testid="self-test-link">{t('tests.selfLink')}</a>
-        {' '}{t('tests.selfNote')}
-      </p>
-
-      <div className="cog-tiles">
-        {tiles.map(item => <Tile key={item.test_id} tile={item} />)}
+      <div className="cog-bigtiles">
+        {tiles.map(item => <BigTile key={item.test_id} tile={item} onOpen={setOpen} />)}
       </div>
 
-      {data?.composite_z != null && <p className="cog-muted">{t('tests.compositeZ', { z: fmt(data.composite_z, 2) })}</p>}
+      {!readOnly && (
+        <div className="cog-starts">
+          <button type="button" className="cog-start cog-start-primary" disabled={!code} onClick={() => setFlow({ mode: 'quick' })}>
+            <NavIcon name="gauge" className="cog-start-icon" />
+            <span className="cog-start-text">
+              <span className="cog-start-label">{t('tests.quick')}</span>
+              <span className="cog-start-time">{t('tests.quickTime')}</span>
+            </span>
+          </button>
+          <button type="button" className="cog-start" disabled={!code} onClick={() => setFlow({ mode: 'full' })}>
+            <NavIcon name="tests" className="cog-start-icon" />
+            <span className="cog-start-text">
+              <span className="cog-start-label">{t('tests.full')}</span>
+              <span className="cog-start-time">{t('tests.fullTime')}</span>
+            </span>
+          </button>
+        </div>
+      )}
+
       <p className="cog-disclaimer">{data?.disclaimer || DISCLAIMER}</p>
+
+      {openTile && (
+        <DataDialog title={`${t(`tests.name_${openTile.test_id}`)} · ${t(`tests.what_${openTile.test_id}`)}`} status={safeStatus(openTile.status)}
+          icon={TEST_ICONS[openTile.test_id]} onClose={closeTile}>
+          <TileDetail tile={openTile} />
+        </DataDialog>
+      )}
+      {about && (
+        <DataDialog title={t('tests.aboutTitle')} icon="checkin" onClose={closeAbout}>
+          <div className="cog-about" data-testid="about-dialog">
+            <ul className="cog-steps">
+              <li>{t('tests.about1')}</li>
+              <li>{t('tests.about2')}</li>
+              <li>{t('tests.about3')}</li>
+            </ul>
+            {data?.composite_z != null && <p className="cog-about-line">{t('tests.compositeZ', { z: fmt(data.composite_z, 2) })}</p>}
+            <p className="cog-about-line cog-self-link">
+              {t('tests.selfIntro')}{' '}
+              <a href={SELF_TEST_URL} target="_blank" rel="noopener" data-testid="self-test-link">{t('tests.selfLink')}</a>
+              {' '}{t('tests.selfNote')}
+            </p>
+          </div>
+        </DataDialog>
+      )}
     </div>
   );
 }

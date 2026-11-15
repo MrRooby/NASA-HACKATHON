@@ -35,29 +35,41 @@ const route = url => {
 };
 
 describe('CognitivePage', () => {
-  it('renders the three tiles with status, headline, baseline n/3 and the synthetic label', async () => {
+  it('renders three big tiles (status, last result, baseline) and opens the details of one in a dialog', async () => {
     const fetchMock = stubMother(route);
     render(<CognitivePage />);
     const pvt = await screen.findByTestId('tile-pvt');
-    await waitFor(() => expect(pvt).toHaveTextContent('Building your baseline (2/3)'));
+    await waitFor(() => expect(pvt).toHaveTextContent('BUILDING BASELINE 2/3'));
     expect(pvt).toHaveAttribute('data-status', 'no_data');
-    expect(pvt).toHaveTextContent('Baseline 2/3');
-    expect(within(pvt).getByText(/BUILDING BASELINE/)).toBeInTheDocument();
+    expect(pvt).toHaveTextContent('PVT');
     const gng = screen.getByTestId('tile-gonogo');
     expect(gng).toHaveAttribute('data-status', 'caution');
     expect(gng).toHaveAttribute('data-tone', 'caution');
     expect(gng).toHaveTextContent('[ CAUT ]');
-    expect(gng).toHaveTextContent('18 %');
-    expect(gng.querySelector('svg.cog-spark.cog-spark-caution polyline')).not.toBeNull();
+    expect(gng).toHaveTextContent('18%');
+    expect(gng).toHaveTextContent('Commission errors 18 %.');
     expect(screen.getByTestId('tile-dsst')).toHaveAttribute('data-status', 'alert');
     expect(screen.getByTestId('tile-dsst')).toHaveTextContent('[ ALRT ]');
     expect(pvt).toHaveTextContent('[ ---- ]');
-    expect(screen.getByTestId('synthetic-label')).toBeInTheDocument();
+    expect(screen.queryByTestId('synthetic-label')).not.toBeInTheDocument();
+    expect(screen.queryByText(/synthetic/i)).not.toBeInTheDocument();
     expect(screen.getByText(/not a diagnosis/i)).toBeInTheDocument();
     expect(screen.queryByText(/not reachable/i)).not.toBeInTheDocument();
     expect(requestedPaths(fetchMock)).toEqual(expect.arrayContaining(['/api/subjects', '/api/cognitive/SYN-01']));
     expect(screen.getByRole('button', { name: /quick test/i })).toBeEnabled();
     expect(screen.getByRole('button', { name: /full battery/i })).toBeEnabled();
+
+    // details: how it works, baseline and trend in a dialog with a big X
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    fireEvent.click(gng);
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveTextContent('How it works');
+    expect(dialog).toHaveTextContent('Square: do nothing.');
+    expect(dialog).toHaveTextContent('Baseline4/3 (ready)');
+    expect(dialog.querySelector('svg.cog-spark.cog-spark-caution polyline')).not.toBeNull();
+    expect(within(dialog).getByText('[ CAUT ]')).toBeInTheDocument();
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Close' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('remembers the chosen person and shows empty tiles for one without data (404)', async () => {
@@ -83,7 +95,7 @@ describe('CognitivePage', () => {
     enqueue({ client_session_uuid: 'pending-1', test_id: 'pvt', trials: [] });
     window.localStorage.setItem('cognitive.subject', 'SYN-01'); // default fetch mock rejects every call
     render(<CognitivePage />);
-    expect(await screen.findByText(/MOTHER is not reachable/i)).toBeInTheDocument();
+    expect(await screen.findByText(/MOTHER offline/i)).toBeInTheDocument();
     expect(screen.getByTestId('queued-banner')).toHaveTextContent('1 result is waiting to be sent');
     expect(screen.getByTestId('tile-dsst')).toHaveAttribute('data-status', 'no_data');
     resetQueueMemory();
@@ -101,7 +113,7 @@ describe('CognitivePage with a fixed person', () => {
     window.localStorage.setItem('cognitive.subject', 'SYN-02');
     const fetchMock = stubMother(route);
     render(<CognitivePage fixedCode="SYN-01" personName="Ada" mother={{ subjects: SUBJECTS, selectedCode: 'SYN-02' }} />);
-    await waitFor(() => expect(screen.getByTestId('tile-pvt')).toHaveTextContent('Building your baseline (2/3)'));
+    await waitFor(() => expect(screen.getByTestId('tile-pvt')).toHaveTextContent('BUILDING BASELINE 2/3'));
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
     expect(screen.getByTestId('cog-person')).toHaveTextContent('Ada · SYN-01');
     expect(requestedPaths(fetchMock)).not.toContain('/api/cognitive/SYN-02');
@@ -119,10 +131,13 @@ describe('CognitivePage with a fixed person', () => {
 });
 
 describe('CognitivePage self-test link', () => {
-  it('links to the standalone local-only self-test page in a new tab', async () => {
+  it('links to the standalone local-only self-test page in a new tab (inside the ABOUT dialog)', async () => {
     stubMother(route);
     render(<CognitivePage />);
-    const link = await screen.findByTestId('self-test-link');
+    expect(screen.queryByTestId('self-test-link')).not.toBeInTheDocument();
+    fireEvent.click(await screen.findByRole('button', { name: /about/i }));
+    expect(screen.getByRole('dialog')).toHaveTextContent('own baseline');
+    const link = screen.getByTestId('self-test-link');
     expect(link).toHaveAttribute('href', '/cognitive.html');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link.closest('p')).toHaveTextContent(/only in your browser/i);
