@@ -2,8 +2,8 @@
  "generator": "cognitive_synthetic_v1",
  "mission_code": "SYN-MARS-HAB-600",
  "mission_start_date": "2039-01-01",
- "n_sessions": 1086,
- "n_trials": 90488,
+ "n_sessions": 1810,
+ "n_trials": 151135,
  "note": "SYNTHETIC data, not real astronaut measurements.",
  "protocols": {
   "dsst": "dsst-1.0",
@@ -209,6 +209,10 @@
  "seed": 42,
  "source_id": "synthetic_v1",
  "subjects": [
+  "SYN-01",
+  "SYN-02",
+  "SYN-03",
+  "SYN-04",
   "SYN-05",
   "SYN-06",
   "SYN-07",

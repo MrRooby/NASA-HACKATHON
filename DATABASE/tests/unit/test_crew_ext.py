@@ -104,11 +104,13 @@ def test_medical_original_events_unchanged(tmp_path):
     assert sorted(e["crew_code"] for e in added) == sorted(f"C{n}" for n in range(5, 11))
 
 
-def test_cognitive_mars_dataset_covers_added_crew():
+def test_cognitive_mars_dataset_covers_whole_crew():
     cog = load_script(SYN_DIR / "cognitive_generate.py")
     cfg = cog.dataset_config("mars", 42)
     sessions, _ = cog.build(42, cfg)
-    assert {s["subject_code"] for s in sessions} == {f"SYN-{n:02d}" for n in range(5, 11)}
+    assert {s["subject_code"] for s in sessions} == {f"SYN-{n:02d}" for n in range(1, 11)}
+    iss_sessions, _ = cog.build(42, cog.dataset_config("iss", 42))
+    assert not {s["session_uuid"] for s in sessions} & {s["session_uuid"] for s in iss_sessions}   # no UUID clash
     assert {s["mission_code"] for s in sessions} == {"SYN-MARS-HAB-600"}
     assert cfg["degraded"] in {s["subject_code"] for s in sessions}
     iss = cog.dataset_config("iss", 42)

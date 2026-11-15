@@ -49,9 +49,10 @@ DEGRADE_START, DEGRADE_FULL = 90, 120          # mission days: ramp of the SYN-0
 APP_VERSION = "0.2.0-synthetic"
 TESTS = ("pvt", "gonogo", "dsst")
 BASELINE_DAYS = [-14, -10, -7, -3]             # session 1 = practice, sessions 2-4 = baseline
-# --dataset mars: the added crew C5..C10 (SYN-05..SYN-10) in SYN-MARS-HAB-600; day = sol (88775.244 s), sol 1 starts
+# --dataset mars: the whole 10-person crew (SYN-01..SYN-10) in SYN-MARS-HAB-600; day = sol (88775.244 s), sol 1 starts
 # at 2039-01-01 00:00 UTC (habitat.sol_epoch_utc). One added person, drawn from the seed, degrades over sols 300-360.
-# The default dataset (iss, SYN-01..SYN-04) is unchanged.
+# SYN-01..04 keep their person parameters from the ISS data set but get own session streams and UUIDs (salted with
+# the mission), so their Mars sessions neither repeat nor collide with the ISS ones. The default dataset (iss) is unchanged.
 MARS_MISSION_CODE = "SYN-MARS-HAB-600"
 MARS_EPOCH = dt.datetime(2039, 1, 1)
 MARS_SOL_S = 88775.244
@@ -100,7 +101,7 @@ def dataset_config(name: str, seed: int) -> dict:
                     degraded=DEGRADED_SUBJECT, degrade_start=DEGRADE_START, degrade_full=DEGRADE_FULL, mars=False)
     degraded = random.Random(stream_seed(seed, "MARS", "cognitive_degraded")).choice(NEW_SUBJECT_CODES)
     return dict(mission=MARS_MISSION_CODE, start=MARS_EPOCH.date().isoformat(), duration=MARS_DURATION,
-                subjects=NEW_SUBJECT_CODES, degraded=degraded, degrade_start=MARS_DEGRADE_START,
+                subjects=SUBJECTS + NEW_SUBJECT_CODES, degraded=degraded, degrade_start=MARS_DEGRADE_START,
                 degrade_full=MARS_DEGRADE_FULL, mars=True)
 
 
@@ -280,11 +281,12 @@ def build(seed: int, cfg=None):
         for test in TESTS:
             for session_no, day in enumerate(schedule(test, cfg["duration"]), start=1):
                 deg = degradation(subject, day, cfg)
-                rng = random.Random(f"{seed}|{subject}|{test}|{session_no}")
+                salt = f"|{cfg['mission']}" if cfg["mars"] and subject in SUBJECTS else ""
+                rng = random.Random(f"{seed}|{subject}|{test}|{session_no}{salt}")
                 sset = stimulus_set(session_no)
                 trials = GENERATORS[test](rng, person, session_no, deg)
                 key = f"{subject}|{test}|{sset}|{session_no}"
-                suid = str(uuid.uuid5(uuid.NAMESPACE_URL, f"awernasa-cognitive:{seed}:{key}"))
+                suid = str(uuid.uuid5(uuid.NAMESPACE_URL, f"awernasa-cognitive:{seed}:{key}{salt}"))
                 if cfg["mars"]:                                  # 08:mm local sol time of that sol
                     start = MARS_EPOCH + dt.timedelta(seconds=(day - 1 + 8 / 24) * MARS_SOL_S) + dt.timedelta(
                         minutes=person["minute"] % 60, seconds=rng.randrange(0, 60), microseconds=rng.randrange(0, 1000) * 1000)
