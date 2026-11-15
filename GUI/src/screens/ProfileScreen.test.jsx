@@ -25,14 +25,14 @@ describe('ProfileScreen: crew file', () => {
     await renderProfile({ session: 'HAB-C2' });
     const file = panel('Crew file');
     expect(within(file).getByRole('heading', { level: 1, name: 'Bogusława Grzegrzułkiewicz' })).toBeInTheDocument();
-    expect(within(file).getByText(/ŚRUBA/)).toBeInTheDocument();
+    expect(within(file).queryByText(/ŚRUBA/)).not.toBeInTheDocument(); // badges and callsigns removed
     expect(within(file).getByText('Systems engineer')).toBeInTheDocument();
     expect(within(file).getByText('Age').nextElementSibling).toHaveTextContent('39');
     expect(within(file).getByText('Nationality').nextElementSibling).toHaveTextContent('PL · Poland');
     expect(within(file).getByText('Education').nextElementSibling).toHaveTextContent(/AGH University of Krakow/);
     expect(within(file).getByText('Home module').nextElementSibling).toHaveTextContent('Habitation module M1');
     expect(within(file).getByText('HAB-C2')).toBeInTheDocument();
-    expect(within(file).getByText('FICTIONAL')).toBeInTheDocument();
+    expect(within(file).queryByText('FICTIONAL')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(within(file).getByRole('img', { name: 'Avatar of Bogusława Grzegrzułkiewicz' })).toHaveAttribute('data-code', 'C2');
   });
 
@@ -43,7 +43,7 @@ describe('ProfileScreen: crew file', () => {
     expect(within(status).getByText('[ CAUT ]')).toBeInTheDocument();
     expect(within(status).getByText('Stone risk: urine volume 1.73 L/d (< 2.5).')).toBeInTheDocument();
     expect(within(status).getByText('SOL 600')).toBeInTheDocument();
-    expect(within(status).getByText('SYNTHETIC')).toBeInTheDocument();
+    expect(within(status).queryByText('SYNTHETIC')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(panel('Crew file')).toHaveAttribute('data-tone', 'caution');
   });
 
@@ -66,7 +66,7 @@ describe('ProfileScreen: crew file', () => {
     const status = screen.getByTestId('profile-status');
     expect(status).toHaveAttribute('data-status', demo.overall_status);
     expect(within(status).getByText(demo.top_message)).toBeInTheDocument();
-    expect(within(status).getByText('DEMO')).toBeInTheDocument();
+    expect(within(status).queryByText('DEMO')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(within(status).getByText(`SOL ${demo.as_of.sol}`)).toBeInTheDocument();
   });
 
@@ -95,7 +95,7 @@ describe('ProfileScreen: skeleton panels', () => {
   it('marks the notes panel as not connected and keeps its controls disabled', async () => {
     await renderProfile({ session: 'HAB-C2' });
     const notes = panel('Notes / diary');
-    expect(within(notes).getByTestId('notes-todo')).toHaveTextContent('Not connected · TODO');
+    expect(within(notes).queryByTestId('notes-todo')).toBeNull();
     expect(within(notes).getByLabelText('New entry')).toBeDisabled();
     expect(within(notes).getByRole('button', { name: 'Save entry' })).toBeDisabled();
     expect(within(notes).getByText('No entries')).toBeInTheDocument();
@@ -105,7 +105,7 @@ describe('ProfileScreen: skeleton panels', () => {
   it('marks the questionnaires as not connected: only the PVT can be started', async () => {
     await renderProfile({ session: 'HAB-C2' });
     const tests = panel('Psychological tests');
-    expect(within(tests).getByTestId('tests-todo')).toHaveTextContent('Not connected · TODO');
+    expect(within(tests).queryByTestId('tests-todo')).toBeNull();
     const start = within(tests).getAllByRole('button', { name: /^Start/ });
     expect(start).toHaveLength(PSYCH_TEST_CATALOG.length);
     start.forEach((button, index) => {
@@ -193,7 +193,7 @@ describe('ProfileScreen: own profile (check-in and flight-surgeon report)', () =
   it('has the daily check-in and the report panel', async () => {
     await renderProfile({ session: 'HAB-C2' });
     expect(within(panel('Daily check-in')).getByLabelText('Systolic pressure')).toHaveValue(128);
-    expect(within(panel('Daily check-in')).getByText('SIMULATED')).toBeInTheDocument();
+    expect(within(panel('Daily check-in')).queryByText('SIMULATED')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(panel('Flight surgeon report')).toBeInTheDocument();
     expect(screen.queryByText(/read only/i)).not.toBeInTheDocument();
   });

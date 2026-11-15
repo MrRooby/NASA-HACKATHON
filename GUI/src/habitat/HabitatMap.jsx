@@ -175,7 +175,6 @@ export default function HabitatMap({ rooms, selectedId = null, onSelect, classNa
               <RoomLabel
                 def={def}
                 text={t(def.mapLabelKey || def.labelKey)}
-                simulatedText={simulated ? t('base.simulated') : null}
               />
               <CrewMarkers def={def} occupants={occupants} />
               <SubZoneMarks def={def} subZones={state.subZones || []} t={t} />

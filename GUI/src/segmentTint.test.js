@@ -1,70 +1,89 @@
 import { describe, expect, it } from 'vitest';
-import { Color, Group, Mesh, MeshStandardMaterial } from 'three';
-import { HOVER_COLOR, STATUS_COLORS, applySegmentTint, baseColors, clearSegmentTint, setColors, setHighlight } from './segmentTint.js';
+import { BoxGeometry, Color, Group, Mesh, MeshStandardMaterial } from 'three';
+import { HOVER_COLOR, STATUS_COLORS, paintSegments, segmentColor } from './segmentTint.js';
+import { prepareBody } from './bodyShading.js';
 
-function model() {
+// Two boxes touching at z = 0 stand in for two body segments of the GLB.
+function model(names = ['left_thigh', 'left_lower_leg']) {
   const scene = new Group();
-  for (const [name, color] of [['head', '#b8d6e0'], ['neck', '#aecdd8'], ['left_thigh', '#7eb8ca']]) {
-    const mesh = new Mesh(undefined, new MeshStandardMaterial({ color }));
+  names.forEach((name, i) => {
+    const geometry = new BoxGeometry(0.2, 0.2, 0.5, 2, 2, 8).translate(0, 0, i === 0 ? 0.25 : -0.25);
+    const mesh = new Mesh(geometry, new MeshStandardMaterial({ color: i === 0 ? '#7eb8ca' : '#5484a0' }));
     mesh.name = name;
     scene.add(mesh);
-  }
+  });
   return scene;
 }
-const byName = (scene, name) => scene.getObjectByName(name);
-const hex = (scene, name) => byName(scene, name).material.color.getHexString();
+const colorAt = (mesh, i) => new Color(...mesh.geometry.attributes.color.array.slice(i * 3, i * 3 + 3));
+const vertexFarFromSeam = mesh => {
+  const pos = mesh.geometry.attributes.position;
+  let best = 0;
+  for (let i = 0; i < pos.count; i += 1) if (Math.abs(pos.getZ(i)) > Math.abs(pos.getZ(best))) best = i;
+  return best;
+};
+const vertexOnSeam = mesh => {
+  const pos = mesh.geometry.attributes.position;
+  for (let i = 0; i < pos.count; i += 1) if (Math.abs(pos.getZ(i)) < 1e-6) return i;
+  return -1;
+};
+const close = (a, b, eps = 0.02) => Math.abs(a.r - b.r) < eps && Math.abs(a.g - b.g) < eps && Math.abs(a.b - b.b) < eps;
 
-describe('segment tint on the GLTF scene', () => {
-  it('tints meshes towards their status colour and leaves others untouched', () => {
-    const scene = model();
-    const neckBefore = hex(scene, 'neck');
-    applySegmentTint(scene, { head: 'ok', left_thigh: 'alert' });
-    const alert = new Color(STATUS_COLORS.alert);
-    const thigh = byName(scene, 'left_thigh').material.color;
-    // Pulled most of the way to the alert red.
-    expect(Math.abs(thigh.r - alert.r)).toBeLessThan(0.1);
-    expect(Math.abs(thigh.g - alert.g)).toBeLessThan(0.1);
-    expect(hex(scene, 'head')).not.toBe('b8d6e0');
-    expect(hex(scene, 'neck')).toBe(neckBefore);
-  });
-
-  it('restores the status tint (not the original colour) after hover', () => {
-    const scene = model();
-    const status = { left_thigh: 'caution' };
-    applySegmentTint(scene, status);
-    const tinted = hex(scene, 'left_thigh');
-    const thigh = byName(scene, 'left_thigh');
-    setHighlight(thigh);
-    expect(thigh.material.color.getHexString()).toBe(new Color(HOVER_COLOR).getHexString());
-    setColors(thigh, baseColors(thigh, status));
-    expect(hex(scene, 'left_thigh')).toBe(tinted);
-  });
-
-  it('without statuses (offline demo) keeps and restores the original colours', () => {
-    const scene = model();
-    applySegmentTint(scene, { head: 'alert' });
-    applySegmentTint(scene, undefined);
-    expect(hex(scene, 'head')).toBe('b8d6e0');
-    applySegmentTint(scene, { head: 'alert' });
-    clearSegmentTint(scene);
-    expect(hex(scene, 'head')).toBe('b8d6e0');
+describe('segment colours', () => {
+  it('alert and caution get the full theme colour; ok is a quiet green; no status keeps the model colour', () => {
+    const original = new Color('#7eb8ca');
+    expect(segmentColor('left_thigh', { left_thigh: 'alert' }, original).getHexString()).toBe(new Color(STATUS_COLORS.alert).getHexString());
+    expect(segmentColor('left_thigh', { left_thigh: 'caution' }, original).getHexString()).toBe(new Color(STATUS_COLORS.caution).getHexString());
+    const ok = segmentColor('left_thigh', { left_thigh: 'ok' }, original);
+    expect(ok.getHexString()).not.toBe(new Color(STATUS_COLORS.ok).getHexString());
+    expect(ok.g).toBeGreaterThan(ok.r);
+    expect(segmentColor('left_thigh', undefined, original).getHexString()).toBe(original.getHexString());
+    expect(segmentColor('neck', { left_thigh: 'ok' }, original).getHexString()).toBe(new Color('#8b939b').getHexString());
+    expect(segmentColor('left_thigh', { left_thigh: 'ok' }, original, 'left_thigh').getHexString()).toBe(new Color(HOVER_COLOR).getHexString());
   });
 });
 
-describe('swapped torso mesh names in the GLB', () => {
-  it('paints the upper-torso mesh (named "abdomen" in the GLB) with the anatomical chest status', () => {
-    const scene = new Group();
-    for (const name of ['chest', 'abdomen']) {
-      const mesh = new Mesh(undefined, new MeshStandardMaterial({ color: '#cccccc' }));
-      mesh.name = name;
-      scene.add(mesh);
+describe('body shading on the GLTF scene', () => {
+  it('replaces the materials with vertex-coloured smooth ones, once', () => {
+    const scene = model();
+    const first = prepareBody(scene);
+    expect(prepareBody(scene)).toBe(first);
+    for (const mesh of first.meshes) {
+      expect(mesh.material.vertexColors).toBe(true);
+      expect(mesh.geometry.attributes.normal.count).toBe(mesh.geometry.attributes.position.count);
     }
-    applySegmentTint(scene, { chest: 'alert', abdomen: 'caution' });
+  });
+
+  it('paints each segment its colour and blends the two colours at the seam (no hard zigzag border)', () => {
+    const scene = model();
+    paintSegments(scene, { left_thigh: 'alert', left_lower_leg: 'ok' });
+    const [thigh, shin] = prepareBody(scene).meshes;
     const red = new Color(STATUS_COLORS.alert);
-    const amber = new Color(STATUS_COLORS.caution);
-    const upper = byName(scene, 'abdomen').material.color;   // GLB "abdomen" = ribcage
-    const lower = byName(scene, 'chest').material.color;     // GLB "chest" = belly
-    expect(Math.abs(upper.r - red.r) + Math.abs(upper.g - red.g)).toBeLessThan(0.15);
-    expect(Math.abs(lower.r - amber.r) + Math.abs(lower.g - amber.g)).toBeLessThan(0.15);
+    const quietGreen = segmentColor('left_lower_leg', { left_lower_leg: 'ok' }, null);
+    expect(close(colorAt(thigh, vertexFarFromSeam(thigh)), red)).toBe(true);
+    expect(close(colorAt(shin, vertexFarFromSeam(shin)), quietGreen)).toBe(true);
+    // On the seam both meshes show the same 50/50 mix, so the border is continuous.
+    const a = colorAt(thigh, vertexOnSeam(thigh));
+    const b = colorAt(shin, vertexOnSeam(shin));
+    expect(close(a, b, 0.001)).toBe(true);
+    expect(close(a, red)).toBe(false);
+  });
+
+  it('hover paints the hovered segment and returns to the status colour afterwards', () => {
+    const scene = model();
+    const status = { left_thigh: 'caution' };
+    paintSegments(scene, status, 'left_thigh');
+    const [thigh] = prepareBody(scene).meshes;
+    const far = vertexFarFromSeam(thigh);
+    expect(close(colorAt(thigh, far), new Color(HOVER_COLOR))).toBe(true);
+    paintSegments(scene, status, null);
+    expect(close(colorAt(thigh, far), new Color(STATUS_COLORS.caution))).toBe(true);
+  });
+
+  it('paints the upper-torso mesh (named "abdomen" in the GLB) with the anatomical chest status', () => {
+    const scene = model(['chest', 'abdomen']);
+    paintSegments(scene, { chest: 'alert', abdomen: 'caution' });
+    const [lowerMesh, upperMesh] = prepareBody(scene).meshes; // GLB "chest" = belly, GLB "abdomen" = ribcage
+    expect(close(colorAt(upperMesh, vertexFarFromSeam(upperMesh)), new Color(STATUS_COLORS.alert))).toBe(true);
+    expect(close(colorAt(lowerMesh, vertexFarFromSeam(lowerMesh)), new Color(STATUS_COLORS.caution))).toBe(true);
   });
 });

@@ -1,7 +1,7 @@
 // FICTIONAL crew of the "Polska Misja Marsjańska" (Polish Mars Mission), habitat
 // MARS-LT-ELYSIUM. No real persons; every record carries fictional: true and the UI
 // shows a FICTIONAL badge next to it. `code` matches the MOTHER subject codes (HAB-C1..C10).
-// C5..C10: names from the team, role / callsign / age / home module drawn at random and kept in sync with
+// C5..C10: names from the team, role / age / home module drawn at random and kept in sync with
 // DATABASE/synthetic/crew_ext.py (age inside the subject's age band in the database).
 
 export const MISSION = {
@@ -22,7 +22,6 @@ export const CREW_PROFILES = [
     code: 'HAB-C1',
     crewCode: 'C1',
     name: 'Aleksander Polkowski',
-    callsign: 'HETMAN',
     age: 47,
     nationality: 'PL',
     role: { en: 'Commander', pl: 'Dowódca' },
@@ -35,13 +34,16 @@ export const CREW_PROFILES = [
       pl: 'Prowadzi poranną odprawę co do minuty i dzierży rekord habitatu w długości przemówienia nad liofilizowanymi pierogami.',
     },
     homeZone: 'module_M1',
+    sex: 'male',
+    heightCm: 182,
+    massKg: 84,
+    model: 'crew_C1', // public/models/crew_C1.glb, generated for this body
   },
   {
     fictional: true,
     code: 'HAB-C2',
     crewCode: 'C2',
     name: 'Bogusława Grzegrzułkiewicz',
-    callsign: 'ŚRUBA',
     age: 39,
     nationality: 'PL',
     role: { en: 'Systems engineer', pl: 'Inżynier systemów' },
@@ -54,13 +56,16 @@ export const CREW_PROFILES = [
       pl: 'Trzykrotnie naprawiła skruber CO2 opaskami zaciskowymi i dobrym słowem. Kontrola misji przestała literować jej nazwisko w 4. solu.',
     },
     homeZone: 'module_M1',
+    sex: 'female',
+    heightCm: 168,
+    massKg: 64,
+    model: 'crew_C2', // public/models/crew_C2.glb, generated for this body
   },
   {
     fictional: true,
     code: 'HAB-C3',
     crewCode: 'C3',
     name: 'Roman Czarny',
-    callsign: 'BAZALT',
     age: 52,
     nationality: 'PL',
     role: { en: 'Geologist', pl: 'Geolog' },
@@ -73,13 +78,16 @@ export const CREW_PROFILES = [
       pl: 'Spędza najwięcej godzin w głębokich tunelach i każdą próbkę skały nazywa imieniem tatrzańskiego szczytu. W szafce z próbkami szczyty już się skończyły.',
     },
     homeZone: 'module_M2',
+    sex: 'male',
+    heightCm: 189,
+    massKg: 79,
+    model: 'crew_C3', // public/models/crew_C3.glb, generated for this body
   },
   {
     fictional: true,
     code: 'HAB-C4',
     crewCode: 'C4',
     name: 'Grażyna Brzęczyszczykiewicz',
-    callsign: 'ZNACHOR',
     age: 42,
     nationality: 'PL',
     role: { en: 'Mission physician', pl: 'Lekarz misji' },
@@ -92,13 +100,16 @@ export const CREW_PROFILES = [
       pl: 'Jedyny lekarz w promieniu 225 milionów km. Przepisuje sen, wodę i bieżnię, w tej kolejności, i sprawdza, kto co opuścił.',
     },
     homeZone: 'module_M2',
+    sex: 'female',
+    heightCm: 165,
+    massKg: 58,
+    model: 'crew_C4', // public/models/crew_C4.glb, generated for this body
   },
   {
     fictional: true,
     code: 'HAB-C5',
     crewCode: 'C5',
     name: 'Żytomira Będzisławska',
-    callsign: 'SMOLUCH',
     age: 55,
     nationality: 'PL',
     role: { en: 'Pilot / flight engineer', pl: 'Pilot / inżynier lotu' },
@@ -107,17 +118,20 @@ export const CREW_PROFILES = [
       pl: 'Mgr inż. lotnictwa, Politechnika Rzeszowska; kapitan linii lotniczych, 12 000 godzin nalotu',
     },
     bio: {
-      en: 'Earned her callsign after a grease fire in the ascent-vehicle simulator. Says Mars has the worst crosswinds she has ever flown, and she has landed in Gdańsk in November.',
-      pl: 'Kryptonim dostała po pożarze smaru w symulatorze pojazdu wznoszenia. Twierdzi, że Mars ma najgorsze boczne wiatry, w jakich latała, a lądowała w Gdańsku w listopadzie.',
+      en: 'Earned her nickname after a grease fire in the ascent-vehicle simulator. Says Mars has the worst crosswinds she has ever flown, and she has landed in Gdańsk in November.',
+      pl: 'Przezwisko dostała po pożarze smaru w symulatorze pojazdu wznoszenia. Twierdzi, że Mars ma najgorsze boczne wiatry, w jakich latała, a lądowała w Gdańsku w listopadzie.',
     },
     homeZone: 'module_M1',
+    sex: 'female',
+    heightCm: 171,
+    massKg: 66,
+    model: 'crew_C5', // public/models/crew_C5.glb, generated for this body
   },
   {
     fictional: true,
     code: 'HAB-C6',
     crewCode: 'C6',
     name: 'Jędżej Podolski',
-    callsign: 'MOTYKA',
     age: 51,
     nationality: 'PL',
     role: { en: 'ISRU & power engineer', pl: 'Inżynier ISRU i energetyki' },
@@ -130,13 +144,16 @@ export const CREW_PROFILES = [
       pl: 'Prowadzi MOXIE i reaktor jak działkę: każdy kilogram tlenu wpisuje do zeszytu z ołówkiem na sznurku.',
     },
     homeZone: 'module_M2',
+    sex: 'male',
+    heightCm: 177,
+    massKg: 88,
+    model: 'crew_C6', // public/models/crew_C6.glb, generated for this body
   },
   {
     fictional: true,
     code: 'HAB-C7',
     crewCode: 'C7',
     name: 'Światosław Ryt',
-    callsign: 'BURSZTYN',
     age: 53,
     nationality: 'PL',
     role: { en: 'EVA specialist', pl: 'Specjalista EVA' },
@@ -149,13 +166,16 @@ export const CREW_PROFILES = [
       pl: 'Ma więcej godzin poza śluzą niż reszta załogi razem. Z każdego wyjścia przynosi jeden ciekawy kamyk, który geolog potem konfiskuje.',
     },
     homeZone: 'module_M2',
+    sex: 'male',
+    heightCm: 185,
+    massKg: 82,
+    model: 'crew_C7', // public/models/crew_C7.glb, generated for this body
   },
   {
     fictional: true,
     code: 'HAB-C8',
     crewCode: 'C8',
     name: 'Andrzej Świętopełek',
-    callsign: 'RZEPA',
     age: 54,
     nationality: 'PL',
     role: { en: 'Habitat botanist', pl: 'Botanik habitatu' },
@@ -168,13 +188,16 @@ export const CREW_PROFILES = [
       pl: 'Rozmawia z sałatą w farmie Drzewo Światła i twierdzi, że rośnie o 8 % szybciej. Nikt nie odważył się zrobić grupy kontrolnej.',
     },
     homeZone: 'module_M1',
+    sex: 'male',
+    heightCm: 174,
+    massKg: 77,
+    model: 'crew_C8', // public/models/crew_C8.glb, generated for this body
   },
   {
     fictional: true,
     code: 'HAB-C9',
     crewCode: 'C9',
     name: 'Kunekunda Krzeszowska',
-    callsign: 'SZPERACZ',
     age: 52,
     nationality: 'PL',
     role: { en: 'Psychologist', pl: 'Psycholog' },
@@ -187,13 +210,16 @@ export const CREW_PROFILES = [
       pl: 'Odczytuje nastrój załogi z tego, jak miesza kawę. Prowadzi testy kognitywne i jako jedyna nigdy nie narzeka na PVT.',
     },
     homeZone: 'module_M1',
+    sex: 'female',
+    heightCm: 163,
+    massKg: 55,
+    model: 'crew_C9', // public/models/crew_C9.glb, generated for this body
   },
   {
     fictional: true,
     code: 'HAB-C10',
     crewCode: 'C10',
     name: 'Czesława Życińska',
-    callsign: 'KRET',
     age: 41,
     nationality: 'PL',
     role: { en: 'Robotics engineer', pl: 'Inżynier robotyki' },
@@ -206,6 +232,10 @@ export const CREW_PROFILES = [
       pl: 'Wysyła łaziki mapujące tam, gdzie nikt się nie mieści. Wszystkie sześć nazwała imionami swoich ciotek; najmłodsza ciotka jest najszybsza.',
     },
     homeZone: 'module_M2',
+    sex: 'female',
+    heightCm: 160,
+    massKg: 52,
+    model: 'crew_C10', // public/models/crew_C10.glb, generated for this body
   },
 ];
 

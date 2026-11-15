@@ -165,10 +165,9 @@ export default function WearablesScreen({ mother, session, viewedCode, navigate,
         className="wear-header"
         title={t('wearables.scanPanel')}
         tone={isProblem(overall) ? overall : 'default'}
-        meta={badgeKind ? <Badge kind={badgeKind} /> : null}
       >
         <dl className="wear-id">
-          <div><dt>{t('wearables.crew')}</dt><dd>{name}{profile?.callsign ? <span className="wear-callsign"> «{profile.callsign}»</span> : null}{viewedCode ? <span className="dim"> · {viewedCode}</span> : null}</dd></div>
+          <div><dt>{t('wearables.crew')}</dt><dd>{name}{viewedCode ? <span className="dim"> · {viewedCode}</span> : null}</dd></div>
           <div><dt>{t('wearables.mission')}</dt><dd>{subject?.mission || '—'}</dd></div>
           <div><dt>{periodLabel}</dt><dd data-testid="wear-sol">{asOf ?? '—'}</dd></div>
           <div><dt>{t('wearables.zone')}</dt><dd>{words(subject?.home_zone || profile?.homeZone) || '—'}</dd></div>
@@ -202,6 +201,7 @@ export default function WearablesScreen({ mother, session, viewedCode, navigate,
         <Panel className="wear-map" title={t('wearables.bodyMap')} meta={t('wearables.bodyMapMeta')}>
           <div className="wear-figure">
             <AstronautViewer
+              model={profile?.model}
               segmentStatus={segmentStatus}
               onSegmentHover={setHoverSegment}
               onSegmentClick={segment => togglePin(regionForSegment(segment))}

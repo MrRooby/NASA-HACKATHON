@@ -80,11 +80,11 @@ describe('HabitatMap', () => {
     render(<HabitatMap rooms={rooms142} />);
     for (const id of ['service', 'technical', 'reactor']) {
       expect(roomEl(id)).toHaveClass('is-simulated');
-      expect(within(roomEl(id)).getByText('SIMULATED')).toBeInTheDocument();
+      expect(within(roomEl(id)).queryByText('SIMULATED')).not.toBeInTheDocument(); // badges and callsigns removed
       expect(roomEl(id).getAttribute('aria-label')).toMatch(/SIMULATED/);
     }
     expect(roomEl('lab')).not.toHaveClass('is-simulated');
-    expect(screen.getAllByText('SIMULATED')).toHaveLength(3);
+    expect(screen.queryAllByText('SIMULATED')).toHaveLength(0); // no SIMULATED labels on the map
   });
 
   it('shows crew markers in the rooms where the crew is', () => {

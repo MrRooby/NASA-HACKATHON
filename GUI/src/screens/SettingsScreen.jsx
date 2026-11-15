@@ -1,12 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { API_BASE } from '../api.js';
-import { Badge, Button, ConnectionBadge, DataRow, Panel, SegBar, StatusTag } from '../components/index.js';
-import { LANGS, useT } from '../i18n/index.js';
+import { Badge, Button, ConnectionBadge, DataRow, LangFlags, Panel, SegBar, StatusTag } from '../components/index.js';
+import { useT } from '../i18n/index.js';
 import { useSettings } from '../settings/SettingsContext.jsx';
 import { COLOR_KEYS } from '../theme/index.js';
 import './settings.css';
-
-const LANG_NAME_KEYS = { en: 'settings.langEn', pl: 'settings.langPl' };
 
 function ThemeRow({ theme, active, onUse, onRemove }) {
   const t = useT();
@@ -40,7 +38,7 @@ function ThemeRow({ theme, active, onUse, onRemove }) {
 /** Settings: theme (built-in + imported), language, CRT effect, read-only data link info. */
 export default function SettingsScreen({ mother }) {
   const t = useT();
-  const { themeId, themes, setTheme, importThemeFile, removeCustomTheme, lang, setLang, crt, setCrt } = useSettings();
+  const { themeId, themes, setTheme, importThemeFile, removeCustomTheme, lang, crt, setCrt } = useSettings();
   const fileInput = useRef(null);
   const [importState, setImportState] = useState(null); // { ok, errors, name }
 
@@ -95,13 +93,7 @@ export default function SettingsScreen({ mother }) {
 
         <div className="stack">
           <Panel title={t('settings.langTitle')} meta={lang}>
-            <div className="row" role="group" aria-label={t('settings.langTitle')}>
-              {LANGS.map(code => (
-                <Button key={code} active={lang === code} aria-pressed={lang === code} onClick={() => setLang(code)}>
-                  {t(LANG_NAME_KEYS[code])}
-                </Button>
-              ))}
-            </div>
+            <LangFlags />
             <p className="dim small settings-note">{t('settings.langNote')}</p>
           </Panel>
 
@@ -120,7 +112,7 @@ export default function SettingsScreen({ mother }) {
             <p className="dim small settings-note">{t('settings.apiNote')}</p>
           </Panel>
 
-          <Panel title={t('settings.previewTitle')} meta={<Badge kind="demo" />}>
+          <Panel title={t('settings.previewTitle')}>
             <div className="row">
               <StatusTag status="ok" /><StatusTag status="caution" /><StatusTag status="alert" /><StatusTag status="no_data" />
             </div>

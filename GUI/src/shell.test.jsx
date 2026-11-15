@@ -28,11 +28,15 @@ describe('login screen', () => {
     for (const profile of CREW_PROFILES) {
       expect(within(list).getByRole('button', { name: `Open session as ${profile.name}` })).toBeInTheDocument();
       expect(within(list).getByText(profile.role.en)).toBeInTheDocument();
-      expect(within(list).getByText(new RegExp(profile.callsign))).toBeInTheDocument();
+
     }
-    expect(screen.getByText('FICTIONAL')).toBeInTheDocument();
+    expect(screen.queryByText('FICTIONAL')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(await screen.findByText('OFFLINE · DEMO')).toBeInTheDocument();
-    expect(screen.getByText(/NO CARRIER/)).toBeInTheDocument();
+    expect(screen.getByText(/^AWERNASA/)).toHaveTextContent(/^AWERNASA v\d+\.\d+\.\d+/);
+    expect(screen.getByTestId('login-sol')).toBeInTheDocument();
+    for (const gone of [/EARTH RELAY/i, /DEMONSTRATION ONLY/i, /Any resemblance/i, /Works without a link/i]) {
+      expect(screen.queryByText(gone)).not.toBeInTheDocument();
+    }
   });
 
   it('shows the live link when MOTHER answers', async () => {
@@ -43,7 +47,7 @@ describe('login screen', () => {
 
   it('can switch the language before logging in', () => {
     renderApp({ login: null });
-    fireEvent.click(screen.getByRole('button', { name: 'pl' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Polski' }));
     expect(screen.getByRole('button', { name: 'Otwórz sesję jako Roman Czarny' })).toBeInTheDocument();
     expect(screen.getByText('Geolog')).toBeInTheDocument();
   });
@@ -57,14 +61,13 @@ describe('app shell', () => {
     expect(stub('home')).toHaveAttribute('data-viewed', 'HAB-C2');
     expect(stub('home')).toHaveAttribute('data-profile', 'Bogusława Grzegrzułkiewicz');
 
-    expect(within(topbar()).getByText('AWERNASA // MARS-LT-ELYSIUM')).toBeInTheDocument();
     expect(screen.getByTestId('screen-name')).toHaveTextContent('Home');
     const nav = screen.getByRole('navigation', { name: /main navigation/i });
     expect(within(nav).getAllByRole('button').map(button => button.getAttribute('data-nav')))
       .toEqual(['home', 'profile', 'base', 'crew', 'tests', 'settings']);
     expect(within(nav).getByRole('button', { name: 'Bogusława Grzegrzułkiewicz' })).toBeInTheDocument();
-    expect(within(nav).getByRole('button', { name: 'Settings' })).toHaveTextContent('⚙');
-    expect(screen.getByTestId('topbar-sol')).toHaveTextContent('SOL ---');
+    expect(within(nav).getByRole('button', { name: 'Settings' })).toContainElement(document.querySelector('[data-nav="settings"] .nf-icon'));
+    expect(screen.getByTestId('topbar-sol')).toHaveTextContent('SOL 600'); // offline: the sol of the built-in demo record
     expect(within(topbar()).getByText(/^\d\d:\d\d:\d\d UTC$/)).toBeInTheDocument();
     expect(within(topbar()).getByRole('button', { name: 'Log out' })).toBeInTheDocument();
   });
@@ -152,7 +155,7 @@ describe('app shell', () => {
     renderApp({ login: 'HAB-C1' });
     fireEvent.click(screen.getByRole('button', { name: 'stub: profile of C3' }));
     fireEvent.click(within(topbar()).getByRole('button', { name: 'Log out' }));
-    expect(screen.queryByRole('banner')).not.toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: /main navigation/i })).not.toBeInTheDocument();
     expect(screen.getByRole('list', { name: /crew members/i })).toBeInTheDocument();
 
     logIn('HAB-C4');

@@ -1,74 +1,93 @@
-import React from 'react';
-import { Avatar, Badge, Button, ConnectionBadge, Panel } from '../components/index.js';
+import React, { useEffect, useState } from 'react';
+import { version } from '../../package.json';
+import { Avatar, Badge, ConnectionBadge, LangFlags } from '../components/index.js';
 import { CREW_PROFILES, localize } from '../data/crewProfiles.js';
-import { LANGS, useI18n } from '../i18n/index.js';
+import { getCrewPhoto } from '../data/crewPhotos.js';
+import { demoReport } from '../data/demoReports.js';
+import { useI18n } from '../i18n/index.js';
 import './login.css';
 
+export const APP_VERSION = version;
+
 /**
- * Crew identification. Works offline: the crew list is local (fictional profiles).
- * props: mother (useMother() state, for the connection line), onLogin(code).
+ * Latest sol known before login. useMother() already loads the report of its default subject
+ * (HAB-C1) once online; offline / while connecting the terminal shows the built-in demo record,
+ * exactly like the top bar after login.
+ */
+export function loginSol(mother) {
+  return mother?.report?.as_of?.sol ?? (mother?.online ? undefined : demoReport(CREW_PROFILES[0].code)?.as_of?.sol);
+}
+
+function UtcClock() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  return <time className="topbar-clock" dateTime={now.toISOString()}>{now.toISOString().slice(11, 19)} UTC</time>;
+}
+
+function CrewCard({ profile, lang, label, onLogin }) {
+  const photo = getCrewPhoto(profile.code);
+  return (
+    <li className="login-cell">
+      <button type="button" className="login-row login-card" data-code={profile.code} aria-label={label} onClick={() => onLogin(profile.code)}>
+        <span className="login-photo">
+          {photo
+            ? <img src={photo} alt="" draggable="false" />
+            : <Avatar code={profile.code} size={160} title={profile.name} className="login-avatar" />}
+        </span>
+        <span className="login-who">
+          <span className="login-name">{profile.name}</span>
+          <span className="login-role">{localize(profile.role, lang)}</span>
+          <span className="login-body">{profile.heightCm} cm · {profile.massKg} kg</span>
+        </span>
+      </button>
+    </li>
+  );
+}
+
+/**
+ * Crew identification for a touch tablet: one big photo card per crew member (tap = log in).
+ * Works offline: the crew list is local (fictional profiles).
+ * props: mother (useMother() state: link badge and sol), onLogin(code).
  */
 export default function LoginScreen({ mother, onLogin }) {
-  const { t, lang, setLang } = useI18n();
-  const mode = mother?.mode === 'online' || mother?.mode === 'connecting' ? mother.mode : 'offline';
-  const linkLine = { online: t('login.boot4Online'), connecting: t('login.boot4Connecting'), offline: t('login.boot4Offline') }[mode];
+  const { t, lang } = useI18n();
+  const sol = loginSol(mother);
 
   return (
     <div className="login">
-      <div className="login-boot">
-        <h1 className="login-brand">{t('common.appName')} // {t('common.habitatCode')}</h1>
-        <p>{t('login.boot1')}</p>
-        <p>{t('login.boot2')}</p>
-        <p>{t('login.boot3')}</p>
-        <p className={`login-link login-link-${mode}`}>{linkLine}</p>
-        <p>{t('login.boot5')}</p>
-      </div>
+      <header className="login-top">
+        <h1 className="login-brand">
+          {t('common.appName')} <span className="login-version">v{APP_VERSION}</span>
+        </h1>
+        <div className="login-status">
+          <span className="topbar-row login-statusline">
+            <span className="topbar-sol" data-testid="login-sol">{sol != null ? t('common.solN', { n: sol }) : t('common.solUnknown')}</span>
+            <ConnectionBadge mode={mother?.mode} error={mother?.error} />
+            <UtcClock />
+          </span>
+          <LangFlags />
+        </div>
+      </header>
 
-      <Panel
-        className="login-panel"
-        title={t('login.title')}
-        meta={<><Badge kind="fictional" /><ConnectionBadge mode={mother?.mode} error={mother?.error} /></>}
-      >
-        <p className="login-prompt">&gt; {t('login.prompt')}<span className="cursor" /></p>
+      <p className="login-prompt">
+        <span>&gt; {t('login.prompt')}<span className="cursor" /></span>
+      </p>
 
+      <div className="login-crewbox">
         <ul className="login-crew" aria-label={t('login.crewList')}>
           {CREW_PROFILES.map(profile => (
-            <li key={profile.code}>
-              <button
-                type="button"
-                className="login-row"
-                data-code={profile.code}
-                aria-label={t('login.openFor', { name: profile.name })}
-                onClick={() => onLogin(profile.code)}
-              >
-                <Avatar code={profile.code} size={56} title={profile.name} />
-                <span className="login-who">
-                  <span className="login-name">{profile.name}</span>
-                  <span className="login-role">{localize(profile.role, lang)}</span>
-                </span>
-                <span className="login-ids">
-                  <span className="login-code">{profile.code}</span>
-                  <span className="login-callsign">{t('login.callsign')}: {profile.callsign}</span>
-                </span>
-                <span className="login-go" aria-hidden="true">[ {t('login.open')} ]</span>
-              </button>
-            </li>
+            <CrewCard
+              key={profile.code}
+              profile={profile}
+              lang={lang}
+              label={t('login.openFor', { name: profile.name })}
+              onLogin={onLogin}
+            />
           ))}
         </ul>
-
-        <p className="login-note">{t('login.fictionalNote')}</p>
-        <p className="login-note">{t('login.offlineNote')}</p>
-      </Panel>
-
-      <div className="login-foot">
-        <span className="row" role="group" aria-label={t('settings.langTitle')}>
-          {LANGS.map(code => (
-            <Button key={code} small active={lang === code} aria-pressed={lang === code} onClick={() => setLang(code)}>
-              {code}
-            </Button>
-          ))}
-        </span>
-        <span>{t('common.disclaimer')}</span>
       </div>
     </div>
   );

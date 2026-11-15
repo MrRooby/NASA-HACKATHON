@@ -88,7 +88,7 @@ describe('BaseScreen', () => {
     const facts = screen.getByTestId('base-head-facts');
     expect(facts).toHaveTextContent('56.5 kPa · 34% O2');
     expect(facts).toHaveTextContent('SOL 142');
-    expect(within(facts).getByText('SYNTHETIC')).toBeInTheDocument();
+    expect(within(facts).queryByText('SYNTHETIC')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(within(facts).queryByText('DEMO')).toBeNull();
     expect(within(facts).getByText('[ ALRT ]')).toBeInTheDocument();
     expect(screen.getByRole('spinbutton', { name: 'Sol' })).toHaveValue(142);
@@ -106,20 +106,20 @@ describe('BaseScreen', () => {
     expect(mapRoom('quarters_north')).toHaveAttribute('aria-pressed', 'false');
     const head = roomPanel().querySelector('.panel-head');
     expect(within(head).getByRole('heading', { name: 'REACTOR' })).toBeInTheDocument();
-    expect(within(head).getByText('SIMULATED')).toBeInTheDocument();
-    expect(within(roomPanel()).getByText(/no sensors in the MOTHER database/i)).toBeInTheDocument();
+    expect(within(head).queryByText('SIMULATED')).not.toBeInTheDocument(); // badges and callsigns removed
+    expect(within(roomPanel()).queryByText(/no sensors in the MOTHER database/i)).not.toBeInTheDocument(); // badges and callsigns removed
 
     const core = row(roomPanel(), 'core_outlet_temp');
     expect(core).toHaveClass('is-simulated');
-    expect(within(core).getByText('SIMULATED')).toBeInTheDocument();
+    expect(within(core).queryByText('SIMULATED')).not.toBeInTheDocument(); // badges and callsigns removed
     for (const channel of ['coolant_flow', 'shield_dose_rate', 'electrical_output_gross']) {
-      expect(within(row(roomPanel(), channel)).getByText('SIMULATED')).toBeInTheDocument();
+      expect(within(row(roomPanel(), channel)).queryByText('SIMULATED')).not.toBeInTheDocument(); // badges and callsigns removed
     }
     // the real fission power of the surface zone is shown here too, marked as MOTHER data
     const fission = row(roomPanel(), 'power_fission');
     expect(fission).not.toHaveClass('is-simulated');
     expect(within(fission).queryByText('SIMULATED')).toBeNull();
-    expect(within(fission).getByText('MOTHER · SURFACE')).toBeInTheDocument();
+    expect(within(fission).queryByText('MOTHER · SURFACE')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(within(fission).getByText('40')).toBeInTheDocument();
   });
 
@@ -290,7 +290,7 @@ describe('BaseScreen', () => {
     renderBase({ mother: makeMother({ mode: 'offline', online: false, report: null, period: null }) });
     await ready();
     const facts = screen.getByTestId('base-head-facts');
-    expect(within(facts).getByText('DEMO')).toBeInTheDocument();
+    expect(within(facts).queryByText('DEMO')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(within(facts).queryByText('SYNTHETIC')).toBeNull();
     expect(facts).toHaveTextContent('SOL 142');
     expect(screen.getByRole('status')).toHaveTextContent(/MOTHER unreachable/);
@@ -329,6 +329,6 @@ describe('BaseScreen', () => {
     expect(within(document.querySelector('.base-events')).getByRole('button', { name: 'STREFA MIESZKALNA N' })).toBeInTheDocument();
 
     fireEvent.click(mapRoom('service'));
-    expect(within(roomPanel().querySelector('.panel-head')).getByText('SYMULOWANE')).toBeInTheDocument();
+    expect(within(roomPanel().querySelector('.panel-head')).queryByText('SYMULOWANE')).not.toBeInTheDocument(); // badges and callsigns removed
   });
 });

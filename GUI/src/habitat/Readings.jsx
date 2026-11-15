@@ -60,10 +60,6 @@ function ReadingRow({ reading }) {
     >
       <span className="base-cell base-cell-label" role="rowheader">
         <span className="base-label-text">{reading.label}</span>
-        {simulated && <Badge kind="simulated" className="base-row-badge" />}
-        {reading.from_zone && (
-          <Badge tone="info" className="base-row-badge">{t('base.fromMother', { zone: t(`base.zone_${reading.from_zone}`) })}</Badge>
-        )}
       </span>
       <span className="base-cell base-cell-value" role="cell">
         {value != null ? value : '—'}

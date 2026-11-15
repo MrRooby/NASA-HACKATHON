@@ -29,11 +29,11 @@ describe('WearablesScreen: header', () => {
     const header = screen.getByRole('heading', { name: 'Body scan' }).closest('section');
     expect(header).toHaveAttribute('data-tone', 'alert');
     expect(within(header).getByText('Grażyna Brzęczyszczykiewicz')).toBeInTheDocument();
-    expect(within(header).getByText(/«ZNACHOR»/)).toBeInTheDocument();
+    expect(within(header).queryByText(/«ZNACHOR»/)).not.toBeInTheDocument(); // badges and callsigns removed
     expect(within(header).getByText('Mars lava-tube habitat')).toBeInTheDocument();
     expect(screen.getByTestId('wear-sol')).toHaveTextContent('142');
     expect(within(header).getByText('module M2')).toBeInTheDocument();
-    expect(within(header).getByText('SYNTHETIC')).toBeInTheDocument();
+    expect(within(header).queryByText('SYNTHETIC')).not.toBeInTheDocument(); // badges and callsigns removed
     const status = header.querySelector('.wear-status');
     expect(within(status).getByText('[ ALRT ]')).toBeInTheDocument();
     expect(within(status).getByText(habC4Sol142.top_message)).toBeInTheDocument();
@@ -269,7 +269,7 @@ describe('WearablesScreen: no live report', () => {
     renderWearables({ mother: makeMother({ mode: 'offline', report: null }) });
     expect(notice()).toHaveTextContent('LINK LOST — SHOWING DEMO DATA');
     const header = screen.getByRole('heading', { name: 'Body scan' }).closest('section');
-    expect(within(header).getByText('DEMO')).toBeInTheDocument();
+    expect(within(header).queryByText('DEMO')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(screen.queryByRole('slider')).not.toBeInTheDocument();
     expect(header).toHaveTextContent('Sol 142 · No link · sol fixed');
     expect(shownOrgans()).toHaveLength(10);

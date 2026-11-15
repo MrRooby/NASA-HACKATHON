@@ -35,10 +35,8 @@ export default function PsychTestsPanel({ crewCode, isOwn, onStart }) {
     <Panel
       className="profile-tests"
       title={t('profile.testsTitle')}
-      meta={connected ? null : <Badge kind="todo" data-testid="tests-todo">{t('profile.notConnected')}</Badge>}
     >
       <p className="profile-tests-battery" data-testid="cognitive-battery">
-        <Badge tone="ok">{t('profile.testsLive')}</Badge>
         <span className="profile-tests-battery-text">{t('profile.testsBattery')}</span>
         <Button small disabled={!onStart || !isOwn} onClick={() => onStart?.(COGNITIVE_BATTERY)}>
           {t('profile.testsOpenBattery')}

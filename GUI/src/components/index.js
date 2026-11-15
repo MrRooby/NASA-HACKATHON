@@ -8,3 +8,4 @@ export { default as SolControl } from './SolControl.jsx';
 export { default as ConnectionBadge } from './ConnectionBadge.jsx';
 export { default as Avatar } from './Avatar.jsx';
 export { cx } from './cx.js';
+export { default as LangFlags, LANG_FLAGS } from './LangFlags.jsx';

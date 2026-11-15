@@ -85,8 +85,6 @@ function MetricTile({ metric, view, selected, onSelect, unit, simulated }) {
         <span className="crew-tile-head">
           <span className="crew-tile-name">{name}</span>
           <span className="crew-tile-flags">
-            {simulated ? <Badge kind="simulated" /> : null}
-            {metric.estimate ? <Badge tone="info">{t('crew.estimate')}</Badge> : null}
             {view.status !== 'ok' ? <StatusMark status={view.status} compact /> : null}
           </span>
         </span>
@@ -126,9 +124,9 @@ function MetricDetail({ metric, solView, simView, sim, personSeries, indicators,
         <div className="crew-detail-title">
           <h3>{name}</h3>
           {live ? (
-            <span className="crew-detail-source"><Badge kind="simulated" /> {t('crew.simNote', { n: Math.round(solEnd) })}</span>
+            <span className="crew-detail-source">{t('crew.simNote', { n: Math.round(solEnd) })}</span>
           ) : metric.estimate ? (
-            <span className="crew-detail-source"><Badge tone="info">{t('crew.estimate')}</Badge> {t(`crew.estimateNote_${metric.id}`)}</span>
+            <span className="crew-detail-source">{t(`crew.estimateNote_${metric.id}`)}</span>
           ) : indicator?.label ? <span className="crew-detail-source">{indicator.label}</span> : null}
         </div>
         <div className="crew-detail-now">
@@ -401,7 +399,7 @@ export default function CrewPerson({ code, mother, session, habitat, navigate, o
             {profile.code === session ? <> <Badge tone="accent">{t('crew.you')}</Badge></> : null}
           </h2>
           <p className="crew-person-role">
-            <span className="crew-member-callsign">“{profile.callsign}”</span> · {localized(profile.role, lang)} · {profile.code}
+            {localized(profile.role, lang)} · {profile.code}
           </p>
           <p className="crew-person-where">
             <span className="label">{t('crew.home')}</span> {zoneName(habitat, profile.homeZone) ?? '—'}
@@ -420,9 +418,6 @@ export default function CrewPerson({ code, mother, session, habitat, navigate, o
             {health.source === 'none' ? t('crew.noRecord') : (health.message || t('crew.noMessage'))}
           </span>
           <span className="crew-person-badges">
-            {health.demo ? <Badge kind="demo" /> : null}
-            {health.synthetic ? <Badge kind="synthetic" /> : null}
-            <Badge kind="fictional" />
           </span>
         </p>
       </header>

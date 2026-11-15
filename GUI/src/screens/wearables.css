@@ -19,7 +19,6 @@
 .wear-id dt { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
 .wear-id dd { margin: 0; color: var(--fg); font-weight: 700; overflow-wrap: anywhere; }
 .wear-id dd .dim { font-weight: 400; }
-.wear-callsign { color: var(--accent); }
 
 .wear-status {
   --tone: var(--border);

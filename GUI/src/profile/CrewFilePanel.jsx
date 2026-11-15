@@ -44,14 +44,12 @@ export default function CrewFilePanel({ profile, report, mother, habitat, naviga
       meta={(
         <>
           <span>{profile.code}</span>
-          {profile.fictional ? <Badge kind="fictional" /> : null}
         </>
       )}
     >
       <div className="crew-file">
         <div className="crew-file-photo">
           <Avatar code={profile.code} size={128} title={t('profile.avatarOf', { name: profile.name })} />
-          <span className="crew-file-callsign">“{profile.callsign}”</span>
         </div>
 
         <div className="crew-file-main">
@@ -64,7 +62,6 @@ export default function CrewFilePanel({ profile, report, mother, habitat, naviga
             <Field label={t('profile.fieldHome')}>{zoneName(habitat, profile.homeZone) ?? '—'}</Field>
             <Field label={t('profile.fieldLocation')}>
               <span data-testid="profile-location">{location ? zoneName(habitat, location.code) : t('profile.locationUnknown')}</span>
-              {location && habitat?.demo ? <> <Badge kind="demo" /></> : null}
             </Field>
             <Field label={t('profile.fieldEducation')} wide>{localized(profile.education, lang)}</Field>
             {profile.bio ? <Field label={t('profile.fieldBio')} wide>{localized(profile.bio, lang)}</Field> : null}
@@ -81,8 +78,6 @@ export default function CrewFilePanel({ profile, report, mother, habitat, naviga
             : (health.message || t('profile.statusNoMessage'))}
         </span>
         {health.sol != null ? <span className="label">{t('common.solN', { n: health.sol })}</span> : null}
-        {health.demo ? <Badge kind="demo" /> : null}
-        {health.synthetic ? <Badge kind="synthetic" /> : null}
         <span className="spacer" />
         <Button onClick={() => navigate('wearables')}>{t('profile.wearableData')}</Button>
       </div>

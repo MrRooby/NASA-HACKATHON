@@ -40,7 +40,6 @@ export default function SurgeonReportPanel({ profile, biometrics, symptoms = nul
     <Panel
       className="profile-report"
       title={t('profile.reportTitle')}
-      meta={<Badge kind="todo">{t('profile.reportLocalOnly')}</Badge>}
     >
       <p className="profile-hint">{t('profile.reportHint')}</p>
       <DataRow label={t('profile.reportReadings')} value={biometrics.length} />

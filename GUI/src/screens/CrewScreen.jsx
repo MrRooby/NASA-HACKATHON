@@ -74,14 +74,13 @@ function CrewRow({ profile, isYou, health, loading, habitat, onOpen, onOpenPerso
           {isYou ? <> <Badge tone="accent" data-testid="crew-you">{t('crew.you')}</Badge></> : null}
         </h3>
         <p className="crew-member-role">
-          <span className="crew-member-callsign">“{profile.callsign}”</span> · {localized(profile.role, lang)} · {profile.code}
+          {localized(profile.role, lang)} · {profile.code}
         </p>
         <p className="crew-member-where">
           <span className="label">{t('crew.home')}</span> {zoneName(habitat, profile.homeZone) ?? '—'}
           {' · '}
           <span className="label">{t('crew.location')}</span>{' '}
           <span data-testid="crew-location">{location ? zoneName(habitat, location.code) : t('crew.locationUnknown')}</span>
-          {location && habitat?.demo ? <> <Badge kind="demo" /></> : null}
         </p>
       </div>
 
@@ -172,9 +171,6 @@ export default function CrewScreen({ mother, session, setViewedCode, navigate })
         meta={(
           <>
             <span>{metaText}</span>
-            {demo ? <Badge kind="demo" /> : null}
-            {synthetic ? <Badge kind="synthetic" /> : null}
-            <Badge kind="fictional">{t('crew.fictionalCrew')}</Badge>
           </>
         )}
       >

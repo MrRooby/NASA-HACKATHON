@@ -35,7 +35,6 @@ export default function NotesPanel({ crewCode, isOwn, sol = null }) {
     <Panel
       className="profile-notes"
       title={t('profile.notesTitle')}
-      meta={notes.connected ? null : <Badge kind="todo" data-testid="notes-todo">{t('profile.notConnected')}</Badge>}
     >
       <p className="profile-hint">{t('profile.notesHint')}</p>
 

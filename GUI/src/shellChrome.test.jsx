@@ -20,21 +20,18 @@ vi.mock('./screens/TestsScreen.jsx', () => ({
 }));
 
 describe('app shell: chrome hidden while a test runs', () => {
-  it('hides the top bar and the footer on setChromeHidden(true) and brings them back', () => {
+  it('hides the top bar on setChromeHidden(true) and brings them back', () => {
     renderApp();
     fireEvent.click(navButton('tests'));
     expect(screen.getByRole('banner')).toBeInTheDocument();
-    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'stub: test running' }));
     expect(screen.queryByRole('banner')).not.toBeInTheDocument();
-    expect(screen.queryByRole('contentinfo')).not.toBeInTheDocument();
     expect(screen.getByRole('main').closest('.shell')).toHaveClass('shell-bare');
     expect(currentScreen()).toBe('tests');
 
     fireEvent.click(screen.getByRole('button', { name: 'stub: test finished' }));
     expect(screen.getByRole('banner')).toBeInTheDocument();
-    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 
   it('never keeps the chrome hidden after the screen changes', () => {

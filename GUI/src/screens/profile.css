@@ -29,7 +29,6 @@
 /* [ CREW FILE ] */
 .crew-file { display: flex; flex-wrap: wrap; gap: 12px 20px; min-width: 0; }
 .crew-file-photo { display: grid; gap: 4px; align-content: start; justify-items: center; }
-.crew-file-callsign { color: var(--accent-bright); font-weight: 700; letter-spacing: 0.08em; }
 .crew-file-main { flex: 1 1 320px; min-width: 0; }
 .crew-file-name { overflow-wrap: anywhere; }
 .crew-file-role { margin: 0 0 8px; color: var(--fg); text-transform: uppercase; letter-spacing: 0.08em; }

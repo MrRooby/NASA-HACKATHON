@@ -1,9 +1,9 @@
 import { Color } from 'three';
-import { segmentForMesh } from './organSegments.js';
-import { MODEL_HOVER_COLOR, getStatusColors } from './theme/index.js';
+import { paintBody } from './bodyShading.js';
+import { MODEL_HOVER_COLOR, getCurrentTheme, getStatusColors } from './theme/index.js';
 
 // Status colours of the body map come from the current UI theme (src/theme) and are read
-// at call time, so the 3D model follows a theme switch on its next tint.
+// at call time, so the 3D model follows a theme switch on its next paint.
 // STATUS_COLORS.ok / .caution / .alert / .no_data always return the current theme's colours.
 export const STATUS_COLORS = Object.freeze({
   get ok() { return getStatusColors().ok; },
@@ -14,56 +14,31 @@ export const STATUS_COLORS = Object.freeze({
 
 export const HOVER_COLOR = MODEL_HOVER_COLOR;
 
-// How far the model colour is pulled towards the status colour (1 = flat status colour).
-const TINT_AMOUNT = 0.82;
-
-const materialsOf = object => (Array.isArray(object.material) ? object.material : [object.material]);
+// "Quiet display": a healthy segment is a calm, greyed green; only caution and alert get the
+// full status colour, so the eye goes to what needs attention.
+const OK_QUIET = 0.38; // how far OK is pulled towards the neutral body grey
+const NO_DATA_QUIET = 0.5;
+const NEUTRAL = '#8b939b';
 
 /**
- * Original material colours, remembered once per mesh on the (cached, shared) GLTF
- * scene itself so a later viewer mount never mistakes a tint for the original.
+ * Colour of one body segment: hover colour, status colour, or the model's own colour when
+ * there is no status at all (offline demo without a report).
  */
-export function originalColors(object) {
-  if (!object.userData.__originalColors) {
-    object.userData.__originalColors = materialsOf(object).map(material => material?.color?.clone() ?? null);
-  }
-  return object.userData.__originalColors;
+export function segmentColor(segment, segmentStatus, originalColor, hoveredSegment = null) {
+  if (hoveredSegment && segment === hoveredSegment) return new Color(HOVER_COLOR);
+  // No report at all (offline demo without data): the model's own colours.
+  if (!segmentStatus) return originalColor ? originalColor.clone() : new Color(NEUTRAL);
+  const status = segmentStatus[segment];
+  // A segment no organ maps to (e.g. the neck): neutral grey, not the model's pale blue.
+  if (!status) return new Color(NEUTRAL);
+  const neutral = new Color(NEUTRAL);
+  if (status === 'ok') return new Color(STATUS_COLORS.ok).lerp(neutral, OK_QUIET);
+  if (status === 'caution' || status === 'alert') return new Color(STATUS_COLORS[status]);
+  return new Color(STATUS_COLORS.no_data).lerp(neutral, NO_DATA_QUIET);
 }
 
-/** Colours a mesh should show when it is not hovered: status tint, or the original colour. */
-export function baseColors(object, segmentStatus) {
-  const originals = originalColors(object);
-  const status = segmentStatus?.[segmentForMesh(object.name)];
-  const target = status && STATUS_COLORS[status];
-  if (!target) return originals;
-  const tint = new Color(target);
-  return originals.map(color => (color ? color.clone().lerp(tint, TINT_AMOUNT) : null));
-}
-
-export function setColors(object, colors) {
-  materialsOf(object).forEach((material, index) => {
-    if (material?.color && colors[index]) material.color.copy(colors[index]);
-  });
-}
-
-export function setHighlight(object, color = HOVER_COLOR) {
-  materialsOf(object).forEach(material => {
-    if (material?.color) material.color.set(color);
-  });
-}
-
-/** Paint every mesh of the scene with its base colour (status tint or original). */
-export function applySegmentTint(scene, segmentStatus) {
-  scene.traverse(object => {
-    if (!object.isMesh || !object.material) return;
-    setColors(object, baseColors(object, segmentStatus));
-  });
-}
-
-/** Restore the model's own colours (on unmount). */
-export function clearSegmentTint(scene) {
-  scene.traverse(object => {
-    if (!object.isMesh || !object.material) return;
-    setColors(object, originalColors(object));
-  });
+/** Paint the body: status colours per segment, soft borders between segments, optional hover. */
+export function paintSegments(scene, segmentStatus, hoveredSegment = null) {
+  void getCurrentTheme; // colours are read through STATUS_COLORS at call time
+  paintBody(scene, (segment, original) => segmentColor(segment, segmentStatus, original, hoveredSegment));
 }

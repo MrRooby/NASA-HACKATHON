@@ -188,7 +188,6 @@ main.screen[data-screen='crew'] {
 .crew-member-role, .crew-member-where { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .crew-member-role { text-transform: uppercase; letter-spacing: 0.06em; }
 .crew-member-role .label, .crew-member-where .label { font-size: 1em; }
-.crew-member-callsign { color: var(--fg); font-weight: 700; }
 .crew-member-where { color: var(--fg); }
 .crew-member-status { display: flex; align-items: baseline; gap: 0.5em; }
 .crew-member-status > .stag { flex: 0 0 auto; }

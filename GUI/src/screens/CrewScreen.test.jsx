@@ -33,10 +33,12 @@ describe('CrewScreen: roster', () => {
   it('shows callsign, role, home module and avatar of each member', async () => {
     await renderCrew({ session: 'HAB-C1' });
     const c3 = within(row('HAB-C3'));
-    expect(c3.getByText(/BAZALT/)).toBeInTheDocument();
-    expect(row('HAB-C3').querySelector('.crew-member-role')).toHaveTextContent('“BAZALT” · Geologist · HAB-C3');
+    expect(c3.queryByText(/BAZALT/)).not.toBeInTheDocument(); // badges and callsigns removed
+    expect(row('HAB-C3').querySelector('.crew-member-role')).toHaveTextContent('Geologist · HAB-C3');
     expect(row('HAB-C3').querySelector('.crew-member-where')).toHaveTextContent(/Home Habitation module M2/);
-    expect(c3.getByRole('img', { name: 'Avatar of Roman Czarny' })).toHaveAttribute('data-code', 'C3');
+    // Roman has a crew photo (src/data/crewPhotos.js); a member without one keeps the pixel avatar.
+    expect(c3.getByRole('img', { name: 'Avatar of Roman Czarny' }).tagName).toBe('IMG');
+    expect(within(row('HAB-C2')).getByRole('img', { name: 'Avatar of Bogusława Grzegrzułkiewicz' })).toHaveAttribute('data-code', 'C2');
   });
 
   it('marks the logged-in member as YOU', async () => {
@@ -51,8 +53,8 @@ describe('CrewScreen: roster', () => {
 
   it('labels the crew as fictional and the statuses as synthetic', async () => {
     await renderCrew({ session: 'HAB-C1' });
-    expect(screen.getByText('Fictional crew')).toHaveAttribute('data-kind', 'fictional');
-    expect(screen.getByText('SYNTHETIC')).toBeInTheDocument();
+    expect(screen.queryByText('Fictional crew')).toBeNull();
+    expect(screen.queryByText('SYNTHETIC')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(screen.getByText('Status as of the latest sol')).toBeInTheDocument();
   });
 });
@@ -96,7 +98,7 @@ describe('CrewScreen: health from the crew overview', () => {
     }
     expect(row('HAB-C4')).toHaveAttribute('data-status', 'alert'); // the demo keeps one alert
     expect(screen.getByText('No link to MOTHER · demo data')).toBeInTheDocument();
-    expect(screen.getAllByText('DEMO').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('DEMO')).toHaveLength(0);
     expect(screen.queryByText('Status as of the latest sol')).not.toBeInTheDocument();
   });
 
@@ -205,7 +207,7 @@ describe('CrewScreen: Polish', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Lista załogi' })).toBeInTheDocument();
     expect(row('HAB-C4').querySelector('.crew-member-role')).toHaveTextContent('Lekarz misji');
     expect(screen.getByTestId('crew-you')).toHaveTextContent('Ty');
-    expect(screen.getByText('Fikcyjna załoga')).toBeInTheDocument();
+    expect(screen.queryByText('Fikcyjna załoga')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(within(row('HAB-C1')).getByLabelText('Nerki: Uwaga')).toBeInTheDocument();
     expect(row('HAB-C1').querySelector('[data-organ="blood"] .crew-organ-word')).toHaveTextContent('Krew');
   });

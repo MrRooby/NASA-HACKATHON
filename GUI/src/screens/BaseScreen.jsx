@@ -105,7 +105,6 @@ function RoomPanel({ room, navigate }) {
       data-room={room.id}
       meta={(
         <span className="base-meta">
-          {room.simulated && <Badge kind="simulated" />}
           <StatusTag status={room.status} />
         </span>
       )}
@@ -129,7 +128,6 @@ function RoomPanel({ room, navigate }) {
             <CrewList occupants={ownOccupants} navigate={navigate} />
           </p>
         )}
-        {room.simulated && <p className="base-sim-note">{t('base.simulatedNote')}</p>}
       </div>
 
       <ReadingsTable
@@ -271,11 +269,6 @@ export default function BaseScreen({ mother, navigate }) {
           <span className="base-head-sol">
             {shownSol != null ? t('common.solN', { n: shownSol }) : t('common.solUnknown')}
           </span>
-          {data?.demo && <Badge kind="demo" />}
-          {data && !data.demo && habitat?.data_kind === 'synthetic' && <Badge kind="synthetic" />}
-          {data && !data.demo && habitat?.data_kind && habitat.data_kind !== 'synthetic' && (
-            <Badge>{String(habitat.data_kind).toUpperCase()}</Badge>
-          )}
           <span className="base-head-overall">
             <span className="base-fact-key">{t('base.overall')}</span>
             <StatusTag status={overall} />
@@ -311,7 +304,6 @@ export default function BaseScreen({ mother, navigate }) {
         </div>
         <p className="base-legend" aria-hidden="true">
           <StatusTag status="ok" /> <StatusTag status="caution" /> <StatusTag status="alert" /> <StatusTag status="no_data" />
-          <span className="base-legend-sim">{t('base.legendSimulated')}</span>
           <span className="base-legend-crew">{t('base.legendCrew')}</span>
         </p>
       </Panel>

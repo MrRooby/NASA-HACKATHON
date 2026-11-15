@@ -1,22 +1,5 @@
 export default {
-  boot1: 'AWERNASA CREW HEALTH TERMINAL v0.2',
-  boot2: 'HABITAT MARS-LT-ELYSIUM · SEALED LAVA TUBE · ELYSIUM MONS',
-  boot3: 'LOCAL STORE ........ OK',
-  boot4Online: 'LINK TO MOTHER ..... OK',
-  boot4Connecting: 'LINK TO MOTHER ..... WAIT',
-  boot4Offline: 'LINK TO MOTHER ..... NO CARRIER · DEMO DATA',
-  boot5: 'EARTH RELAY ........ ASYNC · ONE-WAY DELAY 3–22 MIN',
-
-  title: 'Crew identification',
-  prompt: 'Select your crew record to open a session',
+  prompt: 'Tap your crew record to open a session',
   crewList: 'Crew members',
-  open: 'Open session',
   openFor: 'Open session as {name}',
-  callsign: 'Callsign',
-  role: 'Role',
-  zone: 'Home module',
-  fictionalNote: 'The crew of the Polish Mars Mission is fictional. Any resemblance to real persons is coincidental.',
-  offlineNote: 'Works without a link to MOTHER: the terminal then shows built-in demo data.',
-  link: 'Link',
-  awaiting: 'Awaiting input',
 };

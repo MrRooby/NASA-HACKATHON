@@ -7,6 +7,7 @@ import AstronautViewer from './AstronautViewer.jsx';
 vi.mock('@react-three/fiber', () => ({
   Canvas: () => <div data-testid="r3f-canvas" />,
   useFrame: () => {},
+  useThree: () => ({}),
 }));
 vi.mock('@react-three/drei', () => {
   const Pass = ({ children }) => children ?? null;

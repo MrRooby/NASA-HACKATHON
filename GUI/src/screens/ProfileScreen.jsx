@@ -36,7 +36,6 @@ function CheckInPanel({ biometrics, committed, sol, onUpdate, onCommit }) {
     <Panel
       className="profile-checkin"
       title={t('profile.checkinTitle')}
-      meta={<Badge kind="simulated" title={t('profile.checkinSimulatedHint')} />}
     >
       <CheckIn biometrics={biometrics} sol={sol} onUpdate={onUpdate} onSubmit={onCommit} />
       {committed ? (
