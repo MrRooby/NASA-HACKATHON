@@ -1,12 +1,12 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    App shell for a touch tablet: the shell is exactly one viewport high.
-   Rows: status line · tab bar · screen · footer. The page never scrolls; the
+   Rows: top bar (status line + tabs) · screen. The page never scrolls; the
    screen area is the only box that may scroll, until every screen fits by itself.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .shell {
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr); /* top bar · screen */
   height: 100vh;
   height: 100dvh;
   min-width: 0;
@@ -133,7 +133,7 @@
 .navtab[data-nav='logout'] { color: var(--dim); }
 .navtab[data-nav='logout']:active { color: var(--alert); border-color: var(--alert); }
 
-/* ── screen + footer ─────────────────────────────────────────────────────── */
+/* ── screen ─────────────────────────────────────────────────────── */
 .screen {
   min-width: 0;
   min-height: 0;
@@ -142,21 +142,6 @@
   overscroll-behavior: contain;
 }
 
-.statusline {
-  display: flex;
-  justify-content: space-between;
-  gap: 2px 16px;
-  padding: 4px 16px;
-  overflow: hidden;
-  color: var(--dim);
-  border-top: 1px solid var(--border);
-  background: var(--bg);
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  white-space: nowrap;
-}
-.statusline > span { overflow: hidden; text-overflow: ellipsis; }
 
 /* ── narrow / phone ──────────────────────────────────────────────────────── */
 @media (max-width: 1100px) {
@@ -170,7 +155,6 @@
   .navtab[data-nav='profile'] .navtab-label { font-size: 13px; }
   .topbar-nav { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) repeat(3, minmax(0, 1fr)) var(--tab-h); }
   .navtab[data-nav='profile'] .navtab-label { letter-spacing: 0; }
-  .statusline > span:last-child { display: none; }
 }
 @media (max-height: 500px) {
   .topbar { gap: 2px; padding: 2px 8px 4px; }
@@ -179,5 +163,4 @@
   .navtab-icon { font-size: 28px; }
   .navtab { flex-direction: row; }
   .navtab-label { display: none; }
-  .statusline { display: none; }
 }

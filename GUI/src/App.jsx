@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import useMother from './useMother.js';
 import { getProfile } from './data/crewProfiles.js';
+import { demoReport } from './data/demoReports.js';
 import { useT } from './i18n/index.js';
 import { ConnectionBadge, Panel, StatusTag } from './components/index.js';
 import NavIcon from './navIcons.jsx';
@@ -16,7 +17,7 @@ import './shell.css';
 
 /**
  * Screen id -> component. Every screen gets { mother, session, viewedCode, setViewedCode, navigate, profile,
- * setChromeHidden }. setChromeHidden(true) hides the top bar and the footer (a running cognitive test needs
+ * setChromeHidden }. setChromeHidden(true) hides the top bar (a running cognitive test needs
  * the whole window and steady frame timing); leaving the screen always brings them back.
  */
 export const SCREEN_COMPONENTS = {
@@ -89,7 +90,8 @@ function NavTab({ id, icon, label, name, current, parent, square, onClick }) {
 function TopBar({ mother, session, viewedCode, screen, navigate, onLogout }) {
   const t = useT();
   const me = getProfile(session);
-  const sol = mother.report?.as_of?.sol;
+  // Offline the screens show the built-in demo record of the viewed person: show its sol too.
+  const sol = mother.report?.as_of?.sol ?? (mother.online ? undefined : demoReport(viewedCode)?.as_of?.sol);
   const own = { viewedCode: session };
   const viewingOther = viewedCode !== session;
   // Big full-width tabs for a touch tablet; settings and log out are square icon buttons in the corner.
@@ -201,12 +203,6 @@ export default function App() {
           <Screen {...screenProps} />
         </ScreenBoundary>
       </main>
-      {!chromeHidden && (
-        <footer className="statusline">
-          <span>{mother.online ? t('common.footerLive') : t('common.footerDemo')}</span>
-          <span>{t('common.disclaimer')} · {t('common.credit')}</span>
-        </footer>
-      )}
     </div>
   );
 }

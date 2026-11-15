@@ -277,19 +277,6 @@ input[type='range']:hover::-moz-range-thumb { background: var(--accent-bright); 
 /* ── 4. App shell (src/App.jsx) ──────────────────────────────────────────── */
 /* App shell, top bar and tab navigation: src/shell.css (imported by App.jsx). */
 
-.statusline {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 2px 16px;
-  padding: 4px 16px;
-  color: var(--dim);
-  border-top: 1px solid var(--border);
-  background: var(--bg);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
 
 .screen-fault { color: var(--alert); }
 

@@ -63,7 +63,7 @@ describe('app shell', () => {
       .toEqual(['home', 'profile', 'base', 'crew', 'tests', 'settings']);
     expect(within(nav).getByRole('button', { name: 'Bogusław Grzegrzułkiewicz' })).toBeInTheDocument();
     expect(within(nav).getByRole('button', { name: 'Settings' })).toContainElement(document.querySelector('[data-nav="settings"] .nf-icon'));
-    expect(screen.getByTestId('topbar-sol')).toHaveTextContent('SOL ---');
+    expect(screen.getByTestId('topbar-sol')).toHaveTextContent('SOL 600'); // offline: the sol of the built-in demo record
     expect(within(topbar()).getByText(/^\d\d:\d\d:\d\d UTC$/)).toBeInTheDocument();
     expect(within(topbar()).getByRole('button', { name: 'Log out' })).toBeInTheDocument();
   });
