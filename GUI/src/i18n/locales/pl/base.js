@@ -16,7 +16,7 @@ export default {
   mapHint: 'DOTKNIJ POMIESZCZENIA',
   simulated: 'SYMULOWANE',
   crewHere: 'załoga: {codes}',
-  legendCrew: 'C# = ZAŁOGA W POMIESZCZENIU',
+  legendCrew: '● = CZŁONEK ZAŁOGI, DOTKNIJ, BY OTWORZYĆ',
 
   // Pomieszczenia (pełne nazwy) i krótsze napisy na mapie
   roomAirlock1: 'ŚLUZA 1',

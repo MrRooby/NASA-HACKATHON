@@ -79,7 +79,7 @@ EVENTS = [{"event_code": "evt-1", "event_type": "scrubber_fault", "start_utc": H
            "severity": "major", "source_flag": "simulated"}]
 
 
-def habitat_db(hab=(HAB,), last_hour=H0 + timedelta(hours=9)):
+def habitat_db(hab=(HAB,), last_hour=H0 + timedelta(hours=9), locations=None):
     return FakeConn([
         ("FROM astro_habitat.habitat ORDER BY id", list(hab)),
         ("SELECT MAX(hour_utc)", [{"t": last_hour}]),
@@ -88,7 +88,7 @@ def habitat_db(hab=(HAB,), last_hour=H0 + timedelta(hours=9)):
         ("FROM astro_habitat.channel WHERE per_crew = 0", CHANNELS),
         ("FROM astro_habitat.reading_hourly WHERE habitat_id = %s AND hour_utc >=", HOURLY),
         ("FROM astro_habitat.reading WHERE habitat_id", RAW),
-        ("FROM astro_habitat.crew_location", LOCATIONS),
+        ("FROM astro_habitat.crew_location", LOCATIONS if locations is None else locations),
         ("FROM astro_habitat.event", EVENTS),
     ])
 
@@ -195,6 +195,19 @@ def test_unknown_channels_are_ignored_and_empty_zone_has_no_data(report):
     assert all(r["channel"] != "per_crew_thing" for r in zone(report, "module_M1")["readings"])
     gym = zone(report, "gym")
     assert gym["readings"] == [] and gym["status"] == "no_data" and gym["now_status"] == "no_data"
+
+
+def test_occupants_are_taken_at_the_busiest_moment_not_at_bedtime():
+    day = [
+        {"crew_code": "C1", "zone_code": "module_M1", "from_utc": H0 + timedelta(hours=8)},
+        {"crew_code": "C2", "zone_code": "module_M1", "from_utc": H0 + timedelta(hours=8)},
+        {"crew_code": "C1", "zone_code": "lab", "from_utc": H0 + timedelta(hours=3)},
+        {"crew_code": "C2", "zone_code": "gym", "from_utc": H0 + timedelta(hours=3)},
+    ]
+    out = habitat_report(TeamDatabase(conn=habitat_db(locations=day)))
+    assert zone(out, "lab")["occupants"] == ["C1"]
+    assert zone(out, "module_M1")["occupants"] == []
+    assert out["as_of"]["occupants_at"] is not None
 
 
 def test_occupants_use_each_crew_members_latest_location(report):

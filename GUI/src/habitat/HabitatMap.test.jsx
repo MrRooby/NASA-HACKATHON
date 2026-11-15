@@ -93,9 +93,30 @@ describe('HabitatMap', () => {
     expect(codes('quarters_north')).toEqual(['C1', 'C2']);
     expect(codes('quarters_south')).toEqual(['C3', 'C4']);
     expect(codes('lab')).toEqual([]);
-    expect(within(roomEl('quarters_north')).getByText('C1')).toBeInTheDocument();
+    // a dot, not a code label; its accessible name is the person's full name
+    expect(roomEl('quarters_north').querySelector('.hmap-crew[data-crew="C1"] circle.hmap-crew-dot')).not.toBeNull();
+    expect(screen.queryByText('C1')).toBeNull();
     expect(roomEl('quarters_north').getAttribute('aria-label')).toMatch(/crew: C1, C2/);
     expect(document.querySelectorAll('.hmap-crew')).toHaveLength(4);
+  });
+
+  it('opens the crew member on a tap on a dot and shows name and photo on hover', () => {
+    const onSelect = vi.fn();
+    const onCrewOpen = vi.fn();
+    render(<HabitatMap rooms={rooms142} onSelect={onSelect} onCrewOpen={onCrewOpen} />);
+    const dot = roomEl('quarters_north').querySelector('.hmap-crew[data-crew="C1"]');
+    expect(dot).toHaveAttribute('role', 'button');
+    expect(dot).toHaveAttribute('aria-label', 'Aleksander Polkowski');
+    fireEvent.pointerEnter(dot);
+    const card = document.querySelector('.hmap-card[data-card="C1"]');
+    expect(card).not.toBeNull();
+    expect(card.querySelector('image')).not.toBeNull();
+    expect(within(card).getByText('Aleksander')).toBeInTheDocument();
+    fireEvent.pointerLeave(dot);
+    expect(document.querySelector('.hmap-card')).toBeNull();
+    fireEvent.click(dot);
+    expect(onCrewOpen).toHaveBeenCalledWith('HAB-C1');
+    expect(onSelect).not.toHaveBeenCalled();
   });
 
   it('marks a sub-zone that is not ok, and only that one', () => {
@@ -116,7 +137,7 @@ describe('HabitatMap', () => {
     fireEvent.click(roomEl('reactor'));
     expect(onSelect).toHaveBeenLastCalledWith('reactor');
     // clicking a label or marker inside the room counts too
-    fireEvent.click(within(roomEl('quarters_north')).getByText('C1'));
+    fireEvent.click(roomEl('quarters_north').querySelector('.hmap-crew[data-crew="C1"]'));
     expect(onSelect).toHaveBeenLastCalledWith('quarters_north');
     expect(onSelect).toHaveBeenCalledTimes(2);
   });

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StatusTag } from '../components/index.js';
 import CrewPortrait from '../crew/CrewPortrait.jsx';
 import CrewLoading from '../crew/CrewLoading.jsx';
@@ -13,6 +13,7 @@ import { UI_GLYPH } from '../crew/glyphs.js';
 /** Rows of the roster shown at once; the rest is reached with the ▲ / ▼ blocks. */
 export const ROSTER_ROWS = 5;
 import CrewPerson from '../crew/CrewPerson.jsx';
+import { getProfile } from '../data/crewProfiles.js';
 import NavIcon from '../navIcons.jsx';
 import './crew.css';
 
@@ -84,7 +85,7 @@ function CrewRow({ profile, isYou, health, loading, habitat, onOpen }) {
  * A tap opens the person view (src/crew/CrewPerson.jsx) as a sub-view with a big ‹ BACK.
  * props (shared by every screen): { mother, session, viewedCode, setViewedCode, navigate, profile }
  */
-export default function CrewScreen({ mother, session, setViewedCode, navigate }) {
+export default function CrewScreen({ mother, session, setViewedCode, navigate, route }) {
   const { t } = useI18n();
   const { data: habitat } = useHabitat({ sol: null }); // the overview is always the latest sol
 
@@ -121,6 +122,13 @@ export default function CrewScreen({ mother, session, setViewedCode, navigate })
     setViewedCode(null);
     setPersonCode(null);
   };
+  // navigate('crew', { open: 'HAB-C3' }) (e.g. a crew dot on the base map) opens that person
+  const routeKey = route?.key;
+  const routeOpen = route?.open;
+  useEffect(() => {
+    const person = getProfile(routeOpen);
+    if (person) openPerson(person.code);
+  }, [routeKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (personCode) {
     return (

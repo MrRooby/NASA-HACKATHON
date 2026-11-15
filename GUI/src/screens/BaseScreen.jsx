@@ -339,7 +339,7 @@ export default function BaseScreen({ mother, navigate }) {
       )}
 
       <section className="base-map" aria-label={t('base.mapTitle')}>
-        <HabitatMap rooms={model.rooms} selectedId={selectedId} onSelect={openRoom} />
+        <HabitatMap rooms={model.rooms} selectedId={selectedId} onSelect={openRoom} onCrewOpen={navigate ? code => navigate('crew', { open: code }) : undefined} />
         {!data && (
           <p className="base-map-status" role="status">{loading ? t('common.loading') : t('common.noData')}</p>
         )}

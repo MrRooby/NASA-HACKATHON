@@ -190,15 +190,25 @@ def habitat_report(db, sol: int | None = None) -> dict[str, Any]:
             "sensors": {k: _num(v) for k, (_, v) in sorted(s["sensors"].items())} if len(s["sensors"]) > 1 else None,
         })
 
-    # who is where at the last data point of the sol
+    # who is where: the moment of the sol with the crew spread over the most zones (the work shift),
+    # not the end of the sol, when everyone is asleep in the crew quarters
     ref = last_ts or t1
+    rows = db._q("SELECT crew_code, zone_code, from_utc FROM astro_habitat.crew_location WHERE habitat_id = %s "
+                 "AND from_utc <= %s AND from_utc >= %s ORDER BY from_utc DESC", (hab["id"], ref, t0 - timedelta(days=2)))
+    rows = sorted((r for r in rows if r["from_utc"] <= ref), key=lambda r: r["from_utc"])
+    where: dict[str, str] = {}
+    best, best_at = {}, None
+    for i, r in enumerate(rows):
+        where[r["crew_code"]] = r["zone_code"]
+        if i + 1 < len(rows) and rows[i + 1]["from_utc"] == r["from_utc"]:
+            continue   # apply every move at this instant first
+        if r["from_utc"] >= t0 and len(set(where.values())) >= len(set(best.values())):
+            best, best_at = dict(where), r["from_utc"]
+    if best_at is None:
+        best = where
     occupants: dict[str, list[str]] = {}
-    seen: set[str] = set()
-    for r in db._q("SELECT crew_code, zone_code, from_utc FROM astro_habitat.crew_location WHERE habitat_id = %s "
-                   "AND from_utc <= %s AND from_utc >= %s ORDER BY from_utc DESC", (hab["id"], ref, t0 - timedelta(days=2))):
-        if r["crew_code"] not in seen:
-            seen.add(r["crew_code"])
-            occupants.setdefault(r["zone_code"], []).append(r["crew_code"])
+    for crew, zone_code in best.items():
+        occupants.setdefault(zone_code, []).append(crew)
 
     out_zones = []
     for z in zones:
@@ -228,7 +238,7 @@ def habitat_report(db, sol: int | None = None) -> dict[str, Any]:
                     "atm_ppo2_inspired_mmhg": _num(hab["atm_ppo2_inspired_mmhg"]),
                     "mission_sols": hab["mission_sols"], "crew_capacity": hab["crew_capacity"],
                     "data_kind": "synthetic" if hab["is_synthetic"] else "real"},
-        "as_of": {"sol": sol, "latest_sol": latest, "from_utc": _iso(t0), "to_utc": _iso(t1), "last_reading_utc": _iso(last_ts)},
+        "as_of": {"sol": sol, "latest_sol": latest, "from_utc": _iso(t0), "to_utc": _iso(t1), "last_reading_utc": _iso(last_ts), "occupants_at": _iso(best_at)},
         "overall_status": _worst(*statuses) if statuses else "no_data",
         "zones": out_zones,
         "events": events,

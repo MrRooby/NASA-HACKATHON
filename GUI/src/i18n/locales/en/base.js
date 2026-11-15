@@ -16,7 +16,7 @@ export default {
   mapHint: 'TAP A ROOM',
   simulated: 'SIMULATED',
   crewHere: 'crew: {codes}',
-  legendCrew: 'C# = CREW IN ROOM',
+  legendCrew: '● = CREW MEMBER, TAP TO OPEN',
 
   // Rooms (full names) and the shorter texts drawn on the map
   roomAirlock1: 'AIRLOCK 1',

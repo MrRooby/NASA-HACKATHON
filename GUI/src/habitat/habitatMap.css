@@ -72,9 +72,14 @@
   pointer-events: none;
 }
 
-.hmap-crew { pointer-events: none; }
-.hmap-crew rect { fill: var(--fg); stroke: none; }
-.hmap-crew text { fill: var(--bg); font-size: 15px; font-weight: 800; }
+.hmap-crew { cursor: pointer; outline: none; }
+.hmap-crew-hit { fill: transparent; stroke: none; }
+.hmap-crew-dot { fill: var(--fg); stroke: var(--bg); stroke-width: 3; transition: r 120ms ease; }
+.hmap-crew:hover .hmap-crew-dot,
+.hmap-crew:focus-visible .hmap-crew-dot { fill: var(--accent-bright); r: 14px; }
+.hmap-card-box { fill: var(--panel); stroke: var(--accent); stroke-width: 2; }
+.hmap-card-first { fill: var(--accent-bright); font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.hmap-card-last { fill: var(--fg); font-size: 20px; text-transform: uppercase; }
 
 .hmap-mark { pointer-events: none; }
 .hmap-mark rect { fill: var(--dim); }
