@@ -2,7 +2,8 @@ import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import CrewScreen from './CrewScreen.jsx';
 import { demoOverview } from '../data/demoReports.js';
-import { fixtures } from '../test/mother.js';
+import { fixtures, jsonResponse, stubMother } from '../test/mother.js';
+import habitatSol142 from '../test/fixtures/habitat_sol142.json';
 import { offlineMother, onlineMother, renderScreen, stubBackend } from '../profile/testUtils.jsx';
 
 const rows = () => within(screen.getByRole('list', { name: /^(Crew roster|Lista załogi)$/ })).getAllByRole('listitem').filter(item => item.matches('.crew-member'));
@@ -25,7 +26,7 @@ describe('CrewScreen: roster', () => {
     await renderCrew({ session: 'HAB-C1' });
     expect(rows().map(item => item.getAttribute('data-code'))).toEqual(['HAB-C1', 'HAB-C2', 'HAB-C3', 'HAB-C4']);
     expect(rows().map(item => within(item).getByRole('heading', { level: 3 }).textContent.replace(/\s*You$/, ''))).toEqual([
-      'Aleksander Polkowski', 'Bogusław Grzegrzułkiewicz', 'Roman Czarny', 'Grażyna Brzęczyszczykiewicz',
+      'Aleksander Polkowski', 'Bogusława Grzegrzułkiewicz', 'Roman Czarny', 'Grażyna Brzęczyszczykiewicz',
     ]);
   });
 
@@ -72,8 +73,8 @@ describe('CrewScreen: health from the crew overview', () => {
     expect(items).toHaveLength(10);
     expect(Object.fromEntries(items.map(item => [item.getAttribute('data-organ'), item.getAttribute('data-status')])))
       .toEqual(overviewOf('HAB-C3').organs);
-    expect(items.map(item => item.textContent)).toEqual([
-      'BRNOK', 'EYE--', 'HRTOK', 'LNGOK', 'BLDCA', 'KIDCA', 'GUTCA', 'MSK--', 'LMBOK', 'EXPOK',
+    expect(items.map(item => item.querySelector('.crew-organ-word').textContent)).toEqual([
+      'Brain', 'Eyes', 'Heart', 'Lungs', 'Blood', 'Kidneys', 'Gut', 'Bones', 'Limbs', 'Exposure',
     ]);
     expect(within(organs).getByLabelText('Blood: Caution')).toBeInTheDocument();
     expect(within(organs).getByLabelText('Eyes: No data')).toBeInTheDocument();
@@ -99,24 +100,29 @@ describe('CrewScreen: health from the crew overview', () => {
     expect(screen.queryByText('Status as of the latest sol')).not.toBeInTheDocument();
   });
 
-  it('shows [ ---- ] for everyone while the overview has not arrived yet', async () => {
+  it('reads the report of each person when the crew overview has not arrived', async () => {
+    await renderCrew({ session: 'HAB-C1', mother: onlineMother('HAB-C1', { overview: null }) });
+    await waitFor(() => expect(row('HAB-C3')).toHaveAttribute('data-status', fixtures.habC3.overall_status));
+    expect(screen.queryByTestId('crew-loading')).not.toBeInTheDocument();
+    expect(within(row('HAB-C3')).getByText(fixtures.habC3.top_message)).toBeInTheDocument();
+  });
+
+  it('shows [ ---- ] while neither the overview nor the reports have arrived', async () => {
+    stubMother(url => (/\/api\/organs\/HAB-/.test(url) ? new Promise(() => {}) : new URL(url, 'http://gui.test').pathname === '/api/habitat' ? jsonResponse(habitatSol142) : undefined));
     await renderCrew({ session: 'HAB-C1', mother: onlineMother('HAB-C1', { overview: null }) });
     for (const item of rows()) {
       expect(item).toHaveAttribute('data-status', 'no_data');
-      expect(within(item).getByText('[ ---- ]')).toBeInTheDocument();
       expect(within(item).getByText('Loading…')).toBeInTheDocument();
-      expect(within(item).getAllByRole('listitem').every(organ => organ.getAttribute('data-status') === 'no_data')).toBe(true);
     }
-    expect(screen.queryByText('SYNTHETIC')).not.toBeInTheDocument();
-    expect(screen.queryByText('DEMO')).not.toBeInTheDocument();
+    expect(screen.getByTestId('crew-loading')).toHaveTextContent('Loading…'); // grey veil over the roster
   });
 
-  it('shows [ ---- ] for a member the overview does not list', async () => {
+  it('shows [ ---- ] for a member with neither an overview entry nor a report', async () => {
+    stubMother(url => (url.includes('/api/organs/HAB-C2') ? jsonResponse({ error: 'unknown' }, { status: 404 }) : new URL(url, 'http://gui.test').pathname === '/api/habitat' ? jsonResponse(habitatSol142) : undefined));
     const overview = fixtures.overview.filter(entry => entry.subject.code !== 'HAB-C2');
     await renderCrew({ session: 'HAB-C1', mother: onlineMother('HAB-C1', { overview }) });
+    await waitFor(() => expect(within(row('HAB-C2')).getByText('No health record.')).toBeInTheDocument());
     expect(row('HAB-C2')).toHaveAttribute('data-status', 'no_data');
-    expect(within(row('HAB-C2')).getByText('No health record.')).toBeInTheDocument();
-    expect(row('HAB-C1')).toHaveAttribute('data-status', 'caution');
   });
 });
 
@@ -145,6 +151,54 @@ describe('CrewScreen: actions', () => {
   });
 });
 
+describe('CrewScreen: more than four crew members', () => {
+  it('shows four of the ten rows and pages with the up / down blocks', async () => {
+    await renderCrew({ session: 'HAB-C1' });
+    const [up, down] = document.querySelectorAll('.crew-roster-step');
+    expect(up).toHaveAttribute('aria-label', 'Show the previous crew member');
+    expect(up).toBeDisabled(); // nothing above the first row: greyed out, still there
+    expect(down).toBeEnabled();
+    fireEvent.click(down);
+    fireEvent.click(down);
+    expect(rows().map(item => item.getAttribute('data-code'))).toEqual(['HAB-C3', 'HAB-C4', 'HAB-C5', 'HAB-C6']);
+    for (let i = 0; i < 4; i += 1) fireEvent.click(down);
+    expect(rows().map(item => item.getAttribute('data-code'))).toEqual(['HAB-C7', 'HAB-C8', 'HAB-C9', 'HAB-C10']);
+    expect(down).toBeDisabled(); // nothing below the last row
+    expect(up).toBeEnabled();
+    expect(within(row('HAB-C10')).getByRole('heading', { level: 3 })).toHaveTextContent('Czesława Życińska');
+  });
+});
+
+describe('CrewScreen: person view', () => {
+  it('opens the person view when the row is clicked, and goes back', async () => {
+    const { navigate, setViewedCode } = await renderCrew({ session: 'HAB-C1' });
+    fireEvent.click(row('HAB-C4'));
+    expect(setViewedCode).toHaveBeenCalledWith('HAB-C4');
+    expect(navigate).not.toHaveBeenCalled();
+    expect(screen.getByRole('heading', { level: 2, name: /Grażyna Brzęczyszczykiewicz/ })).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: 'Live charts' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Back to the crew roster' }));
+    expect(setViewedCode).toHaveBeenLastCalledWith(null);
+    expect(rows()).toHaveLength(4);
+  });
+
+  it('opens the person view from the name button and keeps the full profile one click away', async () => {
+    const { navigate } = await renderCrew({ session: 'HAB-C1', mother: onlineMother('HAB-C3') });
+    fireEvent.click(screen.getByRole('button', { name: 'Open Roman Czarny' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Full profile' }));
+    expect(navigate).toHaveBeenCalledWith('profile');
+  });
+
+  it('shows the checks of an organ after a click on it', async () => {
+    await renderCrew({ session: 'HAB-C1', mother: onlineMother('HAB-C3') });
+    fireEvent.click(row('HAB-C3'));
+    fireEvent.click(screen.getByRole('button', { name: /^Blood: / }));
+    const card = fixtures.habC3.organs.find(item => item.organ === 'blood');
+    const checks = within(screen.getByRole('list', { name: 'Checks: Blood' })).getAllByRole('listitem');
+    expect(checks.length).toBe(Math.min(card.checks.length, 6));
+  });
+});
+
 describe('CrewScreen: Polish', () => {
   it('translates roles and labels', async () => {
     await renderCrew({ session: 'HAB-C4', lang: 'pl' });
@@ -153,5 +207,18 @@ describe('CrewScreen: Polish', () => {
     expect(screen.getByTestId('crew-you')).toHaveTextContent('Ty');
     expect(screen.getByText('Fikcyjna załoga')).toBeInTheDocument();
     expect(within(row('HAB-C1')).getByLabelText('Nerki: Uwaga')).toBeInTheDocument();
+    expect(row('HAB-C1').querySelector('[data-organ="blood"] .crew-organ-word')).toHaveTextContent('Krew');
+  });
+});
+
+describe('CrewScreen: organ without data', () => {
+  it('asks to connect a sensor and names what is needed', async () => {
+    await renderCrew({ session: 'HAB-C1', mother: onlineMother('HAB-C3') });
+    fireEvent.click(row('HAB-C3'));
+    fireEvent.click(screen.getByRole('button', { name: /^Bones and muscles: No data/ }));
+    const box = screen.getByTestId('organ-no-data');
+    expect(box).toHaveTextContent('Connect a sensor or run a test');
+    expect(box).toHaveTextContent('grip strength');
+    expect(box).toHaveTextContent('only an estimate by MOTHER');
   });
 });
