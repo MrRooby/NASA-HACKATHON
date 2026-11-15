@@ -54,7 +54,9 @@ export function vitalsFromReport(report) {
   rows.push({ id: 'sleep', value: round(num(sleep?.value)), unit: '%', status: sleep?.status ?? 'no_data' });
 
   const dose = findCheck(report, 'exposure', 'dose_career');
-  rows.push({ id: 'dose', value: round(num(dose?.value), 1), unit: 'mSv', status: dose?.status ?? 'no_data' });
+  const doseValue = num(dose?.value);
+  // Three digits are enough for a narrow column: 67.8 mSv, but 123 mSv.
+  rows.push({ id: 'dose', value: round(doseValue, doseValue != null && doseValue >= 100 ? 0 : 1), unit: 'mSv', status: dose?.status ?? 'no_data' });
 
   return rows;
 }

@@ -85,4 +85,5 @@ export default {
   historyTitle: 'Historia · {name}',
   historyOffline: 'Historia wymaga połączenia z MOTHER.',
   historyError: 'MOTHER nie zwrócił historii.',
+  bodySize: '{h} cm · {m} kg',
 };

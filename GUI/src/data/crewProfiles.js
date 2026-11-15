@@ -33,6 +33,10 @@ export const CREW_PROFILES = [
       pl: 'Prowadzi poranną odprawę co do minuty i dzierży rekord habitatu w długości przemówienia nad liofilizowanymi pierogami.',
     },
     homeZone: 'module_M1',
+    sex: 'male',
+    heightCm: 182,
+    massKg: 84,
+    model: 'crew_C1', // public/models/crew_C1.glb, generated for this body
   },
   {
     fictional: true,
@@ -52,6 +56,10 @@ export const CREW_PROFILES = [
       pl: 'Trzykrotnie naprawił skruber CO2 opaskami zaciskowymi i dobrym słowem. Kontrola misji przestała literować jego nazwisko w 4. solu.',
     },
     homeZone: 'module_M1',
+    sex: 'male',
+    heightCm: 176,
+    massKg: 91,
+    model: 'crew_C2', // public/models/crew_C2.glb, generated for this body
   },
   {
     fictional: true,
@@ -71,6 +79,10 @@ export const CREW_PROFILES = [
       pl: 'Spędza najwięcej godzin w głębokich tunelach i każdą próbkę skały nazywa imieniem tatrzańskiego szczytu. W szafce z próbkami szczyty już się skończyły.',
     },
     homeZone: 'module_M2',
+    sex: 'male',
+    heightCm: 189,
+    massKg: 79,
+    model: 'crew_C3', // public/models/crew_C3.glb, generated for this body
   },
   {
     fictional: true,
@@ -90,6 +102,10 @@ export const CREW_PROFILES = [
       pl: 'Jedyny lekarz w promieniu 225 milionów km. Przepisuje sen, wodę i bieżnię, w tej kolejności, i sprawdza, kto co opuścił.',
     },
     homeZone: 'module_M2',
+    sex: 'female',
+    heightCm: 165,
+    massKg: 58,
+    model: 'crew_C4', // public/models/crew_C4.glb, generated for this body
   },
 ];
 

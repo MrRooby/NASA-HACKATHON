@@ -290,6 +290,11 @@ export default function HomeScreen({ mother, session, viewedCode, navigate, prof
             <span className="home-name">
               <span className="home-name-first">{firstName}</span>
               <span className="home-name-last">{lastNames.join(' ')}</span>
+              {profile?.heightCm ? (
+                <span className="home-body-size" data-testid="home-body-size">
+                  {t('home.bodySize', { h: profile.heightCm, m: profile.massKg })}
+                </span>
+              ) : null}
             </span>
             <span className="home-photo" data-testid="home-photo">
               {photo
@@ -312,7 +317,7 @@ export default function HomeScreen({ mother, session, viewedCode, navigate, prof
                 }
               }}
             >
-              <AstronautViewer frontView segmentStatus={segmentStatus} />
+              <AstronautViewer model={profile?.model} frontView segmentStatus={segmentStatus} />
             </div>
             <ul className="home-vitals" aria-label={t('home.vitalsLabel')}>
               {vitals.map(row => <VitalRow key={row.id} row={row} />)}

@@ -24,20 +24,25 @@
 /* ── left: person ────────────────────────────────────────────────────────── */
 .home-person {
   --side-col: clamp(96px, 8vw, 140px);
+  /* one grid for the whole left half: the figure starts right under the name and fills
+     everything down to the bottom; the photo and the readings share the right column */
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) var(--side-col);
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas:
+    'name   photo'
+    'figure photo'
+    'figure vitals';
   gap: 8px;
   min-width: 0;
   min-height: 0;
   border-right: 1px solid var(--border);
 }
-.home-head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--side-col);
-  align-items: start;
-  gap: 8px;
-  min-width: 0;
-}
+.home-head, .home-body { display: contents; }
+.home-name { grid-area: name; }
+.home-photo { grid-area: photo; }
+.home-figure { grid-area: figure; }
+.home-vitals { grid-area: vitals; }
 .home-name { display: grid; align-self: start; min-width: 0; line-height: 1.05; }
 /* photo in the top-right corner, as wide as the readings column below it (600×700 crops) */
 .home-photo {
@@ -64,13 +69,8 @@
 }
 .home-name-first { font-size: clamp(22px, min(3vw, 5vh), 52px); color: var(--accent-bright); }
 .home-name-last { font-size: clamp(16px, min(2vw, 3.4vh), 34px); }
+.home-body-size { margin-top: 6px; color: var(--dim); font-size: clamp(14px, min(1.3vw, 2.2vh), 20px); letter-spacing: 0.06em; font-variant-numeric: tabular-nums; }
 
-.home-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--side-col);
-  gap: 8px;
-  min-height: 0;
-}
 .home-figure {
   position: relative;
   min-width: 0;

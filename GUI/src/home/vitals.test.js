@@ -27,3 +27,11 @@ describe('vitalsFromReport', () => {
     expect(rows.every(row => row.value == null && row.status === 'no_data')).toBe(true);
   });
 });
+
+describe('vitalsFromReport: narrow column', () => {
+  it('drops the decimal of a dose of 100 mSv or more', () => {
+    const report = JSON.parse(JSON.stringify(habC4Sol142));
+    report.organs.find(card => card.organ === 'exposure').checks.find(check => check.code === 'dose_career').value = 123.44;
+    expect(byId(vitalsFromReport(report)).dose.value).toBe(123);
+  });
+});

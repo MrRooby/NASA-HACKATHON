@@ -39,3 +39,16 @@ describe('fictional crew profiles', () => {
     expect(localize('plain', 'pl')).toBe('plain');
   });
 });
+
+describe('crew bodies', () => {
+  it('every crew member has sex, height, mass and a generated model file', async () => {
+    const { CREW_PROFILES } = await import('./crewProfiles.js');
+    const fs = await import('node:fs');
+    for (const p of CREW_PROFILES) {
+      expect(['male', 'female']).toContain(p.sex);
+      expect(p.heightCm).toBeGreaterThan(140);
+      expect(p.massKg).toBeGreaterThan(40);
+      expect(fs.existsSync(`${process.cwd()}/public/models/${p.model}.glb`)).toBe(true); // tests run from GUI/
+    }
+  });
+});

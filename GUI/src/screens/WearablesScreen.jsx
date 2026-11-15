@@ -202,6 +202,7 @@ export default function WearablesScreen({ mother, session, viewedCode, navigate,
         <Panel className="wear-map" title={t('wearables.bodyMap')} meta={t('wearables.bodyMapMeta')}>
           <div className="wear-figure">
             <AstronautViewer
+              model={profile?.model}
               segmentStatus={segmentStatus}
               onSegmentHover={setHoverSegment}
               onSegmentClick={segment => togglePin(regionForSegment(segment))}

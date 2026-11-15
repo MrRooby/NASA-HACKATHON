@@ -28,7 +28,7 @@ export const CSS_VARS = {
 export const DEFAULT_THEME_ID = 'nostromo';
 
 /** Hover highlight of a 3D model segment (not themed: it must stand out from every status tint). */
-export const MODEL_HOVER_COLOR = '#ffd166';
+export const MODEL_HOVER_COLOR = '#5fb4ff'; // cold blue: never mistaken for a status colour
 
 export const BUILTIN_THEMES = [
   {

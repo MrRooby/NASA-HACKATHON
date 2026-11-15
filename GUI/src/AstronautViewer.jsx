@@ -1,47 +1,45 @@
-import React, { Suspense, useEffect, useRef, useSyncExternalStore } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Bounds, Center, Html, OrbitControls, useGLTF } from '@react-three/drei';
-import { MOUSE, Vector3 } from 'three';
+import React, { Suspense, useEffect, useLayoutEffect, useRef, useSyncExternalStore } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Center, Html, OrbitControls, useGLTF } from '@react-three/drei';
+import { Box3, MOUSE, Vector3 } from 'three';
 import landmarks from '../models/anny_astronaut_landmarks.json';
-import { applySegmentTint, baseColors, clearSegmentTint, setColors, setHighlight } from './segmentTint.js';
+import { paintSegments } from './segmentTint.js';
+import { prepareBody } from './bodyShading.js';
 import { segmentForMesh } from './organSegments.js';
 import { getCurrentTheme, subscribeTheme } from './theme/index.js';
 
-const MODEL_PATH = '/models/anny_astronaut_bone_segmented.glb';
+export const DEFAULT_MODEL = 'anny_astronaut_bone_segmented';
+/** '/models/<name>.glb'; every crew member has a model generated for their body (crewProfiles.model). */
+export const modelPath = name => `/models/${name || DEFAULT_MODEL}.glb`;
 
 /**
  * segmentStatus: optional { anatomicalSegment: 'ok' | 'caution' | 'alert' | 'no_data' } (see organSegments.js;
  *   the GLB's swapped chest/abdomen mesh names are translated there).
  * Without it the model keeps its own colours (offline demo).
  */
-function AstronautModel({ onModelFrame, segmentStatus, onSegmentHover, onSegmentClick }) {
-  const { scene } = useGLTF(MODEL_PATH);
+function AstronautModel({ model, onModelFrame, segmentStatus, onSegmentHover, onSegmentClick }) {
+  const { scene } = useGLTF(modelPath(model));
   const modelGroup = useRef();
-  const hoveredObject = useRef(null);
+  const hovered = useRef(null); // hovered anatomical segment
   const statusRef = useRef(segmentStatus);
   statusRef.current = segmentStatus;
+  prepareBody(scene); // smooth normals + soft colour borders (once per loaded scene)
 
   // The status colours belong to the UI theme: a theme switch repaints the model.
   const theme = useSyncExternalStore(subscribeTheme, getCurrentTheme, getCurrentTheme);
 
-  // Status tint; re-applied whenever the statuses (or the theme) change. The hovered mesh keeps its highlight.
   useEffect(() => {
-    applySegmentTint(scene, segmentStatus);
-    if (hoveredObject.current) setHighlight(hoveredObject.current);
+    paintSegments(scene, segmentStatus, hovered.current);
   }, [scene, segmentStatus, theme]);
 
-  useEffect(() => () => {
-    clearSegmentTint(scene);
-    hoveredObject.current = null;
-  }, [scene]);
+  useEffect(() => () => { hovered.current = null; }, [scene]);
 
   const setHoveredObject = (object) => {
-    if (hoveredObject.current === object) return;
-    // Back to the status tint (or the original colour when there is no status), not to the raw material.
-    if (hoveredObject.current) setColors(hoveredObject.current, baseColors(hoveredObject.current, statusRef.current));
-    hoveredObject.current = object;
-    if (object) setHighlight(object);
-    onSegmentHover?.(object ? segmentForMesh(object.name) : null);
+    const segment = object ? segmentForMesh(object.name) : null;
+    if (hovered.current === segment) return;
+    hovered.current = segment;
+    paintSegments(scene, statusRef.current, segment);
+    onSegmentHover?.(segment);
   };
 
   const handlePointerOver = (event) => {
@@ -103,14 +101,50 @@ function LoadingState() {
   return <Html center className="model-viewer-status">LOADING MODEL...</Html>;
 }
 
-function CameraLight() {
-  const light = useRef();
+/**
+ * Frame the whole body: the camera distance fits both the model height and its arm span to
+ * the canvas (recomputed when the canvas is resized), so head, hands and feet are never cut.
+ */
+function FitCamera({ target, margin = 1.08, controls = false, refHeight = 0 }) {
+  const { camera, size } = useThree();
+  useLayoutEffect(() => {
+    const object = target.current;
+    if (!object) return;
+    const box = new Box3().setFromObject(object);
+    if (box.isEmpty()) return;
+    const center = box.getCenter(new Vector3());
+    const dims = box.getSize(new Vector3());
+    // With a reference height every body is framed in the same 2 m box, feet on the floor,
+    // so a tall crew member really looks taller than a short one.
+    if (refHeight > dims.y) {
+      center.y = box.min.y + refHeight / 2;
+      dims.y = refHeight;
+    }
+    const aspect = size.width / Math.max(1, size.height);
+    const tanHalf = Math.tan((camera.fov * Math.PI) / 360);
+    const forHeight = dims.y / 2 / tanHalf;
+    const forWidth = dims.x / 2 / (tanHalf * aspect);
+    const distance = Math.max(forHeight, forWidth) * margin + dims.z / 2;
+    camera.position.set(center.x, center.y, center.z + distance);
+    camera.near = Math.max(0.01, distance / 100);
+    camera.far = distance * 10;
+    camera.lookAt(center);
+    camera.updateProjectionMatrix();
+    if (controls) controls.target?.copy?.(center);
+  }, [camera, size.width, size.height, target, margin, controls, refHeight]);
+  return null;
+}
 
-  useFrame(({ camera }) => {
-    if (light.current) light.current.position.copy(camera.position);
-  });
-
-  return <pointLight ref={light} intensity={3} distance={10} decay={1.5} />;
+/** Soft studio light: key from the front-left, cool fill, rim from behind for the silhouette. */
+function Lights() {
+  return (
+    <>
+      <hemisphereLight args={['#f2f4f7', '#20242c', 0.9]} />
+      <directionalLight position={[-2.5, 3, 4]} intensity={2.1} />
+      <directionalLight position={[3, 1, 2]} intensity={0.55} color="#cfe0ff" />
+      <directionalLight position={[0, 2.5, -4]} intensity={1.3} />
+    </>
+  );
 }
 
 class ModelErrorBoundary extends React.Component {
@@ -125,7 +159,7 @@ class ModelErrorBoundary extends React.Component {
       return (
         <div className="model-viewer-error" role="alert">
           MODEL FILE NOT FOUND
-          <span>Expected: /models/anny_astronaut_bone_segmented.glb</span>
+          <span>Expected: {this.props.path}</span>
         </div>
       );
     }
@@ -134,27 +168,40 @@ class ModelErrorBoundary extends React.Component {
   }
 }
 
-export default function AstronautViewer({ frontView = false, onModelFrame, segmentStatus, onSegmentHover, onSegmentClick }) {
+function FittedModel({ frontView, ...modelProps }) {
+  const group = useRef();
+  const controls = useThree(state => state.controls);
+  return (
+    <>
+      <group ref={group}>
+        <Center>
+          <AstronautModel {...modelProps} />
+        </Center>
+      </group>
+      <FitCamera target={group} margin={frontView ? 1.02 : 1.2} controls={controls || false} />
+    </>
+  );
+}
+
+export default function AstronautViewer({ model = null, frontView = false, onModelFrame, segmentStatus, onSegmentHover, onSegmentClick }) {
   return (
     <div className={`astronaut-viewer${frontView ? ' astronaut-viewer-front' : ''}`} aria-label="Front-facing astronaut health model">
-      <ModelErrorBoundary>
-        <Canvas camera={{ position: frontView ? [0, 0, 5] : [0, 0, 4], fov: frontView ? 28 : 35 }} dpr={[1, 2]}>
-          <ambientLight intensity={1.4} />
-          <hemisphereLight args={['#ffffff', '#b8c9c7', 1.8]} />
-          <CameraLight />
+      <ModelErrorBoundary key={model || DEFAULT_MODEL} path={modelPath(model)}>
+        <Canvas camera={{ position: [0, 0, 5], fov: frontView ? 28 : 35 }} dpr={[1, 2]} gl={{ antialias: true }}>
+          <Lights />
           <Suspense fallback={<LoadingState />}>
-            <Bounds fit clip margin={frontView ? 0.9 : 1.2}>
-              <Center>
-                <AstronautModel
-                  onModelFrame={onModelFrame}
-                  segmentStatus={segmentStatus}
-                  onSegmentHover={onSegmentHover}
-                  onSegmentClick={onSegmentClick}
-                />
-              </Center>
-            </Bounds>
+            <FittedModel
+              key={model || DEFAULT_MODEL}
+              model={model}
+              frontView={frontView}
+              onModelFrame={onModelFrame}
+              segmentStatus={segmentStatus}
+              onSegmentHover={onSegmentHover}
+              onSegmentClick={onSegmentClick}
+            />
           </Suspense>
           {!frontView && <OrbitControls
+            makeDefault
             enablePan
             zoomToCursor
             mouseButtons={{
