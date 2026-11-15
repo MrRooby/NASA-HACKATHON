@@ -57,13 +57,12 @@ describe('app shell', () => {
     expect(stub('home')).toHaveAttribute('data-viewed', 'HAB-C2');
     expect(stub('home')).toHaveAttribute('data-profile', 'Bogusław Grzegrzułkiewicz');
 
-    expect(within(topbar()).getByText('AWERNASA // MARS-LT-ELYSIUM')).toBeInTheDocument();
     expect(screen.getByTestId('screen-name')).toHaveTextContent('Home');
     const nav = screen.getByRole('navigation', { name: /main navigation/i });
     expect(within(nav).getAllByRole('button').map(button => button.getAttribute('data-nav')))
       .toEqual(['home', 'profile', 'base', 'crew', 'tests', 'settings']);
     expect(within(nav).getByRole('button', { name: 'Bogusław Grzegrzułkiewicz' })).toBeInTheDocument();
-    expect(within(nav).getByRole('button', { name: 'Settings' })).toHaveTextContent('⚙');
+    expect(within(nav).getByRole('button', { name: 'Settings' })).toContainElement(document.querySelector('[data-nav="settings"] .nf-icon'));
     expect(screen.getByTestId('topbar-sol')).toHaveTextContent('SOL ---');
     expect(within(topbar()).getByText(/^\d\d:\d\d:\d\d UTC$/)).toBeInTheDocument();
     expect(within(topbar()).getByRole('button', { name: 'Log out' })).toBeInTheDocument();

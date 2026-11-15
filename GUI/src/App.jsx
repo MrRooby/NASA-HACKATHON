@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import useMother from './useMother.js';
 import { getProfile } from './data/crewProfiles.js';
 import { useT } from './i18n/index.js';
-import { Button, ConnectionBadge, Panel, StatusTag } from './components/index.js';
+import { ConnectionBadge, Panel, StatusTag } from './components/index.js';
+import NavIcon from './navIcons.jsx';
 import LoginScreen from './screens/LoginScreen.jsx';
 import HomeScreen from './screens/HomeScreen.jsx';
 import WearablesScreen from './screens/WearablesScreen.jsx';
@@ -68,18 +69,19 @@ class ScreenBoundary extends React.Component {
   }
 }
 
-function NavTab({ id, label, name, current, parent, className, onClick }) {
+function NavTab({ id, icon, label, name, current, parent, square, onClick }) {
   return (
     <button
       type="button"
-      className={['navtab', current ? 'is-current' : '', parent ? 'is-parent' : '', className || ''].filter(Boolean).join(' ')}
+      className={['navtab', square ? 'navtab-square' : '', parent ? 'is-parent' : ''].filter(Boolean).join(' ')}
       data-nav={id}
       aria-current={current ? 'page' : undefined}
       aria-label={name ?? label}
       title={name ?? label}
       onClick={onClick}
     >
-      <span className="navtab-label" aria-hidden={name ? 'true' : undefined}>{label}</span>
+      <NavIcon name={icon} className="navtab-icon" />
+      {!square && <span className="navtab-label" aria-hidden={name ? 'true' : undefined}>{label}</span>}
     </button>
   );
 }
@@ -90,46 +92,45 @@ function TopBar({ mother, session, viewedCode, screen, navigate, onLogout }) {
   const sol = mother.report?.as_of?.sol;
   const own = { viewedCode: session };
   const viewingOther = viewedCode !== session;
-  // Big full-width tabs for a touch tablet; settings sit as a square button in the corner.
+  // Big full-width tabs for a touch tablet; settings and log out are square icon buttons in the corner.
   const tabs = [
-    { id: 'home', label: t('common.navHome'), opts: own, current: screen === 'home', parent: screen === 'wearables' },
-    { id: 'profile', label: me ? <>{me.name.split(' ')[0]}<br />{me.name.split(' ').slice(1).join(' ')}</> : session, name: me?.name, opts: own, current: screen === 'profile' && !viewingOther, className: 'navtab-person' },
-    { id: 'base', label: t('common.navBase'), current: screen === 'base' },
-    { id: 'crew', label: t('common.navCrew'), current: screen === 'crew', parent: screen === 'profile' && viewingOther },
-    { id: 'tests', label: t('common.navTests'), current: screen === 'tests' },
+    { id: 'home', icon: 'home', label: t('common.navHome'), opts: own, current: screen === 'home', parent: screen === 'wearables' },
+    { id: 'profile', icon: 'person', label: me ? <>{me.name.split(' ')[0]}<br />{me.name.split(' ').slice(1).join(' ')}</> : session, name: me?.name, opts: own, current: screen === 'profile' && !viewingOther },
+    { id: 'base', icon: 'base', label: t('common.navBase'), current: screen === 'base' },
+    { id: 'crew', icon: 'crew', label: t('common.navCrew'), current: screen === 'crew', parent: screen === 'profile' && viewingOther },
+    { id: 'tests', icon: 'tests', label: t('common.navTests'), current: screen === 'tests' },
   ];
 
   return (
     <header className="topbar">
       <div className="topbar-row">
-        <div className="topbar-id">
-          <span className="topbar-brand">{t('common.appName')} // {t('common.habitatCode')}</span>
-          <span className="topbar-screen" data-testid="screen-name">{t(SCREEN_TITLE_KEYS[screen])}</span>
-          {viewingOther && <span className="topbar-viewing">{t('common.viewing', { code: viewedCode })}</span>}
-        </div>
-        <div className="topbar-status">
+        <span className="visually-hidden" data-testid="screen-name">{t(SCREEN_TITLE_KEYS[screen])}</span>
+        <span className="topbar-sol" data-testid="topbar-sol">
+          {sol != null ? t('common.solN', { n: sol }) : t('common.solUnknown')}
+        </span>
+        {viewingOther && <span className="topbar-viewing">{t('common.viewing', { code: viewedCode })}</span>}
+        <span className="topbar-status">
           <ConnectionBadge mode={mother.mode} error={mother.error} />
-          <span className="topbar-sol" data-testid="topbar-sol">
-            {sol != null ? t('common.solN', { n: sol }) : t('common.solUnknown')}
-          </span>
           <UtcClock />
-          <Button variant="ghost" className="topbar-logout" onClick={onLogout}>{t('common.logout')}</Button>
-        </div>
+        </span>
       </div>
 
-      <nav className="topbar-nav" aria-label={t('common.navMain')}>
-        {tabs.map(tab => (
-          <NavTab key={tab.id} {...tab} onClick={() => navigate(tab.id, tab.opts)} />
-        ))}
-        <NavTab
-          id="settings"
-          label="⚙"
-          name={t('common.navSettings')}
-          current={screen === 'settings'}
-          className="navtab-settings"
-          onClick={() => navigate('settings')}
-        />
-      </nav>
+      <div className="topbar-tabs">
+        <nav className="topbar-nav" aria-label={t('common.navMain')}>
+          {tabs.map(tab => (
+            <NavTab key={tab.id} {...tab} onClick={() => navigate(tab.id, tab.opts)} />
+          ))}
+          <NavTab
+            id="settings"
+            icon="settings"
+            name={t('common.navSettings')}
+            current={screen === 'settings'}
+            square
+            onClick={() => navigate('settings')}
+          />
+        </nav>
+        <NavTab id="logout" icon="logout" name={t('common.logout')} square onClick={onLogout} />
+      </div>
     </header>
   );
 }

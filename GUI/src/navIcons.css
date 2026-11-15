@@ -1,0 +1,18 @@
+@font-face {
+  font-family: 'AwernasaNerdIcons';
+  src: url('./assets/fonts/nerd-icons.woff2') format('woff2');
+  font-display: block;
+  unicode-range: U+F0000-F1FFFF;
+}
+.nf-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'AwernasaNerdIcons';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}

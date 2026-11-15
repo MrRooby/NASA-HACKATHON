@@ -18,59 +18,63 @@
 .topbar {
   display: grid;
   grid-template-rows: auto auto;
-  gap: 8px;
-  padding: 8px 12px 10px;
+  gap: 6px;
+  padding: 4px 12px 10px;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   user-select: none;
   -webkit-user-select: none;
 }
 
+/* slim status line: sol · (viewing) ··· link to MOTHER · UTC clock */
 .topbar-row {
   display: flex;
   align-items: center;
-  gap: 8px 20px;
+  gap: 4px 16px;
   min-width: 0;
-  min-height: 40px;
-}
-.topbar-id { display: flex; align-items: baseline; gap: 0 14px; min-width: 0; overflow: hidden; }
-.topbar-brand { color: var(--accent); font-weight: 700; font-size: 15px; letter-spacing: 0.08em; white-space: nowrap; }
-.topbar-screen { color: var(--fg); font-size: 15px; text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.topbar-screen::before { content: '▸\00a0'; content: '▸\00a0' / ''; color: var(--accent); }
-.topbar-viewing {
-  padding: 2px 8px;
-  color: var(--bg);
-  background: var(--caution);
+  min-height: 24px;
   font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.08em;
   white-space: nowrap;
 }
-.topbar-status { display: flex; align-items: center; gap: 4px 18px; margin-left: auto; white-space: nowrap; font-size: 15px; }
-.topbar-sol { color: var(--accent-bright); font-weight: 700; font-size: 18px; letter-spacing: 0.08em; }
-.topbar-clock { color: var(--dim); letter-spacing: 0.04em; }
-.topbar-logout { min-height: 40px; padding: 0 10px; touch-action: manipulation; }
+.topbar-sol { color: var(--accent-bright); font-weight: 700; font-size: 14px; }
+.topbar-viewing {
+  padding: 0 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--bg);
+  background: var(--caution);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.topbar-status { display: flex; align-items: center; gap: 4px 16px; margin-left: auto; }
+.topbar-status .conn { font-size: 13px; }
+.topbar-clock { color: var(--dim); }
 
-/* ── tab bar: big touch targets across the full width, settings in the corner ── */
+/* ── tab bar: big touch targets across the full width, icon squares in the corner ── */
+.topbar-tabs {
+  --tab-h: clamp(64px, 10.5vh, 92px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--tab-h);
+  gap: 8px;
+}
 .topbar-nav {
   display: grid;
   /* home · person (wider: full name) · base · crew · tests · settings */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) repeat(3, minmax(0, 1fr)) var(--tab-h);
   gap: 8px;
-  --tab-h: clamp(56px, 9vh, 76px);
+  min-width: 0;
 }
 
 .navtab {
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 12px;
   min-width: 0;
   height: var(--tab-h);
-  padding: 4px 10px;
+  padding: 4px 12px;
   color: var(--fg);
   background: var(--panel);
   border: 1px solid var(--border);
@@ -79,22 +83,25 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
+.navtab-icon { flex: 0 0 auto; font-size: calc(var(--tab-h) * 0.42); }
+.navtab-square { padding: 0; }
+.navtab-square .navtab-icon { font-size: calc(var(--tab-h) * 0.5); }
 .navtab-label {
-  max-width: 100%;
+  min-width: 0;
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
-  font-size: clamp(16px, 1.9vw, 24px);
+  font-size: clamp(16px, 1.8vw, 24px);
   font-weight: 700;
   line-height: 1.15;
-  text-align: center;
+  text-align: left;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   overflow-wrap: anywhere;
 }
-.navtab-person .navtab-label { font-size: clamp(14px, 1.6vw, 22px); letter-spacing: 0.02em; }
+.navtab[data-nav='profile'] .navtab-label { font-size: clamp(13px, 1.45vw, 20px); letter-spacing: 0.02em; }
 
 /* pressed feedback does not depend on hover (touch) */
 .navtab:active { background: var(--raised); border-color: var(--accent); }
@@ -122,8 +129,9 @@
 /* parent of a sub-screen (wearables under home, another person's profile under crew) */
 .navtab.is-parent { border-color: var(--accent); color: var(--accent-bright); }
 
-.navtab-settings { width: var(--tab-h); padding: 0; }
-.navtab-settings .navtab-label { font-size: calc(var(--tab-h) * 0.5); line-height: 1; letter-spacing: 0; }
+/* log out: same square, alert colour on press */
+.navtab[data-nav='logout'] { color: var(--dim); }
+.navtab[data-nav='logout']:active { color: var(--alert); border-color: var(--alert); }
 
 /* ── screen + footer ─────────────────────────────────────────────────────── */
 .screen {
@@ -151,19 +159,25 @@
 .statusline > span { overflow: hidden; text-overflow: ellipsis; }
 
 /* ── narrow / phone ──────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .navtab { flex-direction: column; gap: 4px; padding: 4px; }
+  .navtab-label { text-align: center; font-size: clamp(13px, 1.8vw, 18px); }
+  .navtab-icon { font-size: calc(var(--tab-h) * 0.38); }
+}
 @media (max-width: 900px) {
-  .topbar-brand { display: none; }
-  .topbar-status { gap: 4px 12px; font-size: 13px; }
-  .topbar-clock { display: none; }
-  .topbar-nav { gap: 4px; }
-  .navtab { padding: 2px 4px; }
-  .navtab-label { font-size: 14px; letter-spacing: 0.04em; }
-  .navtab-settings .navtab-label { font-size: 26px; }
+  .topbar-tabs, .topbar-nav { gap: 4px; }
+  .navtab-label { font-size: 13px; letter-spacing: 0.04em; }
+  .navtab[data-nav='profile'] .navtab-label { font-size: 13px; }
+  .topbar-nav { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) repeat(3, minmax(0, 1fr)) var(--tab-h); }
+  .navtab[data-nav='profile'] .navtab-label { letter-spacing: 0; }
   .statusline > span:last-child { display: none; }
 }
 @media (max-height: 500px) {
-  .topbar { grid-template-rows: auto; grid-template-columns: minmax(0, 1fr); gap: 4px; padding: 4px 8px; }
-  .topbar-row { min-height: 32px; }
-  .topbar-nav { --tab-h: 48px; }
+  .topbar { gap: 2px; padding: 2px 8px 4px; }
+  .topbar-tabs { --tab-h: 52px; }
+  .topbar-nav { grid-template-columns: repeat(5, minmax(0, 1fr)) var(--tab-h); }
+  .navtab-icon { font-size: 28px; }
+  .navtab { flex-direction: row; }
+  .navtab-label { display: none; }
   .statusline { display: none; }
 }
