@@ -2,8 +2,15 @@ import { describe, expect, it } from 'vitest';
 import { CREW_PHOTOS, PHOTO_FOR_CREW, getCrewPhoto } from './crewPhotos.js';
 
 describe('crew photos', () => {
-  it('bundles the six cropped photos', () => {
-    expect(Object.keys(CREW_PHOTOS).sort()).toEqual(['fartek', 'hartek', 'jan', 'kamil', 'kinga', 'konrad']);
+  it('bundles the team photos and the generated faces', () => {
+    for (const name of ['fartek', 'hartek', 'jan', 'kamil', 'kinga', 'konrad', 'generated-woman1', 'generated-woman4']) {
+      expect(CREW_PHOTOS[name]).toBeTruthy();
+    }
+  });
+
+  it('every crew member has a photo', async () => {
+    const { CREW_CODES } = await import('./crewProfiles.js');
+    for (const code of CREW_CODES) expect(getCrewPhoto(code)).toBeTruthy();
   });
 
   it('every assigned photo exists and no photo is used twice', () => {

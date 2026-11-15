@@ -1,5 +1,5 @@
 export default {
-  prompt: 'Tap your crew record to open a session',
+  prompt: 'Be aware of the consciousness',
   crewList: 'Crew members',
   openFor: 'Open session as {name}',
 };

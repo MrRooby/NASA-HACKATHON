@@ -1,5 +1,5 @@
 export default {
-  prompt: 'Dotknij swojego rekordu, aby otworzyć sesję',
+  prompt: 'Be aware of the consciousness',
   crewList: 'Członkowie załogi',
   openFor: 'Otwórz sesję jako {name}',
 };
