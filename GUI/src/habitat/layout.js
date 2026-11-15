@@ -16,7 +16,7 @@ import { ROOM_PATHS } from './geometry.js';
  *   labelKey   i18n key of the full room name (panel title, aria-label)
  *   mapLabelKey i18n key of the text drawn on the map (defaults to labelKey)
  *   path       SVG path of the room interior (viewBox 0 0 2048 599)
- *   label      anchor of the map label: { x, y, rotate?, wrap?, align? }
+ *   label      centre of the map label (the centre of the room area): { x, y, rotate?, wrap?, align? }
  *   crew       top-left of the first crew marker: { x, y, cols? } (cols = markers per row)
  *   marks      top-left of the first sub-zone marker: { x, y } (rooms with sub-zones)
  */
@@ -39,21 +39,21 @@ export const ROOMS = [
     id: 'service', zone: null, subZones: [], simulated: true,
     labelKey: 'base.roomService',
     path: ROOM_PATHS.service,
-    label: { x: 421, y: 178 },
+    label: { x: 417.1, y: 183.6 },
     crew: { x: 330, y: 210 },
   },
   {
     id: 'medbay', zone: 'ambulatory', subZones: [], simulated: false,
     labelKey: 'base.roomMedbay',
     path: ROOM_PATHS.medbay,
-    label: { x: 300, y: 311 },
+    label: { x: 447.1, y: 312 },
     crew: { x: 262, y: 338 },
   },
   {
     id: 'recreation', zone: 'tunnel_common', subZones: ['gym', 'farm'], simulated: false,
     labelKey: 'base.roomRecreation',
     path: ROOM_PATHS.recreation,
-    label: { x: 850, y: 178 },
+    label: { x: 850, y: 178 }, // at the top: the middle of the room is where the crew is
     crew: { x: 742, y: 262 },
     marks: { x: 742, y: 310 },
   },
@@ -61,35 +61,35 @@ export const ROOMS = [
     id: 'lab', zone: 'lab', subZones: [], simulated: false,
     labelKey: 'base.roomLab',
     path: ROOM_PATHS.lab,
-    label: { x: 1112, y: 181 },
+    label: { x: 1151.3, y: 185.5 },
     crew: { x: 1066, y: 216 },
   },
   {
     id: 'quarters_north', zone: 'module_M1', subZones: [], simulated: false,
     labelKey: 'base.roomQuartersNorth', mapLabelKey: 'base.mapQuartersNorth',
     path: ROOM_PATHS.quarters_north,
-    label: { x: 1392, y: 233 },
+    label: { x: 1391.6, y: 232.6 },
     crew: { x: 1300, y: 256 },
   },
   {
     id: 'quarters_south', zone: 'module_M2', subZones: [], simulated: false,
     labelKey: 'base.roomQuartersSouth', mapLabelKey: 'base.mapQuartersSouth',
     path: ROOM_PATHS.quarters_south,
-    label: { x: 1392, y: 366 },
+    label: { x: 1401.3, y: 380.6 },
     crew: { x: 1300, y: 392 },
   },
   {
     id: 'technical', zone: null, subZones: [], simulated: true,
     labelKey: 'base.roomTechnical',
     path: ROOM_PATHS.technical,
-    label: { x: 1602, y: 278, wrap: true, align: 'start', lineHeight: 43 },
+    label: { x: 1653, y: 308, wrap: true, lineHeight: 43 },
     crew: { x: 1614, y: 370 },
   },
   {
     id: 'reactor', zone: null, subZones: [], simulated: true,
     labelKey: 'base.roomReactor',
     path: ROOM_PATHS.reactor,
-    label: { x: 1893, y: 270 },
+    label: { x: 1895.9, y: 302.1 },
     crew: { x: 1858, y: 310 },
   },
 ];
