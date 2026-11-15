@@ -1,6 +1,8 @@
 // FICTIONAL crew of the "Polska Misja Marsjańska" (Polish Mars Mission), habitat
 // MARS-LT-ELYSIUM. No real persons; every record carries fictional: true and the UI
-// shows a FICTIONAL badge next to it. `code` matches the MOTHER subject codes (HAB-C1..C4).
+// shows a FICTIONAL badge next to it. `code` matches the MOTHER subject codes (HAB-C1..C10).
+// C5..C10: names from the team, role / callsign / age / home module drawn at random and kept in sync with
+// DATABASE/synthetic/crew_ext.py (age inside the subject's age band in the database).
 
 export const MISSION = {
   fictional: true,
@@ -38,7 +40,7 @@ export const CREW_PROFILES = [
     fictional: true,
     code: 'HAB-C2',
     crewCode: 'C2',
-    name: 'Bogusław Grzegrzułkiewicz',
+    name: 'Bogusława Grzegrzułkiewicz',
     callsign: 'ŚRUBA',
     age: 39,
     nationality: 'PL',
@@ -48,8 +50,8 @@ export const CREW_PROFILES = [
       pl: 'Dr inż. automatyki i robotyki, AGH w Krakowie; kurs systemów podtrzymywania życia, Politechnika Śląska',
     },
     bio: {
-      en: 'Has repaired the CO2 scrubber three times with cable ties and a firm word. Mission Control stopped trying to spell his surname on sol 4.',
-      pl: 'Trzykrotnie naprawił skruber CO2 opaskami zaciskowymi i dobrym słowem. Kontrola misji przestała literować jego nazwisko w 4. solu.',
+      en: 'Has repaired the CO2 scrubber three times with cable ties and a firm word. Mission Control stopped trying to spell her surname on sol 4.',
+      pl: 'Trzykrotnie naprawiła skruber CO2 opaskami zaciskowymi i dobrym słowem. Kontrola misji przestała literować jej nazwisko w 4. solu.',
     },
     homeZone: 'module_M1',
   },
@@ -59,7 +61,7 @@ export const CREW_PROFILES = [
     crewCode: 'C3',
     name: 'Roman Czarny',
     callsign: 'BAZALT',
-    age: 34,
+    age: 52,
     nationality: 'PL',
     role: { en: 'Geologist', pl: 'Geolog' },
     education: {
@@ -88,6 +90,120 @@ export const CREW_PROFILES = [
     bio: {
       en: 'The only flight surgeon within 225 million km. Prescribes sleep, water and the treadmill, in that order, and checks who skipped which.',
       pl: 'Jedyny lekarz w promieniu 225 milionów km. Przepisuje sen, wodę i bieżnię, w tej kolejności, i sprawdza, kto co opuścił.',
+    },
+    homeZone: 'module_M2',
+  },
+  {
+    fictional: true,
+    code: 'HAB-C5',
+    crewCode: 'C5',
+    name: 'Żytomira Będzisławska',
+    callsign: 'SMOLUCH',
+    age: 55,
+    nationality: 'PL',
+    role: { en: 'Pilot / flight engineer', pl: 'Pilot / inżynier lotu' },
+    education: {
+      en: 'MSc in aviation, Rzeszów University of Technology; airline captain, 12,000 flight hours',
+      pl: 'Mgr inż. lotnictwa, Politechnika Rzeszowska; kapitan linii lotniczych, 12 000 godzin nalotu',
+    },
+    bio: {
+      en: 'Earned her callsign after a grease fire in the ascent-vehicle simulator. Says Mars has the worst crosswinds she has ever flown, and she has landed in Gdańsk in November.',
+      pl: 'Kryptonim dostała po pożarze smaru w symulatorze pojazdu wznoszenia. Twierdzi, że Mars ma najgorsze boczne wiatry, w jakich latała, a lądowała w Gdańsku w listopadzie.',
+    },
+    homeZone: 'module_M1',
+  },
+  {
+    fictional: true,
+    code: 'HAB-C6',
+    crewCode: 'C6',
+    name: 'Jędżej Podolski',
+    callsign: 'MOTYKA',
+    age: 51,
+    nationality: 'PL',
+    role: { en: 'ISRU & power engineer', pl: 'Inżynier ISRU i energetyki' },
+    education: {
+      en: 'PhD in power engineering, Gdańsk University of Technology; electrolyser operator at a chemical plant in Puławy',
+      pl: 'Dr inż. energetyki, Politechnika Gdańska; operator elektrolizera w zakładach chemicznych w Puławach',
+    },
+    bio: {
+      en: 'Runs MOXIE and the reactor like a family allotment: every kilogram of oxygen goes into a notebook with a pencil tied to it.',
+      pl: 'Prowadzi MOXIE i reaktor jak działkę: każdy kilogram tlenu wpisuje do zeszytu z ołówkiem na sznurku.',
+    },
+    homeZone: 'module_M2',
+  },
+  {
+    fictional: true,
+    code: 'HAB-C7',
+    crewCode: 'C7',
+    name: 'Światosław Ryt',
+    callsign: 'BURSZTYN',
+    age: 53,
+    nationality: 'PL',
+    role: { en: 'EVA specialist', pl: 'Specjalista EVA' },
+    education: {
+      en: 'MSc in mechanical engineering, Warsaw University of Technology; former Tatra mountain rescuer; technical diving instructor',
+      pl: 'Mgr inż. mechaniki, Politechnika Warszawska; były ratownik TOPR; instruktor nurkowania technicznego',
+    },
+    bio: {
+      en: 'Has more hours outside the airlock than the rest of the crew combined. Brings back one interesting pebble per EVA, which the geologist then confiscates.',
+      pl: 'Ma więcej godzin poza śluzą niż reszta załogi razem. Z każdego wyjścia przynosi jeden ciekawy kamyk, który geolog potem konfiskuje.',
+    },
+    homeZone: 'module_M2',
+  },
+  {
+    fictional: true,
+    code: 'HAB-C8',
+    crewCode: 'C8',
+    name: 'Andrzej Świętopełek',
+    callsign: 'RZEPA',
+    age: 54,
+    nationality: 'PL',
+    role: { en: 'Habitat botanist', pl: 'Botanik habitatu' },
+    education: {
+      en: 'DSc in horticulture, Warsaw University of Life Sciences; greenhouse research station in Skierniewice',
+      pl: 'Dr hab. ogrodnictwa, SGGW w Warszawie; stacja badawcza szklarni w Skierniewicach',
+    },
+    bio: {
+      en: 'Talks to the lettuce in the Tree of Light farm and claims it grows 8 % faster. Nobody has dared to run the control group.',
+      pl: 'Rozmawia z sałatą w farmie Drzewo Światła i twierdzi, że rośnie o 8 % szybciej. Nikt nie odważył się zrobić grupy kontrolnej.',
+    },
+    homeZone: 'module_M1',
+  },
+  {
+    fictional: true,
+    code: 'HAB-C9',
+    crewCode: 'C9',
+    name: 'Kunekunda Krzeszowska',
+    callsign: 'SZPERACZ',
+    age: 52,
+    nationality: 'PL',
+    role: { en: 'Psychologist', pl: 'Psycholog' },
+    education: {
+      en: 'PhD in psychology, Jagiellonian University; isolation studies at the Arctowski Polish Antarctic Station',
+      pl: 'Dr psychologii, Uniwersytet Jagielloński; badania izolacji na Polskiej Stacji Antarktycznej im. Arctowskiego',
+    },
+    bio: {
+      en: 'Reads the crew\'s mood from the way they stir their coffee. Runs the cognitive tests and is the only one who never complains about the PVT.',
+      pl: 'Odczytuje nastrój załogi z tego, jak miesza kawę. Prowadzi testy kognitywne i jako jedyna nigdy nie narzeka na PVT.',
+    },
+    homeZone: 'module_M1',
+  },
+  {
+    fictional: true,
+    code: 'HAB-C10',
+    crewCode: 'C10',
+    name: 'Czesława Życińska',
+    callsign: 'KRET',
+    age: 41,
+    nationality: 'PL',
+    role: { en: 'Robotics engineer', pl: 'Inżynier robotyki' },
+    education: {
+      en: 'PhD in robotics, Poznań University of Technology; student Mars rover team, European Rover Challenge winner',
+      pl: 'Dr inż. robotyki, Politechnika Poznańska; studenckie koło łazików marsjańskich, zwycięstwo w European Rover Challenge',
+    },
+    bio: {
+      en: 'Sends the tunnel-mapping rovers where nobody else fits. Named all six after her aunts; the youngest aunt is the fastest.',
+      pl: 'Wysyła łaziki mapujące tam, gdzie nikt się nie mieści. Wszystkie sześć nazwała imionami swoich ciotek; najmłodsza ciotka jest najszybsza.',
     },
     homeZone: 'module_M2',
   },

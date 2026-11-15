@@ -3,10 +3,12 @@ import { CREW_CODES, CREW_PROFILES, MISSION, getProfile, localize } from './crew
 import { fixtures } from '../test/mother.js';
 
 describe('fictional crew profiles', () => {
-  it('has the four habitat crew members, all flagged fictional', () => {
-    expect(CREW_CODES).toEqual(['HAB-C1', 'HAB-C2', 'HAB-C3', 'HAB-C4']);
+  it('has the ten habitat crew members, all flagged fictional', () => {
+    expect(CREW_CODES).toEqual(Array.from({ length: 10 }, (_, i) => `HAB-C${i + 1}`));
     expect(CREW_PROFILES.map(profile => profile.name)).toEqual([
-      'Aleksander Polkowski', 'Bogusław Grzegrzułkiewicz', 'Roman Czarny', 'Grażyna Brzęczyszczykiewicz',
+      'Aleksander Polkowski', 'Bogusława Grzegrzułkiewicz', 'Roman Czarny', 'Grażyna Brzęczyszczykiewicz',
+      'Żytomira Będzisławska', 'Jędżej Podolski', 'Światosław Ryt', 'Andrzej Świętopełek', 'Kunekunda Krzeszowska',
+      'Czesława Życińska',
     ]);
     expect(MISSION.fictional).toBe(true);
     for (const profile of CREW_PROFILES) {
@@ -23,9 +25,13 @@ describe('fictional crew profiles', () => {
   });
 
   it('matches the habitat crew known to MOTHER (codes and home zones)', () => {
-    expect(CREW_PROFILES.map(profile => profile.homeZone)).toEqual(['module_M1', 'module_M1', 'module_M2', 'module_M2']);
+    // home modules as in DATABASE/schema/005_habitat_seed.sql (C1..C4) and 017_mars_crew_ext.sql (C5..C10)
+    expect(CREW_PROFILES.map(profile => profile.homeZone)).toEqual([
+      'module_M1', 'module_M1', 'module_M2', 'module_M2', 'module_M1', 'module_M2', 'module_M2', 'module_M1', 'module_M1', 'module_M2',
+    ]);
+    // the MOTHER fixture snapshot predates C5..C10: every crew member it knows has a profile
     const habitatCrew = fixtures.subjects.filter(subject => subject.kind === 'habitat_crew').map(subject => subject.code);
-    expect(habitatCrew.sort()).toEqual([...CREW_CODES].sort());
+    expect(habitatCrew.every(code => CREW_CODES.includes(code))).toBe(true);
     expect(fixtures.habC1.subject.home_zone).toBe(getProfile('HAB-C1').homeZone);
   });
 

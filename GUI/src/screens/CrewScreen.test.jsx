@@ -21,11 +21,13 @@ beforeEach(() => {
 });
 
 describe('CrewScreen: roster', () => {
-  it('lists the four crew members in order', async () => {
+  it('lists the ten crew members in order', async () => {
     await renderCrew({ session: 'HAB-C1' });
-    expect(rows().map(item => item.getAttribute('data-code'))).toEqual(['HAB-C1', 'HAB-C2', 'HAB-C3', 'HAB-C4']);
+    expect(rows().map(item => item.getAttribute('data-code'))).toEqual(Array.from({ length: 10 }, (_, i) => `HAB-C${i + 1}`));
     expect(rows().map(item => within(item).getByRole('heading', { level: 3 }).textContent.replace(/\s*You$/, ''))).toEqual([
-      'Aleksander Polkowski', 'Bogusław Grzegrzułkiewicz', 'Roman Czarny', 'Grażyna Brzęczyszczykiewicz',
+      'Aleksander Polkowski', 'Bogusława Grzegrzułkiewicz', 'Roman Czarny', 'Grażyna Brzęczyszczykiewicz',
+      'Żytomira Będzisławska', 'Jędżej Podolski', 'Światosław Ryt', 'Andrzej Świętopełek', 'Kunekunda Krzeszowska',
+      'Czesława Życińska',
     ]);
   });
 
@@ -87,7 +89,7 @@ describe('CrewScreen: health from the crew overview', () => {
 
   it('shows the built-in demo records, labelled DEMO, without a link to MOTHER', async () => {
     await renderCrew({ session: 'HAB-C1', mother: offlineMother() });
-    expect(rows()).toHaveLength(4);
+    expect(rows()).toHaveLength(10);
     for (const entry of demoOverview()) {
       const item = row(entry.subject.code);
       expect(item).toHaveAttribute('data-status', entry.overall_status);

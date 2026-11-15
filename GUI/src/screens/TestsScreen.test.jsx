@@ -105,7 +105,7 @@ describe('TestsScreen', () => {
   it('is translated', async () => {
     stubCognitive();
     renderTests({ session: 'HAB-C1', viewedCode: 'HAB-C2', lang: 'pl' });
-    expect(screen.getByTestId('read-only-banner')).toHaveTextContent('PODGLĄD: BOGUSŁAW GRZEGRZUŁKIEWICZ — TYLKO DO ODCZYTU');
+    expect(screen.getByTestId('read-only-banner')).toHaveTextContent('PODGLĄD: BOGUSŁAWA GRZEGRZUŁKIEWICZ — TYLKO DO ODCZYTU');
     expect(await screen.findByRole('heading', { level: 1, name: 'Testy kognitywne' })).toBeInTheDocument();
     await waitFor(() => expect(screen.getByTestId('tile-dsst')).toHaveTextContent('BUDOWANIE POZIOMU BAZOWEGO'));
   });

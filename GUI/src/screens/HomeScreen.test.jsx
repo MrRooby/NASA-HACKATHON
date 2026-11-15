@@ -188,7 +188,7 @@ describe('HomeScreen: no live report', () => {
   it('connecting: demo data with its own notice', () => {
     renderHome({ mother: makeMother({ mode: 'connecting', report: null }), session: 'HAB-C2' });
     expect(notice()).toHaveTextContent('ESTABLISHING LINK — SHOWING DEMO DATA');
-    expect(screen.getByText('Bogusław Grzegrzułkiewicz')).toBeInTheDocument();
+    expect(screen.getByText('Bogusława Grzegrzułkiewicz')).toBeInTheDocument();
     expect(limbCard('left_leg')).toHaveAttribute('data-status', 'ok');
   });
 

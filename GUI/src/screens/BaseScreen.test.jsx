@@ -75,7 +75,7 @@ describe('BaseScreen', () => {
     expect(within(row(roomPanel(), 'voc_benzene')).getByText('INFO')).toBeInTheDocument();
 
     const crew = within(roomPanel()).getByRole('button', { name: /C1 Aleksander Polkowski/ });
-    expect(within(roomPanel()).getByRole('button', { name: /C2 Bogusław Grzegrzułkiewicz/ })).toBeInTheDocument();
+    expect(within(roomPanel()).getByRole('button', { name: /C2 Bogusława Grzegrzułkiewicz/ })).toBeInTheDocument();
     fireEvent.click(crew);
     expect(navigate).toHaveBeenCalledWith('profile', { viewedCode: 'HAB-C1' });
   });
