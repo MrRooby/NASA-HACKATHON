@@ -8,9 +8,9 @@ describe('crew photos', () => {
     }
   });
 
-  it('every crew member except C5 has a photo', async () => {
+  it('every crew member has a photo', async () => {
     const { CREW_CODES } = await import('./crewProfiles.js');
-    for (const code of CREW_CODES.filter(c => c !== 'HAB-C5')) expect(getCrewPhoto(code)).toBeTruthy(); // C5: photo to be replaced
+    for (const code of CREW_CODES) expect(getCrewPhoto(code)).toBeTruthy();
   });
 
   it('every assigned photo exists and no photo is used twice', () => {
