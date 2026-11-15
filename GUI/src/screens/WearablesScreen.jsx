@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import AstronautViewer from '../AstronautViewer.jsx';
-import { Badge, Button, DataRow, Panel, SegBar, SolControl, StatusTag, cx } from '../components/index.js';
+import { SegBar, SolControl, StatusTag, cx } from '../components/index.js';
 import { useT } from '../i18n/index.js';
+import NavIcon from '../navIcons.jsx';
 import { LIMB_SEGMENTS, ORGAN_SEGMENTS, organsForSegment, segmentStatusFromReport, worstStatus } from '../organSegments.js';
+import DataDialog, { Pager } from '../home/DataDialog.jsx';
 import LimbCard from '../home/LimbCard.jsx';
-import OrganCard from '../home/OrganCard.jsx';
 import TelemetryNotice from '../home/TelemetryNotice.jsx';
 import { clearPendingFocus, peekPendingFocus } from '../home/focus.js';
 import { formatValue, words } from '../home/format.js';
@@ -14,9 +15,9 @@ import './wearables.css';
 
 export const SOL_MAX = 600;
 const DAY_MAX = 400;
+const CHECKS_PER_PAGE = 4;
 
-// Body regions offered as text chips (keyboard / touch alternative to the 3D model).
-// Left / right are the astronaut's own sides, as in MOTHER.
+// Body regions of the 3D model. Left / right are the astronaut's own sides, as in MOTHER.
 export const REGIONS = [
   { id: 'head', labelKey: 'wearables.regionHead', segments: ['head'] },
   { id: 'chest', labelKey: 'wearables.regionChest', segments: ['chest'] },
@@ -27,6 +28,20 @@ export const REGIONS = [
   { id: 'left_leg', labelKey: 'wearables.regionLeftLeg', segments: LIMB_SEGMENTS.left_leg },
   { id: 'right_leg', labelKey: 'wearables.regionRightLeg', segments: LIMB_SEGMENTS.right_leg },
 ];
+
+// Closest NavIcon for each organ card (no eye / blood / bone / kidney glyphs yet).
+const ORGAN_ICONS = {
+  brain: 'tests',
+  eyes: 'body',
+  heart: 'heart',
+  lungs: 'lungs',
+  blood: 'organs',
+  kidneys: 'glucose',
+  gut: 'glucose',
+  musculoskeletal: 'body',
+  limbs: 'leg',
+  exposure: 'radiation',
+};
 
 const DEVICE_LABEL_KEYS = {
   left_arm: 'wearables.deviceLeftArm',
@@ -64,28 +79,131 @@ export function organsForRegion(report, region) {
   return cards;
 }
 
-const isProblem = status => status === 'caution' || status === 'alert';
+/** Popup to open for a notification handed over from the home screen. */
+export function dialogForTarget(target) {
+  if (!target) return null;
+  if (target.limb && regionById(target.limb)) return { kind: 'region', region: regionById(target.limb) };
+  if (target.device) return { kind: 'bands' };
+  if (target.organ) return { kind: 'organ', organ: target.organ };
+  return null;
+}
 
-function DeviceList({ devices }) {
+/** The metric shown big on an organ tile: the first one with the card's status, else the first. */
+function leadMetric(card) {
+  const metrics = card.metrics || [];
+  return metrics.find(metric => metric.status === card.status) || metrics[0] || null;
+}
+
+
+/** Right column: one big tile per organ card. */
+function OrganTile({ card, highlighted, onOpen }) {
+  const t = useT();
+  const status = card.status ?? 'no_data';
+  const metric = leadMetric(card);
+  const value = metric ? formatValue(metric.value) : null;
+  return (
+    <button
+      type="button"
+      className={cx('wear-tile', `wear-tile-${status}`, highlighted && 'is-highlight')}
+      data-organ={card.organ}
+      data-status={status}
+      aria-label={`${t('common.open')}: ${card.label}`}
+      onClick={() => onOpen(card.organ)}
+    >
+      <span className="wear-tile-head">
+        <NavIcon name={ORGAN_ICONS[card.organ] || 'organs'} className="wear-tile-icon" />
+        <span className="wear-tile-name">{card.label}</span>
+        <StatusTag status={status} />
+      </span>
+      {value != null ? (
+        <>
+          <span className="wear-tile-value">
+            {value}
+            {metric.unit ? <span className="wear-tile-unit">{metric.unit}</span> : null}
+          </span>
+          <span className="wear-tile-metric">{metric.name}</span>
+        </>
+      ) : <span className="wear-tile-headline">{card.headline || '—'}</span>}
+    </button>
+  );
+}
+
+/** Popup body of one organ card: headline, action, its checks (paged) and the rule behind it. */
+function OrganBody({ card }) {
+  const t = useT();
+  const [page, setPage] = useState(0);
+  const status = card.status ?? 'no_data';
+  const checks = Array.isArray(card.checks) && card.checks.length
+    ? card.checks
+    : (card.metrics || []).map(metric => ({ label: metric.name, value: metric.value, unit: metric.unit, status: metric.status }));
+  const pages = Math.max(1, Math.ceil(checks.length / CHECKS_PER_PAGE));
+  const safe = Math.min(page, pages - 1);
+  const slice = checks.slice(safe * CHECKS_PER_PAGE, safe * CHECKS_PER_PAGE + CHECKS_PER_PAGE);
+  return (
+    <div className="wear-dlg" data-organ={card.organ}>
+      <p className="wear-dlg-headline">{card.headline}</p>
+      {status !== 'ok' && card.action ? (
+        <p className="wear-dlg-action"><span aria-hidden="true">&gt; </span>{card.action}</p>
+      ) : null}
+      {checks.length ? (
+        <ul className="wear-checks" aria-label={t('wearables.checks')}>
+          {slice.map(check => (
+            <li key={check.code || check.label} className={cx('wear-check', `wear-check-${check.status ?? 'no_data'}`)} data-status={check.status ?? 'no_data'}>
+              <span className="wear-check-label">{check.label}</span>
+              <span className="wear-check-value">
+                {formatValue(check.value) ?? '—'}
+                {check.unit ? <span className="wear-check-unit">{check.unit}</span> : null}
+              </span>
+              <StatusTag status={check.status} />
+              {check.message ? <span className="wear-check-msg">{check.message}</span> : null}
+            </li>
+          ))}
+        </ul>
+      ) : <p className="wear-empty">{t('wearables.checksNone')}</p>}
+      <Pager page={safe} pages={pages} onPage={setPage} />
+      {card.why ? (
+        <p className="wear-dlg-why"><span className="label">{t('wearables.why')}</span> {card.why}</p>
+      ) : null}
+    </div>
+  );
+}
+
+/** Popup body of a body region: the limb band (arms / legs) and the organs mapped there. */
+function RegionBody({ cards, limb, onOpen }) {
+  const t = useT();
+  return (
+    <div className={cx('wear-region-dlg', limb && 'has-limb')}>
+      {limb ? <LimbCard data={limb} className="wear-limb" /> : null}
+      {cards.length === 0
+        ? <p className="wear-empty">{t('wearables.regionNone')}</p>
+        : (
+          <div className="wear-region-tiles">
+            {cards.map(card => <OrganTile key={card.organ} card={card} onOpen={onOpen} />)}
+          </div>
+        )}
+    </div>
+  );
+}
+
+/** Popup body: every wearable band with state and battery; bands that need attention first. */
+function BandsBody({ devices }) {
   const t = useT();
   const list = Array.isArray(devices) ? devices.filter(device => device?.limb) : [];
   if (list.length === 0) return <p className="wear-empty">{t('wearables.devicesNone')}</p>;
-  // Bands that need attention first; otherwise the order MOTHER sent.
   const sorted = [...list].sort((a, b) => Number(b.status !== 'ok') - Number(a.status !== 'ok'));
   return (
-    <ul className="wear-devices">
+    <ul className="wear-devices" aria-label={t('wearables.devices')}>
       {sorted.map(device => {
+        const status = device.status ?? 'no_data';
         const battery = typeof device.battery_pct === 'number' ? Math.round(device.battery_pct) : null;
         const name = DEVICE_LABEL_KEYS[device.limb] ? t(DEVICE_LABEL_KEYS[device.limb]) : words(device.limb);
         return (
-          <li key={device.limb} className={cx('wear-device', `wear-device-${device.status ?? 'no_data'}`)} data-device={device.limb} data-status={device.status ?? 'no_data'}>
+          <li key={device.limb} className={cx('wear-device', `wear-device-${status}`)} data-device={device.limb} data-status={status}>
             <span className="wear-device-name">{name}</span>
             <span className="wear-device-state">{words(device.state) || '—'}</span>
-            <span className="wear-device-battery">
-              <SegBar value={battery} max={100} status={device.status} segments={10} label={`${t('wearables.battery')}: ${name}`} />
-              <span className="wear-device-pct">{battery != null ? `${battery} %` : '—'}</span>
-            </span>
-            <StatusTag status={device.status} />
+            <SegBar value={battery} max={100} status={device.status} segments={10} label={`${t('wearables.battery')}: ${name}`} />
+            <span className="wear-device-pct">{battery != null ? `${battery} %` : '—'}</span>
+            <StatusTag status={status} />
             {device.message ? <span className="wear-device-msg">{device.message}</span> : null}
           </li>
         );
@@ -95,9 +213,10 @@ function DeviceList({ devices }) {
 }
 
 /**
- * Wearables: the full body scan of one crew member. Header strip, sol control, the 3D
- * astronaut tinted by organ status with region chips, the environment (exposure) card,
- * the ten organ cards and the list of wearable bands.
+ * Wearables: the full body scan of one crew member, one screen, no scrolling.
+ *   header — ‹ BACK, name + overall status, sol control, ENVIRONMENT and BANDS buttons;
+ *   left   — the interactive 3D astronaut tinted by organ status (tap a part → popup);
+ *   right  — ten organ tiles (tap → popup with checks, action and why).
  * Props (shared by every screen): { mother, session, viewedCode, setViewedCode, navigate, profile }.
  * Sol: SolControl <-> mother.period / mother.setPeriod({ sol }) (flight day for non-habitat people).
  */
@@ -107,49 +226,74 @@ export default function WearablesScreen({ mother, session, viewedCode, navigate,
   const { report, kind, asOf } = source;
 
   const [hoverSegment, setHoverSegment] = useState(null);
-  // Region pinned by a click; a notification opened on the home screen pre-selects one.
-  const [pinned, setPinned] = useState(() => regionForTarget(peekPendingFocus()));
+  // Open popup; a notification opened on the home screen pre-selects one.
+  const [dialog, setDialog] = useState(() => dialogForTarget(peekPendingFocus()));
   useEffect(() => { clearPendingFocus(); }, []);
+  const close = useCallback(() => setDialog(null), []);
 
-  // Another person: forget the selection (not on the first render, which may carry a hand-over).
-  const [personOfSelection, setPersonOfSelection] = useState(viewedCode);
-  if (personOfSelection !== viewedCode) {
-    setPersonOfSelection(viewedCode);
-    setPinned(null);
+  // Another person: close the popup (not on the first render, which may carry a hand-over).
+  const [personOfDialog, setPersonOfDialog] = useState(viewedCode);
+  if (personOfDialog !== viewedCode) {
+    setPersonOfDialog(viewedCode);
+    setDialog(null);
     setHoverSegment(null);
   }
 
   const segmentStatus = useMemo(() => (report ? segmentStatusFromReport(report) : undefined), [report]);
   const { limbs } = useMemo(() => limbsFromReport(report), [report]);
-  const organs = report?.organs || [];
+  const organs = Array.isArray(report?.organs) ? report.organs : [];
   const exposure = organs.find(card => card.organ === 'exposure') || null;
+  const devices = Array.isArray(report?.devices) ? report.devices : [];
+  const badDevices = devices.filter(device => device?.status && device.status !== 'ok');
+  const bandsStatus = devices.length ? worstStatus(devices.map(device => device.status ?? 'no_data')) : 'no_data';
 
-  const regionStatus = useCallback(
-    region => worstStatus(region.segments.map(segment => segmentStatus?.[segment]).filter(Boolean)) || 'no_data',
-    [segmentStatus],
-  );
   const regionLabel = region => (region.labelKey ? t(region.labelKey) : region.label);
-
+  const regionStatus = region => worstStatus(region.segments.map(segment => segmentStatus?.[segment]).filter(Boolean)) || 'no_data';
   const hoverRegion = regionForSegment(hoverSegment);
-  const activeRegion = hoverRegion || pinned;
-  const activeCards = organsForRegion(report, activeRegion);
-  const pinnedCards = organsForRegion(report, pinned);
-  const visibleCards = pinned ? pinnedCards : organs;
-  const highlighted = new Set(hoverRegion ? organsForRegion(report, hoverRegion).map(card => card.organ) : []);
-  const activeLimb = activeRegion && LIMB_SEGMENTS[activeRegion.id] ? limbs.find(item => item.limb === activeRegion.id) : null;
+  const highlighted = new Set(organsForRegion(report, hoverRegion).map(card => card.organ));
 
-  const togglePin = useCallback(region => {
-    setPinned(current => (!region || current?.id === region.id ? null : region));
-  }, []);
+  const openOrgan = useCallback(organ => setDialog({ kind: 'organ', organ }), []);
+  const openSegment = useCallback(segment => {
+    const region = regionForSegment(segment);
+    if (!region) return;
+    const cards = organsForRegion(report, region);
+    if (!LIMB_SEGMENTS[region.id] && cards.length === 1) setDialog({ kind: 'organ', organ: cards[0].organ });
+    else setDialog({ kind: 'region', region });
+  }, [report]);
 
   const subject = report?.subject;
   const name = profile?.name || subject?.label || viewedCode || '—';
   const overall = report?.overall_status ?? 'no_data';
-  const badgeKind = source.demo ? 'demo' : subject?.data_kind === 'synthetic' ? 'synthetic' : null;
   const periodLabel = kind === 'sol' ? t('common.sol') : t('wearables.flightDay');
   const linked = source.mode === 'online';
-  const devices = report?.devices;
-  const badDevices = (devices || []).filter(device => device?.status && device.status !== 'ok').length;
+
+  let dialogView = null;
+  if (dialog?.kind === 'organ') {
+    const card = organs.find(item => item.organ === dialog.organ);
+    dialogView = card ? (
+      <DataDialog title={card.label} status={card.status ?? 'no_data'} icon={ORGAN_ICONS[card.organ] || 'organs'} onClose={close}>
+        <OrganBody key={card.organ} card={card} />
+      </DataDialog>
+    ) : (
+      <DataDialog title={dialog.organ === 'exposure' ? t('wearables.environment') : words(dialog.organ)} icon="radiation" onClose={close}>
+        <p className="wear-empty">{dialog.organ === 'exposure' ? t('wearables.environmentNone') : t('wearables.organsNone')}</p>
+      </DataDialog>
+    );
+  } else if (dialog?.kind === 'region') {
+    const { region } = dialog;
+    const limb = LIMB_SEGMENTS[region.id] ? limbs.find(item => item.limb === region.id) || null : null;
+    dialogView = (
+      <DataDialog title={regionLabel(region)} status={regionStatus(region)} icon="body" onClose={close}>
+        <RegionBody cards={organsForRegion(report, region)} limb={limb} onOpen={openOrgan} />
+      </DataDialog>
+    );
+  } else if (dialog?.kind === 'bands') {
+    dialogView = (
+      <DataDialog title={t('wearables.devices')} status={bandsStatus} icon="bands" onClose={close}>
+        <BandsBody devices={devices} />
+      </DataDialog>
+    );
+  }
 
   return (
     <div className="wearables-screen">
@@ -161,25 +305,21 @@ export default function WearablesScreen({ mother, session, viewedCode, navigate,
 
       <TelemetryNotice source={source} code={viewedCode} />
 
-      <Panel
-        className="wear-header"
-        title={t('wearables.scanPanel')}
-        tone={isProblem(overall) ? overall : 'default'}
-      >
-        <dl className="wear-id">
-          <div><dt>{t('wearables.crew')}</dt><dd>{name}{viewedCode ? <span className="dim"> · {viewedCode}</span> : null}</dd></div>
-          <div><dt>{t('wearables.mission')}</dt><dd>{subject?.mission || '—'}</dd></div>
-          <div><dt>{periodLabel}</dt><dd data-testid="wear-sol">{asOf ?? '—'}</dd></div>
-          <div><dt>{t('wearables.zone')}</dt><dd>{words(subject?.home_zone || profile?.homeZone) || '—'}</dd></div>
-        </dl>
+      <header className="wear-head" data-status={overall}>
+        <button type="button" className="wear-back" onClick={() => navigate?.('home')}>
+          <NavIcon name="prev" className="wear-back-icon" />
+          <span>{t('common.back')}</span>
+        </button>
 
-        <div className={cx('wear-status', `wear-status-${overall}`)} data-status={overall}>
-          <span className="label">{t('wearables.overall')}</span>
-          <StatusTag status={overall} />
-          <span className="wear-top-message">{report?.top_message ?? '—'}</span>
+        <div className={cx('wear-who', `wear-who-${overall}`)}>
+          <span className="wear-who-line">
+            <span className="wear-name">{name}</span>
+            <StatusTag status={overall} className="wear-overall" />
+          </span>
+          <span className="wear-top-message" title={report?.top_message || undefined}>{report?.top_message ?? '—'}</span>
         </div>
 
-        <div className="wear-controls">
+        <div className="wear-sol">
           {linked ? (
             <SolControl
               value={mother?.period?.[kind] ?? null}
@@ -189,138 +329,64 @@ export default function WearablesScreen({ mother, session, viewedCode, navigate,
               onChange={next => mother?.setPeriod?.(next == null ? null : { [kind]: next })}
             />
           ) : (
-            <span className="wear-sol-fixed">{periodLabel} {asOf ?? '—'} · {t('wearables.solFixed')}</span>
+            <span className="wear-sol-fixed">
+              {periodLabel} <strong data-testid="wear-sol">{asOf ?? '—'}</strong>
+              <span className="wear-sol-note">{t('wearables.solFixed')}</span>
+            </span>
           )}
+          {linked ? <span className="visually-hidden" data-testid="wear-sol">{asOf ?? '—'}</span> : null}
           {linked && mother?.loadingReport ? <span className="wear-updating" role="status">{t('wearables.updating')}</span> : null}
-          <span className="spacer" />
-          <Button onClick={() => navigate?.('home')}>{t('common.back')}</Button>
         </div>
-      </Panel>
 
-      <div className="wear-main">
-        <Panel className="wear-map" title={t('wearables.bodyMap')} meta={t('wearables.bodyMapMeta')}>
-          <div className="wear-figure">
-            <AstronautViewer
-              model={profile?.model}
-              segmentStatus={segmentStatus}
-              onSegmentHover={setHoverSegment}
-              onSegmentClick={segment => togglePin(regionForSegment(segment))}
-            />
-          </div>
-
-          <div className="wear-chips" role="group" aria-label={t('wearables.regions')}>
-            <Button small active={!pinned} aria-pressed={!pinned} onClick={() => setPinned(null)}>{t('wearables.regionAll')}</Button>
-            {REGIONS.map(region => {
-              const status = regionStatus(region);
-              const selected = pinned?.id === region.id;
-              return (
-                <Button
-                  key={region.id}
-                  small
-                  className={cx('wear-chip', `wear-chip-${status}`)}
-                  active={selected}
-                  aria-pressed={selected}
-                  data-region={region.id}
-                  data-status={status}
-                  onClick={() => togglePin(region)}
-                >
-                  {regionLabel(region)}
-                </Button>
-              );
-            })}
-          </div>
-
-          <div className="wear-region" data-region={activeRegion?.id ?? ''} aria-live="polite">
-            {activeRegion ? (
-              <>
-                <div className="wear-region-head">
-                  <span className="label">{t('wearables.region')}</span>
-                  <strong className="wear-region-name">{regionLabel(activeRegion)}</strong>
-                  <StatusTag status={regionStatus(activeRegion)} />
-                </div>
-                {activeCards.length === 0
-                  ? <p className="dim">{t('wearables.regionNone')}</p>
-                  : (
-                    <ul className="wear-region-organs">
-                      {activeCards.map(card => (
-                        <li key={card.organ} data-organ={card.organ}>
-                          <StatusTag status={card.status} /> <strong>{card.label}</strong>
-                          <span className="wear-region-headline"> · {card.headline}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-              </>
-            ) : <p className="dim">{t('wearables.regionHint')}</p>}
-          </div>
-        </Panel>
-
-        <div className="wear-side">
-          {activeLimb ? <LimbCard data={activeLimb} className="wear-limb" /> : null}
-
-          <Panel
-            className="wear-env"
-            title={t('wearables.environment')}
-            tone={isProblem(exposure?.status) ? exposure.status : 'default'}
-            meta={exposure ? <StatusTag status={exposure.status} /> : null}
-            data-organ="exposure"
+        <div className="wear-actions">
+          <button
+            type="button"
+            className={cx('wear-action', `wear-action-${exposure?.status ?? 'no_data'}`)}
+            data-open="environment"
+            data-status={exposure?.status ?? 'no_data'}
+            onClick={() => setDialog({ kind: 'organ', organ: 'exposure' })}
           >
-            {exposure ? (
-              <>
-                <p className="wear-env-headline">{exposure.headline}</p>
-                {(exposure.metrics || []).slice(0, 3).map(metric => (
-                  <DataRow
-                    key={metric.name}
-                    label={metric.name}
-                    value={formatValue(metric.value)}
-                    unit={metric.unit}
-                    status={metric.status && metric.status !== 'ok' ? metric.status : undefined}
-                  />
-                ))}
-                {exposure.status !== 'ok' && exposure.action
-                  ? <p className="organ-action"><span className="organ-prompt" aria-hidden="true">&gt; </span>{exposure.action}</p>
-                  : null}
-              </>
-            ) : <p className="wear-empty">{t('wearables.environmentNone')}</p>}
-          </Panel>
-
-          <Panel
-            className="wear-devices-panel"
-            title={t('wearables.devices')}
-            tone={badDevices ? 'caution' : 'default'}
-            meta={devices?.length
-              ? (badDevices
-                ? t('wearables.devicesAttention', { n: devices.length, bad: badDevices })
-                : t('wearables.devicesOk', { n: devices.length }))
-              : null}
+            <NavIcon name="radiation" className="wear-action-icon" />
+            <span className="wear-action-label">{t('wearables.environment')}</span>
+            <StatusTag status={exposure?.status} />
+          </button>
+          <button
+            type="button"
+            className={cx('wear-action', `wear-action-${bandsStatus}`)}
+            data-open="bands"
+            data-status={bandsStatus}
+            onClick={() => setDialog({ kind: 'bands' })}
           >
-            <DeviceList devices={devices} />
-          </Panel>
+            <NavIcon name="bands" className="wear-action-icon" />
+            <span className="wear-action-label">{t('wearables.devices')}</span>
+            <span className="wear-action-count" data-testid="bands-count">
+              {badDevices.length ? t('wearables.devicesBad', { bad: badDevices.length, n: devices.length }) : t('wearables.devicesCount', { n: devices.length })}
+            </span>
+          </button>
         </div>
+      </header>
+
+      <div className="wear-stage">
+        <section className="wear-figure" aria-label={t('wearables.bodyMap')} title={t('wearables.bodyMapHint')}>
+          <AstronautViewer
+            model={profile?.model}
+            segmentStatus={segmentStatus}
+            onSegmentHover={setHoverSegment}
+            onSegmentClick={openSegment}
+          />
+          <span className="wear-figure-hint" aria-hidden="true">{hoverRegion ? regionLabel(hoverRegion) : t('wearables.bodyMapHint')}</span>
+        </section>
+
+        <section className="wear-organs" aria-label={t('wearables.organs')}>
+          {organs.length === 0
+            ? <p className="wear-empty">{t('wearables.organsNone')}</p>
+            : organs.map(card => (
+              <OrganTile key={card.organ} card={card} highlighted={highlighted.has(card.organ)} onOpen={openOrgan} />
+            ))}
+        </section>
       </div>
 
-      <Panel
-        className="wear-organs"
-        title={t('wearables.organs')}
-        meta={(
-          <span className="wear-organs-meta">
-            <span data-testid="organ-count">
-              {pinned
-                ? t('wearables.organsFiltered', { n: visibleCards.length, total: organs.length, region: regionLabel(pinned) })
-                : t('wearables.organsMeta', { n: organs.length, schema: report?.schema_version || '—' })}
-            </span>
-            {pinned ? <Button small onClick={() => setPinned(null)}>{t('wearables.showAll')}</Button> : null}
-          </span>
-        )}
-      >
-        {visibleCards.length === 0 ? (
-          <p className="wear-empty">{organs.length === 0 ? t('wearables.organsNone') : t('wearables.regionNone')}</p>
-        ) : (
-          <div className="wear-organ-grid">
-            {visibleCards.map(card => <OrganCard key={card.organ} card={card} highlighted={highlighted.has(card.organ)} />)}
-          </div>
-        )}
-      </Panel>
+      {dialogView}
     </div>
   );
 }

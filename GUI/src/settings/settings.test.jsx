@@ -34,14 +34,17 @@ describe('language', () => {
 });
 
 describe('CRT effect', () => {
-  it('is on by default and the toggle sets data-crt on <html>', () => {
+  it('is on by default and the big switch sets data-crt on <html>', () => {
     renderSettings();
     expect(html).toHaveAttribute('data-crt', 'on');
-    fireEvent.click(screen.getByRole('button', { name: 'CRT off' }));
+    const toggle = screen.getByRole('switch', { name: 'CRT effect' });
+    expect(toggle).toHaveAttribute('aria-checked', 'true');
+    fireEvent.click(toggle);
     expect(html).toHaveAttribute('data-crt', 'off');
     expect(window.localStorage.getItem(STORAGE_CRT)).toBe('off');
-    expect(screen.getByRole('button', { name: 'CRT off' })).toHaveAttribute('aria-pressed', 'true');
-    fireEvent.click(screen.getByRole('button', { name: 'CRT on' }));
+    expect(toggle).toHaveAttribute('aria-checked', 'false');
+    expect(toggle).toHaveTextContent('Off');
+    fireEvent.click(toggle);
     expect(html).toHaveAttribute('data-crt', 'on');
     expect(window.localStorage.getItem(STORAGE_CRT)).toBe('on');
   });
@@ -65,6 +68,7 @@ describe('themes', () => {
     expect(html).toHaveAttribute('data-theme', 'nostromo');
     expect(themeRow('nostromo')).toHaveAttribute('aria-current', 'true');
     expect(within(themeRow('nostromo')).getByText('[ Active ]')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Use theme Nostromo' })).toHaveAttribute('aria-pressed', 'true');
     expect(themeRow('phosphor').querySelectorAll('.theme-swatch')).toHaveLength(13);
     expect(within(themeRow('phosphor')).queryByRole('button', { name: /remove/i })).not.toBeInTheDocument();
   });
@@ -136,11 +140,16 @@ describe('themes', () => {
 });
 
 describe('data link info', () => {
-  it('shows the API base read-only and the connection state', () => {
+  it('shows the connection state and opens the API details in a popup', () => {
     renderSettings(makeMother({ mode: 'offline', online: false, error: { message: 'Cannot reach MOTHER', hint: 'start MOTHER' } }));
-    expect(screen.getByText('same origin /api')).toBeInTheDocument();
     expect(screen.getByText('OFFLINE · DEMO')).toHaveAttribute('title', 'Cannot reach MOTHER · start MOTHER');
-    expect(screen.getByText('Cannot reach MOTHER')).toBeInTheDocument();
+    expect(screen.queryByText('same origin /api')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Details' }));
+    const dialog = screen.getByRole('dialog', { name: 'Data link' });
+    expect(within(dialog).getByText('same origin /api')).toBeInTheDocument();
+    expect(within(dialog).getByText('Cannot reach MOTHER')).toBeInTheDocument();
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Close' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });
 

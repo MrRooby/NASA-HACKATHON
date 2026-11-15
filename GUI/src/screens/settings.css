@@ -1,37 +1,150 @@
-/* SettingsScreen.jsx (theme variables only; swatches show the theme objects' own colours inline). */
-.settings-screen { display: grid; gap: 12px; }
-.settings-head p { margin: 2px 0 0; }
-.settings-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 12px; align-items: start; }
-@media (max-width: 1100px) {
-  .settings-grid { grid-template-columns: minmax(0, 1fr); }
-}
+/* SettingsScreen.jsx: one screen, no scrolling, touch sized. Theme variables only; theme tiles
+   show each theme object's own colours inline. Popups: DataDialog (styled in home.css). */
+.screen[data-screen='settings'] { display: grid; grid-template-rows: minmax(0, 1fr); overflow: hidden; }
+.settings-screen { display: flex; flex-direction: column; gap: 10px; min-width: 0; min-height: 0; overflow: hidden; }
 
-.theme-list { margin-bottom: 10px; border-top: 1px solid var(--border); }
-.theme-row {
+.settings-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 20px; min-width: 0; }
+.settings-head h1 { margin: 0; font-size: clamp(22px, 2vw, 32px); text-transform: uppercase; letter-spacing: 0.08em; }
+.settings-sub { margin: 0; color: var(--dim); font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.settings-grid {
+  flex: 1 1 auto;
   display: grid;
-  grid-template-columns: 2ch minmax(0, 1fr) auto 10ch auto;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: clamp(12px, 1.6vw, 24px);
+  min-height: 0;
+}
+.settings-side { display: grid; grid-template-rows: auto auto auto; align-content: start; gap: clamp(12px, 2vh, 24px); min-width: 0; min-height: 0; }
+
+.settings-block { display: grid; align-content: start; gap: 10px; min-width: 0; min-height: 0; }
+.settings-block-head { display: flex; align-items: center; gap: 12px; min-width: 0; min-height: 48px; border-bottom: 1px solid var(--border); }
+.settings-block-head h2 { margin: 0; color: var(--accent-bright); font-size: clamp(16px, 1.4vw, 22px); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+.settings-meta { color: var(--dim); font-size: 14px; text-transform: uppercase; white-space: nowrap; }
+.settings-block-head .pager { gap: 8px; }
+.settings-block-head .pager-btn { width: 56px; height: 44px; font-size: 28px; }
+.settings-block-head .pager-pos { min-width: 5ch; font-size: 14px; }
+.settings-block-head .conn { font-size: 14px; }
+
+/* ── themes ──────────────────────────────────────────────────────────────── */
+.settings-themes { grid-template-rows: auto minmax(0, 1fr) auto; }
+.theme-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 10px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.theme-row { position: relative; display: grid; min-width: 0; min-height: 0; }
+.theme-use {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  min-width: 0;
+  min-height: 96px;
+  padding: 10px 12px;
+  border: 1px solid;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.theme-row.is-active .theme-use { border-width: 4px; padding: 7px 9px; }
+.theme-name { min-width: 0; overflow: hidden; font-size: clamp(15px, 1.3vw, 20px); font-weight: 700; text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+.theme-row:has(.theme-remove) .theme-name { padding-right: 52px; }
+.theme-swatches { display: flex; align-self: center; height: clamp(24px, 6vh, 64px); border: 1px solid currentColor; }
+.theme-swatch { flex: 1 1 0; min-width: 0; }
+.theme-kind { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+.theme-remove {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  color: var(--bg);
+  background: var(--alert);
+  border: 0;
+  font-size: 28px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.theme-import { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; min-width: 0; }
+.settings-import-hint, .settings-import-ok { flex: 1 1 18ch; min-width: 0; margin: 0; font-size: 14px; }
+.settings-import-hint { color: var(--dim); }
+.settings-import-ok { color: var(--ok); }
+
+/* big touch button (import, link details) */
+.settings-big {
+  display: inline-flex;
   align-items: center;
-  gap: 4px 12px;
-  padding: 5px 4px;
-  border-bottom: 1px solid var(--border);
+  justify-content: center;
+  gap: 10px;
+  min-height: 72px;
+  padding: 0 24px;
+  color: var(--accent-bright);
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  font: inherit;
+  font-size: clamp(15px, 1.3vw, 20px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
-.theme-row.is-active { background: var(--raised); }
-.theme-marker { color: var(--accent); white-space: pre; }
-.theme-name { display: grid; min-width: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
-.theme-id { color: var(--dim); font-size: 11px; font-weight: 400; text-transform: none; letter-spacing: 0; overflow-wrap: anywhere; }
-.theme-swatches { display: inline-flex; border: 1px solid var(--border); }
-.theme-swatch { display: block; width: 12px; height: 18px; }
-.theme-kind { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
-.theme-actions { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 8px; min-width: 12ch; }
-.theme-active-tag { color: var(--ok); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+.settings-big:active { background: var(--raised); border-color: var(--accent-bright); }
+.settings-big-icon { font-size: 30px; color: var(--accent); }
 
-.theme-import { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 6px; }
-.theme-errors { padding-left: 2ch; }
+/* ── language ────────────────────────────────────────────────────────────── */
+.settings-flags { gap: 16px; }
+.settings-flags .langflag { width: clamp(96px, 8vw, 132px); height: clamp(64px, 5.4vw, 88px); }
+
+/* ── CRT switch ──────────────────────────────────────────────────────────── */
+.settings-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 72px;
+  padding: 0;
+  color: var(--dim);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.settings-switch-track { position: relative; display: block; width: 128px; height: 64px; background: var(--panel); border: 2px solid var(--border); }
+.settings-switch-knob { position: absolute; top: 6px; left: 6px; width: 48px; height: 48px; background: var(--dim); }
+.settings-switch.is-on .settings-switch-track { border-color: var(--accent); background: var(--raised); }
+.settings-switch.is-on .settings-switch-knob { left: 70px; background: var(--accent-bright); }
+.settings-switch-text { font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.settings-switch.is-on .settings-switch-text { color: var(--accent-bright); }
+@media (prefers-reduced-motion: no-preference) {
+  .settings-switch-knob { transition: left 120ms linear; }
+}
+
+/* ── popups ──────────────────────────────────────────────────────────────── */
+.settings-errors { display: grid; gap: 8px; color: var(--alert); font-size: 16px; }
+.settings-errors p { margin: 0; font-weight: 700; }
+.theme-errors { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .theme-errors li::before { content: '- '; }
-.settings-note { margin-top: 6px; }
+.settings-link { display: grid; gap: 10px; font-size: 16px; }
+.settings-link h3 { margin: 6px 0 0; color: var(--accent); font-size: 16px; }
+.settings-note { margin: 0; color: var(--dim); font-size: 14px; }
+.settings-preview { display: flex; flex-wrap: wrap; gap: 12px; }
 
-@media (max-width: 1000px) {
-  .theme-row { grid-template-columns: 2ch minmax(0, 1fr) auto; }
-  .theme-kind { display: none; }
-  .theme-actions { grid-column: 2 / -1; justify-content: flex-start; }
+@media (max-width: 1300px) {
+  .settings-sub { display: none; }
 }
+
+/* readable rows in the link popup (DataRow defaults to 12 px labels) */
+.settings-link .datarow-label, .settings-link .datarow-unit, .settings-link .datarow-note { font-size: 14px; }
+.settings-link .datarow-value { font-size: 18px; }

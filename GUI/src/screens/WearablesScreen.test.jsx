@@ -5,7 +5,7 @@ import habC4Sol142 from '../test/fixtures/organs_HAB-C4_sol142.json';
 import { clone, makeMother, renderScreen, screenProps } from '../home/testUtils.jsx';
 import { peekPendingFocus, setPendingFocus } from '../home/focus.js';
 import { getProfile } from '../data/crewProfiles.js';
-import WearablesScreen, { organsForRegion, regionForSegment, regionForTarget } from './WearablesScreen.jsx';
+import WearablesScreen, { dialogForTarget, organsForRegion, regionForSegment, regionForTarget } from './WearablesScreen.jsx';
 
 vi.mock('../AstronautViewer.jsx', async () => ({ default: (await import('../test/mocks.jsx')).MockAstronautViewer }));
 
@@ -13,30 +13,28 @@ beforeEach(() => setPendingFocus(null));
 afterEach(() => vi.useRealTimers());
 
 const notice = () => document.querySelector('.tele-notice');
-const organCards = () => [...document.querySelectorAll('.organ-card')];
-const organCard = organ => document.querySelector(`.organ-card[data-organ="${organ}"]`);
-const headTag = organ => organCard(organ).querySelector('.organ-head .stag');
-const shownOrgans = () => organCards().map(card => card.dataset.organ);
-const chip = name => within(screen.getByRole('group', { name: 'Body regions' })).getByRole('button', { name });
+const tiles = () => [...document.querySelectorAll('.wear-organs .wear-tile')];
+const tile = organ => document.querySelector(`.wear-organs .wear-tile[data-organ="${organ}"]`);
+const shownOrgans = () => tiles().map(item => item.dataset.organ);
+const dialog = () => screen.queryByRole('dialog');
+const closeDialog = () => fireEvent.click(within(dialog()).getByRole('button', { name: 'Close' }));
+const segment = name => screen.getByRole('button', { name: `model segment ${name}` });
 
 function renderWearables({ mother = makeMother({ report: habC4Sol142, period: { sol: 142 } }), ...rest } = {}, options) {
   return renderScreen(WearablesScreen, screenProps({ mother, ...rest }), options);
 }
 
 describe('WearablesScreen: header', () => {
-  it('shows person, mission, sol, zone, the SYNTHETIC badge and the overall status', () => {
+  it('shows the person, the overall status and the top message, without badges or callsigns', () => {
     renderWearables();
-    const header = screen.getByRole('heading', { name: 'Body scan' }).closest('section');
-    expect(header).toHaveAttribute('data-tone', 'alert');
-    expect(within(header).getByText('Grażyna Brzęczyszczykiewicz')).toBeInTheDocument();
-    expect(within(header).queryByText(/«ZNACHOR»/)).not.toBeInTheDocument(); // badges and callsigns removed
-    expect(within(header).getByText('Mars lava-tube habitat')).toBeInTheDocument();
+    const head = document.querySelector('.wear-head');
+    expect(head).toHaveAttribute('data-status', 'alert');
+    expect(within(head).getByText('Grażyna Brzęczyszczykiewicz')).toBeInTheDocument();
+    expect(head.querySelector('.wear-overall')).toHaveTextContent('[ ALRT ]');
+    expect(within(head).getByText(habC4Sol142.top_message)).toBeInTheDocument();
     expect(screen.getByTestId('wear-sol')).toHaveTextContent('142');
-    expect(within(header).getByText('module M2')).toBeInTheDocument();
-    expect(within(header).queryByText('SYNTHETIC')).not.toBeInTheDocument(); // badges and callsigns removed
-    const status = header.querySelector('.wear-status');
-    expect(within(status).getByText('[ ALRT ]')).toBeInTheDocument();
-    expect(within(status).getByText(habC4Sol142.top_message)).toBeInTheDocument();
+    expect(within(head).queryByText(/«ZNACHOR»/)).not.toBeInTheDocument();
+    expect(within(head).queryByText('SYNTHETIC')).not.toBeInTheDocument();
     expect(notice()).toBeNull();
   });
 
@@ -47,7 +45,7 @@ describe('WearablesScreen: header', () => {
     expect(screen.getByTestId('read-only-banner')).toHaveTextContent('VIEWING GRAŻYNA BRZĘCZYSZCZYKIEWICZ — READ ONLY');
   });
 
-  it('[ BACK ] returns to the home screen', () => {
+  it('‹ BACK returns to the home screen', () => {
     const { props } = renderWearables();
     fireEvent.click(screen.getByRole('button', { name: 'Back' }));
     expect(props.navigate).toHaveBeenCalledWith('home');
@@ -68,15 +66,11 @@ describe('WearablesScreen: sol control', () => {
     expect(props.mother.setPeriod).toHaveBeenCalledTimes(1);
     expect(props.mother.setPeriod).toHaveBeenCalledWith({ sol: 150 });
 
-    fireEvent.change(screen.getByRole('slider', { name: 'Sol slider' }), { target: { value: '380' } });
-    act(() => { vi.advanceTimersByTime(600); });
-    expect(props.mother.setPeriod).toHaveBeenLastCalledWith({ sol: 380 });
-
     fireEvent.click(screen.getByRole('button', { name: 'Latest' }));
     expect(props.mother.setPeriod).toHaveBeenLastCalledWith(null);
   });
 
-  it('on the latest sol shows the sol of the report and disables [ LATEST ]', () => {
+  it('on the latest sol shows the sol of the report and disables LATEST', () => {
     renderWearables({ mother: makeMother({ report: habC1 }), session: 'HAB-C1' });
     expect(screen.getByRole('spinbutton', { name: 'Sol' })).toHaveValue(600);
     expect(screen.getByRole('button', { name: 'Latest' })).toBeDisabled();
@@ -88,50 +82,45 @@ describe('WearablesScreen: sol control', () => {
   });
 });
 
-describe('WearablesScreen: organ cards', () => {
-  it('renders the ten organ cards in the order of the report', () => {
+describe('WearablesScreen: organ tiles', () => {
+  it('shows ten tiles in report order with status, one big value and the metric name', () => {
     renderWearables();
     expect(shownOrgans()).toEqual(['brain', 'eyes', 'heart', 'lungs', 'blood', 'kidneys', 'gut', 'musculoskeletal', 'limbs', 'exposure']);
-    expect(screen.getByTestId('organ-count')).toHaveTextContent('10 systems · schema 1.1');
-    expect(organCard('limbs')).toHaveAttribute('data-status', 'alert');
-    expect(headTag('limbs')).toHaveTextContent('[ ALRT ]');
-    expect(headTag('kidneys')).toHaveTextContent('[ CAUT ]');
-    expect(headTag('eyes')).toHaveTextContent('[ ---- ]');
-    expect(headTag('heart')).toHaveTextContent('[ OK ]');
-    // A metric that is not ok carries its own tag.
-    expect(within(organCard('limbs')).getByText('Circulation: left leg').closest('.datarow')).toHaveTextContent('25 % of other limbs[ ALRT ]');
+    expect(tile('limbs')).toHaveAttribute('data-status', 'alert');
+    expect(tile('limbs').querySelector('.stag')).toHaveTextContent('[ ALRT ]');
+    // the metric with the card's status leads
+    expect(tile('limbs').querySelector('.wear-tile-value')).toHaveTextContent('25% of other limbs');
+    expect(tile('limbs').querySelector('.wear-tile-metric')).toHaveTextContent('Circulation: left leg');
+    expect(tile('kidneys').querySelector('.stag')).toHaveTextContent('[ CAUT ]');
+    expect(tile('heart').querySelector('.wear-tile-value')).toHaveTextContent('4.19mmol/L');
+    // no metrics: the headline instead
+    expect(tile('eyes').querySelector('.stag')).toHaveTextContent('[ ---- ]');
+    expect(tile('eyes').querySelector('.wear-tile-headline')).toHaveTextContent(/^No data yet/);
   });
 
-  it('shows label, headline, at most three metrics and the action only when not ok', () => {
+  it('a tile opens the organ popup with headline, action, paged checks and why', () => {
     renderWearables();
-    const kidneys = organCard('kidneys');
-    expect(within(kidneys).getByRole('heading', { name: 'Kidneys & urine' })).toBeInTheDocument();
-    expect(within(kidneys).getByText('Stone risk: urine volume 1.73 L/d (< 2.5).')).toBeInTheDocument();
-    expect(kidneys.querySelectorAll('.datarow')).toHaveLength(3);
-    expect(within(kidneys).getByText('Hydration').closest('.datarow')).toHaveTextContent('1.01 SG');
-    expect(kidneys.querySelector('.organ-action')).toHaveTextContent(/^> Drink to ≥2\.5 L urine\/day/);
-
-    const heart = organCard('heart');
-    expect(within(heart).getByText('Mean arterial pressure').closest('.datarow')).toHaveTextContent('86.18 mmHg');
-    expect(heart.querySelector('.organ-action')).toBeNull();
-    expect(organCard('lungs').querySelectorAll('.datarow')).toHaveLength(1);
-    expect(organCard('eyes').querySelectorAll('.datarow')).toHaveLength(0);
+    fireEvent.click(tile('kidneys'));
+    const dlg = dialog();
+    expect(dlg).toHaveAccessibleName('Kidneys & urine');
+    expect(within(dlg).getByText('Stone risk: urine volume 1.73 L/d (< 2.5).', { selector: '.wear-dlg-headline' })).toBeInTheDocument();
+    expect(dlg.querySelector('.wear-dlg-action')).toHaveTextContent(/^> Drink to ≥2\.5 L urine\/day/);
+    const kidneys = habC4Sol142.organs.find(card => card.organ === 'kidneys');
+    expect(dlg.querySelectorAll('.wear-check')).toHaveLength(4);
+    expect(within(dlg).getByText('Hydration').closest('.wear-check')).toHaveTextContent('Hydration1.01SG[ OK ]Well hydrated.');
+    expect(within(dlg).getByText(/1 \/ 2|1\/2/)).toBeInTheDocument();
+    fireEvent.click(within(dlg).getByRole('button', { name: 'Next page' }));
+    expect(dlg.querySelectorAll('.wear-check')).toHaveLength(kidneys.checks.length - 4);
+    expect(dlg.querySelector('.wear-dlg-why')).toHaveTextContent(kidneys.why);
+    closeDialog();
+    expect(dialog()).toBeNull();
   });
 
-  it('[ WHY? ] reveals and hides the rule behind a card', () => {
+  it('an ok organ has no action line', () => {
     renderWearables();
-    const limbs = organCard('limbs');
-    const why = habC4Sol142.organs.find(card => card.organ === 'limbs').why;
-    expect(within(limbs).queryByText(why)).not.toBeInTheDocument();
-    const toggle = within(limbs).getByRole('button', { name: 'Why?' });
-    expect(toggle).toHaveAttribute('aria-expanded', 'false');
-    fireEvent.click(toggle);
-    expect(within(limbs).getByText(why)).toBeInTheDocument();
-    expect(within(limbs).getByRole('button', { name: 'Hide why' })).toHaveAttribute('aria-expanded', 'true');
-    // Only this card opened.
-    expect(document.querySelectorAll('.organ-why')).toHaveLength(1);
-    fireEvent.click(within(limbs).getByRole('button', { name: 'Hide why' }));
-    expect(within(limbs).queryByText(why)).not.toBeInTheDocument();
+    fireEvent.click(tile('heart'));
+    expect(dialog().querySelector('.wear-dlg-action')).toBeNull();
+    expect(dialog().querySelectorAll('.wear-check')).toHaveLength(3);
   });
 });
 
@@ -140,74 +129,64 @@ describe('WearablesScreen: body map', () => {
     renderWearables();
     const viewer = screen.getByTestId('astronaut-viewer');
     expect(viewer).toHaveAttribute('data-front-view', 'false');
-    const tint = JSON.parse(viewer.dataset.segmentStatus);
-    expect(tint).toMatchObject({ left_thigh: 'alert', left_foot: 'alert', right_foot: 'ok', abdomen: 'caution', head: 'ok' });
+    expect(JSON.parse(viewer.dataset.segmentStatus)).toMatchObject({ left_thigh: 'alert', left_foot: 'alert', right_foot: 'ok', abdomen: 'caution', head: 'ok' });
   });
 
-  it('a region chip filters the organ cards and shows that limb', () => {
+  it('hovering a segment highlights the organ tiles mapped there', () => {
     renderWearables();
-    expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
-    expect(chip('L leg')).toHaveAttribute('data-status', 'alert');
-    expect(chip('R leg')).toHaveAttribute('data-status', 'ok');
-
-    fireEvent.click(chip('L leg'));
-    expect(chip('L leg')).toHaveAttribute('aria-pressed', 'true');
-    expect(chip('All')).toHaveAttribute('aria-pressed', 'false');
-    expect(shownOrgans()).toEqual(['musculoskeletal', 'limbs']);
-    expect(screen.getByTestId('organ-count')).toHaveTextContent('2 of 10 · L leg');
-    const limb = document.querySelector('.wear-limb');
-    expect(limb).toHaveAttribute('data-limb', 'left_leg');
-    expect(limb.querySelector('[data-field="circulation"]')).toHaveTextContent('25 %');
-    const readout = document.querySelector('.wear-region');
-    expect(readout).toHaveAttribute('data-region', 'left_leg');
-    expect(readout.querySelector('.wear-region-head')).toHaveTextContent('L leg[ ALRT ]');
-    expect(within(readout).getByText('Limbs (circulation)')).toBeInTheDocument();
-
-    fireEvent.click(chip('Head'));
-    expect(shownOrgans()).toEqual(['brain', 'eyes']);
-    expect(document.querySelector('.wear-limb')).toBeNull();
-
-    fireEvent.click(chip('Head')); // same chip again: back to all
-    expect(shownOrgans()).toHaveLength(10);
-
-    fireEvent.click(chip('Abdomen'));
-    expect(shownOrgans()).toEqual(['kidneys', 'gut']);
-    fireEvent.click(screen.getByRole('button', { name: 'Show all' }));
-    expect(shownOrgans()).toHaveLength(10);
-    expect(screen.queryByRole('button', { name: 'Show all' })).not.toBeInTheDocument();
+    fireEvent.mouseEnter(segment('chest'));
+    expect(tiles().filter(item => item.classList.contains('is-highlight')).map(item => item.dataset.organ)).toEqual(['heart', 'lungs']);
+    fireEvent.mouseLeave(segment('chest'));
+    expect(document.querySelectorAll('.wear-tile.is-highlight')).toHaveLength(0);
   });
 
-  it('clicking a segment of the model pins its region; hovering only highlights', () => {
+  it('tapping a limb opens its region popup with the band and its organs; an organ there opens its popup', () => {
     renderWearables();
-    fireEvent.mouseEnter(screen.getByRole('button', { name: 'model segment chest' }));
-    expect(shownOrgans()).toHaveLength(10);
-    expect(organCards().filter(card => card.classList.contains('is-highlight')).map(card => card.dataset.organ)).toEqual(['heart', 'lungs']);
-    expect(document.querySelector('.wear-region')).toHaveAttribute('data-region', 'chest');
-    fireEvent.mouseLeave(screen.getByRole('button', { name: 'model segment chest' }));
-    expect(document.querySelectorAll('.organ-card.is-highlight')).toHaveLength(0);
-    expect(document.querySelector('.wear-region')).toHaveTextContent(/Hover a body part/);
-
-    fireEvent.click(screen.getByRole('button', { name: 'model segment right_forearm' }));
-    expect(chip('R arm')).toHaveAttribute('aria-pressed', 'true');
-    expect(shownOrgans()).toEqual(['blood', 'limbs']);
-    expect(document.querySelector('.wear-limb')).toHaveAttribute('data-limb', 'right_arm');
+    fireEvent.click(segment('left_foot'));
+    const dlg = dialog();
+    expect(dlg).toHaveAccessibleName('L leg');
+    expect(dlg.querySelector('.dlg-status')).toHaveTextContent('[ ALRT ]');
+    expect(dlg.querySelector('.wear-limb')).toHaveAttribute('data-limb', 'left_leg');
+    expect(dlg.querySelector('[data-field="circulation"]')).toHaveTextContent('25 %');
+    expect([...dlg.querySelectorAll('.wear-tile')].map(item => item.dataset.organ)).toEqual(['musculoskeletal', 'limbs']);
+    fireEvent.click(dlg.querySelector('.wear-tile[data-organ="limbs"]'));
+    expect(dialog()).toHaveAccessibleName('Limbs (circulation)');
   });
 
-  it('opens on the region of a notification handed over from the home screen', () => {
+  it('a part with several organs opens the region; a part with one organ opens that organ', () => {
+    renderWearables();
+    fireEvent.click(segment('head'));
+    expect(dialog()).toHaveAccessibleName('Head');
+    expect([...dialog().querySelectorAll('.wear-tile')].map(item => item.dataset.organ)).toEqual(['brain', 'eyes']);
+    expect(dialog().querySelector('.wear-limb')).toBeNull();
+    closeDialog();
+    fireEvent.click(segment('pelvis'));
+    expect(dialog()).toHaveAccessibleName('Digestion & metabolism');
+  });
+
+  it('opens the popup of a notification handed over from the home screen', () => {
     setPendingFocus({ screen: 'wearables', organ: 'limbs', limb: 'left_leg' });
     renderWearables();
-    expect(chip('L leg')).toHaveAttribute('aria-pressed', 'true');
-    expect(shownOrgans()).toEqual(['musculoskeletal', 'limbs']);
+    expect(dialog()).toHaveAccessibleName('L leg');
     expect(peekPendingFocus()).toBeNull(); // one-shot
   });
 
-  it('forgets the pinned region when another person is viewed', () => {
+  it('a notification about an organ or a band opens that popup', () => {
+    setPendingFocus({ screen: 'wearables', organ: 'kidneys' });
+    const first = renderWearables();
+    expect(dialog()).toHaveAccessibleName('Kidneys & urine');
+    first.unmount();
+    setPendingFocus({ screen: 'wearables', device: 'right_leg' });
+    renderWearables();
+    expect(dialog()).toHaveAccessibleName('Bands');
+  });
+
+  it('closes the popup when another person is viewed', () => {
     const { rerenderWith, props } = renderWearables();
-    fireEvent.click(chip('Head'));
-    expect(shownOrgans()).toHaveLength(2);
+    fireEvent.click(tile('heart'));
+    expect(dialog()).not.toBeNull();
     rerenderWith({ ...props, mother: makeMother({ report: habC1 }), viewedCode: 'HAB-C1', profile: getProfile('HAB-C1') });
-    expect(chip('All')).toHaveAttribute('aria-pressed', 'true');
-    expect(shownOrgans()).toHaveLength(10);
+    expect(dialog()).toBeNull();
   });
 
   it('region helpers', () => {
@@ -216,82 +195,84 @@ describe('WearablesScreen: body map', () => {
     expect(regionForSegment(null)).toBeNull();
     expect(regionForTarget({ organ: 'kidneys' }).id).toBe('abdomen');
     expect(regionForTarget({ device: 'head_eeg' }).id).toBe('head');
-    expect(regionForTarget({ device: 'right_arm' }).id).toBe('right_arm');
     expect(regionForTarget({ organ: 'exposure' })).toBeNull();
-    expect(regionForTarget(null)).toBeNull();
     expect(organsForRegion(habC4Sol142, regionForSegment('neck'))).toEqual([]);
     expect(organsForRegion(null, regionForSegment('head'))).toEqual([]);
+    expect(dialogForTarget({ organ: 'limbs', limb: 'left_leg' })).toMatchObject({ kind: 'region', region: { id: 'left_leg' } });
+    expect(dialogForTarget({ device: 'head_eeg' })).toEqual({ kind: 'bands' });
+    expect(dialogForTarget({ organ: 'gut' })).toEqual({ kind: 'organ', organ: 'gut' });
+    expect(dialogForTarget(null)).toBeNull();
   });
 });
 
-describe('WearablesScreen: environment and wearables', () => {
-  it('shows the exposure card as ENVIRONMENT', () => {
+describe('WearablesScreen: environment and bands', () => {
+  it('ENVIRONMENT opens the exposure card', () => {
     renderWearables();
-    const env = screen.getByRole('heading', { name: 'Environment' }).closest('section');
-    expect(within(env).getByText('[ OK ]')).toBeInTheDocument();
-    expect(within(env).getByText('All 1 check normal.')).toBeInTheDocument();
-    expect(within(env).getByText('Radiation dose (personal dosimeter)').closest('.datarow')).toHaveTextContent('67.81 mSv');
+    const button = document.querySelector('[data-open="environment"]');
+    expect(button).toHaveAttribute('data-status', 'ok');
+    fireEvent.click(button);
+    expect(dialog()).toHaveAccessibleName('Radiation & air');
+    expect(within(dialog()).getByText('Radiation dose (personal dosimeter)').closest('.wear-check')).toHaveTextContent('67.81mSv');
   });
 
-  it('lists every band with state and battery', () => {
+  it('BANDS lists every band with state and battery', () => {
     renderWearables();
-    const panel = screen.getByRole('heading', { name: 'Wearables' }).closest('section');
-    const rows = within(panel).getAllByRole('listitem');
+    const button = document.querySelector('[data-open="bands"]');
+    expect(button).toHaveTextContent('5 · all ok');
+    fireEvent.click(button);
+    const rows = within(dialog()).getAllByRole('listitem');
     expect(rows.map(row => row.dataset.device)).toEqual(['left_arm', 'right_arm', 'left_leg', 'right_leg', 'head_eeg']);
     expect(within(rows[4]).getByText('EEG headband')).toBeInTheDocument();
     expect(rows[0]).toHaveTextContent('connected');
     expect(rows[0]).toHaveTextContent('94 %');
     expect(within(rows[0]).getByRole('meter', { name: 'Battery: Left arm band' })).toHaveAttribute('aria-valuenow', '94');
-    expect(panel).toHaveTextContent('5 bands · all ok');
-    expect(panel).toHaveAttribute('data-tone', 'default');
   });
 
-  it('puts bands that need attention first', () => {
+  it('puts bands that need attention first and flags the button', () => {
     const report = clone(habC4Sol142);
     Object.assign(report.devices.find(device => device.limb === 'right_leg'), {
       status: 'caution', state: 'low_battery', battery_pct: 8.2, message: 'Right leg band battery low.',
     });
     renderWearables({ mother: makeMother({ report, period: { sol: 142 } }) });
-    const panel = screen.getByRole('heading', { name: 'Wearables' }).closest('section');
-    const rows = within(panel).getAllByRole('listitem');
+    const button = document.querySelector('[data-open="bands"]');
+    expect(button).toHaveAttribute('data-status', 'caution');
+    expect(button).toHaveTextContent('1 of 5 need care');
+    fireEvent.click(button);
+    const rows = within(dialog()).getAllByRole('listitem');
     expect(rows.map(row => row.dataset.device)).toEqual(['right_leg', 'left_arm', 'right_arm', 'left_leg', 'head_eeg']);
-    expect(rows[0]).toHaveAttribute('data-status', 'caution');
     expect(rows[0]).toHaveTextContent('low battery');
     expect(rows[0]).toHaveTextContent('8 %');
     expect(within(rows[0]).getByText('Right leg band battery low.')).toBeInTheDocument();
-    expect(panel).toHaveTextContent('5 bands · 1 need attention');
-    expect(panel).toHaveAttribute('data-tone', 'caution');
   });
 });
 
 describe('WearablesScreen: no live report', () => {
-  it('offline: demo report, DEMO badge, notice, and no sol control', () => {
+  it('offline: demo report, notice, and no sol control', () => {
     renderWearables({ mother: makeMother({ mode: 'offline', report: null }) });
     expect(notice()).toHaveTextContent('LINK LOST — SHOWING DEMO DATA');
-    const header = screen.getByRole('heading', { name: 'Body scan' }).closest('section');
-    expect(within(header).queryByText('DEMO')).not.toBeInTheDocument(); // badges and callsigns removed
     expect(screen.queryByRole('slider')).not.toBeInTheDocument();
-    expect(header).toHaveTextContent('Sol 142 · No link · sol fixed');
+    expect(document.querySelector('.wear-sol-fixed')).toHaveTextContent('Sol 142No link · sol fixed');
+    expect(screen.queryByText('DEMO')).not.toBeInTheDocument();
     expect(shownOrgans()).toHaveLength(10);
-    expect(organCard('limbs')).toHaveAttribute('data-status', 'alert');
+    expect(tile('limbs')).toHaveAttribute('data-status', 'alert');
   });
 
   it('online without a report: awaits telemetry and does not crash', () => {
     renderWearables({ mother: makeMother({ report: null, loadingReport: true }) });
     expect(notice()).toHaveTextContent('AWAITING TELEMETRY…');
-    expect(organCards()).toHaveLength(0);
+    expect(tiles()).toHaveLength(0);
     expect(screen.getByText('NO ORGAN DATA')).toBeInTheDocument();
-    expect(screen.getByText('NO EXPOSURE DATA')).toBeInTheDocument();
-    expect(screen.getByText('NO WEARABLE DATA')).toBeInTheDocument();
     expect(screen.getByTestId('astronaut-viewer')).not.toHaveAttribute('data-segment-status');
-    fireEvent.click(chip('L arm')); // a chip still works on an empty report
-    expect(chip('L arm')).toHaveAttribute('aria-pressed', 'true');
-    expect(document.querySelector('.wear-region')).toHaveTextContent('No organ card is linked to this part.');
+    fireEvent.click(document.querySelector('[data-open="environment"]'));
+    expect(within(dialog()).getByText('NO EXPOSURE DATA')).toBeInTheDocument();
+    closeDialog();
+    fireEvent.click(document.querySelector('[data-open="bands"]'));
+    expect(within(dialog()).getByText('NO WEARABLE DATA')).toBeInTheDocument();
   });
 
   it('survives a report without organs, devices or subject', () => {
     renderWearables({ mother: makeMother({ report: { schema_version: '1.1', as_of: {}, overall_status: 'no_data' }, code: 'HAB-C4' }) });
-    expect(organCards()).toHaveLength(0);
+    expect(tiles()).toHaveLength(0);
     expect(screen.getByTestId('wear-sol')).toHaveTextContent('—');
   });
 });
@@ -299,10 +280,13 @@ describe('WearablesScreen: no live report', () => {
 describe('WearablesScreen: Polish', () => {
   it('translates its own texts and leaves backend texts in English', () => {
     renderWearables({ session: 'HAB-C1', viewedCode: 'HAB-C4' }, { lang: 'pl' });
-    expect(screen.getByRole('heading', { name: 'Skan ciała' })).toBeInTheDocument();
     expect(screen.getByTestId('read-only-banner')).toHaveTextContent('PODGLĄD: GRAŻYNA BRZĘCZYSZCZYKIEWICZ — TYLKO DO ODCZYTU');
-    expect(document.querySelector('.wear-chip[data-region="left_leg"]')).toHaveTextContent('L noga');
-    expect(within(organCard('kidneys')).getByRole('button', { name: 'Dlaczego?' })).toBeInTheDocument();
-    expect(within(organCard('kidneys')).getByRole('heading', { name: 'Kidneys & urine' })).toBeInTheDocument();
+    expect(document.querySelector('[data-open="environment"]')).toHaveTextContent('Środowisko');
+    expect(document.querySelector('[data-open="bands"]')).toHaveTextContent('Opaski');
+    fireEvent.click(segment('left_foot'));
+    expect(dialog()).toHaveAccessibleName('L noga');
+    fireEvent.click(dialog().querySelector('.wear-tile[data-organ="limbs"]'));
+    expect(dialog()).toHaveAccessibleName('Limbs (circulation)');
+    expect(within(dialog()).getByText('Dlaczego?')).toBeInTheDocument();
   });
 });

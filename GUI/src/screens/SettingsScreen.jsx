@@ -1,46 +1,71 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { API_BASE } from '../api.js';
-import { Badge, Button, ConnectionBadge, DataRow, LangFlags, Panel, SegBar, StatusTag } from '../components/index.js';
+import { ConnectionBadge, DataRow, LangFlags, SegBar, StatusTag, cx } from '../components/index.js';
 import { useT } from '../i18n/index.js';
+import NavIcon from '../navIcons.jsx';
+import DataDialog, { Pager } from '../home/DataDialog.jsx';
 import { useSettings } from '../settings/SettingsContext.jsx';
 import { COLOR_KEYS } from '../theme/index.js';
 import './settings.css';
 
-function ThemeRow({ theme, active, onUse, onRemove }) {
+const THEMES_PER_PAGE = 9;
+
+/** One big theme tile drawn in the theme's own colours; tap = use it. */
+function ThemeTile({ theme, active, onUse, onRemove }) {
   const t = useT();
+  const c = theme.colors;
   return (
-    <li className={`theme-row${active ? ' is-active' : ''}`} data-theme-id={theme.id} aria-current={active ? 'true' : undefined}>
-      <span className="theme-marker" aria-hidden="true">{active ? '▶' : ' '}</span>
-      <span className="theme-name">
-        {theme.name}
-        <span className="theme-id">{theme.id}</span>
-      </span>
-      <span className="theme-swatches" role="img" aria-label={t('settings.themeSwatches', { name: theme.name })}>
-        {COLOR_KEYS.map(key => (
-          <span key={key} className="theme-swatch" title={`${key} ${theme.colors[key]}`} style={{ background: theme.colors[key] }} />
-        ))}
-      </span>
-      <span className="theme-kind">{theme.custom ? t('settings.themeCustom') : t('settings.themeBuiltin')}</span>
-      <span className="theme-actions">
-        {active
-          ? <span className="theme-active-tag">[ {t('settings.themeActive')} ]</span>
-          : <Button aria-label={t('settings.themeUseNamed', { name: theme.name })} onClick={() => onUse(theme.id)}>{t('settings.themeUse')}</Button>}
-        {theme.custom && (
-          <Button variant="danger" aria-label={t('settings.themeRemoveNamed', { name: theme.name })} onClick={() => onRemove(theme.id)}>
-            {t('settings.themeRemove')}
-          </Button>
-        )}
-      </span>
+    <li className={cx('theme-row', active && 'is-active')} data-theme-id={theme.id} aria-current={active ? 'true' : undefined}>
+      <button
+        type="button"
+        className="theme-use"
+        aria-pressed={active}
+        aria-label={t('settings.themeUseNamed', { name: theme.name })}
+        onClick={() => onUse(theme.id)}
+        style={{ background: c.bg, color: c.fg, borderColor: active ? c.accentBright : c.border }}
+      >
+        <span className="theme-name" style={{ color: c.accentBright }}>{theme.name}</span>
+        <span className="theme-swatches" role="img" aria-label={t('settings.themeSwatches', { name: theme.name })}>
+          {COLOR_KEYS.map(key => (
+            <span key={key} className="theme-swatch" title={`${key} ${c[key]}`} style={{ background: c[key] }} />
+          ))}
+        </span>
+        <span className="theme-kind" style={{ color: active ? c.ok : c.dim }}>
+          {active ? `[ ${t('settings.themeActive')} ]` : theme.custom ? t('settings.themeCustom') : t('settings.themeBuiltin')}
+        </span>
+      </button>
+      {theme.custom ? (
+        <button
+          type="button"
+          className="theme-remove"
+          aria-label={t('settings.themeRemoveNamed', { name: theme.name })}
+          title={t('settings.themeRemove')}
+          onClick={() => onRemove(theme.id)}
+        >
+          <NavIcon name="close" />
+        </button>
+      ) : null}
     </li>
   );
 }
 
-/** Settings: theme (built-in + imported), language, CRT effect, read-only data link info. */
+/**
+ * Settings, one screen, no scrolling: big theme tiles + import on the left; language flags,
+ * the CRT switch and the data link on the right. Import errors and link details open in popups.
+ */
 export default function SettingsScreen({ mother }) {
   const t = useT();
-  const { themeId, themes, setTheme, importThemeFile, removeCustomTheme, lang, crt, setCrt } = useSettings();
+  const { themeId, themes, setTheme, importThemeFile, removeCustomTheme, crt, setCrt } = useSettings();
   const fileInput = useRef(null);
   const [importState, setImportState] = useState(null); // { ok, errors, name }
+  const [linkOpen, setLinkOpen] = useState(false);
+  const [page, setPage] = useState(0);
+  const closeImport = useCallback(() => setImportState(null), []);
+  const closeLink = useCallback(() => setLinkOpen(false), []);
+
+  const pages = Math.max(1, Math.ceil(themes.length / THEMES_PER_PAGE));
+  const safePage = Math.min(page, pages - 1);
+  const shown = themes.slice(safePage * THEMES_PER_PAGE, safePage * THEMES_PER_PAGE + THEMES_PER_PAGE);
 
   const onFile = async event => {
     const file = event.target.files?.[0];
@@ -48,23 +73,29 @@ export default function SettingsScreen({ mother }) {
     if (!file) return;
     const result = await importThemeFile(file);
     setImportState({ ok: result.ok, errors: result.errors || [], name: result.theme?.name });
+    if (result.ok) setPage(Math.max(0, Math.ceil((themes.length + 1) / THEMES_PER_PAGE) - 1));
   };
 
   return (
     <div className="settings-screen">
-      <div className="settings-head">
+      <header className="settings-head">
         <h1>{t('settings.title')}</h1>
-        <p className="label">{t('settings.subtitle')}</p>
-      </div>
+        <p className="settings-sub">{t('settings.subtitle')}</p>
+      </header>
 
       <div className="settings-grid">
-        <Panel className="settings-themes" title={t('settings.themeTitle')} meta={t('settings.themeMeta', { n: themes.length })}>
+        <section className="settings-block settings-themes" aria-labelledby="settings-theme-title">
+          <header className="settings-block-head">
+            <h2 id="settings-theme-title">{t('settings.themeTitle')}</h2>
+            <span className="settings-meta">{t('settings.themeMeta', { n: themes.length })}</span>
+            <span className="spacer" />
+            <Pager page={safePage} pages={pages} onPage={setPage} />
+          </header>
           <ul className="theme-list">
-            {themes.map(theme => (
-              <ThemeRow key={theme.id} theme={theme} active={theme.id === themeId} onUse={setTheme} onRemove={removeCustomTheme} />
+            {shown.map(theme => (
+              <ThemeTile key={theme.id} theme={theme} active={theme.id === themeId} onUse={setTheme} onRemove={removeCustomTheme} />
             ))}
           </ul>
-
           <div className="theme-import">
             <input
               ref={fileInput}
@@ -75,52 +106,78 @@ export default function SettingsScreen({ mother }) {
               tabIndex={-1}
               onChange={onFile}
             />
-            <Button variant="primary" onClick={() => fileInput.current?.click()}>{t('settings.importButton')}</Button>
-            <span className="dim small">{t('settings.importHint')}</span>
+            <button type="button" className="settings-big settings-import" onClick={() => fileInput.current?.click()}>
+              <span>{t('settings.importButton')}</span>
+            </button>
+            {importState?.ok ? (
+              <p className="settings-import-ok" role="status"><StatusTag status="ok" /> {t('settings.importOk', { name: importState.name })}</p>
+            ) : <p className="settings-import-hint">{t('settings.importHint')}</p>}
           </div>
-          {importState?.ok && (
-            <p className="text-ok" role="status"><StatusTag status="ok" /> {t('settings.importOk', { name: importState.name })}</p>
-          )}
-          {importState && !importState.ok && (
-            <div className="text-alert" role="alert">
-              <p><StatusTag status="alert" /> {t('settings.importFailed')}</p>
-              <ul className="theme-errors">
-                {importState.errors.map(error => <li key={error}>{error}</li>)}
-              </ul>
-            </div>
-          )}
-        </Panel>
+        </section>
 
-        <div className="stack">
-          <Panel title={t('settings.langTitle')} meta={lang}>
-            <LangFlags />
-            <p className="dim small settings-note">{t('settings.langNote')}</p>
-          </Panel>
+        <div className="settings-side">
+          <section className="settings-block" aria-labelledby="settings-lang-title">
+            <header className="settings-block-head"><h2 id="settings-lang-title">{t('settings.langTitle')}</h2></header>
+            <LangFlags className="settings-flags" />
+          </section>
 
-          <Panel title={t('settings.crtTitle')} meta={crt ? t('common.on') : t('common.off')}>
-            <div className="row" role="group" aria-label={t('settings.crtLabel')}>
-              <span className="label">{t('settings.crtLabel')}</span>
-              <Button active={crt} aria-pressed={crt} onClick={() => setCrt(true)}>{t('settings.crtOn')}</Button>
-              <Button active={!crt} aria-pressed={!crt} onClick={() => setCrt(false)}>{t('settings.crtOff')}</Button>
-            </div>
-            <p className="dim small settings-note">{t('settings.crtNote')}</p>
-          </Panel>
+          <section className="settings-block" aria-labelledby="settings-crt-title">
+            <header className="settings-block-head"><h2 id="settings-crt-title">{t('settings.crtTitle')}</h2></header>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={crt}
+              aria-label={t('settings.crtTitle')}
+              className={cx('settings-switch', crt && 'is-on')}
+              onClick={() => setCrt(!crt)}
+            >
+              <span className="settings-switch-track" aria-hidden="true"><span className="settings-switch-knob" /></span>
+              <span className="settings-switch-text">{crt ? t('common.on') : t('common.off')}</span>
+            </button>
+          </section>
 
-          <Panel title={t('settings.apiTitle')} meta={<ConnectionBadge mode={mother?.mode} error={mother?.error} />}>
+          <section className="settings-block" aria-labelledby="settings-api-title">
+            <header className="settings-block-head">
+              <h2 id="settings-api-title">{t('settings.apiTitle')}</h2>
+              <span className="spacer" />
+              <ConnectionBadge mode={mother?.mode} error={mother?.error} />
+            </header>
+            <button type="button" className="settings-big" data-open="link" onClick={() => setLinkOpen(true)}>
+              <NavIcon name="report" className="settings-big-icon" />
+              <span>{t('settings.linkDetails')}</span>
+            </button>
+          </section>
+        </div>
+      </div>
+
+      {importState && !importState.ok ? (
+        <DataDialog title={t('settings.importTitle')} status="alert" icon="report" onClose={closeImport}>
+          <div className="settings-errors" role="alert">
+            <p>{t('settings.importFailed')}</p>
+            <ul className="theme-errors">
+              {importState.errors.slice(0, 8).map(error => <li key={error}>{error}</li>)}
+            </ul>
+          </div>
+        </DataDialog>
+      ) : null}
+
+      {linkOpen ? (
+        <DataDialog title={t('settings.apiTitle')} icon="report" onClose={closeLink}>
+          <div className="settings-link">
             <DataRow label={t('settings.apiBase')} value={API_BASE || t('settings.apiSameOrigin')} />
-            {mother?.error?.message && <DataRow label={t('settings.apiState')} value={mother.error.message} status="alert" note={mother.error.hint} />}
-            <p className="dim small settings-note">{t('settings.apiNote')}</p>
-          </Panel>
-
-          <Panel title={t('settings.previewTitle')}>
-            <div className="row">
+            {mother?.error?.message
+              ? <DataRow label={t('settings.apiState')} value={mother.error.message} status="alert" note={mother.error.hint} />
+              : null}
+            <p className="settings-note">{t('settings.apiNote')}</p>
+            <h3>{t('settings.previewTitle')}</h3>
+            <div className="settings-preview">
               <StatusTag status="ok" /><StatusTag status="caution" /><StatusTag status="alert" /><StatusTag status="no_data" />
             </div>
             <DataRow label={t('settings.previewSample')} value={128} unit="mmHg" status="caution" />
             <SegBar value={13} max={20} status="caution" label={t('settings.previewSample')} />
-          </Panel>
-        </div>
-      </div>
+          </div>
+        </DataDialog>
+      ) : null}
     </div>
   );
 }

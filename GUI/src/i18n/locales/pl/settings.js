@@ -7,7 +7,6 @@ export default {
   themeActive: 'Aktywny',
   themeBuiltin: 'Wbudowany',
   themeCustom: 'Własny',
-  themeUse: 'Użyj',
   themeUseNamed: 'Użyj motywu {name}',
   themeRemove: 'Usuń',
   themeRemoveNamed: 'Usuń motyw {name}',
@@ -15,22 +14,15 @@ export default {
 
   importTitle: 'Import motywu',
   importButton: 'Importuj motyw (.json)',
-  importHint: 'Plik JSON z polami id, name i 13 kolorami hex. Wzór: themes/example-theme.json.',
+  importHint: 'Plik JSON: id, name, 13 kolorów hex',
   importOk: 'Motyw „{name}” zaimportowany i włączony.',
   importFailed: 'Motyw odrzucony:',
-  importReadError: 'Nie udało się odczytać pliku.',
 
   langTitle: 'Język',
-  langEn: 'English',
-  langPl: 'Polski',
-  langNote: 'Teksty wysyłane przez MOTHER (nagłówki, zalecenia) pozostają po angielsku.',
 
   crtTitle: 'Efekt CRT',
-  crtLabel: 'Linie skanowania i poświata luminoforu',
-  crtOn: 'CRT wł.',
-  crtOff: 'CRT wył.',
-  crtNote: 'Domyślnie wyłączony, gdy system prosi o ograniczenie ruchu.',
 
+  linkDetails: 'Szczegóły',
   apiTitle: 'Łącze danych',
   apiBase: 'Adres API',
   apiSameOrigin: 'ten sam host /api',

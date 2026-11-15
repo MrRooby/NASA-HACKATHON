@@ -1,103 +1,298 @@
-/* Styles of WearablesScreen.jsx (theme variables only). Organ card, limb card and
-   telemetry notice: src/home/wearable.css. */
-.wearables-screen { display: grid; gap: 12px; min-width: 0; }
+/* Styles of WearablesScreen.jsx (theme variables only): one screen high, no scrolling.
+   header strip · left the 3D figure · right ten organ tiles. Details live in popups
+   (DataDialog, styled in home.css). Limb card / telemetry notice: src/home/wearable.css. */
+
+.screen[data-screen='wearables'] { display: grid; grid-template-rows: minmax(0, 1fr); overflow: hidden; }
+.wearables-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
 
 .wear-readonly {
   margin: 0;
   padding: 4px 10px;
   color: var(--bg);
   background: var(--caution);
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* ── Header strip ────────────────────────────────────────────────────────── */
-.wear-id { display: flex; flex-wrap: wrap; gap: 4px 28px; margin: 0 0 8px; }
-.wear-id > div { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
-.wear-id dt { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
-.wear-id dd { margin: 0; color: var(--fg); font-weight: 700; overflow-wrap: anywhere; }
-.wear-id dd .dim { font-weight: 400; }
+/* ── header strip ────────────────────────────────────────────────────────── */
+.wear-head {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: stretch;
+  gap: clamp(8px, 1.2vw, 16px);
+  min-width: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
 
-.wear-status {
-  --tone: var(--border);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 12px;
-  padding: 6px 10px;
-  border: 1px solid var(--tone);
+.wear-back,
+.wear-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 72px;
+  padding: 0 clamp(10px, 1.2vw, 18px);
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  font: inherit;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.wear-back:active, .wear-action:active { background: var(--raised); border-color: var(--accent); }
+@media (hover: hover) {
+  .wear-back:hover, .wear-action:hover { border-color: var(--accent); }
+}
+.wear-back { font-size: clamp(16px, 1.4vw, 22px); color: var(--accent-bright); border-color: var(--accent); }
+.wear-back-icon { font-size: clamp(28px, 2.4vw, 40px); }
+
+.wear-who { display: grid; align-content: center; gap: 2px; min-width: 0; }
+.wear-who-line { display: flex; align-items: baseline; gap: 12px; min-width: 0; }
+.wear-name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--accent-bright);
+  font-size: clamp(18px, 1.8vw, 30px);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.wear-overall { flex: 0 0 auto; font-size: clamp(14px, 1.2vw, 18px); }
+.wear-top-message {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--dim);
+  font-size: clamp(13px, 1vw, 16px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wear-who-caution .wear-top-message { color: var(--caution); }
+.wear-who-alert .wear-top-message { color: var(--alert); font-weight: 700; }
+
+/* sol: slider + number + LATEST, all touch sized */
+.wear-sol { position: relative; display: flex; align-items: center; min-width: 0; }
+.wear-sol .solctl { flex-wrap: nowrap; gap: 10px; }
+.wear-sol .solctl-label { font-size: 16px; font-weight: 700; color: var(--fg); }
+.wear-sol .solctl-range { width: clamp(120px, 14vw, 300px); min-width: 0; height: 56px; }
+.wear-sol .solctl-range::-webkit-slider-runnable-track { height: 8px; }
+.wear-sol .solctl-range::-webkit-slider-thumb { width: 28px; height: 52px; margin-top: -22px; }
+.wear-sol .solctl-range::-moz-range-track { height: 8px; }
+.wear-sol .solctl-range::-moz-range-thumb { width: 28px; height: 52px; }
+.wear-sol .solctl-number { width: 5.5ch; height: 56px; font-size: 24px; font-weight: 700; }
+.wear-sol .solctl .btn { min-height: 56px; padding: 0 10px; font-size: 15px; border: 1px solid var(--accent); }
+.wear-sol-fixed { display: grid; color: var(--dim); font-size: 16px; text-transform: uppercase; letter-spacing: 0.06em; }
+.wear-sol-fixed strong { color: var(--fg); font-size: 26px; }
+.wear-sol-note { font-size: 13px; }
+.wear-updating {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  color: var(--accent);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+.wear-actions { display: flex; gap: 8px; }
+.wear-action { flex-direction: column; gap: 2px; min-width: clamp(110px, 10vw, 170px); }
+.wear-action-icon { font-size: clamp(22px, 2vw, 32px); color: var(--accent); }
+.wear-action-label { font-size: clamp(14px, 1.1vw, 18px); }
+.wear-action .stag, .wear-action-count { font-size: 13px; font-weight: 400; letter-spacing: 0.04em; white-space: nowrap; }
+.wear-action-caution { border-color: var(--caution); }
+.wear-action-caution .wear-action-count, .wear-action-caution .wear-action-icon { color: var(--caution); }
+.wear-action-alert { border-color: var(--alert); border-width: 2px; }
+.wear-action-alert .wear-action-count, .wear-action-alert .wear-action-icon { color: var(--alert); }
+
+/* ── stage: figure | organ tiles ─────────────────────────────────────────── */
+.wear-stage {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.5fr);
+  gap: clamp(10px, 1.4vw, 20px);
+  min-height: 0;
+}
+.wear-figure {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--border);
   background: var(--bg);
 }
-.wear-status-caution { --tone: var(--caution); }
-.wear-status-alert { --tone: var(--alert); }
-.wear-status-no_data { --tone: var(--accent-dim); }
-.wear-top-message { flex: 1 1 24ch; min-width: 0; overflow-wrap: anywhere; }
-.wear-status-alert .wear-top-message { color: var(--alert); font-weight: 700; }
-
-.wear-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin-top: 8px; }
-.wear-controls .solctl { flex: 1 1 320px; }
-.wear-sol-fixed { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
-.wear-updating { color: var(--accent); font-size: 12px; letter-spacing: 0.08em; }
-
-/* ── Figure + side column ────────────────────────────────────────────────── */
-.wear-main {
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 1fr);
-  gap: 12px;
-  align-items: start;
-  min-width: 0;
-}
-.wear-figure { height: 600px; min-width: 0; border: 1px solid var(--accent-dim); background: var(--bg); }
 .wear-figure .astronaut-viewer { height: 100%; }
+.wear-figure-hint {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  color: var(--dim);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
 
-.wear-chips { display: flex; flex-wrap: wrap; gap: 2px 8px; margin-top: 8px; }
-.wear-chip-caution { --btn: var(--caution); }
-.wear-chip-alert { --btn: var(--alert); font-weight: 700; }
-.wear-chip-no_data { --btn: var(--dim); }
+.wear-organs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+}
 
-.wear-region { min-height: 4.5em; margin-top: 8px; padding-top: 6px; border-top: 1px dotted var(--accent-dim); }
-.wear-region-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
-.wear-region-name { color: var(--accent-bright); text-transform: uppercase; letter-spacing: 0.08em; }
-.wear-region-organs { display: grid; gap: 2px; margin-top: 4px; }
-.wear-region-organs li { overflow-wrap: anywhere; }
-.wear-region-headline { color: var(--dim); }
+/* organ tile (also used inside the region popup) */
+.wear-tile {
+  --tone: var(--fg);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-content: center;
+  gap: 2px;
+  min-width: 0;
+  min-height: 0;
+  padding: 6px 12px;
+  overflow: hidden;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.wear-tile:active { background: var(--raised); border-color: var(--accent); }
+@media (hover: hover) {
+  .wear-tile:hover { border-color: var(--accent); }
+}
+.wear-tile.is-highlight { border-color: var(--accent-bright); background: var(--raised); }
+.wear-tile-caution { --tone: var(--caution); border-color: var(--caution); }
+.wear-tile-alert { --tone: var(--alert); border-color: var(--alert); border-width: 2px; background: color-mix(in srgb, var(--alert) 12%, var(--panel)); }
+.wear-tile-no_data { --tone: var(--dim); }
 
-.wear-side { display: grid; gap: 12px; align-content: start; min-width: 0; }
-.wear-env-headline { margin: 0 0 4px; overflow-wrap: anywhere; }
-.wear-env .datarow-label { text-transform: none; letter-spacing: 0; }
+.wear-tile-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.wear-tile-icon { flex: 0 0 auto; font-size: clamp(20px, min(1.8vw, 3.2vh), 32px); color: var(--accent); }
+.wear-tile-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-size: clamp(14px, min(1.15vw, 2.2vh), 20px);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.wear-tile-head .stag { flex: 0 0 auto; font-size: clamp(13px, min(1vw, 1.9vh), 16px); }
+.wear-tile-value {
+  align-self: center;
+  overflow: hidden;
+  color: var(--tone);
+  font-size: clamp(22px, min(2.3vw, 4.4vh), 44px);
+  font-weight: 700;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.wear-tile-unit { margin-left: 0.3em; color: var(--dim); font-size: 0.45em; font-weight: 400; }
+.wear-tile-metric,
+.wear-tile-headline {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--dim);
+  font-size: clamp(13px, min(0.95vw, 1.8vh), 16px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wear-tile-headline { align-self: center; grid-row: 2 / 4; color: var(--tone); white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
 
-.wear-devices { display: grid; gap: 0; }
+.wear-empty { margin: 0; padding: 6px 0; color: var(--dim); font-size: 16px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ── popups ──────────────────────────────────────────────────────────────── */
+.wear-dlg { display: grid; gap: 12px; min-height: 0; }
+.wear-dlg-headline { margin: 0; font-size: clamp(16px, 1.5vw, 22px); font-weight: 700; }
+.wear-dlg-action { margin: 0; padding: 8px 12px; color: var(--caution); border: 1px solid var(--caution); font-size: 17px; }
+.wear-dlg-why { margin: 0; color: var(--dim); font-size: 14px; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; }
+.wear-dlg-why .label { margin-right: 6px; font-size: 14px; color: var(--accent); }
+
+.wear-checks { display: grid; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--border); }
+.wear-check {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  column-gap: 16px;
+  min-height: 64px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.wear-check-label { min-width: 0; overflow: hidden; font-size: 17px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.wear-check-value { font-size: 24px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.wear-check-unit { margin-left: 0.3em; color: var(--dim); font-size: 14px; font-weight: 400; }
+.wear-check .stag { font-size: 16px; }
+.wear-check-msg { grid-column: 1 / -1; min-width: 0; overflow: hidden; color: var(--dim); font-size: 15px; text-overflow: ellipsis; white-space: nowrap; }
+.wear-check-caution .wear-check-value, .wear-check-caution .wear-check-msg { color: var(--caution); }
+.wear-check-alert .wear-check-value, .wear-check-alert .wear-check-msg { color: var(--alert); }
+
+.wear-region-dlg { display: grid; gap: 12px; min-height: 0; }
+.wear-region-dlg.has-limb { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+.wear-region-tiles { display: grid; grid-auto-rows: minmax(110px, auto); gap: 8px; }
+.wear-region-dlg:not(.has-limb) .wear-region-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.wear-limb .limb-head h3 { font-size: 18px; }
+.wear-limb .limb-body { font-size: 16px; }
+.wear-limb .label, .wear-limb .limb-band, .wear-limb .limb-unit { font-size: 14px; }
+.wear-limb .limb-circ-value { font-size: 32px; }
+
+.wear-devices { display: grid; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--border); }
 .wear-device {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto 6ch auto;
   align-items: center;
-  gap: 2px 12px;
-  padding: 3px 0;
-  border-bottom: 1px dotted var(--accent-dim);
+  column-gap: 16px;
+  min-height: 72px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
 }
-.wear-device:last-child { border-bottom: 0; }
-.wear-device-name { color: var(--fg); text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; overflow-wrap: anywhere; }
-.wear-device-state { color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; }
-.wear-device-caution .wear-device-state { color: var(--caution); }
-.wear-device-alert .wear-device-state { color: var(--alert); }
-.wear-device-battery { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-.wear-device-pct { min-width: 5ch; color: var(--dim); font-size: 12px; text-align: right; }
-.wear-device-msg { grid-column: 1 / -1; color: var(--caution); font-size: 12px; overflow-wrap: anywhere; }
-.wear-device-alert .wear-device-msg { color: var(--alert); }
+.wear-device-name { min-width: 0; overflow: hidden; font-size: 18px; font-weight: 700; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.wear-device-state { color: var(--dim); font-size: 16px; text-transform: uppercase; letter-spacing: 0.06em; }
+.wear-device-pct { font-size: 18px; text-align: right; font-variant-numeric: tabular-nums; }
+.wear-device .stag { font-size: 16px; }
+.wear-device-caution .wear-device-state, .wear-device-caution .wear-device-msg { color: var(--caution); }
+.wear-device-alert .wear-device-state, .wear-device-alert .wear-device-msg { color: var(--alert); }
+.wear-device-msg { grid-column: 1 / -1; font-size: 15px; }
 
-.wear-empty { margin: 0; padding: 6px 0; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; }
-
-/* ── Organ cards ─────────────────────────────────────────────────────────── */
-.wear-organs-meta { display: inline-flex; flex-wrap: wrap; align-items: baseline; justify-content: flex-end; gap: 2px 12px; }
-.wear-organ-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; align-items: start; }
-
-@media (max-width: 1000px) {
-  .wear-main { grid-template-columns: minmax(0, 1fr); }
-  .wear-figure { height: 480px; }
+/* ── smaller tablets ─────────────────────────────────────────────────────── */
+@media (max-width: 1400px) {
+  .wear-top-message { display: none; }
+  .wear-sol .solctl-label { display: none; }
 }
-@media (max-width: 560px) {
-  .wear-figure { height: 380px; }
-  .wear-device { grid-template-columns: minmax(0, 1fr) auto; }
+@media (max-width: 1300px) {
+  .wear-action { min-width: 0; }
+  .wear-action-icon { display: none; }
 }
+/* the viewer's mouse hint (drag / scroll) does not apply to a touch screen */
+.wear-figure .model-viewer-hint { display: none; }
+.wear-limb .datarow-label, .wear-limb .datarow-unit, .wear-limb .limb-msg { font-size: 14px; }
+.wear-limb .datarow-value { font-size: 18px; }
