@@ -127,7 +127,17 @@
 .cog-big-ok { --tone: var(--ok); }
 .cog-big-caution { --tone: var(--caution); background: color-mix(in srgb, var(--caution) 8%, var(--panel)); }
 .cog-big-alert { --tone: var(--alert); background: color-mix(in srgb, var(--alert) 12%, var(--panel)); }
-.cog-big-icon { align-self: center; min-height: 0; overflow: hidden; font-size: clamp(48px, min(6vw, 12vh), 150px); line-height: 1; }
+.cog-big-icon { margin-right: 0.25em; font-size: 1em; line-height: 1; vertical-align: -0.1em; }
+/* trend of the last sessions inside each tile */
+.cog-chart { display: grid; gap: 4px; align-self: stretch; width: 100%; min-height: 0; }
+.cog-chart-svg { display: block; width: 100%; height: clamp(56px, 11vh, 130px); overflow: visible; }
+.cog-chart-base { stroke: var(--dim); stroke-width: 1.5; stroke-dasharray: 6 5; vector-effect: non-scaling-stroke; }
+.cog-chart-line { fill: none; stroke: var(--accent-bright); stroke-width: 2.5; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.cog-chart-pt { stroke: var(--accent-bright); stroke-width: 6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.cog-chart-last { stroke: var(--tone, var(--accent-bright)); stroke-width: 12; }
+.cog-chart-axis { display: flex; justify-content: space-between; gap: 8px; color: var(--dim); font-size: 13px; letter-spacing: 0.04em; }
+.cog-chart-base-label { text-transform: uppercase; }
+.cog-chart-empty { align-self: center; color: var(--dim); font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
 .cog-big-names { display: grid; justify-items: center; max-width: 100%; min-width: 0; }
 .cog-big-name { max-width: 100%; overflow: hidden; color: var(--accent-bright); font-size: clamp(20px, min(2.2vw, 3.8vh), 38px); font-weight: 700; letter-spacing: 0.04em; text-overflow: ellipsis; white-space: nowrap; }
 .cog-big-what { max-width: 100%; overflow: hidden; color: var(--dim); font-size: clamp(14px, min(1.2vw, 2.1vh), 19px); text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }

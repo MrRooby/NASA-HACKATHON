@@ -96,4 +96,6 @@ export default {
   repeat: 'POWTÓRZ TEST',
   nextTest: 'NASTĘPNY TEST',
   finish: 'KONIEC',
+  chartLabel: 'Ostatnie sesje: {n}',
+  chartBaseline: 'średnia bazowa',
 };

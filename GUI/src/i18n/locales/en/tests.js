@@ -96,4 +96,6 @@ export default {
   repeat: 'REPEAT TEST',
   nextTest: 'NEXT TEST',
   finish: 'FINISH',
+  chartLabel: 'Last {n} sessions',
+  chartBaseline: 'baseline',
 };

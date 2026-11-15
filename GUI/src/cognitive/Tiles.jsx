@@ -84,6 +84,52 @@ export function bigValue(tile) {
   return [fmt(m.dsst_throughput_per_min, 1), '/min'];
 }
 
+
+/** Value shown for one trend point, in the same unit as the big number (Go/No-Go: % of No-Go trials). */
+const trendValue = (testId, v) => (testId === 'gonogo' && v <= 1 ? v * 100 : v);
+
+/**
+ * Simple chart of the last sessions of one test: the line of the key metric, the own baseline
+ * (mean of the first sessions) as a dashed line, the latest session as a dot. Inline SVG, theme colours.
+ */
+export function TrendChart({ tile }) {
+  const t = useT();
+  const pts = (tile.trend || []).filter(p => typeof p?.value === 'number' && Number.isFinite(p.value))
+    .map(p => ({ at: p.started_at, v: trendValue(tile.test_id, p.value) }));
+  if (pts.length < 2) return <span className="cog-chart-empty">{t('tests.noTrend')}</span>;
+  const W = 300; const H = 100; const PAD = 8;
+  const vals = pts.map(p => p.v);
+  const needed = Math.min(tile.baseline?.needed ?? BASELINE_NEEDED, pts.length);
+  const base = vals.slice(0, needed).reduce((a, b) => a + b, 0) / needed;
+  let lo = Math.min(...vals, base); let hi = Math.max(...vals, base);
+  if (hi - lo < 1e-9) { lo -= 1; hi += 1; }
+  const x = i => PAD + (i / (pts.length - 1)) * (W - 2 * PAD);
+  const y = v => PAD + (1 - (v - lo) / (hi - lo)) * (H - 2 * PAD);
+  const line = pts.map((p, i) => `${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+  const last = pts[pts.length - 1];
+  const day = iso => (iso ? String(iso).slice(5, 10).split('-').reverse().join('.') : '');
+  const digits = tile.test_id === 'dsst' ? 1 : 0;
+  return (
+    <span className={`cog-chart cog-chart-${safeStatus(tile.status)}`}>
+      <svg className="cog-chart-svg" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img"
+        aria-label={t('tests.chartLabel', { n: pts.length })}>
+        <line className="cog-chart-base" x1={PAD} x2={W - PAD} y1={y(base)} y2={y(base)} />
+        <polyline className="cog-chart-line" points={line} />
+        {/* zero-length lines with round caps: dots that stay round when the chart is stretched */}
+        {pts.map((p, i) => (
+          <line key={i} className={i === pts.length - 1 ? 'cog-chart-pt cog-chart-last' : 'cog-chart-pt'}
+            x1={x(i)} x2={x(i)} y1={y(p.v)} y2={y(p.v)} />
+        ))}
+      </svg>
+      <span className="cog-chart-axis">
+        <span>{day(pts[0].at)}</span>
+        <span className="cog-chart-base-label">{t('tests.chartBaseline')} {fmt(base, digits)}</span>
+        <span>{day(last.at)}</span>
+      </span>
+    </span>
+  );
+}
+
 const METRIC_KEY = { pvt: 'tests.metricPvt', gonogo: 'tests.metricGonogo', dsst: 'tests.metricDsst' };
 
 /** One test as a big button: icon, name, last result as one big number, status. Opens the details. */
@@ -97,10 +143,10 @@ export function BigTile({ tile, onOpen }) {
     <button type="button" className={`cog-big cog-big-${status}`} onClick={() => onOpen?.(tile.test_id)}
       data-testid={`tile-${tile.test_id}`} data-status={tile.status} data-tone={status === 'no_data' ? 'default' : status}>
       <span className="cog-big-names">
-        <span className="cog-big-name">{t(`tests.name_${tile.test_id}`)}</span>
+        <span className="cog-big-name"><NavIcon name={TEST_ICONS[tile.test_id] || 'tests'} className="cog-big-icon" /> {t(`tests.name_${tile.test_id}`)}</span>
         <span className="cog-big-what">{t(`tests.what_${tile.test_id}`)}</span>
       </span>
-      <NavIcon name={TEST_ICONS[tile.test_id] || 'tests'} className="cog-big-icon" />
+      <TrendChart tile={tile} />
       <span className="cog-big-value" aria-label={t(METRIC_KEY[tile.test_id])}>
         {value ? <>{value[0]}<span className="cog-big-unit">{value[1]}</span></> : '—'}
       </span>
