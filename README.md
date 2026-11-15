@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🚀 AWERNASA
+# AWERNASA
 
-**Monitoring zdrowia załogi w habitacie na Marsie**
+**Crew health monitoring for a Mars lava-tube habitat**
 
 [![CI](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/ci.yml/badge.svg)](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/ci.yml)
 [![Build & Release](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/release.yml/badge.svg)](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/release.yml)
@@ -10,120 +10,104 @@
 ![Node](https://img.shields.io/badge/Node-20%2B-339933?logo=node.js&logoColor=white)
 ![MariaDB](https://img.shields.io/badge/MariaDB-11.4-003545?logo=mariadb&logoColor=white)
 
-*NASA Space Apps Challenge 2026: Create Health Monitoring Software for Astronauts on Space Missions*
+NASA Space Apps Challenge 2026: *Create Health Monitoring Software for Astronauts on Space Missions*
 
 </div>
 
----
+A crew lives in a sealed lava tube on the slope of Elysium Mons. Habitat sensors, body-worn bands and medical tests write to one database. The **MOTHER** backend checks the data against NASA limits, and the **GUI**, a touch-first tablet app, shows each person's state on a 3D body model: green is OK, yellow is caution, red is alert.
 
-4-osobowa załoga żyje w uszczelnionym **tunelu lawowym** na zboczu Elysium Mons. Czujniki habitatu, opaski na ciele (wearables) i badania medyczne zapisują dane do bazy. Backend **MOTHER** analizuje je według norm NASA, a **GUI** pokazuje stan zdrowia każdej osoby na **interaktywnym modelu 3D**: zielony to OK, żółty to uwaga, czerwony to alarm.
+The full challenge text is in [CHALLENGE.md](CHALLENGE.md).
 
-Pełny opis wyzwania: [CHALLENGE.md](CHALLENGE.md).
-
-## 🧭 Jak to działa
+## Architecture
 
 ```mermaid
 flowchart LR
-    subgraph SRC["Źródła danych"]
-        HAB["🏠 HABITAT<br/>czujniki: CO2, O2, promieniowanie, mocz"]
-        WEAR["⌚ WEARABLES<br/>opaski: tętno, SpO2, sen"]
-        MED["🩺 MEDICAL<br/>badania krwi, lekarz"]
-        PUB["🛰️ Dane publiczne<br/>NASA · NOAA · OSDR"]
-    end
-
-    DB[("🗄️ DATABASE<br/>MariaDB 11.4")]
-    CFG["📏 config/<br/>progi NASA-STD-3001"]
-    MOTHER["🧠 MOTHER<br/>FastAPI · /api/*"]
-    GUI["🧍 GUI<br/>React + ludzik 3D"]
-
-    HAB --> DB
-    WEAR --> DB
-    MED --> DB
-    PUB -- ETL --> DB
-    DB -- "widoki astro_api" --> MOTHER
-    CFG --> MOTHER
+    HAB["HABITAT<br/>CO2, O2, radiation, water"] --> DB
+    WEAR["WEARABLES<br/>heart rate, SpO2, sleep"] --> DB
+    MED["MEDICAL<br/>blood tests, cognitive tests"] --> DB
+    PUB["Public data<br/>NASA, NOAA, OSDR"] -- ETL --> DB
+    DB[("DATABASE<br/>MariaDB 11.4")] -- "astro_api views" --> MOTHER["MOTHER<br/>FastAPI /api/*"]
+    CFG["config/<br/>NASA-STD-3001 limits"] --> MOTHER
     CFG --> GUI
-    MOTHER -- "JSON /api" --> GUI
+    MOTHER -- JSON --> GUI["GUI<br/>React + three.js"]
 ```
 
-## 📁 Struktura repozytorium
+## Repository
 
-| Folder | Co to jest |
+| Folder | Contents |
 |---|---|
-| `GUI/` | interfejs: React + Vite + three.js, model 3D kolorowany według stanu narządów |
-| `MOTHER/` | backend: FastAPI, **tylko API JSON** (`/api/*`), czyta bazę i liczy analizę zdrowia |
-| `DATABASE/` | MariaDB 11.4: schemat (`schema/`), import danych (`etl/`), generatory danych demo (`synthetic/`) |
-| `HABITAT/` | plan danych z czujników habitatu, zdjęcia lokalizacji (`jaskinia/`) |
-| `WEARABLES/`, `MEDICAL-DIAGNOSIS/` | opisy części systemu |
-| `config/` | progi i źródła medyczne (NASA-STD-3001 itd.), wspólne dla całego zespołu |
-| `data/` | dane publiczne (NASA, NOAA, OSDR…), zob. [DATA_SOURCES.md](DATA_SOURCES.md) i `data/public/README.md` |
-| `deploy/` | uruchomienie całości w Dockerze i CI/CD, zob. [deploy/README.md](deploy/README.md) |
+| `GUI/` | React + Vite + three.js app: home view, habitat map, crew, calendar, cognitive tests |
+| `MOTHER/` | FastAPI backend, JSON API only (`/api/*`); reads the database and computes the health analysis |
+| `DATABASE/` | MariaDB schema (`schema/`), data import (`etl/`), demo data generators (`synthetic/`) |
+| `HABITAT/` | habitat sensor data plan and site photos |
+| `config/` | medical thresholds and their sources, shared by the backend and the GUI |
+| `data/` | public datasets; see [DATA_SOURCES.md](DATA_SOURCES.md) |
+| `deploy/` | Docker setup and CI/CD; see [deploy/README.md](deploy/README.md) |
 
-## ⚡ Szybki start: lokalnie (development)
+## Running locally
 
-### Wymagania
-- **Tailscale** zalogowany do sieci zespołu: baza działa pod `100.118.238.112:3306`, dostępna tylko w tailnecie.
-- **Python 3.10+** (backend).
-- **Node 20+** (GUI). Na Node 16 Vite się nie uruchomi (`crypto.getRandomValues is not a function`). Z nvm: `nvm install 20`, potem w `GUI/` `nvm use`.
-- **Login do bazy:** najlepiej użytkownik `astro_reader` (tylko odczyt); hasło od właściciela bazy.
+Requirements:
+- Tailscale on the team network (the database is at `100.118.238.112:3306`, reachable only from the tailnet);
+- Python 3.10+;
+- Node 20+ (Vite does not start on Node 16);
+- a database login, preferably the read-only `astro_reader`.
 
-### 1. Backend: MOTHER (terminal 1)
+**Backend** (terminal 1):
 ```bash
 cd MOTHER
 ./start.sh          # Windows: start.bat
 ```
-- Za pierwszym razem skrypt tworzy `MOTHER/.venv`, instaluje paczki i pyta o bazę. Przy wartościach w [nawiasach] wciśnij Enter, potem podaj użytkownika i hasło.
-- Dane zapisują się w `MOTHER/.env` (w `.gitignore`, nie trafia do repo). Ponowne wpisanie: `./start.sh --setup`.
-- API: **http://127.0.0.1:8000/api/status** (`"reachable": true` = baza OK), dokumentacja: **http://127.0.0.1:8000/api/docs**.
-- Pierwsze `/api/dashboard` liczy się ok. 40 s. Karty narządów (`/api/organs/...`) działają od razu.
+The first run creates `MOTHER/.venv`, installs dependencies and asks for the database login, which is saved to `MOTHER/.env` (ignored by git). Run `./start.sh --setup` to enter it again. Check http://127.0.0.1:8000/api/status (`"reachable": true` means the database is up); API docs are at http://127.0.0.1:8000/api/docs. The first `/api/dashboard` call takes about 40 s.
 
-### 2. GUI (terminal 2)
+**GUI** (terminal 2):
 ```bash
 cd GUI
-nvm use                                         # Node 20 z .nvmrc
+nvm use
 npm ci
 MOTHER_URL=http://127.0.0.1:8000 npm run dev
 ```
-- Otwórz adres z terminala (zwykle **http://localhost:5173**), kliknij logowanie demo.
-- Na górnym pasku: **LIVE · MOTHER** = dane z bazy, **OFFLINE · demo data** = MOTHER nie odpowiada i GUI pokazuje wbudowane dane demo.
-- Vite przekazuje `/api` do MOTHER (`GUI/vite.config.js`), więc nie ma problemów z CORS, a zmiany w GUI przeładowują się na żywo.
-- Przykład z alarmem: osoba **HAB-C4**, sol **142**. Lewa noga świeci na czerwono (perfuzja 25%).
+Open the address Vite prints (usually http://localhost:5173) and pick a crew member. The top bar shows `LIVE · MOTHER` when data comes from the database and `OFFLINE` when MOTHER is unreachable; the GUI then uses built-in demo data. Vite proxies `/api` to MOTHER, so there is no CORS setup.
 
-## 🐳 Całość w Dockerze (serwer)
+Example alert: crew member HAB-C4 on sol 142, left leg red (perfusion 25 %).
+
+## Docker
+
 ```bash
-cp deploy/.env.example deploy/.env      # uzupełnij hasła i BIND_IP (adres Tailscale serwera)
+cp deploy/.env.example deploy/.env      # passwords and BIND_IP (the server's Tailscale address)
 docker compose -f deploy/docker-compose.yml up -d --build
 ```
-Wynik: GUI pod `http://<BIND_IP>:8081` (nginx przekazuje `/api/` do MOTHER), MOTHER pod `http://<BIND_IP>:8000/api/status` i MariaDB. Szczegóły, sekrety i rollback: [deploy/README.md](deploy/README.md).
+The GUI runs at `http://<BIND_IP>:8081` (nginx proxies `/api/` to MOTHER), MOTHER at `http://<BIND_IP>:8000`. Secrets and rollback: [deploy/README.md](deploy/README.md).
 
-## 🧪 Testy
+## Tests
+
 ```bash
-python3 scripts/validate_config.py                          # spójność config/*.json
+python3 scripts/validate_config.py
 cd MOTHER   && pip install -r requirements-dev.txt && python -m pytest -q
 cd DATABASE && pip install -r requirements-dev.txt && python -m pytest -q tests/unit
-cd GUI      && npm test                                     # Node 20+
+cd GUI      && npm test
 ```
-Testy działają bez bazy i bez sieci. Test integracyjny bazy (`DATABASE/tests/integration`) uruchamia się tylko, gdy ustawiona jest zmienna `ASTRO_TEST_DB_HOST`; w CI działa na tymczasowej MariaDB.
+The tests need neither the database nor the network. The database integration test (`DATABASE/tests/integration`) runs only when `ASTRO_TEST_DB_HOST` is set; CI runs it against a temporary MariaDB.
 
-## 🔁 CI/CD (GitHub Actions)
-- **`ci.yml`:** testy i build przy każdym pushu i pull requeście.
-- **`release.yml`:** przy pushu na `master` lub `release/**` pakuje wszystko (GUI, MOTHER, DATABASE, deploy) do artefaktu `release-bundles` i publikuje obrazy w GHCR. Tag `vX.Y.Z` dodatkowo tworzy **GitHub Release**.
-- **`deploy.yml`:** wdrożenie na serwer przez Tailscale i SSH (ręcznie albo po release; bez sekretów się pomija).
+## CI/CD
 
-## 📜 Dane i zasady konkursu
-- Wszystkie dane osób w bazie są **syntetyczne** albo pochodzą z publicznych zbiorów (Inspiration4/OSDR, LSDA). GUI oznacza dane syntetyczne etykietą **SYNTHETIC**.
-- Zasady Space Apps (licencje, cytowania, użycie narzędzi SI, ograniczenia dotyczące Chin) opisuje [RULES-NASA.md](RULES-NASA.md).
-- To demo edukacyjne, **nie porada medyczna**.
+- `ci.yml`: tests and build on every push and pull request.
+- `release.yml`: on push to `master` or `release/**`, packages GUI, MOTHER, DATABASE and deploy as the `release-bundles` artifact and publishes images to GHCR. A `vX.Y.Z` tag also creates a GitHub Release.
+- `deploy.yml`: deploys to the server over Tailscale and SSH, manually or after a release; skipped when secrets are missing.
 
-## ⚖️ Licencja
+## Data and rules
+
+- Crew data in the database is either synthetic or taken from public datasets (Inspiration4/OSDR, LSDA). The crew members are fictional.
+- Space Apps rules (licences, citations, use of AI tools) are summarised in [RULES-NASA.md](RULES-NASA.md).
+- This is an educational demo, not medical advice.
+
+## License
+
 Copyright (C) 2026 the AWERNASA contributors.
 
-Kod tego repozytorium (GUI, MOTHER, DATABASE, HABITAT, scripts, deploy) jest udostępniany na licencji **GNU Affero General Public License v3.0 only** (`SPDX-License-Identifier: AGPL-3.0-only`). Pełny tekst: [LICENSE](LICENSE).
+The code in this repository is licensed under the GNU Affero General Public License v3.0 only (`SPDX-License-Identifier: AGPL-3.0-only`); see [LICENSE](LICENSE). It comes with no warranty. If you distribute it, or run a modified version as a network service, you must make the full source available under the same licence.
 
-- Każdy, kto rozpowszechnia ten kod albo jego przeróbki, musi udostępnić pełne źródła na tej samej licencji.
-- Dotyczy to także uruchamiania zmienionej wersji jako usługi sieciowej (AGPL §13): użytkownicy usługi mają prawo do jej kodu źródłowego.
-- Program jest dostarczany **bez żadnej gwarancji** (AGPL §15–16).
-
-Materiały osób trzecich zachowują własne licencje i nie są objęte AGPL:
-- zbiory danych w `data/public/` (np. MMASH na ODbL 1.0, zob. [data/public/human/raw/mmash/LICENSE.txt](data/public/human/raw/mmash/LICENSE.txt)); pełna lista źródeł i licencji: [DATA_SOURCES.md](DATA_SOURCES.md) i [RULES-NASA.md](RULES-NASA.md);
-- zależności npm i Python (na licencjach MIT, BSD lub Apache-2.0) oraz fonty JetBrains Mono i Pixelify Sans (SIL OFL 1.1).
+Third-party material keeps its own licence:
+- datasets in `data/public/` (e.g. MMASH under ODbL 1.0); the full list is in [DATA_SOURCES.md](DATA_SOURCES.md);
+- npm and Python dependencies (MIT, BSD, Apache-2.0);
+- the Anny body model (Apache-2.0) with MakeHuman assets (CC0);
+- fonts: JetBrains Mono and Nerd Fonts icons (SIL OFL 1.1 / MIT).
