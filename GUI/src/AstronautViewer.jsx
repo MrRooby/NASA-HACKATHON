@@ -21,7 +21,7 @@ export const modelPath = name => `/models/${name || DEFAULT_MODEL}.glb`;
  *   the GLB's swapped chest/abdomen mesh names are translated there).
  * Without it the model keeps its own colours (offline demo).
  */
-function AstronautModel({ model, onModelFrame, segmentStatus, onSegmentHover, onSegmentClick }) {
+function AstronautModel({ model, onModelFrame, segmentStatus, onSegmentHover, onSegmentClick, interactive = true }) {
   const { scene } = useGLTF(modelPath(model));
   const modelGroup = useRef();
   const hovered = useRef(null); // hovered anatomical segment
@@ -93,9 +93,9 @@ function AstronautModel({ model, onModelFrame, segmentStatus, onSegmentHover, on
     <group ref={modelGroup} rotation={[-Math.PI / 2, 0, 0]}>
       <primitive
         object={scene}
-        onPointerOver={handlePointerOver}
-        onPointerOut={clearHover}
-        onClick={handleClick}
+        onPointerOver={interactive ? handlePointerOver : undefined}
+        onPointerOut={interactive ? clearHover : undefined}
+        onClick={interactive ? handleClick : undefined}
       />
     </group>
   );
@@ -177,13 +177,21 @@ function FittedModel({ frontView, skeleton = null, bones = null, ...modelProps }
   const controls = useThree(state => state.controls);
   return (
     <>
-      <group ref={group} key={skeleton ? 'skeleton' : 'body'}>
+      {/* body and skeleton share one frame: the body stays (hidden) in the skeleton view, so the
+          camera and the figure do not move when the view is switched */}
+      <group ref={group}>
         <Center>
+          <group visible={!skeleton}>
+            <AstronautModel
+              {...modelProps}
+              interactive={!skeleton}
+            />
+          </group>
           {skeleton ? (
             <group rotation={[-Math.PI / 2, 0, 0]}>
               <Skeleton3D data={skeleton} status={bones} onSegmentHover={modelProps.onSegmentHover} onSegmentClick={modelProps.onSegmentClick} />
             </group>
-          ) : <AstronautModel {...modelProps} />}
+          ) : null}
         </Center>
       </group>
       <FitCamera target={group} margin={frontView ? 1.02 : 1.2} controls={controls || false} />
@@ -212,7 +220,7 @@ function ViewSwitch({ mode, onMode, bones }) {
           </button>
         ))}
       </div>
-      {mode === 'skeleton' && bones ? (
+      {bones ? (
         <div className="viewer-bones" data-testid="viewer-bones" onClick={event => event.stopPropagation()}>
           <span className="viewer-bones-head">
             <span className="viewer-bones-title">{t('common.boneDensity')}</span>
@@ -235,7 +243,7 @@ export default function AstronautViewer({ model = null, sol = null, frontView = 
   const bones = useMemo(() => (code ? boneStatus(code, sol) : null), [code, sol]);
   const canSkeleton = Boolean(code);
   return (
-    <div className={`astronaut-viewer${frontView ? ' astronaut-viewer-front' : ''}${canSkeleton ? ' has-switch' : ''}${mode === 'skeleton' && bones ? ' is-skeleton' : ''}`} aria-label="Front-facing astronaut health model">
+    <div className={`astronaut-viewer${frontView ? ' astronaut-viewer-front' : ''}${canSkeleton ? ' has-switch' : ''}${bones ? ' has-bones' : ''}`} aria-label="Front-facing astronaut health model">
       <ModelErrorBoundary key={model || DEFAULT_MODEL} path={modelPath(model)}>
         <Canvas camera={{ position: [0, 0, 5], fov: frontView ? 28 : 35 }} dpr={[1, 2]} gl={{ antialias: true }}>
           <Lights />
