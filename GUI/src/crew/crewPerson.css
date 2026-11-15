@@ -193,7 +193,7 @@
   line-clamp: 2;
 }
 .crew-note-label { color: var(--accent-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
-.crew-checks { display: grid; grid-auto-rows: 64px; align-content: start; gap: 6px; height: clamp(150px, 38vh, 470px); margin: 0; padding: 0; overflow: hidden; list-style: none; }
+.crew-checks { display: grid; grid-auto-rows: 64px; align-content: start; gap: 6px; flex: 1 1 auto; min-height: 140px; margin: 0; padding: 0; overflow: hidden; list-style: none; }
 .crew-check {
   display: grid;
   grid-template-columns: 8.4ch minmax(0, 1fr) auto;
