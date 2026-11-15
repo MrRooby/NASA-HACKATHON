@@ -2,42 +2,40 @@
 
 # AWERNASA
 
-### Crew health terminal for a Mars lava-tube habitat
+**Crew health terminal for a Mars lava-tube habitat**
 
-*Be aware of the consciousness.*
+<sub>NASA SPACE APPS CHALLENGE 2026 · <i>Create Health Monitoring Software for Astronauts on Space Missions</i></sub>
 
-[![Live demo](https://img.shields.io/badge/%E2%96%B6%20live%20demo-GitHub%20Pages-E07A2F?style=for-the-badge)](https://mrrooby.github.io/NASA-HACKATHON/)
-[![Cognitive self-test](https://img.shields.io/badge/%F0%9F%A7%A0%20cognitive%20self--test-try%20it-5B8DEF?style=for-the-badge)](https://mrrooby.github.io/NASA-HACKATHON/cognitive.html)
+<br>
+
+[![Open the live demo](https://img.shields.io/badge/%E2%96%B6%20%20open%20the%20live%20demo-E07A2F?style=for-the-badge)](https://mrrooby.github.io/NASA-HACKATHON/)
+&nbsp;
+[![Cognitive self-test](https://img.shields.io/badge/cognitive%20self--test-1E1E2E?style=for-the-badge)](https://mrrooby.github.io/NASA-HACKATHON/cognitive.html)
+
+</div>
+
+> [!IMPORTANT]
+> **The live demo is a preview of the interface, not the full application.**
+> It is the frontend alone, hosted on GitHub Pages, with no MOTHER backend and no database behind it. Every screen runs on built-in sample data (badge `OFFLINE · DEMO`), so there are no live readings, and screens that need the backend, such as History, stay empty. To run the complete system, see [Quick start](#quick-start).
+
+<div align="center">
+
+<img src="docs/screenshots/02-home-alert.webp" alt="AWERNASA home screen: 3D body model with the left leg in red, vitals, notifications and wearable bands" width="100%">
+
+<br>
 
 [![CI](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/ci.yml/badge.svg)](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/ci.yml)
 [![Build & Release](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/release.yml/badge.svg)](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/release.yml)
 [![Pages](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/pages.yml/badge.svg)](https://github.com/MrRooby/NASA-HACKATHON/actions/workflows/pages.yml)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
 ![three.js](https://img.shields.io/badge/three.js-r187-000000?logo=threedotjs&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-backend-009688?logo=fastapi&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Python%203.10%2B-009688?logo=fastapi&logoColor=white)
 ![MariaDB](https://img.shields.io/badge/MariaDB-11.4-003545?logo=mariadb&logoColor=white)
 ![License](https://img.shields.io/badge/license-AGPL--3.0-blue)
 
-**NASA Space Apps Challenge 2026** · *Create Health Monitoring Software for Astronauts on Space Missions*
-
-<img src="docs/screenshots/02-home-alert.webp" alt="AWERNASA home screen: 3D body model with the left leg in red, vitals, notifications and wearable bands" width="100%">
+[About](#about) · [Features](#features) · [Screenshots](#screenshots) · [Architecture](#architecture) · [Quick start](#quick-start) · [Deployment](#deployment) · [Tests](#tests-and-cicd) · [Licence](#data-rules-and-licence)
 
 </div>
-
----
-
-## Contents
-
-- [About](#about)
-- [Features](#features)
-- [Screenshots](#screenshots)
-- [Architecture](#architecture)
-- [Quick start](#quick-start)
-- [Deployment](#deployment)
-- [Tests and CI/CD](#tests-and-cicd)
-- [Repository layout](#repository-layout)
-- [Data, rules and licence](#data-rules-and-licence)
 
 ## About
 
@@ -62,8 +60,6 @@ Away from Earth there is no flight surgeon on call, so the crew has to notice pr
 | 🎨 **Themes and languages** | Six colour themes (Nostromo, Phosphor CRT, Catppuccin…), JSON theme import, optional CRT scanlines, English and Polish. |
 
 ## Screenshots
-
-> All screenshots come from the [live demo](https://mrrooby.github.io/NASA-HACKATHON/), which runs on built-in demo data. The crew members are fictional.
 
 ### Login: choose a crew member
 <img src="docs/screenshots/01-login.webp" alt="Login screen with ten crew member cards" width="100%">
