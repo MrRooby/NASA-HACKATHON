@@ -1,29 +1,136 @@
-/* Daily check-in form (src/checkin/CheckIn.jsx). Colours come from the theme variables only. */
-.intake-form { display: grid; gap: 12px; }
-.intake-head { margin: 0; }
-.intake-section { display: grid; gap: 6px; min-width: 0; }
-.intake-section-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 2px 12px;
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--border);
+/* Daily check-in form (src/checkin/CheckIn.jsx): three steps, big touch inputs, no scrolling.
+   Colours come from the theme variables only. */
+.intake-form {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1.6vh, 16px);
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
 }
-.intake-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px 24px; }
-.intake-field { display: grid; gap: 3px; align-content: start; min-width: 0; }
-.intake-label { color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; }
-.intake-input-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
-.intake-input { width: 9ch; text-align: right; }
-.intake-select { max-width: 100%; }
-.intake-unit { min-width: 5ch; }
-.intake-unit, .intake-hint, .intake-autosave { color: var(--dim); font-size: 12px; }
+
+/* step tabs: 1 · HEART  2 · BODY  3 · MIND */
+.intake-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.intake-steptab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 0 8px;
+  color: var(--dim);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  font: inherit;
+  font-size: clamp(15px, min(1.3vw, 2.4vh), 20px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.intake-steptab span { overflow: hidden; text-overflow: ellipsis; }
+.intake-steptab-icon { font-size: 28px; line-height: 1; }
+.intake-steptab.is-current { color: var(--accent-bright); border-color: var(--accent); background: var(--raised); }
+
+.intake-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(10px, 1.6vw, 24px); align-content: start; min-height: 0; }
+.intake-grid-mind { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+.intake-field {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-content: start;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+.intake-caution { border-color: var(--caution); }
+.intake-alert { border-color: var(--alert); }
+.intake-label { overflow: hidden; color: var(--fg); font-size: clamp(15px, min(1.3vw, 2.4vh), 20px); font-weight: 700; text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+
+/* [ − ] 128 [ + ] */
+.intake-stepper { display: grid; grid-template-columns: 72px minmax(0, 1fr) 72px; gap: 6px; }
+.intake-step {
+  height: clamp(64px, 14vh, 140px);
+  color: var(--accent-bright);
+  background: var(--raised);
+  border: 1px solid var(--accent);
+  font: inherit;
+  font-size: 40px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.intake-step:active { color: var(--bg); background: var(--accent-bright); }
+.intake-input {
+  width: 100%;
+  min-width: 0;
+  height: clamp(64px, 14vh, 140px);
+  padding: 0 8px;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font: inherit;
+  font-size: clamp(30px, min(3.4vw, 7vh), 64px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.intake-input::-webkit-inner-spin-button, .intake-input::-webkit-outer-spin-button { margin: 0; -webkit-appearance: none; }
 .intake-caution .intake-input { border-color: var(--caution); color: var(--caution); }
 .intake-alert .intake-input { border-color: var(--alert); color: var(--alert); }
-.intake-guidance { flex: 1 0 100%; margin: 0; padding-left: 8px; border-left: 1px solid var(--caution); color: var(--fg); font-size: 12px; }
+
+.intake-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; min-width: 0; }
+.intake-unit { color: var(--dim); font-size: 16px; }
+.intake-tag { margin-left: auto; font-size: 16px; }
+.intake-guidance {
+  flex: 1 0 100%;
+  margin: 0;
+  padding-left: 8px;
+  overflow: hidden;
+  border-left: 2px solid var(--caution);
+  color: var(--fg);
+  font-size: 15px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
 .intake-alert .intake-guidance { border-left-color: var(--alert); }
 .intake-action { color: var(--dim); }
-.mood-row { display: flex; gap: 4px; }
-.intake-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
-.intake-actions { display: flex; gap: 8px; }
+
+/* mood 1..5 and symptoms: big toggle buttons */
+.intake-choices { display: grid; gap: 6px; }
+.intake-mood { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.intake-symptoms { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.intake-choice {
+  min-width: 0;
+  min-height: clamp(64px, 13vh, 120px);
+  padding: 0 6px;
+  overflow: hidden;
+  color: var(--fg);
+  background: var(--raised);
+  border: 1px solid var(--border);
+  font: inherit;
+  font-size: clamp(15px, min(1.3vw, 2.4vh), 20px);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.intake-mood .intake-choice { font-size: clamp(26px, min(2.6vw, 5vh), 40px); }
+.intake-choice.is-on { color: var(--bg); background: var(--accent); border-color: var(--accent-bright); }
+
+/* pager · state · commit */
+.intake-footer { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 16px; }
+.intake-footer .pager { gap: 12px; }
+.intake-state { min-width: 0; font-size: 15px; }
+.btn.intake-commit { min-height: 64px; padding: 0 20px; font-size: 18px; border: 1px solid var(--accent-bright); touch-action: manipulation; }

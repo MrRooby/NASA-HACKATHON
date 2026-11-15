@@ -1,6 +1,8 @@
 import React, { useId, useState } from 'react';
-import { Button, StatusTag } from '../components/index.js';
+import { Button, StatusTag, cx } from '../components/index.js';
 import { useT } from '../i18n/index.js';
+import NavIcon from '../navIcons.jsx';
+import { Pager } from '../home/DataDialog.jsx';
 import './checkin.css';
 
 /** Check-in field -> id of the reading in thresholdLogic.initialBiometrics. */
@@ -14,18 +16,26 @@ export const FIELD_TO_METRIC = {
   mood: 'mood',
 };
 
+/** Values the form starts with (demo readings, rated by thresholdLogic like any other). */
+export const CHECKIN_DEFAULTS = {
+  systolic: 128, diastolic: 82, hr: 68, glucose: 92, temperature: 36.8,
+  sleep: 6.2, mood: 4, symptoms: 'NONE',
+};
+
 // Labels are i18n keys of the `profile` namespace (the check-in lives on the profile screen).
-const SECTIONS = [
-  { id: 'cardio', title: 'profile.checkinSectionVitals', tag: 'profile.checkinTagDevice', items: [
-    { key: 'systolic',  label: 'profile.checkinSystolic',  unit: 'mmHg', type: 'number' },
-    { key: 'diastolic', label: 'profile.checkinDiastolic', unit: 'mmHg', type: 'number' },
-    { key: 'hr',        label: 'profile.checkinHeartRate', unit: 'bpm',  type: 'number' },
-    { key: 'glucose', label: 'profile.checkinGlucose', unit: 'mg/dL', type: 'number' },
-    { key: 'temperature', label: 'profile.checkinTemperature', unit: '°C', type: 'number', step: 0.1 },
+// One step = one screen without scrolling; `inc` is what the − / + buttons add.
+export const CHECKIN_STEPS = [
+  { id: 'heart', title: 'profile.checkinStepHeart', icon: 'heart', fields: [
+    { key: 'systolic',  label: 'profile.checkinSystolic',  unit: 'mmHg', inc: 1 },
+    { key: 'diastolic', label: 'profile.checkinDiastolic', unit: 'mmHg', inc: 1 },
+    { key: 'hr',        label: 'profile.checkinHeartRate', unit: 'bpm',  inc: 1 },
   ]},
-  { id: 'recovery', title: 'profile.checkinSectionRecovery', tag: 'profile.checkinTagSelf', items: [
-    { key: 'sleep', label: 'profile.checkinSleep', unit: 'h', type: 'number', step: 0.1 },
+  { id: 'body', title: 'profile.checkinStepBody', icon: 'glucose', fields: [
+    { key: 'glucose',     label: 'profile.checkinGlucose',     unit: 'mg/dL', inc: 1 },
+    { key: 'temperature', label: 'profile.checkinTemperature', unit: '°C', inc: 0.1, step: 0.1 },
+    { key: 'sleep',       label: 'profile.checkinSleep',       unit: 'h', inc: 0.5, step: 0.1 },
   ]},
+  { id: 'mind', title: 'profile.checkinStepMind', icon: 'tests', fields: [] },
 ];
 
 const SYMPTOMS = [
@@ -42,7 +52,7 @@ function Assessment({ reading }) {
   const flagged = reading.status === 'caution' || reading.status === 'alert';
   return (
     <>
-      <StatusTag status={reading.status} />
+      <StatusTag status={reading.status} className="intake-tag" />
       {flagged && (reading.message || reading.action) ? (
         <p className="intake-guidance" role="note">
           {reading.message}
@@ -53,108 +63,138 @@ function Assessment({ reading }) {
   );
 }
 
+/** One number reading: label, big [ − ] value [ + ] stepper, unit, status and guidance. */
+function NumberField({ uid, field, value, reading, onChange }) {
+  const t = useT();
+  const label = t(field.label);
+  const bump = sign => {
+    const current = Number(value);
+    const base = Number.isFinite(current) && value !== '' ? current : CHECKIN_DEFAULTS[field.key];
+    onChange(Math.round((base + sign * field.inc) * 10) / 10);
+  };
+  return (
+    <div className={cx('intake-field', reading?.status && `intake-${reading.status}`)} data-field={field.key} data-status={reading?.status}>
+      <label className="intake-label" htmlFor={`${uid}-${field.key}`}>{label}</label>
+      <div className="intake-stepper">
+        <button type="button" className="intake-step" aria-label={t('profile.checkinLess', { label })} onClick={() => bump(-1)}>−</button>
+        <input
+          id={`${uid}-${field.key}`}
+          className="intake-input"
+          type="number"
+          inputMode="decimal"
+          step={field.step}
+          value={value}
+          onChange={event => onChange(event.target.value)}
+        />
+        <button type="button" className="intake-step" aria-label={t('profile.checkinMore', { label })} onClick={() => bump(1)}>+</button>
+      </div>
+      <div className="intake-meta">
+        <span className="intake-unit">{field.unit}</span>
+        <Assessment reading={reading} />
+      </div>
+    </div>
+  );
+}
+
 /**
- * Daily check-in form (logic of the first GUI, restyled to the terminal kit).
- * props: onSubmit(event, values) — form submit; onUpdate(metricId, value) — every edit of a
- *        reading (wire it to thresholdLogic.updateBiometric); biometrics — current assessed
- *        readings (optional; gives every field its status tag and guidance); sol — shown in the head.
+ * Daily check-in form, paged in three steps so it fits one touch screen:
+ * 1 blood pressure + heart rate, 2 glucose + temperature + sleep, 3 mood + symptoms.
+ * props: onSubmit(event, values) — form submit (the commit button is on every step);
+ *        onUpdate(metricId, value) — every edit of a reading (wire it to thresholdLogic.updateBiometric);
+ *        biometrics — current assessed readings (optional; gives every field its status tag and guidance);
+ *        values / onValuesChange — optional controlled values (keeps them when the form is closed
+ *        and opened again); status — node shown next to the commit button (e.g. the commit confirmation).
  * Field labels are translated; messages and actions come from config/thresholds.json (English).
  */
-export default function CheckIn({ onSubmit, onUpdate, biometrics, sol = null }) {
+export default function CheckIn({ onSubmit, onUpdate, biometrics, values, onValuesChange, status = null }) {
   const t = useT();
   const uid = useId();
-  const [vals, setVals] = useState({
-    systolic: 128, diastolic: 82, hr: 68, glucose: 92, temperature: 36.8,
-    sleep: 6.2, mood: 4, symptoms: 'NONE'
-  });
+  const [ownVals, setOwnVals] = useState(CHECKIN_DEFAULTS);
+  const vals = values ?? ownVals;
+  const setVals = onValuesChange ?? setOwnVals;
+  const [step, setStep] = useState(0);
+  const current = CHECKIN_STEPS[step];
+
   const set = (k, v) => {
     setVals(c => ({ ...c, [k]: v }));
     const metricId = FIELD_TO_METRIC[k];
     if (metricId) onUpdate?.(metricId, v);
   };
   const readingOf = key => biometrics?.find(item => item.id === FIELD_TO_METRIC[key]);
-  const fieldClass = key => {
-    const status = readingOf(key)?.status;
-    return `intake-field${status ? ` intake-${status}` : ''}`;
-  };
+  const mood = readingOf('mood');
 
   return (
-    <form className="intake-form" onSubmit={event => onSubmit?.(event, vals)}>
-      <p className="intake-head label">
-        {t('profile.checkinHead')} · {sol != null ? t('common.solN', { n: sol }) : t('common.solUnknown')} · {t('profile.checkinEstimate')}
-      </p>
+    <form className="intake-form" data-step={current.id} onSubmit={event => onSubmit?.(event, vals)}>
+      <ol className="intake-steps" aria-label={t('profile.checkinSteps')}>
+        {CHECKIN_STEPS.map((item, index) => (
+          <li key={item.id}>
+            <button
+              type="button"
+              className={cx('intake-steptab', index === step && 'is-current')}
+              aria-current={index === step ? 'step' : undefined}
+              onClick={() => setStep(index)}
+            >
+              <NavIcon name={item.icon} className="intake-steptab-icon" />
+              <span>{index + 1} · {t(item.title)}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
 
-      {SECTIONS.map(section => (
-        <section className="intake-section" key={section.id}>
-          <header className="intake-section-head">
-            <h3>{t(section.title)}</h3>
-            <span className="label">{t(section.tag)}</span>
-          </header>
-          <div className="intake-grid">
-            {section.items.map(f => (
-              <div className={fieldClass(f.key)} data-field={f.key} data-status={readingOf(f.key)?.status} key={f.key}>
-                <label className="intake-label" htmlFor={`${uid}-${f.key}`}>{t(f.label)}</label>
-                <div className="intake-input-row">
-                  <input
-                    id={`${uid}-${f.key}`}
-                    className="intake-input"
-                    type={f.type}
-                    step={f.step}
-                    value={vals[f.key]}
-                    onChange={e => set(f.key, e.target.value)}
-                  />
-                  <span className="intake-unit">{f.unit}</span>
-                  <Assessment reading={readingOf(f.key)} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      ))}
-
-      <section className="intake-section">
-        <header className="intake-section-head">
-          <h3>{t('profile.checkinSectionPsych')}</h3>
-          <span className="label">{t('profile.checkinTagSelf')}</span>
-        </header>
+      {current.fields.length ? (
         <div className="intake-grid">
-          <div className={fieldClass('mood')} data-field="mood" data-status={readingOf('mood')?.status}>
+          {current.fields.map(field => (
+            <NumberField
+              key={field.key}
+              uid={uid}
+              field={field}
+              value={vals[field.key]}
+              reading={readingOf(field.key)}
+              onChange={value => set(field.key, value)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="intake-grid intake-grid-mind">
+          <div className={cx('intake-field', mood?.status && `intake-${mood.status}`)} data-field="mood" data-status={mood?.status}>
             <span className="intake-label" id={`${uid}-mood`}>{t('profile.checkinMood')}</span>
-            <div className="intake-input-row">
-              <div className="mood-row" role="group" aria-labelledby={`${uid}-mood`}>
-                {[1,2,3,4,5].map(n => (
-                  <Button
-                    key={n}
-                    className={`mood-btn${vals.mood === n ? ' sel' : ''}`}
-                    active={vals.mood === n}
-                    aria-pressed={vals.mood === n}
-                    onClick={() => set('mood', n)}
-                  >{n}</Button>
-                ))}
-              </div>
-              <Assessment reading={readingOf('mood')} />
+            <div className="intake-choices intake-mood" role="group" aria-labelledby={`${uid}-mood`}>
+              {[1, 2, 3, 4, 5].map(n => (
+                <button
+                  key={n}
+                  type="button"
+                  className={cx('intake-choice', vals.mood === n && 'is-on')}
+                  aria-pressed={vals.mood === n}
+                  onClick={() => set('mood', n)}
+                >{n}</button>
+              ))}
             </div>
-            <span className="intake-hint">{t('profile.checkinMoodHint')}</span>
+            <div className="intake-meta">
+              <span className="intake-unit">{t('profile.checkinMoodHint')}</span>
+              <Assessment reading={mood} />
+            </div>
           </div>
           <div className="intake-field" data-field="symptoms">
-            <label className="intake-label" htmlFor={`${uid}-symptoms`}>{t('profile.checkinSymptoms')}</label>
-            <select
-              id={`${uid}-symptoms`}
-              className="intake-select"
-              value={vals.symptoms}
-              onChange={e => set('symptoms', e.target.value)}
-            >
-              {SYMPTOMS.map(([value, label]) => <option key={value} value={value}>{t(label)}</option>)}
-            </select>
+            <span className="intake-label" id={`${uid}-symptoms`}>{t('profile.checkinSymptoms')}</span>
+            <div className="intake-choices intake-symptoms" role="group" aria-labelledby={`${uid}-symptoms`}>
+              {SYMPTOMS.map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  className={cx('intake-choice', vals.symptoms === value && 'is-on')}
+                  aria-pressed={vals.symptoms === value}
+                  onClick={() => set('symptoms', value)}
+                >{t(label)}</button>
+              ))}
+            </div>
           </div>
         </div>
-      </section>
+      )}
 
       <div className="intake-footer">
-        <span className="intake-autosave">{t('profile.checkinNotStored')}</span>
-        <div className="intake-actions">
-          <Button type="submit" variant="primary">{t('profile.checkinCommit')}</Button>
-        </div>
+        <Pager page={step} pages={CHECKIN_STEPS.length} onPage={setStep} />
+        <div className="intake-state">{status}</div>
+        <Button type="submit" variant="primary" className="intake-commit">{t('profile.checkinCommit')}</Button>
       </div>
     </form>
   );

@@ -1,89 +1,255 @@
-/* Styles of ProfileScreen.jsx and src/profile/* (theme variables only). */
-.profile-screen { display: grid; gap: 12px; min-width: 0; }
-
-/* two columns: who / tests / check-in on the left, notes / notifications / report on the right */
-.profile-columns { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 12px; align-items: start; min-width: 0; }
-.profile-column { display: grid; gap: 12px; align-content: start; min-width: 0; }
-@media (max-width: 1000px) {
-  .profile-columns { grid-template-columns: minmax(0, 1fr); }
+/* Styles of ProfileScreen.jsx and src/profile/* (theme variables only): one screen high, no scrolling.
+   Header (photo, who, status) on top, big action tiles below; details in DataDialog popups
+   (styles in home.css) and the check-in in a sub-view (src/checkin/checkin.css). */
+.screen[data-screen='profile'] { display: grid; grid-template-rows: minmax(0, 1fr); overflow: hidden; }
+.profile-screen {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 14px);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
 }
 
-/* read-only banner: someone else's profile */
-.profile-readonly {
+/* big terminal button for main actions (≥ 64 px) */
+.btn.pf-big {
+  min-height: 64px;
+  padding: 0 18px;
+  font-size: 18px;
+  border: 1px solid var(--btn);
+  touch-action: manipulation;
+}
+.btn.pf-big:disabled { border-color: var(--border); border-style: dashed; }
+
+.pf-label { color: var(--dim); font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; }
+.pf-dim { color: var(--dim); font-size: 14px; }
+.pf-empty { margin: 0; color: var(--dim); font-size: 18px; text-transform: uppercase; letter-spacing: 0.08em; }
+.pf-empty::before { content: '> '; content: '> ' / ''; color: var(--accent-dim); }
+.pf-note-off { margin: 0; color: var(--caution); font-size: 15px; text-transform: uppercase; letter-spacing: 0.04em; }
+.pf-state { margin: 0; color: var(--fg); font-size: 16px; }
+.pf-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+
+/* read-only strip: someone else's profile */
+.pf-readonly {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 4px 16px;
-  padding: 4px 12px;
+  gap: 8px 16px;
+  padding: 4px 4px 4px 14px;
   color: var(--caution);
   border: 1px solid var(--caution);
   background: var(--panel);
 }
-.profile-readonly-text { font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.pf-readonly-text { min-width: 0; overflow: hidden; font-size: clamp(15px, 1.3vw, 20px); font-weight: 700; text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+.pf-readonly .btn.pf-big { min-height: 56px; --btn: var(--caution); }
 
-.profile-hint { color: var(--dim); font-size: 12px; }
-.profile-empty { color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; }
-.profile-empty::before { content: '> '; content: '> ' / ''; color: var(--accent-dim); }
-
-/* [ CREW FILE ] */
-.crew-file { display: flex; flex-wrap: wrap; gap: 12px 20px; min-width: 0; }
-.crew-file-photo { display: grid; gap: 4px; align-content: start; justify-items: center; }
-.crew-file-main { flex: 1 1 320px; min-width: 0; }
-.crew-file-name { overflow-wrap: anywhere; }
-.crew-file-role { margin: 0 0 8px; color: var(--fg); text-transform: uppercase; letter-spacing: 0.08em; }
-.crew-file-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px 20px; margin: 0; }
-.crew-file-field { min-width: 0; }
-.crew-file-field-wide { grid-column: 1 / -1; }
-.crew-file-field dt { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
-.crew-file-field dd { margin: 0; color: var(--fg); overflow-wrap: anywhere; }
-.crew-file-status {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 2px 10px;
-  margin-top: 10px;
-  padding-top: 6px;
-  border-top: 1px solid var(--border);
-}
-.crew-file-status-text { color: var(--fg); min-width: 0; overflow-wrap: anywhere; }
-
-/* [ NOTES / DIARY ] */
-.profile-note-list { display: grid; gap: 6px; margin-bottom: 8px; }
-.profile-note { padding-left: 8px; border-left: 1px solid var(--accent-dim); }
-.profile-note p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
-.profile-note-form { display: grid; gap: 4px; margin-top: 8px; }
-.profile-note-input { width: 100%; min-height: 6em; resize: vertical; }
-
-/* [ PSYCHOLOGICAL TESTS ] */
-.profile-tests-battery {
-  display: flex;
-  flex-wrap: wrap;
+/* ── header ──────────────────────────────────────────────────────────── */
+.pf-head {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1.3fr) minmax(0, 1fr) auto;
   align-items: center;
-  gap: 4px 10px;
-  margin: 0 0 6px;
-  padding: 3px 8px;
-  border: 1px solid var(--ok);
+  gap: clamp(12px, 1.6vw, 28px);
+  min-width: 0;
+  padding-bottom: clamp(8px, 1.4vh, 14px);
+  border-bottom: 1px solid var(--border);
 }
-.profile-tests-battery-text { flex: 1 1 28ch; min-width: 0; color: var(--fg); font-size: 12px; }
-.profile-table-wrap { overflow-x: auto; margin: 6px 0; }
-.profile-tests-table th[scope='row'] {
-  padding: 2px 12px 2px 0;
-  color: var(--fg);
-  border-bottom: 1px dotted var(--accent-dim);
-  font-size: inherit;
-  font-weight: 700;
-  text-transform: none;
-  letter-spacing: 0;
-  vertical-align: baseline;
-  min-width: 18ch;
+.pf-photo {
+  display: grid;
+  place-items: center;
+  height: clamp(110px, 21vh, 220px);
+  aspect-ratio: 6 / 7;
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--border);
 }
-.profile-test-purpose { min-width: 26ch; font-size: 12px; }
-.profile-test-cadence { white-space: nowrap; }
-.profile-test-ref { display: block; color: var(--dim); font-size: 11px; white-space: normal; }
-.profile-test-action { text-align: right; white-space: nowrap; }
-.profile-tests-table td:last-child { padding-right: 0; }
+.pf-photo img { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; }
+.pf-photo .avatar { width: 72%; height: auto; color: var(--accent); }
+.pf-who { display: grid; gap: clamp(2px, 0.6vh, 8px); min-width: 0; }
+.pf-name {
+  display: grid;
+  margin: 0;
+  color: var(--accent-bright);
+  font-size: clamp(22px, min(2.3vw, 3.7vh), 44px);
+  line-height: 1.3;
+}
+.pf-name > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf-role, .pf-body, .pf-loc { margin: 0; overflow: hidden; font-size: clamp(16px, min(1.3vw, 2.4vh), 22px); line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+.pf-role { color: var(--fg); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.pf-code { color: var(--dim); font-weight: 400; }
+.pf-body { color: var(--fg); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+.pf-loc { display: flex; align-items: center; gap: 8px; color: var(--dim); }
+.pf-loc-icon { color: var(--accent); }
 
-/* [ DAILY CHECK-IN ] and [ FLIGHT SURGEON REPORT ] */
-.profile-checkin-state, .profile-report-state { margin: 8px 0 0; padding-top: 6px; border-top: 1px solid var(--border); }
-.profile-report-actions { margin-top: 8px; }
+.pf-status {
+  display: grid;
+  gap: 6px;
+  align-self: stretch;
+  align-content: center;
+  min-width: 0;
+  padding: 8px 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--ok);
+}
+.pf-status[data-status='caution'] { border-left-color: var(--caution); }
+.pf-status[data-status='alert'] { border-left-color: var(--alert); }
+.pf-status[data-status='no_data'] { border-left-color: var(--dim); }
+.pf-status-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: 16px; }
+.pf-status-label { color: var(--dim); font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; }
+.pf-status-sol { color: var(--dim); font-size: 14px; }
+.pf-status-text {
+  overflow: hidden;
+  color: var(--fg);
+  font-size: clamp(15px, min(1.2vw, 2.2vh), 20px);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.pf-head-actions { display: grid; align-self: stretch; }
+.pf-head-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: clamp(120px, 11vw, 190px);
+  min-height: 64px;
+  padding: 8px;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--accent-dim);
+  font: inherit;
+  font-size: clamp(14px, min(1.1vw, 2vh), 18px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.pf-head-btn:active { background: var(--raised); border-color: var(--accent); }
+.pf-head-btn-icon { font-size: clamp(30px, min(2.6vw, 5vh), 48px); color: var(--accent); }
+
+/* ── tiles ───────────────────────────────────────────────────────────── */
+.pf-tiles {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: clamp(8px, 1vw, 14px);
+  min-height: 0;
+}
+.pf-tiles[data-count='4'] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pf-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 1vh, 12px);
+  min-width: 0;
+  min-height: 0;
+  padding: 6px;
+  overflow: hidden;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pf-tile:active { background: var(--raised); border-color: var(--accent); }
+@media (hover: hover) {
+  .pf-tile:hover { border-color: var(--accent); }
+}
+.pf-tile-icon { font-size: clamp(34px, min(4vw, 7vh), 80px); color: var(--accent); }
+.pf-tile-label { max-width: 100%; overflow: hidden; font-size: clamp(17px, min(1.8vw, 3vh), 32px); font-weight: 700; text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+.pf-tile-info { color: var(--dim); font-size: clamp(14px, min(1.2vw, 2.2vh), 20px); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+.pf-tile[data-open='notifs'] .pf-tile-info { color: var(--accent-bright); font-size: clamp(20px, min(1.8vw, 3.2vh), 34px); font-weight: 700; }
+
+/* ── check-in sub-view ───────────────────────────────────────────────── */
+.pf-sub { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: clamp(8px, 1.4vh, 14px); flex: 1 1 auto; min-height: 0; }
+.pf-sub-head { display: flex; align-items: center; gap: 16px; min-width: 0; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.pf-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 64px;
+  padding: 0 18px 0 8px;
+  color: var(--bg);
+  background: var(--accent);
+  border: 0;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.pf-back .nf-icon { font-size: 32px; }
+.pf-back:active { background: var(--accent-bright); }
+.pf-sub-icon { font-size: 36px; color: var(--accent); }
+.pf-sub-title { flex: 1 1 auto; min-width: 0; margin: 0; overflow: hidden; color: var(--accent-bright); font-size: clamp(20px, 2vw, 30px); text-overflow: ellipsis; white-space: nowrap; }
+.pf-sub-sol { color: var(--dim); font-size: 18px; white-space: nowrap; }
+
+/* ── popups ──────────────────────────────────────────────────────────── */
+.pf-lead { margin: 0; color: var(--fg); font-size: 16px; }
+.pf-dlg-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; }
+.pf-dlg-foot .pf-note-off { min-width: 0; }
+
+/* personal data */
+.pf-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 24px; margin: 0; }
+.pf-field { min-width: 0; }
+.pf-field-wide { grid-column: 1 / -1; }
+.pf-field dt { color: var(--dim); font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; }
+.pf-field dd { margin: 2px 0 0; color: var(--fg); font-size: 18px; overflow-wrap: anywhere; }
+
+/* report */
+.pf-report { display: grid; gap: 18px; }
+.pf-figs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.pf-fig { display: grid; align-content: start; gap: 6px; min-width: 0; padding: 10px 12px; background: var(--raised); border: 1px solid var(--border); }
+.pf-fig[data-status='caution'] { border-color: var(--caution); }
+.pf-fig-value { color: var(--fg); font-size: clamp(18px, 1.8vw, 30px); font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.pf-fig[data-status='caution'] .pf-fig-value { color: var(--caution); }
+
+/* notes */
+.pf-notes { display: grid; gap: 12px; }
+.pf-note-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.pf-note { padding-left: 10px; border-left: 2px solid var(--accent-dim); }
+.pf-note p { margin: 0; font-size: 16px; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+.pf-note-form { display: grid; gap: 8px; }
+.pf-note-input { width: 100%; min-height: 120px; padding: 10px; font: inherit; font-size: 18px; resize: none; }
+.pf-note-input:disabled { color: var(--dim); border-style: dashed; }
+
+/* psych tests */
+.pf-tests { display: grid; gap: 12px; }
+.pf-battery { display: flex; align-items: center; gap: 12px 20px; padding: 8px 8px 8px 14px; border: 1px solid var(--ok); }
+.pf-battery-text { flex: 1 1 auto; min-width: 0; color: var(--fg); font-size: 16px; }
+.pf-test-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.pf-test { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 10px 12px; background: var(--raised); border: 1px solid var(--border); }
+.pf-test-main { display: grid; gap: 4px; min-width: 0; }
+.pf-test-name { margin: 0; color: var(--accent-bright); font-size: 18px; }
+.pf-test-purpose { margin: 0; color: var(--fg); font-size: 16px; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+.pf-test-meta { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 0; color: var(--dim); font-size: 15px; }
+.pf-test-meta b { color: var(--fg); }
+.pf-test-ref { margin: 0; overflow: hidden; color: var(--dim); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+
+/* notifications */
+.pf-notifs { display: grid; gap: 12px; }
+.pf-notif-list .notif-title { font-size: 17px; }
+.pf-notif-list .notif-source { font-size: 14px; }
+.pf-notif-list .notif-detail, .pf-notif-list .notif-action { font-size: 16px; }
+.pf-notif-list .notif-detail { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+.pf-notif-list .btn { min-height: 52px; padding: 0 14px; font-size: 16px; border: 1px solid var(--btn); }
+.pf-notif-list .notif { padding: 10px 0 10px 12px; }
+
+@media (max-width: 1100px) {
+  .pf-head { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .pf-status { grid-column: 1 / -1; grid-row: 2; }
+  .pf-figs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

@@ -1,9 +1,12 @@
-import React from 'react';
-import { Badge, Button, Panel } from '../components/index.js';
+import React, { useState } from 'react';
+import { Button } from '../components/index.js';
 import { useI18n } from '../i18n/index.js';
+import { Pager } from '../home/DataDialog.jsx';
 import { COGNITIVE_BATTERY, PSYCH_TEST_CATALOG, listPsychResults, listPsychTests } from '../data/crewStore.js';
 import { localized } from '../crew/crewStatus.js';
 import { useStoreList } from './useStoreList.js';
+
+const PER_PAGE = 2;
 
 /** Latest result per test id (highest sol). */
 function latestByTest(results) {
@@ -16,80 +19,67 @@ function latestByTest(results) {
 }
 
 /**
- * List of psychological tests with the last result and the next due sol per test.
- * The cognitive battery (PVT, Go/No-Go, DSST) is real and runs on the TESTS screen: its line and
- * the PVT row (`available: true`) call onStart. The questionnaires are still a SKELETON: static
- * catalogue (crewStore.PSYCH_TEST_CATALOG), no results, [ START ] disabled; all of it is read
- * through crewStore, so real data needs no change here (see GUI/TODO.md, section b).
+ * PSYCH TESTS popup body: the cognitive battery (PVT, Go/No-Go, DSST, real, runs on the TESTS
+ * screen) on top, then the test catalogue paged two at a time, with the last result and the next
+ * due sol. The questionnaires are not connected yet: static catalogue (crewStore.PSYCH_TEST_CATALOG),
+ * no results, START disabled; all of it is read through crewStore, so real data needs no change
+ * here (see GUI/TODO.md, section b).
  * props: crewCode ('HAB-C1'), isOwn (only the person themselves starts a test),
- *        onStart(test) — opens the test runner; without it every [ START ] stays disabled.
+ *        onStart(test) — opens the test runner; without it every START stays disabled.
  */
 export default function PsychTestsPanel({ crewCode, isOwn, onStart }) {
   const { t, lang } = useI18n();
   const tests = useStoreList(listPsychTests, [], PSYCH_TEST_CATALOG);
   const results = useStoreList(() => listPsychResults(crewCode), [crewCode]);
   const latest = latestByTest(results.items);
-  const connected = tests.connected && results.connected;
+  const [page, setPage] = useState(0);
+  const pages = Math.max(1, Math.ceil(tests.items.length / PER_PAGE));
+  const safe = Math.min(page, pages - 1);
+  const slice = tests.items.slice(safe * PER_PAGE, safe * PER_PAGE + PER_PAGE);
 
   return (
-    <Panel
-      className="profile-tests"
-      title={t('profile.testsTitle')}
-    >
-      <p className="profile-tests-battery" data-testid="cognitive-battery">
-        <span className="profile-tests-battery-text">{t('profile.testsBattery')}</span>
-        <Button small disabled={!onStart || !isOwn} onClick={() => onStart?.(COGNITIVE_BATTERY)}>
+    <div className="pf-tests">
+      <div className="pf-battery" data-testid="cognitive-battery">
+        <span className="pf-battery-text">{t('profile.testsBattery')}</span>
+        <Button variant="primary" className="pf-big" disabled={!onStart || !isOwn} onClick={() => onStart?.(COGNITIVE_BATTERY)}>
           {t('profile.testsOpenBattery')}
         </Button>
-      </p>
-      <p className="profile-hint">{t('profile.testsHint')}</p>
-      <div className="profile-table-wrap">
-        <table className="table profile-tests-table">
-          <thead>
-            <tr>
-              <th scope="col">{t('profile.testsColName')}</th>
-              <th scope="col">{t('profile.testsColPurpose')}</th>
-              <th scope="col">{t('profile.testsColCadence')}</th>
-              <th scope="col">{t('profile.testsColLast')}</th>
-              <th scope="col">{t('profile.testsColNext')}</th>
-              <th scope="col"><span className="visually-hidden">{t('profile.testsColAction')}</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            {tests.items.map(test => {
-              const last = latest[test.id];
-              const name = localized(test.name, lang);
-              const nextDue = last?.sol != null && test.cadence?.everySols ? last.sol + test.cadence.everySols : null;
-              return (
-                <tr key={test.id} data-test-id={test.id}>
-                  <th scope="row" className="profile-test-name">{name}</th>
-                  <td className="profile-test-purpose">
-                    {localized(test.purpose, lang)}
-                    <span className="profile-test-ref">{t('profile.testsReference')}: {test.reference}</span>
-                  </td>
-                  <td className="profile-test-cadence">
-                    {localized(test.cadence?.label, lang)}
-                    <span className="profile-test-ref">{t('profile.testsDuration', { n: test.durationMin })}</span>
-                  </td>
-                  <td data-cell="last">{last ? `${last.score ?? '—'} · ${t('common.solN', { n: last.sol })}` : '—'}</td>
-                  <td data-cell="next">{nextDue != null ? t('common.solN', { n: nextDue }) : '—'}</td>
-                  <td className="profile-test-action">
-                    <Button
-                      small
-                      disabled={!onStart || !test.available || !isOwn}
-                      aria-label={`${t('profile.testsStart')}: ${name}`}
-                      onClick={() => onStart?.(test)}
-                    >
-                      {t('profile.testsStart')}
-                    </Button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
       </div>
-      <p className="profile-hint">{t('profile.testsAssumption')}</p>
-    </Panel>
+
+      <ul className="pf-test-list">
+        {slice.map(test => {
+          const last = latest[test.id];
+          const name = localized(test.name, lang);
+          const nextDue = last?.sol != null && test.cadence?.everySols ? last.sol + test.cadence.everySols : null;
+          return (
+            <li key={test.id} className="pf-test" data-test-id={test.id}>
+              <div className="pf-test-main">
+                <h3 className="pf-test-name">{name}</h3>
+                <p className="pf-test-purpose">{localized(test.purpose, lang)}</p>
+                <p className="pf-test-meta">
+                  <span className="pf-test-cadence">{localized(test.cadence?.label, lang)} · {t('profile.testsDuration', { n: test.durationMin })}</span>
+                  <span>{t('profile.testsColLast')}: <b data-cell="last">{last ? `${last.score ?? '—'} · ${t('common.solN', { n: last.sol })}` : '—'}</b></span>
+                  <span>{t('profile.testsColNext')}: <b data-cell="next">{nextDue != null ? t('common.solN', { n: nextDue }) : '—'}</b></span>
+                </p>
+                <p className="pf-test-ref">{t('profile.testsReference')}: {test.reference}</p>
+              </div>
+              <Button
+                className="pf-big"
+                disabled={!onStart || !test.available || !isOwn}
+                aria-label={`${t('profile.testsStart')}: ${name}`}
+                onClick={() => onStart?.(test)}
+              >
+                {t('profile.testsStart')}
+              </Button>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div className="pf-dlg-foot">
+        <span className="pf-note-off">{t('profile.testsHint')}</span>
+        <Pager page={safe} pages={pages} onPage={setPage} />
+      </div>
+    </div>
   );
 }

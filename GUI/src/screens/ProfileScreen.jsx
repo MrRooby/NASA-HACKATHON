@@ -1,19 +1,24 @@
-import React, { useMemo, useState } from 'react';
-import { Badge, Button, Panel, StatusTag } from '../components/index.js';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Button, Panel, StatusTag } from '../components/index.js';
 import { useT } from '../i18n/index.js';
+import NavIcon from '../navIcons.jsx';
 import { useHabitat } from '../habitat/useHabitat.js';
 import { buildNotifications } from '../notifications/buildNotifications.js';
 import NotificationList from '../notifications/NotificationList.jsx';
-import CheckIn from '../checkin/CheckIn.jsx';
+import CheckIn, { CHECKIN_DEFAULTS } from '../checkin/CheckIn.jsx';
 import { createBiometrics, updateBiometric } from '../checkin/thresholdLogic.js';
+import DataDialog, { Pager } from '../home/DataDialog.jsx';
 import { setPendingFocus } from '../home/focus.js';
 import { useCrewReport } from '../home/useCrewReport.js';
 import { findLocation } from '../crew/crewStatus.js';
-import CrewFilePanel from '../profile/CrewFilePanel.jsx';
+import PersonalData, { CrewHeader } from '../profile/CrewFilePanel.jsx';
 import NotesPanel from '../profile/NotesPanel.jsx';
 import PsychTestsPanel from '../profile/PsychTestsPanel.jsx';
 import SurgeonReportPanel from '../profile/SurgeonReportPanel.jsx';
+import './home.css'; // DataDialog and Pager styles
 import './profile.css';
+
+const NOTIFS_PER_PAGE = 3;
 
 /**
  * Notifications that concern one person: their organs and wearables, plus habitat zones and
@@ -28,32 +33,41 @@ export function personalNotifications(items, zones = []) {
   });
 }
 
-/** [ DAILY CHECK-IN ]: the legacy form plus the confirmation of the committed entry. */
-function CheckInPanel({ biometrics, committed, sol, onUpdate, onCommit }) {
+/** NOTIFICATIONS popup body: the personal list, paged instead of scrolled. */
+function NotificationsBody({ items, onOpen }) {
   const t = useT();
-  const attention = biometrics.filter(item => item.status !== 'ok').length;
+  const [page, setPage] = useState(0);
+  const pages = Math.max(1, Math.ceil(items.length / NOTIFS_PER_PAGE));
+  const safe = Math.min(page, pages - 1);
   return (
-    <Panel
-      className="profile-checkin"
-      title={t('profile.checkinTitle')}
-    >
-      <CheckIn biometrics={biometrics} sol={sol} onUpdate={onUpdate} onSubmit={onCommit} />
-      {committed ? (
-        <p className="profile-checkin-state" role="status">
-          <StatusTag status={attention > 0 ? 'caution' : 'ok'} />{' '}
-          {t('profile.checkinCommitted', { time: committed.at.slice(11, 16) })}{' '}
-          {attention > 0 ? t('profile.checkinAttention', { n: attention }) : t('profile.checkinAllNormal')}
-        </p>
-      ) : null}
-    </Panel>
+    <div className="pf-notifs">
+      <NotificationList
+        className="pf-notif-list"
+        items={items.slice(safe * NOTIFS_PER_PAGE, safe * NOTIFS_PER_PAGE + NOTIFS_PER_PAGE)}
+        emptyText={t('profile.notificationsEmpty')}
+        onOpen={onOpen}
+      />
+      <Pager page={safe} pages={pages} onPage={setPage} />
+    </div>
+  );
+}
+
+/** One big action tile of the profile screen. */
+function Tile({ id, icon, label, info, onOpen }) {
+  return (
+    <button type="button" className="pf-tile" data-open={id} onClick={onOpen}>
+      <NavIcon name={icon} className="pf-tile-icon" />
+      <span className="pf-tile-label">{label}</span>
+      {info != null ? <span className="pf-tile-info">{info}</span> : null}
+    </button>
   );
 }
 
 /**
- * PROFILE screen: crew file, notes / diary (skeleton), psychological tests (cognitive battery on the
- * TESTS screen, questionnaires still a skeleton),
- * notifications; on the logged-in person's own profile also the daily check-in and the
- * flight-surgeon report. Another person's profile is read-only.
+ * PROFILE screen, one screen high: a header (photo, name, role, age · height · weight,
+ * location, health status) and big tiles that open popups (DataDialog) or, for the daily
+ * check-in, a sub-view with ‹ BACK. On the logged-in person's own profile also the check-in
+ * and the flight-surgeon report; another person's profile is read-only.
  * props (shared by every screen): { mother, session, viewedCode, setViewedCode, navigate, profile }
  */
 export default function ProfileScreen({ mother, session, viewedCode, setViewedCode, navigate, profile }) {
@@ -73,6 +87,10 @@ export default function ProfileScreen({ mother, session, viewedCode, setViewedCo
     return personalNotifications(buildNotifications({ report, habitat }), [profile.homeZone, location?.code]);
   }, [report, habitat, profile]);
 
+  // which popup / sub-view is open: null | 'checkin' | 'report' | 'notes' | 'tests' | 'notifs' | 'data'
+  const [open, setOpen] = useState(null);
+  const close = useCallback(() => setOpen(null), []);
+
   // Same hand-over as the home screen: the wearables screen opens on the organ / band.
   const openTarget = target => {
     if (!target?.screen) return;
@@ -80,7 +98,8 @@ export default function ProfileScreen({ mother, session, viewedCode, setViewedCo
     navigate(target.screen, target);
   };
 
-  // Check-in readings of the logged-in person: shared by the form and the flight-surgeon report.
+  // Check-in of the logged-in person: values and assessed readings, shared by the form and the report.
+  const [checkinValues, setCheckinValues] = useState(CHECKIN_DEFAULTS);
   const [biometrics, setBiometrics] = useState(createBiometrics);
   const [committed, setCommitted] = useState(null); // { at, symptoms } of the last committed entry
   const updateReading = (id, value) => setBiometrics(current => updateBiometric(current, id, value));
@@ -88,6 +107,7 @@ export default function ProfileScreen({ mother, session, viewedCode, setViewedCo
     event.preventDefault();
     setCommitted({ at: new Date().toISOString(), symptoms: values?.symptoms && values.symptoms !== 'NONE' ? values.symptoms : null });
   };
+  const attention = biometrics.filter(item => item.status !== 'ok').length;
 
   // Cognitive tests (PVT, Go/No-Go, DSST) run on the TESTS screen; the questionnaires have no runner yet.
   const startTest = test => {
@@ -104,60 +124,94 @@ export default function ProfileScreen({ mother, session, viewedCode, setViewedCo
       <div className="profile-screen">
         <Panel title={t('profile.title')} tone="caution">
           <p>{t('profile.unknownPerson', { code: viewedCode ?? '—' })}</p>
-          <Button onClick={backToOwn}>{t('profile.backToOwn')}</Button>
+          <Button className="pf-big" onClick={backToOwn}>{t('profile.backToOwn')}</Button>
         </Panel>
       </div>
     );
   }
 
+  // ── sub-view: daily check-in ──
+  if (isOwn && open === 'checkin') {
+    return (
+      <div className="profile-screen" data-own="true" data-view="checkin">
+        <section className="pf-sub" aria-labelledby="pf-checkin-title">
+          <header className="pf-sub-head">
+            <button type="button" className="pf-back" onClick={close}>
+              <NavIcon name="prev" />
+              <span>{t('profile.back')}</span>
+            </button>
+            <NavIcon name="checkin" className="pf-sub-icon" />
+            <h2 id="pf-checkin-title" className="pf-sub-title">{t('profile.checkinTitle')}</h2>
+            <span className="pf-sub-sol">{sol != null ? t('common.solN', { n: sol }) : t('common.solUnknown')}</span>
+          </header>
+          <CheckIn
+            biometrics={biometrics}
+            values={checkinValues}
+            onValuesChange={setCheckinValues}
+            onUpdate={updateReading}
+            onSubmit={commitCheckIn}
+            status={committed ? (
+              <p className="pf-state" role="status">
+                <StatusTag status={attention > 0 ? 'caution' : 'ok'} />{' '}
+                {t('profile.checkinCommitted', { time: committed.at.slice(11, 16) })}{' '}
+                {attention > 0 ? t('profile.checkinAttention', { n: attention }) : t('profile.checkinAllNormal')}
+              </p>
+            ) : null}
+          />
+        </section>
+      </div>
+    );
+  }
+
+  const tiles = [
+    isOwn && { id: 'checkin', icon: 'checkin', label: t('profile.checkinTitle'), info: committed ? t('profile.tileDoneAt', { time: committed.at.slice(11, 16) }) : t('profile.tileToDo') },
+    isOwn && { id: 'report', icon: 'report', label: t('profile.reportTile') },
+    { id: 'notes', icon: 'history', label: t('profile.notesTitle') },
+    { id: 'tests', icon: 'tests', label: t('profile.testsTitle') },
+    { id: 'notifs', icon: 'bell', label: t('profile.notificationsTitle'), info: <span data-testid="profile-notification-count">{notifications.length}</span> },
+    { id: 'data', icon: 'person', label: t('profile.dataTitle') },
+  ].filter(Boolean);
+
+  const dialogs = {
+    report: { title: t('profile.reportTitle'), icon: 'report', body: <SurgeonReportPanel profile={profile} biometrics={biometrics} symptoms={committed?.symptoms ?? null} mother={mother} sol={sol} /> },
+    notes: { title: t('profile.notesTitle'), icon: 'history', body: <NotesPanel crewCode={profile.code} isOwn={isOwn} sol={sol} /> },
+    tests: { title: t('profile.testsTitle'), icon: 'tests', body: <PsychTestsPanel crewCode={profile.code} isOwn={isOwn} onStart={startTest} /> },
+    notifs: { title: t('profile.notificationsTitle'), icon: 'bell', body: <NotificationsBody items={notifications} onOpen={openTarget} /> },
+    data: { title: t('profile.dataTitle'), icon: 'person', body: <PersonalData profile={profile} habitat={habitat} /> },
+  };
+  const dialog = open && dialogs[open] && (open !== 'report' || isOwn) ? dialogs[open] : null;
+
   return (
     <div className="profile-screen" data-own={isOwn ? 'true' : 'false'}>
       {!isOwn ? (
-        <div className="profile-readonly" role="status">
-          <span className="profile-readonly-text">{t('profile.readOnly', { name: profile.name })}</span>
-          <Button onClick={backToOwn}>{t('profile.backToOwn')}</Button>
+        <div className="pf-readonly" role="status">
+          <span className="pf-readonly-text">{t('profile.readOnly', { name: profile.name })}</span>
+          <Button className="pf-big" onClick={backToOwn}>{t('profile.backToOwn')}</Button>
         </div>
       ) : null}
 
-      <div className="profile-columns">
-        <div className="profile-column">
-          <CrewFilePanel profile={profile} report={report} mother={mother} habitat={habitat} navigate={navigate} />
-          <PsychTestsPanel crewCode={profile.code} isOwn={isOwn} onStart={startTest} />
-          {isOwn ? (
-            <CheckInPanel
-              biometrics={biometrics}
-              committed={committed}
-              sol={sol}
-              onUpdate={updateReading}
-              onCommit={commitCheckIn}
-            />
-          ) : null}
-        </div>
+      <CrewHeader
+        profile={profile}
+        report={report}
+        mother={mother}
+        habitat={habitat}
+        actions={(
+          <button type="button" className="pf-head-btn" onClick={() => navigate('wearables')}>
+            <NavIcon name="bands" className="pf-head-btn-icon" />
+            <span>{t('profile.wearableData')}</span>
+          </button>
+        )}
+      />
 
-        <div className="profile-column">
-          <NotesPanel crewCode={profile.code} isOwn={isOwn} sol={sol} />
-          <Panel
-            className="profile-notifications"
-            title={t('profile.notificationsTitle')}
-            meta={<span data-testid="profile-notification-count">{notifications.length}</span>}
-          >
-            <NotificationList
-              items={notifications}
-              emptyText={t('profile.notificationsEmpty')}
-              onOpen={openTarget}
-            />
-          </Panel>
-          {isOwn ? (
-            <SurgeonReportPanel
-              profile={profile}
-              biometrics={biometrics}
-              symptoms={committed?.symptoms ?? null}
-              mother={mother}
-              sol={sol}
-            />
-          ) : null}
-        </div>
-      </div>
+      <nav className="pf-tiles" data-count={tiles.length} aria-label={t('profile.tilesLabel')}>
+        {tiles.map(tile => <Tile key={tile.id} {...tile} onOpen={() => setOpen(tile.id)} />)}
+      </nav>
+
+      {dialog ? (
+        <DataDialog title={dialog.title} icon={dialog.icon} onClose={close}>
+          {dialog.body}
+        </DataDialog>
+      ) : null}
     </div>
   );
 }
