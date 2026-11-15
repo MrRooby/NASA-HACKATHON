@@ -1,21 +1,12 @@
-/* Person view of the CREW screen (CrewPerson.jsx). Theme variables only, every rule is a .crew-* class.
-
-   Units: f = the screen's base size from crew.css (20–28 px). Nothing is smaller than 1em (20 px), every
-   target is at least 3.2em (64 px): the view is used on a tablet, in gloves, from a distance.
-
-   Sizing model (the screen box = window minus top bar and footer, see crew.css):
-     .crew-person       rows: header (auto) · organs (auto) · live area (the rest, minmax(0, 1fr))
-     .crew-person-live  size container "live": the arrangement follows the space it really got
-       wide            tiles column (7 × 1fr) | details
-       short           tiles 2 × 4 | details           (live area lower than 30 f)
-       narrow          bar / tiles 2 × 4 / details      (live area narrower than 32 f)
-     tiles, details    size containers: each drops low-priority parts when its own box is small. */
+/* Person view of the CREW screen (CrewPerson.jsx) and its popups. Theme variables only.
+   One screen high, laid out like Home: left = name, photo, 3D figure, readings; right = back, status,
+   facts | bands, ten organs.
+   Charts and checks open in DataDialog (src/home/DataDialog.jsx); their content is .crew-dlg. */
 .crew-person {
-  --gap: clamp(8px, 1vmin, 14px);
+  position: relative;
   flex: 1 1 auto;
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
-  gap: var(--gap);
+  grid-template-rows: minmax(0, 1fr);
   min-height: 0;
   min-width: 0;
 }
@@ -24,213 +15,219 @@
 .crew-tone-caution { --tone: var(--caution); color: var(--caution); }
 .crew-tone-alert { --tone: var(--alert); color: var(--alert); }
 .crew-tone-no_data { --tone: var(--dim); color: var(--dim); }
-.crew-mark { font-weight: 700; white-space: nowrap; }
-.crew-mark-compact .crew-glyph { font-size: 1.2em; }
-.crew-unit { color: var(--dim); font-weight: 400; }
+.crew-unit { margin-left: 0.25em; color: var(--dim); font-size: 0.5em; font-weight: 400; }
 
-/* ── header ───────────────────────────────────────────────────────────── */
-.crew-person-head {
+/* ── stage: left = the person as on Home (home.css classes), right = facts ── */
+.crew-person-stage {
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr) auto;
-  grid-template-areas: 'back avatar id actions' 'status status status status';
-  gap: 0.4em 0.8em;
-  align-items: center;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.4fr);
+  gap: clamp(10px, 1.6vw, 24px);
   min-width: 0;
-  padding: 0.5em;
-  background: var(--panel);
-  border: 1px solid var(--crew-line);
+  min-height: 0;
 }
-.crew-person[data-status='ok'] .crew-person-head { border-color: var(--crew-ok-line); }
-.crew-person[data-status='caution'] .crew-person-head { border-color: var(--caution); }
-.crew-person[data-status='alert'] .crew-person-head { border-color: var(--alert); }
-.crew-back { grid-area: back; align-self: stretch; min-width: 6em; font-size: 1.15em !important; }
-.crew-back .crew-glyph { font-size: 1.4em; }
-.crew-person-head > .crew-portrait { grid-area: avatar; height: 4.9em; width: 4.2em; } /* 6:7 */
-.crew-person-id { grid-area: id; display: grid; gap: 0.15em; min-width: 0; }
-.crew-person-name { display: flex; align-items: baseline; gap: 0 0.5em; min-width: 0; color: var(--fg); font-size: 1.6em; line-height: 1.2; }
-.crew-person-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.crew-person-role, .crew-person-where { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.3; }
-.crew-person-role { text-transform: uppercase; letter-spacing: 0.06em; }
-.crew-person-actions { grid-area: actions; display: grid; gap: 0.3em; justify-items: stretch; }
-.crew-person-status { grid-area: status; display: flex; align-items: baseline; gap: 0.3em 0.6em; min-width: 0; margin: 0; font-size: 1.1em; line-height: 1.3; }
-.crew-person-status > .stag { flex: 0 0 auto; }
-.crew-person-message { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.crew-person-badges { display: inline-flex; flex: 0 0 auto; gap: 0.4em; }
-
-@media (max-width: 900px) {
-  .crew-person-head { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'back id' 'actions actions' 'status status'; }
-  .crew-person-head > .crew-portrait, .crew-person-badges { display: none; }
-  .crew-person-actions { display: flex; flex-wrap: wrap; }
-}
-@media (max-height: 820px) {
-  .crew-person-head { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: 'back id actions' 'status status status'; }
-  .crew-person-head > .crew-portrait, .crew-person-where, .crew-person-badges { display: none; }
-  .crew-person-actions { display: flex; }
-  .crew-person-name { font-size: 1.3em; }
-}
-
-/* ── ten organs: one word + status mark; 3.2em high (touch target); ten in a row need
-   10 × 6.6 + 9 × 0.4 = 69.6em ("Ekspozycja" = 10 ch = 6em + padding), otherwise 5 × 2. */
-.crew-person-organs-wrap { container: organs / inline-size; min-width: 0; }
-.crew-person-organs { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 0.4em; margin: 0; padding: 0; list-style: none; }
-@container organs (max-width: 69.6em) { .crew-person-organs { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-.crew-organ-tile {
+.crew-person-name { margin: 0; font-size: inherit; }
+.crew-person-name > .crew-you { justify-self: start; margin-top: 6px; }
+.crew-person-photo .crew-portrait { display: block; width: 100%; height: 100%; }
+.crew-person-photo .crew-portrait > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.crew-person-photo .crew-portrait > .avatar { width: 70%; height: auto; margin: 15% auto 0; border: 0; }
+.crew-person-figure { cursor: default; }
+/* readings that have a chart: the whole row is a button */
+.home-vital.crew-vital-open { padding: 0; }
+.crew-vital-btn {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas: 'word state';
-  align-items: center;
-  justify-items: center;
-  gap: 0.2em 0.3em;
+  align-content: center;
+  gap: 2px;
   width: 100%;
-  min-height: 3.2em;
-  padding: 0.4em 0.5em;
-  color: var(--fg);
-  background: var(--panel);
-  border: 1px solid var(--crew-line);
-  font: inherit;
-  cursor: pointer;
-}
-.crew-organ-tile .crew-organ-word { grid-area: word; justify-self: stretch; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; font-weight: 700; line-height: 1.3; }
-.crew-organ-state { grid-area: state; font-size: 1.3em; line-height: 1; }
-.crew-organ-tile[data-status='ok'] { border-color: var(--crew-ok-line); }
-.crew-organ-tile[data-status='caution'] { border-color: var(--caution); }
-.crew-organ-tile[data-status='alert'] { color: var(--alert); border-color: var(--alert); }
-/* short windows: tighter tiles */
-@media (max-height: 820px) {
-  .crew-person-organs { grid-template-columns: repeat(10, minmax(0, 1fr)); }
-  .crew-organ-tile { padding-block: 0.2em; }
-}
-
-/* ── live area: tiles + details ───────────────────────────────────────── */
-.crew-person-live { container: live / size; min-height: 0; min-width: 0; }
-.crew-live-grid {
-  display: grid;
-  grid-template-columns: minmax(0, clamp(14em, 36%, 26em)) minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  grid-template-areas: 'bar bar' 'tiles detail';
-  gap: var(--gap);
   height: 100%;
+  min-width: 0;
+  padding: 0 8px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
 }
-.crew-live-bar { grid-area: bar; display: flex; align-items: center; gap: 0.3em 0.8em; min-width: 0; }
-.crew-live { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
-.crew-live-on { color: var(--ok); }
-.crew-live-dot { display: inline-block; width: 0.6em; height: 0.6em; margin-right: 0.5em; background: var(--ok); animation: crew-blink 1.2s steps(2, start) infinite; }
+.crew-vital-btn:hover, .crew-vital-btn:focus-visible { background: var(--raised); outline: none; }
 
-.crew-tiles {
-  grid-area: tiles;
+.crew-person-right { display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: var(--gap); min-width: 0; min-height: 0; }
+.crew-person-top { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.crew-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  min-height: 72px;
+  padding: 0 22px 0 14px;
+  color: var(--bg);
+  background: var(--accent);
+  border: 0;
+  font: inherit;
+  font-size: clamp(18px, 1.2em, 24px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.crew-back .crew-glyph { font-size: 1.8em; line-height: 1; }
+.crew-back:active, .crew-back:focus-visible { background: var(--accent-bright); outline: none; }
+.crew-person-tag { flex: 0 0 auto; font-size: clamp(22px, 1.5em, 32px); }
+.crew-person-message { flex: 1 1 auto; min-width: 0; margin: 0; padding-left: 12px; border-left: 4px solid var(--crew-line); font-size: clamp(16px, 1em, 19px); line-height: 1.3; }
+.crew-message-caution { border-left-color: var(--caution); color: var(--caution); }
+.crew-message-alert { border-left-color: var(--alert); color: var(--alert); }
+.crew-message-no_data { color: var(--dim); }
+.crew-clamp { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; }
+.crew-clamp-2 { -webkit-line-clamp: 2; line-clamp: 2; }
+.crew-clamp-3 { -webkit-line-clamp: 3; line-clamp: 3; }
+
+.crew-person-mid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: calc(var(--gap) * 1.5); min-height: 0; }
+.crew-panel { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 6px; min-width: 0; min-height: 0; }
+.crew-group-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 36px;
+  margin: 0;
+  color: var(--accent-bright);
+  border-bottom: 1px solid var(--border);
+  font-size: clamp(16px, 1em, 20px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.crew-group-head > .nf-icon { color: var(--accent); font-size: 1.2em; }
+.crew-empty { margin: 0; color: var(--dim); font-size: 16px; text-transform: uppercase; }
+
+/* person facts: two columns of key–value rows */
+.crew-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 16px; align-content: start; margin: 0; }
+.crew-fact { display: grid; gap: 1px; min-width: 0; }
+.crew-fact-wide { grid-column: 1 / -1; }
+.crew-fact dt { color: var(--dim); font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; }
+.crew-fact dd { min-width: 0; margin: 0; overflow: hidden; font-size: 16px; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+.crew-fact dd.crew-clamp { white-space: normal; }
+
+/* wearable bands: name, state, battery bar, % */
+.crew-bands { display: grid; grid-template-rows: repeat(5, minmax(0, 1fr)); min-height: 0; margin: 0; padding: 0; list-style: none; }
+.crew-band {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: repeat(7, minmax(0, 1fr));
-  gap: var(--gap);
+  grid-template-columns: 4.6em minmax(0, 1fr) 54px 3.2em;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+  border-bottom: 1px dotted var(--crew-line);
+}
+.crew-band-name { overflow: hidden; font-size: 15px; font-weight: 700; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.crew-band-state { overflow: hidden; color: var(--dim); font-size: 14px; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.crew-band-pct { font-size: 15px; text-align: right; font-variant-numeric: tabular-nums; }
+.crew-band-caution .crew-band-name { color: var(--caution); }
+.crew-band-alert .crew-band-name { color: var(--alert); }
+
+/* ten organs: status tag + name + one short line; a tap opens the checks */
+.crew-person-organs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  gap: 6px var(--gap);
   min-height: 0;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.crew-tiles > li { container: tile / size; min-height: 0; min-width: 0; }
-.crew-detail { grid-area: detail; }
-
-/* 7 rows of ≥ 3.2em + 6 gaps + bar 3.2em ≈ 30em: below that, tiles 2 × 4 (each row ~1.75× taller) */
-@container live (max-height: 30em) {
-  .crew-live-grid { grid-template-columns: minmax(0, clamp(18em, 46%, 34em)) minmax(0, 1fr); }
-  .crew-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); }
-}
-/* narrow (phones upright): bar / tiles / details stacked */
-@container live (max-width: 32em) {
-  .crew-live-grid {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 4fr) minmax(0, 5fr);
-    grid-template-areas: 'bar' 'tiles' 'detail';
-  }
-  .crew-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); }
-}
-
-/* one tile: the name on top (whole width, wraps at spaces, never cut with "…"), then the number with
-   its flags. Exact heights in the tile's em (= f):
-     padding 0.4 + 0.4 = 0.8 · name ≤ 2 lines × 1.3 = 2.6 · gap 0.2 · number 1.15 v (line 1.15)
-     wide tile:   rows 'name' / 'value flags'          → 0.8 + 2.6 + 0.2 + 1.15 v ≤ H
-                  v = clamp(1.3em, min((H − 3.6em) / 1.15, 10cqi), 3.6em); needs H ≥ 5.1em
-                  width: "118/74 mmHg" ≈ 5.1 v ≤ 0.51 W, the badge ≈ 5.4em beside it
-     narrow tile (< 20em): rows 'name' / 'flags' / 'value' → + 0.2 + 1.3 (badge row)
-                  v = clamp(1.3em, min((H − 5.1em) / 1.15, 14cqi), 3.6em); needs H ≥ 6.6em
-     shorter: one row, name (2 lines) | number at 1.2em, flags hidden → 0.2 + 2.6 = 2.8em
-   The longest word ("PROMIENIOWANIA", 14 ch ≈ 9em) fits a tile of 10em; only a narrower tile breaks it. */
-.crew-tile {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-rows: auto minmax(0, 1fr);
-  grid-template-areas: 'name name' 'value flags';
+.crew-person-organs > li { display: grid; min-width: 0; min-height: 0; }
+.crew-organ-row {
+  display: flex;
   align-items: center;
-  gap: 0.2em 0.4em;
-  width: 100%;
-  height: 100%;
-  padding: 0.4em 0.6em;
+  gap: 10px;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 10px;
+  overflow: hidden;
   color: var(--fg);
-  text-align: left;
   background: var(--panel);
   border: 1px solid var(--crew-line);
+  border-left: 4px solid var(--crew-line);
   font: inherit;
+  text-align: left;
   cursor: pointer;
-  overflow: hidden;
+  touch-action: manipulation;
 }
-.crew-tile-head { display: contents; }
-.crew-tile-name {
-  grid-area: name;
-  align-self: start;
-  min-width: 0;
-  color: var(--dim);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  line-height: 1.3;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: normal;
-}
-.crew-tile-flags { grid-area: flags; display: flex; align-items: center; justify-content: flex-end; gap: 0.3em; min-width: 0; line-height: 1.3; }
-.crew-tile-flags .badge { font-size: 0.8em; padding: 0 0.3em; }
-.crew-tile-value {
-  grid-area: value;
-  align-self: center;
-  min-width: 0;
-  white-space: nowrap;
-  font-size: clamp(1.3em, min(calc((100cqh - 3.6em) / 1.15), 10cqi), 3.6em);
-  font-weight: 700;
-  line-height: 1.15;
-}
-.crew-tile-value .crew-unit { font-size: 0.5em; }
-.crew-tile[data-status='ok'] { border-color: var(--crew-ok-line); }
-.crew-tile[data-status='caution'] { border-color: var(--caution); }
-.crew-tile[data-status='alert'] { border-color: var(--alert); }
-@container tile (max-width: 20em) {
-  .crew-tile { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); grid-template-areas: 'name' 'flags' 'value'; }
-  .crew-tile-flags { justify-content: flex-start; }
-  .crew-tile-value { font-size: clamp(1.3em, min(calc((100cqh - 5.1em) / 1.15), 14cqi), 3.6em); }
-}
-@container tile (max-width: 20em) and (max-height: 6.6em) {
-  .crew-tile { grid-template-rows: auto minmax(0, 1fr); grid-template-areas: 'name' 'value'; }
-  .crew-tile-flags { display: none; }
-  .crew-tile-value { font-size: 1.3em; }
-}
-@container tile (max-height: 5.1em) {
-  .crew-tile { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr); grid-template-areas: 'name value'; padding-block: 0.1em; }
-  .crew-tile-name { align-self: center; }
-  .crew-tile-flags { display: none; }
-  .crew-tile-value { font-size: 1.2em; }
-}
+.crew-organ-row:hover, .crew-organ-row:focus-visible { background: var(--raised); border-color: var(--accent); outline: none; }
+.crew-organ-row[data-status='ok'] { border-left-color: var(--ok); }
+.crew-organ-row[data-status='caution'] { border-color: var(--caution); border-left-color: var(--caution); }
+.crew-organ-row[data-status='alert'] { border-color: var(--alert); border-left-color: var(--alert); background: color-mix(in srgb, var(--alert) 10%, var(--panel)); }
+.crew-organ-tag { flex: 0 0 8.4ch; font-size: 15px; }
+.crew-organ-text { display: grid; min-width: 0; }
+.crew-organ-word, .crew-organ-line { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.crew-organ-word { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.crew-organ-line { color: var(--dim); font-size: 14px; }
 
-.crew-organ-tile:hover, .crew-tile:hover, .crew-organ-tile:focus-visible, .crew-tile:focus-visible {
-  background: var(--raised);
-  border-color: var(--accent);
-  outline: none;
+/* ── popups (inside DataDialog) ───────────────────────────────────────── */
+.crew-dlg { display: flex; flex-direction: column; gap: 12px; min-width: 0; min-height: 0; font-size: 16px; }
+.crew-dlg .btn { min-height: 56px; font-size: 16px; }
+.crew-detail-now { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.crew-detail-value { font-size: clamp(36px, 6vh, 60px); font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.crew-detail-now > .crew-unit { margin-left: 0; font-size: 18px; }
+.crew-live-text { flex: 1 1 auto; min-width: 0; overflow: hidden; color: var(--dim); font-size: 14px; text-align: right; text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+.crew-windows { display: flex; flex-wrap: wrap; gap: 8px; }
+.crew-detail-legend { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 0; }
+.crew-legend-swatch { display: inline-block; width: 1.4em; height: 0; margin-right: 0.3em; vertical-align: middle; border-top: 3px solid var(--fg); }
+.crew-legend-2 .crew-legend-swatch { border-top-style: dashed; }
+.crew-dlg > .crew-chart { height: clamp(120px, 24vh, 340px); flex: 0 0 auto; }
+.crew-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 0.7fr)) minmax(0, 1.6fr); gap: 8px; margin: 0; }
+.crew-stats > div { display: grid; gap: 2px; min-width: 0; padding: 6px 10px; background: var(--bg); border: 1px solid var(--crew-line); }
+.crew-stats dt { color: var(--dim); font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+.crew-stats dd { margin: 0; overflow: hidden; font-size: 20px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.crew-detail-links { display: flex; gap: 10px; }
+
+.crew-organ-note {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: 17px;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
-.crew-organ-tile[aria-pressed='true'], .crew-tile[aria-pressed='true'] {
-  border-color: var(--accent-bright);
-  box-shadow: inset 0 0 0 2px var(--accent-bright);
+.crew-note-label { color: var(--accent-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.crew-checks { display: grid; grid-auto-rows: 64px; align-content: start; gap: 6px; height: clamp(150px, 38vh, 470px); margin: 0; padding: 0; overflow: hidden; list-style: none; }
+.crew-check {
+  display: grid;
+  grid-template-columns: 8.4ch minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  font-size: 16px;
+  column-gap: 12px;
+  align-content: center;
+  min-width: 0;
+  padding: 0 10px;
+  background: var(--bg);
+  border: 1px solid var(--crew-line);
+  border-left: 4px solid var(--crew-line);
 }
+.crew-check[data-status='caution'] { border-left-color: var(--caution); }
+.crew-check[data-status='alert'] { border-left-color: var(--alert); }
+.crew-check-tag { grid-row: 1 / span 2; align-self: center; }
+.crew-check-label, .crew-check-message { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.crew-check-label { font-size: 17px; font-weight: 700; }
+.crew-check-value { grid-row: 1 / span 2; grid-column: 3; align-self: center; font-size: 22px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.crew-check-value .crew-unit { font-size: 14px; }
+.crew-check-message { grid-column: 2; color: var(--dim); font-size: 14px; }
+.crew-detail-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.crew-detail-related { display: flex; gap: 10px; margin-left: auto; }
+
+/* organ without any sensor / test: a clear call to connect one */
+.crew-nodata { display: grid; gap: 8px; padding: 14px 16px; border: 2px dashed var(--info); background: var(--bg); }
+.crew-nodata p { margin: 0; font-size: 17px; line-height: 1.35; }
+.crew-nodata-title { color: var(--info); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.crew-nodata-text strong { color: var(--fg); }
+.crew-nodata-note { color: var(--dim); }
 
 /* ── chart: box (frame) > plot (inset, so the end dot stays inside) ───── */
 .crew-chart { display: grid; grid-template-rows: minmax(0, 1fr); min-height: 0; min-width: 0; }
-.crew-chart-big { grid-template-rows: minmax(0, 1fr) auto; gap: 0.2em; }
+.crew-chart-big { grid-template-rows: minmax(0, 1fr) auto; gap: 4px; }
 .crew-chart-box { position: relative; display: block; min-height: 0; overflow: hidden; background: var(--bg); border: 1px solid var(--crew-line); }
 .crew-chart-plot { position: absolute; inset: 7px; display: block; }
 .crew-chart-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -240,84 +237,18 @@
 .crew-chart-line { fill: none; stroke: var(--tone); stroke-width: 3; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
 .crew-chart-line-2 { stroke-dasharray: 8 5; }
 .crew-chart-dot { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; background: var(--tone); animation: crew-blink 1.2s steps(2, start) infinite; }
-.crew-chart-axis { position: absolute; left: 2px; padding: 0 0.2em; color: var(--dim); line-height: 1.2; background: color-mix(in srgb, var(--bg) 75%, transparent); }
+.crew-chart-axis { position: absolute; left: 2px; padding: 0 4px; color: var(--dim); font-size: 14px; line-height: 1.2; background: color-mix(in srgb, var(--bg) 75%, transparent); }
 .crew-chart-axis-top { top: 2px; }
 .crew-chart-axis-bottom { bottom: 2px; }
-.crew-chart-x { display: flex; justify-content: space-between; gap: 0.5em; color: var(--dim); line-height: 1.2; }
-
-/* ── details: one size container, priorities by its height (em = f) ─────
-   head 4.5 · windows 3.2 (+3.4 when they wrap) · chart ≥ 4 · stats 2.8 · context 3.9 · link 3.2 ·
-   gaps 6 × 0.5 · padding 1  →  ≈ 26em with everything; parts go in this order: context (< 27em),
-   legend + link (< 23.5em), stats + source (< 19em), window buttons (< 14em). */
-.crew-detail {
-  container: detail / size;
-  min-height: 0;
-  min-width: 0;
-  background: var(--panel);
-  border: 1px solid var(--crew-line);
-}
-.crew-detail-body { display: flex; flex-direction: column; gap: 0.5em; height: 100%; padding: 0.5em; overflow: hidden; }
-.crew-detail-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.2em 0.6em; min-width: 0; flex: 0 0 auto; }
-.crew-detail-title { display: grid; gap: 0.1em; min-width: 0; }
-.crew-detail-title h3 { color: var(--fg); font-size: 1.4em; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.crew-detail-source { color: var(--dim); line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.crew-detail-source .badge { font-size: 0.8em; }
-.crew-detail-now { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 0 0.4em; flex: 0 0 auto; line-height: 1.2; }
-.crew-detail-value { font-size: clamp(1.6em, 7cqi, 2.8em); font-weight: 700; line-height: 1.2; white-space: nowrap; }
-.crew-detail-legend { display: flex; flex-wrap: wrap; gap: 0.1em 1em; margin: 0; line-height: 1.3; flex: 0 0 auto; }
-.crew-legend-swatch { display: inline-block; width: 1.4em; height: 0; margin-right: 0.3em; vertical-align: middle; border-top: 3px solid var(--fg); }
-.crew-legend-2 .crew-legend-swatch { border-top-style: dashed; }
-.crew-windows { display: flex; flex-wrap: wrap; gap: 0.3em; flex: 0 0 auto; }
-.crew-detail-body > .crew-chart-big { flex: 1 1 0; min-height: 4em; }
-.crew-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(6em, 1fr)); gap: 0.2em 0.8em; margin: 0; flex: 0 0 auto; }
-.crew-stats div { display: grid; gap: 0.05em; min-width: 0; }
-.crew-stats dt { color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.3; }
-.crew-stats dd { margin: 0; font-weight: 700; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.crew-detail-context { flex: 0 0 auto; margin: 0; color: var(--dim); line-height: 1.3; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; max-height: 3.9em; overflow: hidden; }
-.crew-detail-links, .crew-detail-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3em 0.6em; margin: 0; flex: 0 0 auto; }
-.crew-pager { display: inline-flex; align-items: center; gap: 0.4em; }
-.crew-pager .btn { min-width: 3.2em; }
-
-.crew-organ-note { flex: 0 0 auto; margin: 0; line-height: 1.3; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; max-height: 2.6em; overflow: hidden; }
-.crew-organ-why { color: var(--dim); }
-.crew-checks { flex: 1 1 0; display: grid; grid-auto-rows: max-content; align-content: start; gap: 0.3em; min-height: 0; margin: 0; padding: 0; list-style: none; overflow: hidden; }
-/* fixed row height (two single lines), so useRowsThatFit can page exactly */
-.crew-check {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  grid-template-rows: 1.3em 1.3em;
-  gap: 0.1em 0.6em;
-  align-items: baseline;
-  padding: 0.2em 0.4em;
-  line-height: 1.3;
-  border-left: 4px solid var(--crew-line);
-  background: var(--bg);
-}
-.crew-check[data-status='ok'] { border-left-color: var(--ok); }
-.crew-check[data-status='caution'] { border-left-color: var(--caution); }
-.crew-check[data-status='alert'] { border-left-color: var(--alert); }
-.crew-check-label, .crew-check-message { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.crew-check-label { font-weight: 700; }
-.crew-check-value { font-weight: 700; white-space: nowrap; }
-.crew-check-message { grid-column: 1 / -1; color: var(--dim); }
-.crew-empty { margin: 0; color: var(--dim); }
-/* organ without any sensor / test: a clear call to connect one (not a grey line) */
-.crew-nodata { display: grid; gap: 0.3em; padding: 0.5em 0.6em; border: 2px dashed var(--info); background: var(--bg); }
-.crew-nodata p { margin: 0; line-height: 1.3; }
-.crew-nodata-title { color: var(--info); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
-.crew-nodata-text strong { color: var(--fg); }
-.crew-nodata-note { color: var(--dim); }
-
-@container detail (max-height: 27em) { .crew-detail-context { display: none; } }
-@container detail (max-height: 23.5em) { .crew-detail-legend, .crew-detail-links, .crew-organ-why { display: none; } }
-@container detail (max-height: 19em) { .crew-stats, .crew-detail-source, .crew-organ-note { display: none; } }
-@container detail (max-height: 14em) {
-  .crew-windows { display: none; }
-  .crew-detail-value { font-size: 1.4em; }
-}
-@container detail (max-width: 24em) { .crew-detail-head { flex-wrap: wrap; } .crew-detail-now { justify-content: flex-start; } }
+.crew-chart-x { display: flex; justify-content: space-between; gap: 8px; color: var(--dim); font-size: 14px; line-height: 1.2; }
 
 @keyframes crew-blink { to { opacity: 0.25; } }
 @media (prefers-reduced-motion: reduce) {
   .crew-live-dot, .crew-chart-dot { animation: none; }
+}
+
+/* short screens (768–800 px): long facts on one line, so the organ rows keep ≥ 48 px */
+@media (max-height: 820px) {
+  .crew-fact dd.crew-clamp { -webkit-line-clamp: 1; line-clamp: 1; }
+  .crew-back, .crew-person-top .btn { min-height: 64px; }
 }

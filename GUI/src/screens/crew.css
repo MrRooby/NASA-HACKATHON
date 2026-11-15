@@ -1,259 +1,158 @@
-/* Styles of CrewScreen.jsx (theme variables only).
+/* Styles of CrewScreen.jsx (theme variables only). One screen high, no scrolling: the overview is a
+   list of big rows (ROSTER_ROWS at once, ▲ / ▼ on the right); each row = photo, name, role, one status, one line. */
+.screen[data-screen='crew'] { display: grid; grid-template-rows: minmax(0, 1fr); overflow: hidden; }
 
-   Fit, not scroll. The CREW screen is exactly one window high: the top bar and the footer keep
-   their own height (whatever they contain, however they wrap) and count as margins; the screen gets
-   the rest. Every selector needs main[data-screen='crew'] or a .crew-* class, so no other screen is
-   affected. Inside, rows and tiles are size containers: they scale their text to the box they got and
-   drop low-priority detail when it is small, so one markup works on phones, tablets and desktops. */
-.shell:has(> main.screen[data-screen='crew']) { height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; }
-.shell:has(> main.screen[data-screen='crew']) > :not(main) { flex: 0 0 auto; }
-main.screen[data-screen='crew'] {
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-  padding: clamp(6px, 1.2vmin, 16px) clamp(8px, 1.5vmin, 16px);
-}
-/* f: the screen's base size. The screens are used on a tablet, in space gloves, from a distance:
-   no text below 20 px (f ≥ 20 px, nothing smaller than 1em) and every target at least 3.2em ≈ 64 px.
-   f = 20 px on phones and tablets, ~21.4 px on a 1080 px side, at most 28 px. */
-.crew-screen {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 0;
-  min-height: 0;
-  font-size: clamp(20px, calc(0.6rem + 1.2vmin), 28px);
-}
-/* Colour roles on our screens (DESIGN.md §1, whatever the theme):
-     status   --ok / --caution / --alert, and --crew-line for "no data": the only colours that mean a state;
-              an OK frame is quiet (--crew-ok-line), caution / alert frames are full colour
-     structure --crew-line (frames, grids, axes) and --fg / --dim text: neutral, never the theme accent
-     action   the theme accent: buttons, hover, the selected tile, the paging blocks */
 .crew-screen {
   --crew-line: color-mix(in srgb, var(--dim) 42%, var(--bg));
-  --crew-ok-line: color-mix(in srgb, var(--ok) 55%, var(--bg));
+  --gap: clamp(8px, 1vmin, 14px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  font-size: clamp(16px, min(1.2vw, 2.1vh), 20px);
 }
-.crew-screen .panel { --tone: var(--fg); border-color: var(--crew-line); }
-.crew-screen .panel-rule { border-top-color: var(--crew-line); }
-.crew-screen :is(.btn, .btn-sm, .label, .panel-meta, .panel-title, .badge, .stag) { font-size: 1em; }
-/* Buttons = big blocks: bold uppercase word, quiet frame,
-   the active one filled with the accent and a darker strip at the bottom; no [ brackets ]. */
+.crew-glyph { display: inline-block; text-align: center; }
+
+/* Buttons = big blocks: bold uppercase word, quiet frame, the active one filled with the accent. */
 .crew-screen .btn {
-  --btn: var(--accent);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.45em;
-  min-height: 3.2em;
+  min-height: 56px;
   padding: 0 0.9em;
   color: var(--fg);
   background: var(--panel);
   border: 1px solid var(--accent-dim);
-  border-bottom-width: 0.25em;
+  border-bottom-width: 4px;
+  font-size: 1em;
   font-weight: 700;
   line-height: 1.15;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
+  touch-action: manipulation;
 }
 .crew-screen .btn::before, .crew-screen .btn::after { content: none; }
-.crew-screen .btn .crew-glyph { font-size: 1.35em; letter-spacing: 0; }
-.crew-screen .btn:hover:not(:disabled), .crew-screen .btn:focus-visible { color: var(--fg); background: var(--raised); border-color: var(--accent-bright); outline: none; }
+.crew-screen .btn .crew-glyph, .crew-screen .btn .nf-icon { font-size: 1.3em; letter-spacing: 0; }
+.crew-screen .btn:hover:not(:disabled), .crew-screen .btn:focus-visible { background: var(--raised); border-color: var(--accent-bright); outline: none; }
 .crew-screen .btn.is-active, .crew-screen .btn[aria-pressed='true'], .crew-screen .btn:active:not(:disabled) {
   color: var(--bg);
   background: var(--accent);
   border-color: var(--accent);
-  border-bottom-color: color-mix(in srgb, var(--accent) 55%, var(--bg));
 }
-.crew-screen .btn:disabled { color: var(--dim); background: var(--panel); border-color: var(--crew-line); cursor: default; }
-.crew-glyph { display: inline-block; text-align: center; }
+.crew-screen .btn:disabled { color: var(--dim); border-color: var(--crew-line); cursor: default; }
 
-/* roster panel: always the whole screen, four equal rows */
-.crew-screen > .panel { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
-.crew-screen > .panel > .panel-body { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
-.crew-roster-wrap { flex: 1 1 auto; display: flex; gap: 8px; min-height: 0; }
+/* "YOU": a filled accent label */
+.crew-you {
+  padding: 2px 8px;
+  color: var(--bg);
+  background: var(--accent);
+  font-size: clamp(14px, 0.85em, 18px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── head ─────────────────────────────────────────────────────────────── */
+.crew-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  min-height: 48px;
+  border-bottom: 1px solid var(--border);
+}
+.crew-head-icon { font-size: clamp(22px, 1.4em, 30px); color: var(--accent); }
+.crew-head-title { margin: 0; color: var(--accent-bright); font-size: clamp(18px, 1.25em, 26px); letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+.crew-count { display: inline-flex; align-items: baseline; gap: 6px; font-weight: 700; font-size: 1.1em; white-space: nowrap; }
+.crew-head-meta { flex: 1 1 auto; min-width: 0; overflow: hidden; color: var(--dim); font-size: 14px; text-align: right; text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+
+/* ── roster: ROSTER_ROWS big rows | ▲ / ▼ blocks ─────────────────────── */
+.crew-roster-wrap { flex: 1 1 auto; display: flex; gap: var(--gap); min-height: 0; }
 .crew-roster {
   flex: 1 1 auto;
-  min-width: 0;
   display: grid;
-  grid-template-rows: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(var(--crew-rows, 5), minmax(0, 1fr));
+  gap: var(--gap);
+  min-width: 0;
   min-height: 0;
   margin: 0;
   padding: 0;
   list-style: none;
 }
+.crew-row-cell { display: grid; grid-template-rows: minmax(0, 1fr); min-width: 0; min-height: 64px; }
+.crew-row {
+  position: relative;
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  color: var(--fg);
+  background: var(--panel);
+  border: 3px solid var(--crew-line);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.crew-row:hover, .crew-row:focus-visible { background: var(--raised); outline: none; }
+.crew-row:focus-visible { border-color: var(--accent); }
+/* colour frame only when not OK */
+.crew-row[data-status='caution'] { border-color: var(--caution); }
+.crew-row[data-status='alert'] { border-color: var(--alert); background: color-mix(in srgb, var(--alert) 10%, var(--panel)); }
+/* the layout lives in an absolutely placed span: a <button> does not give its own grid a definite height */
+.crew-row-inner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1.2fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 28px);
+  padding-right: 16px;
+}
+.crew-row-photo { position: relative; height: 100%; aspect-ratio: 6 / 7; overflow: hidden; background: var(--bg); border-right: 1px solid var(--crew-line); }
+.crew-row-photo .crew-portrait { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.crew-row-photo .crew-portrait > img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; user-select: none; -webkit-user-drag: none; }
+.crew-row-photo .crew-portrait > .avatar { width: 70%; height: auto; border: 0; }
+.crew-row-id, .crew-row-health { display: grid; gap: 4px; min-width: 0; }
+.crew-row-name { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.crew-row-name-text { min-width: 0; overflow: hidden; font-size: clamp(18px, 1.3em, 28px); font-weight: 700; text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+.crew-row-you .crew-row-name-text { color: var(--accent-bright); }
+.crew-row-role { overflow: hidden; color: var(--dim); font-size: clamp(14px, 0.9em, 18px); text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+.crew-row-status { font-size: clamp(18px, 1.3em, 28px); }
+.crew-row-open { color: var(--accent); font-size: clamp(32px, 2.4em, 52px); line-height: 1; }
+.crew-pt-line { min-width: 0; overflow: hidden; font-size: clamp(14px, 0.9em, 18px); text-overflow: ellipsis; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+.crew-pt-line-dim { color: var(--dim); }
+.crew-pt-line-caution { color: var(--caution); font-weight: 700; }
+.crew-pt-line-alert { color: var(--alert); font-weight: 700; }
 
-/* more than four crew: big accent blocks on the right, up (top) and down (bottom), only when there is
-   a record in that direction; otherwise the block stays, greyed out (disabled) */
-.crew-roster-pager { flex: 0 0 clamp(3em, 8vmin, 6em); display: grid; grid-template-rows: 1fr 1fr; gap: 8px; }
+.crew-roster-pager { flex: 0 0 clamp(72px, 7vw, 110px); display: grid; grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr); gap: var(--gap); }
 .crew-roster-step {
   display: grid;
   place-items: center;
-  min-height: 0;
+  min-height: 64px;
   padding: 0;
   color: var(--bg);
   background: var(--accent);
   border: 1px solid var(--accent);
   font: inherit;
-  font-size: clamp(1.6em, 5vmin, 3.5em);
+  font-size: clamp(32px, 5vmin, 56px);
   cursor: pointer;
+  touch-action: manipulation;
 }
 .crew-roster-step:hover:not(:disabled), .crew-roster-step:focus-visible { background: var(--accent-bright); border-color: var(--accent-bright); outline: none; }
 /* nothing further that way: stays in place, greyed out */
 .crew-roster-step:disabled { color: var(--dim); background: var(--raised); border-color: var(--crew-line); cursor: default; }
+.crew-roster-pos { color: var(--dim); font-size: 16px; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
 
-/* ── one roster row ──────────────────────────────────────────────────────────────────────────────
-   The row (li) is a size container (its em = f). The grid inside (.crew-member-row) has fixed line
-   boxes, in its own em:
-     P  padding                 0.4 + 0.4                        = 0.8
-     N  name                    1.25 em × line 1.3               = 1.625
-     L  role / where / status   1 em × line 1.3                  = 1.3 each
-     C  organ chips, 5 × 2      2 × 2 + 0.3 gap                  = 4.3
-     gaps                       0.2 inside a block, 0.5 between the id and health blocks
-   Stacked (default): avatar | id block over health block
-     id = N + .2 + L + .2 + L = 4.625     health = L + .2 + C = 5.8
-     full = P + id + .5 + health = 11.725 → −1.5 without "where" = 10.225 → −1.5 without role = 8.725
-          → −1.5 without the status line = 7.225 (name + chips) → one line, name | status = 2.425
-   Portraits are 6:7 (width : height), the crew photo format: height h → width 6/7 h.
-   Side by side: portrait 5 × 5.83 | id | chips 42.5 (5 × 8.2 + 4 × 0.3; a chip = mark + space + 10 ch + padding)
-     height P + max(5.83, 4.625, 5.8) = 6.63;  width ≥ 1.2 + 5 + 1 + 16 (id) + 1 + 42.5 = 66.7 → 67
-     with the two buttons (3.2 + 0.2 + 3.2 = 6.6 high; "DANE Z CZUJNIKÓW" = 16 ch × (0.6 + 0.08 letter
-     spacing) + 1.8 padding + border ≈ 12.7 → column 13.5 + gap 1): height 7.4, width 81.4 → 81.5
-   Text size: the row grows its own em while the chosen layout still fits both ways:
-     em = clamp(f, min(height / layout height, width / layout width), 1.6 f)
-   Below f the tiers drop lines instead (the queries below are in f, so they match exactly). */
-.crew-member {
-  container: crew-row / size;
-  min-height: 0;
-  border: 1px solid transparent;
-  border-bottom-color: var(--crew-line);
-  border-left: 0.3em solid var(--crew-line);
-  cursor: pointer;
-}
-.crew-member:last-child { border-bottom-color: transparent; }
-/* left edge = the person's overall status */
-.crew-member[data-status='ok'] { border-left-color: var(--crew-ok-line); }
-.crew-member[data-status='caution'] { border-left-color: var(--caution); }
-.crew-member[data-status='alert'] { border-left-color: var(--alert); }
-.crew-member:hover, .crew-member:focus-within {
-  background: var(--raised);
-  border-top-color: var(--accent);
-  border-right-color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-.crew-member-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-areas: 'avatar id' 'avatar health';
-  column-gap: 1em;
-  row-gap: 0.5em;
-  align-content: center;
-  align-items: center;
-  height: 100%;
-  padding: 0.4em 0.6em;
-  overflow: hidden;
-  font-size: clamp(1em, min(calc(100cqh / 11.75), calc(100cqi / 30)), 1.6em);
-}
-.crew-portrait { display: block; flex: 0 0 auto; aspect-ratio: 6 / 7; overflow: hidden; background: var(--bg); border: 1px solid var(--crew-line); }
-.crew-portrait > .avatar, .crew-portrait > img { display: block; width: 100%; height: 100%; border: 0; object-fit: cover; }
-.crew-member-row > .crew-portrait { grid-area: avatar; height: 4.6em; width: calc(4.6em * 6 / 7); align-self: center; }
-.crew-member-id { grid-area: id; }
-.crew-member-health { grid-area: health; }
-.crew-member-actions { grid-area: actions; display: none; gap: 0.2em; justify-items: stretch; }
-.crew-member-actions .btn { min-height: 3.2em; }
-
-.crew-member-id, .crew-member-health { display: grid; gap: 0.2em; min-width: 0; }
-.crew-member-name { display: flex; align-items: baseline; gap: 0.5em; min-width: 0; height: 1.3em; color: var(--fg); font-size: 1.25em; line-height: 1.3; }
-.crew-member-name .badge { flex: 0 0 auto; font-size: 0.8em; }
-.crew-member-open {
-  min-width: 0;
-  padding: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: inherit;
-  background: none;
-  border: 0;
-  font: inherit;
-  line-height: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-.crew-member:hover .crew-member-open, .crew-member-open:focus-visible { text-decoration: underline; outline: none; }
-.crew-member-role, .crew-member-where, .crew-member-status { margin: 0; min-width: 0; height: 1.3em; line-height: 1.3; }
-.crew-member-role, .crew-member-where { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.crew-member-role { text-transform: uppercase; letter-spacing: 0.06em; }
-.crew-member-role .label, .crew-member-where .label { font-size: 1em; }
-.crew-member-where { color: var(--fg); }
-.crew-member-status { display: flex; align-items: baseline; gap: 0.5em; }
-.crew-member-status > .stag { flex: 0 0 auto; }
-.crew-member-message { flex: 1 1 auto; min-width: 0; color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.crew-member[data-status='no_data'] .crew-member-message { color: var(--dim); }
-
-/* ten organs: status glyph (shape) + colour + one word; full status word = accessible name */
-.crew-organs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.3em; margin: 0; padding: 0; list-style: none; }
-.crew-organ {
-  display: flex;
-  align-items: center;
-  gap: 0.35em;
-  min-width: 0;
-  height: 2em;
-  padding: 0 0.4em;
-  color: var(--dim);
-  border: 1px solid var(--crew-line);
-  font-weight: 700;
-  line-height: 1.3;
-}
-.crew-organ-glyph { flex: 0 0 auto; font-size: 1.15em; }
-.crew-organ-word { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.crew-organ-ok { color: var(--ok); border-color: var(--crew-ok-line); }
-.crew-organ-caution { color: var(--caution); border-color: var(--caution); }
-.crew-organ-alert { color: var(--alert); border-color: var(--alert); }
-
-.crew-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.2em 1.2em; flex: 0 0 auto; margin: 0.5em 0 0; color: var(--dim); }
-.crew-legend-item { font-weight: 700; }
-.crew-legend-hint { color: var(--dim); }
-@media (max-height: 640px) { .crew-legend { display: none; } }
-
-/* stacked tiers (row em = f here, since the row is below 11.75 f): 11.75 / 10.25 / 8.75 / 7.25 */
-@container crew-row (max-height: 11.75em) { .crew-member-where { display: none; } }
-@container crew-row (max-height: 10.25em) { .crew-member-role { display: none; } }
-@container crew-row (max-height: 8.75em) { .crew-member-status { display: none; } }
-@container crew-row (max-height: 7.25em) {
-  .crew-member-row { grid-template-columns: 1.4em minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: 'avatar id health'; }
-  .crew-member-row > .crew-portrait { height: 1.625em; width: 1.4em; }
-  .crew-member-status { display: flex; }
-  .crew-organs { display: none; }
-}
-
-/* side by side: avatar | id | chips (| buttons) */
-@container crew-row (min-width: 67em) and (min-height: 6.65em) {
-  .crew-member-row {
-    grid-template-columns: 5em minmax(16em, 1fr) 42.5em;
-    grid-template-areas: 'avatar id health';
-    font-size: clamp(1em, min(calc(100cqh / 6.65), calc(100cqi / 67)), 1.6em);
-  }
-  .crew-member-row > .crew-portrait { height: 5.83em; width: 5em; }
-  .crew-member-where, .crew-member-role { display: block; }
-  .crew-member-status { display: flex; }
-  .crew-organs { display: grid; }
-}
-@container crew-row (min-width: 81.5em) and (min-height: 7.45em) {
-  .crew-member-row {
-    grid-template-columns: 5em minmax(16em, 1fr) 42.5em 13.5em;
-    grid-template-areas: 'avatar id health actions';
-    font-size: clamp(1em, min(calc(100cqh / 7.45), calc(100cqi / 81.5)), 1.6em);
-  }
-  .crew-member-actions { display: grid; }
-}
-
-/* Loading veil (src/crew/CrewLoading.jsx), roster and person view: everything below greyed out,
-   one big word over it. */
-.crew-screen, .crew-person { position: relative; }
+/* ── loading veil: content greyed out, one big word on top ─────────────── */
 :is(.crew-screen, .crew-person)[data-loading='true'] > :not(.crew-loading) { filter: grayscale(1) brightness(0.55); pointer-events: none; }
 .crew-loading {
   position: absolute;
@@ -268,7 +167,7 @@ main.screen[data-screen='crew'] {
   color: var(--fg);
   background: var(--panel);
   border: 1px solid var(--crew-line);
-  font-size: clamp(2.2em, 9vmin, 6em);
+  font-size: clamp(32px, 8vmin, 72px);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
