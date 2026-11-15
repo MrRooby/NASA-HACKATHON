@@ -3,7 +3,6 @@
 
 import { DEFAULT_ROOM_ID, EXTERIOR_ZONES, ROOMS, locateZone } from './layout.js';
 import { isGuiSimulated, realReadingsFor, simulatedRoomReadings } from './simulatedRooms.js';
-import { scenarioRoomReadings } from '../data/scenario.js';
 
 /** Higher = worse. `unrated` (no threshold) never raises a status. */
 export const STATUS_RANK = { ok: 0, unrated: 0, no_data: 1, caution: 2, alert: 3 };
@@ -19,6 +18,11 @@ export function worstStatus(statuses) {
 
 const zoneStatus = zone => (zone ? zone.status || 'no_data' : 'no_data');
 const zoneNowStatus = zone => (zone ? zone.now_status || zone.status || 'no_data' : 'no_data');
+/** [status] of a database zone that has rated data, [] otherwise (no_data must not grey out a room). */
+const ratedZone = (zone, pick) => {
+  const status = zone ? pick(zone) : 'no_data';
+  return status === 'no_data' ? [] : [status];
+};
 
 /**
  * deriveHabitat(data) -> {
@@ -37,17 +41,28 @@ export function deriveHabitat(data) {
 
   const rooms = ROOMS.map(def => {
     if (def.simulated) {
+      // A database zone with the room's id (e.g. 'reactor') adds its own readings, crew and events.
+      const dbZone = byCode[def.id] || null;
       const readings = data
-        ? [...scenarioRoomReadings(def.id, simulatedRoomReadings(def.id, sol, { tsUtc }), sol), ...realReadingsFor(def.id, byCode.surface)]
+        ? [
+          ...(dbZone?.readings || []),
+          // a measured radiation channel replaces the simulated one
+          ...simulatedRoomReadings(def.id, sol, { tsUtc })
+            .filter(sim => !(dbZone?.readings || []).some(real => real.category === sim.category && sim.category === 'radiation')),
+          ...realReadingsFor(def.id, byCode.surface),
+        ]
         : [];
-      // The room colour comes from the simulated readings only: real surface channels
-      // shown here are already counted in the exterior status.
+      // The room colour comes from the simulated readings, the room's own database zone and the
+      // sol's events there: real surface channels shown here are already counted in the exterior status.
       const own = readings.filter(isGuiSimulated);
+      const eventStatus = (data?.events || [])
+        .filter(event => event.zone === def.id && (event.sol == null || event.sol === sol))
+        .map(event => severityStatus(event.severity));
       return {
-        id: def.id, def, zone: null, zoneLabel: null, simulated: true,
-        status: data ? worstStatus(own.map(reading => reading.worst_status)) : 'no_data',
-        nowStatus: data ? worstStatus(own.map(reading => reading.status)) : 'no_data',
-        occupants: byCode[def.id]?.occupants || [], readings, subZones: [],
+        id: def.id, def, zone: dbZone ? dbZone.code : null, zoneLabel: dbZone?.label ?? null, simulated: true,
+        status: data ? worstStatus([...own.map(reading => reading.worst_status), ...ratedZone(dbZone, zoneStatus), ...eventStatus]) : 'no_data',
+        nowStatus: data ? worstStatus([...own.map(reading => reading.status), ...ratedZone(dbZone, zoneNowStatus)]) : 'no_data',
+        occupants: dbZone?.occupants || [], readings, subZones: [],
       };
     }
     const zone = byCode[def.zone] || null;

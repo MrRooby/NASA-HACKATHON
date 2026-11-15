@@ -4,8 +4,6 @@
 // origin, so every URL is relative ('/api/...'). For other setups set VITE_API_BASE
 // at build time (e.g. VITE_API_BASE=http://127.0.0.1:8000).
 
-import { scenarioHabitat, scenarioOverview, scenarioReport } from './data/scenario.js';
-
 export const API_BASE = String(import.meta.env.VITE_API_BASE ?? '').replace(/\/+$/, '');
 
 export const DEFAULT_TIMEOUT_MS = 10000;
@@ -101,7 +99,7 @@ export const getStatus = options => request('/api/status', options);
 export const getSubjects = options => request('/api/subjects', options);
 
 /** GET /api/organs -> crew overview: [{ subject, overall_status, top_message, organs: {brain: 'ok', ...} }] */
-export const getOverview = options => request('/api/organs', { timeoutMs: OVERVIEW_TIMEOUT_MS, ...options }).then(scenarioOverview);
+export const getOverview = options => request('/api/organs', { timeoutMs: OVERVIEW_TIMEOUT_MS, ...options });
 
 /**
  * GET /api/organs/{code}[?sol=N | ?day=N] -> one person's 10 organ cards.
@@ -112,7 +110,7 @@ export function getOrganReport(code, { sol, day } = {}, options) {
   if (sol != null && sol !== '') params.set('sol', String(sol));
   else if (day != null && day !== '') params.set('day', String(day));
   const query = params.toString();
-  return request(`/api/organs/${encodeURIComponent(code)}${query ? `?${query}` : ''}`, options).then(scenarioReport);
+  return request(`/api/organs/${encodeURIComponent(code)}${query ? `?${query}` : ''}`, options);
 }
 
 /**
@@ -123,7 +121,7 @@ export function getHabitat({ sol } = {}, options) {
   const params = new URLSearchParams();
   if (sol != null && sol !== '') params.set('sol', String(sol));
   const query = params.toString();
-  return request(`/api/habitat${query ? `?${query}` : ''}`, options).then(scenarioHabitat);
+  return request(`/api/habitat${query ? `?${query}` : ''}`, options);
 }
 
 export function getCalendar({ start, end } = {}, options) {
