@@ -3,6 +3,7 @@
 
 import { DEFAULT_ROOM_ID, EXTERIOR_ZONES, ROOMS, locateZone } from './layout.js';
 import { isGuiSimulated, realReadingsFor, simulatedRoomReadings } from './simulatedRooms.js';
+import { scenarioRoomReadings } from '../data/scenario.js';
 
 /** Higher = worse. `unrated` (no threshold) never raises a status. */
 export const STATUS_RANK = { ok: 0, unrated: 0, no_data: 1, caution: 2, alert: 3 };
@@ -37,7 +38,7 @@ export function deriveHabitat(data) {
   const rooms = ROOMS.map(def => {
     if (def.simulated) {
       const readings = data
-        ? [...simulatedRoomReadings(def.id, sol, { tsUtc }), ...realReadingsFor(def.id, byCode.surface)]
+        ? [...scenarioRoomReadings(def.id, simulatedRoomReadings(def.id, sol, { tsUtc }), sol), ...realReadingsFor(def.id, byCode.surface)]
         : [];
       // The room colour comes from the simulated readings only: real surface channels
       // shown here are already counted in the exterior status.
@@ -46,7 +47,7 @@ export function deriveHabitat(data) {
         id: def.id, def, zone: null, zoneLabel: null, simulated: true,
         status: data ? worstStatus(own.map(reading => reading.worst_status)) : 'no_data',
         nowStatus: data ? worstStatus(own.map(reading => reading.status)) : 'no_data',
-        occupants: [], readings, subZones: [],
+        occupants: byCode[def.id]?.occupants || [], readings, subZones: [],
       };
     }
     const zone = byCode[def.zone] || null;

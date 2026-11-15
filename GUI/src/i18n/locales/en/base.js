@@ -29,6 +29,7 @@ export default {
   roomQuartersSouth: 'CREW QUARTERS S',
   roomTechnical: 'TECHNICAL ZONE',
   roomReactor: 'REACTOR',
+  zone_reactor: 'REACTOR',
   mapQuartersNorth: 'CREW QUARTERS N',
   mapQuartersSouth: 'CREW QUARTERS S',
 

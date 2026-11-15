@@ -49,7 +49,7 @@ function CrewList({ occupants, navigate }) {
     <span className="base-crew-list">
       {occupants.map(code => {
         const person = getProfile(code);
-        const text = person ? `${code} ${person.name}` : code;
+        const text = person ? person.name : code;
         return person && navigate ? (
           <button
             key={code}
@@ -57,7 +57,7 @@ function CrewList({ occupants, navigate }) {
             className="base-crew is-link"
             data-crew={code}
             title={t('base.openProfile', { name: person.name })}
-            onClick={() => navigate('profile', { viewedCode: person.code })}
+            onClick={() => navigate('crew', { open: person.code })}
           >
             {text}
           </button>
@@ -120,7 +120,7 @@ function RoomDialog({ room, history, navigate, onClose }) {
               ? <span>{t('base.simulatedZone')}</span>
               : <span className="base-fact-text">{sub ? `${sub.code} · ${sub.label}` : `${room.zone}${room.zoneLabel ? ` · ${room.zoneLabel}` : ''}`}</span>}
           </p>
-          {!room.simulated && (
+          {(!room.simulated || room.occupants.length > 0) && (
             <p className="base-fact">
               <span className="base-fact-key">{t('base.crewPresent')}</span>
               <CrewList occupants={sub ? sub.occupants : ownOccupants} navigate={navigate} />

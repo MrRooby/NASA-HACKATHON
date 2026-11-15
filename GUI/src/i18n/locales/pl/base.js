@@ -29,6 +29,7 @@ export default {
   roomQuartersSouth: 'STREFA MIESZKALNA S',
   roomTechnical: 'STREFA TECHNICZNA',
   roomReactor: 'REAKTOR',
+  zone_reactor: 'REAKTOR',
   mapQuartersNorth: 'STREFA MIESZKALNA',
   mapQuartersSouth: 'STREFA MIESZKALNA',
 

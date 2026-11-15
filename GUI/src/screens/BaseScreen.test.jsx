@@ -116,10 +116,10 @@ describe('BaseScreen', () => {
     fireEvent.click(within(dialog()).getByRole('button', { name: 'Previous page' }));
     expect(within(findTile('voc_benzene')).getByText('INFO')).toBeInTheDocument();
 
-    const crew = within(roomDialog()).getByRole('button', { name: /C1 Aleksander Polkowski/ });
-    expect(within(roomDialog()).getByRole('button', { name: /C2 Bogusława Grzegrzułkiewicz/ })).toBeInTheDocument();
+    const crew = within(roomDialog()).getByRole('button', { name: /^Aleksander Polkowski$/ });
+    expect(within(roomDialog()).getByRole('button', { name: /^Bogusława Grzegrzułkiewicz$/ })).toBeInTheDocument();
     fireEvent.click(crew);
-    expect(navigate).toHaveBeenCalledWith('profile', { viewedCode: 'HAB-C1' });
+    expect(navigate).toHaveBeenCalledWith('crew', { open: 'HAB-C1' });
   });
 
   it('shows the header line: habitat, atmosphere, sol, overall status; no badges', async () => {
