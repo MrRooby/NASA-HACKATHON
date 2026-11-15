@@ -66,7 +66,8 @@
 .dlg-stack { display: grid; gap: 12px; min-height: 0; }
 /* The block that holds a Pager fills the popup and keeps the Pager on the bottom edge,
    so the arrows stay in the same place on every page. */
-.dlg-body > :has(.pager) { flex: 1 1 auto; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+/* the popup content always fills the fixed-size popup (not only when it has a Pager) */
+.dlg-body > :only-child { flex: 1 1 auto; min-height: 0; }
 .dlg-body :has(> .pager) { display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto; min-height: 0; }
 .dlg-body .pager { margin-top: auto; padding-top: 4px; }
 .dlg .btn { min-height: 52px; padding: 0 16px; font-size: 16px; touch-action: manipulation; }

@@ -270,7 +270,8 @@ export default function ReadingTiles({ readings, label, empty, grouped = true, s
   return (
     <div className="base-tiles-wrap">
       <div ref={gridRef} className="base-tiles-area">{body}</div>
-      {!open && <Pager page={current} pages={pages} onPage={setPage} />}
+      {/* the pager slot is always there, so the measured tile area never changes with the page count */}
+      {!open && <div className="base-pager-slot"><Pager page={current} pages={pages} onPage={setPage} /></div>}
     </div>
   );
 }
