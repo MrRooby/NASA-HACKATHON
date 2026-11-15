@@ -24,7 +24,7 @@ describe('ProfileScreen: crew file', () => {
   it('shows the profile fields of HAB-C2', async () => {
     await renderProfile({ session: 'HAB-C2' });
     const file = panel('Crew file');
-    expect(within(file).getByRole('heading', { level: 1, name: 'Bogusław Grzegrzułkiewicz' })).toBeInTheDocument();
+    expect(within(file).getByRole('heading', { level: 1, name: 'Bogusława Grzegrzułkiewicz' })).toBeInTheDocument();
     expect(within(file).getByText(/ŚRUBA/)).toBeInTheDocument();
     expect(within(file).getByText('Systems engineer')).toBeInTheDocument();
     expect(within(file).getByText('Age').nextElementSibling).toHaveTextContent('39');
@@ -33,7 +33,7 @@ describe('ProfileScreen: crew file', () => {
     expect(within(file).getByText('Home module').nextElementSibling).toHaveTextContent('Habitation module M1');
     expect(within(file).getByText('HAB-C2')).toBeInTheDocument();
     expect(within(file).getByText('FICTIONAL')).toBeInTheDocument();
-    expect(within(file).getByRole('img', { name: 'Avatar of Bogusław Grzegrzułkiewicz' })).toHaveAttribute('data-code', 'C2');
+    expect(within(file).getByRole('img', { name: 'Avatar of Bogusława Grzegrzułkiewicz' })).toHaveAttribute('data-code', 'C2');
   });
 
   it('shows the overall status of the MOTHER report, labelled synthetic', async () => {
@@ -224,7 +224,7 @@ describe('ProfileScreen: own profile (check-in and flight-surgeon report)', () =
 
     const stored = JSON.parse(window.localStorage.getItem('orbit-health-report'));
     expect(stored.crewCode).toBe('HAB-C2');
-    expect(stored.crew).toMatchObject({ code: 'HAB-C2', name: 'Bogusław Grzegrzułkiewicz', fictional: true });
+    expect(stored.crew).toMatchObject({ code: 'HAB-C2', name: 'Bogusława Grzegrzułkiewicz', fictional: true });
     expect(stored.mission).toBe('MARS-LT-ELYSIUM');
     expect(stored.sol).toBe(600);
     expect(stored.indicators).toHaveLength(8);
@@ -322,7 +322,7 @@ describe('ProfileScreen: Polish', () => {
     expect(panel('Powiadomienia')).toBeInTheDocument();
     expect(screen.getByText('Inżynier systemów')).toBeInTheDocument();
     expect(screen.getByText('PL · Polska')).toBeInTheDocument();
-    expect(screen.getByText('Przeglądasz: Bogusław Grzegrzułkiewicz — tylko do odczytu')).toBeInTheDocument();
+    expect(screen.getByText('Przeglądasz: Bogusława Grzegrzułkiewicz — tylko do odczytu')).toBeInTheDocument();
     expect(screen.getByText(PSYCH_TEST_CATALOG[2].name.pl)).toBeInTheDocument();
     expect(screen.getAllByText('Co tydzień').length).toBeGreaterThan(0);
   });

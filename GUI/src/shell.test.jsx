@@ -20,11 +20,11 @@ const topbar = () => screen.getByRole('banner');
 const stub = id => screen.getByTestId(`stub-${id}`);
 
 describe('login screen', () => {
-  it('lists the four fictional crew members and works offline', async () => {
+  it('lists the ten fictional crew members and works offline', async () => {
     renderApp({ login: null });
     expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
     const list = screen.getByRole('list', { name: /crew members/i });
-    expect(within(list).getAllByRole('button')).toHaveLength(4);
+    expect(within(list).getAllByRole('button')).toHaveLength(10);
     for (const profile of CREW_PROFILES) {
       expect(within(list).getByRole('button', { name: `Open session as ${profile.name}` })).toBeInTheDocument();
       expect(within(list).getByText(profile.role.en)).toBeInTheDocument();
@@ -55,14 +55,14 @@ describe('app shell', () => {
     expect(currentScreen()).toBe('home');
     expect(stub('home')).toHaveAttribute('data-session', 'HAB-C2');
     expect(stub('home')).toHaveAttribute('data-viewed', 'HAB-C2');
-    expect(stub('home')).toHaveAttribute('data-profile', 'Bogusław Grzegrzułkiewicz');
+    expect(stub('home')).toHaveAttribute('data-profile', 'Bogusława Grzegrzułkiewicz');
 
     expect(within(topbar()).getByText('AWERNASA // MARS-LT-ELYSIUM')).toBeInTheDocument();
     expect(screen.getByTestId('screen-name')).toHaveTextContent('Home');
     const nav = screen.getByRole('navigation', { name: /main navigation/i });
     expect(within(nav).getAllByRole('button').map(button => button.getAttribute('data-nav')))
       .toEqual(['home', 'profile', 'base', 'crew', 'tests', 'settings']);
-    expect(within(nav).getByRole('button', { name: 'Bogusław Grzegrzułkiewicz' })).toBeInTheDocument();
+    expect(within(nav).getByRole('button', { name: 'Bogusława Grzegrzułkiewicz' })).toBeInTheDocument();
     expect(within(nav).getByRole('button', { name: 'Settings' })).toHaveTextContent('⚙');
     expect(screen.getByTestId('topbar-sol')).toHaveTextContent('SOL ---');
     expect(within(topbar()).getByText(/^\d\d:\d\d:\d\d UTC$/)).toBeInTheDocument();
