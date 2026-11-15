@@ -10,7 +10,6 @@ import { isGuiSimulated } from './simulatedRooms.js';
 import { RangeBar, Sparkline, TrendChart } from './charts.jsx';
 import { HISTORY_SOLS, channelSeries, useSolHistory } from './useSolHistory.js';
 
-const NOW_KEYS = { ok: 'base.nowOk', caution: 'base.nowCaution', alert: 'base.nowAlert' };
 const QUALITY_KEYS = { suspect: 'base.qualitySuspect', sensor_fault: 'base.qualityFault' };
 
 /** NavIcon per reading group (closest existing glyph). */
@@ -67,14 +66,18 @@ export const rowStatus = reading => {
 };
 
 /**
- * Note for a reading whose fault has already passed: "PEAK 7.737 · NOW OK"
- * (categorical channels: "FAULT EARLIER THIS SOL · NOW OK"); null otherwise.
+ * Note for a reading whose fault has already passed: "PEAK 7.737 EARLIER THIS SOL"
+ * (categorical channels: "FAULT EARLIER THIS SOL"); null otherwise. The tag already shows the
+ * status, so the note names the current one only when it is not OK: "… · NOW CAUTION".
+ * short: the tile form, which fits next to the tag ("PEAK 7.737", "EARLIER FAULT").
  */
-export function recoveryNote(reading, t) {
+export function recoveryNote(reading, t, { short = false } = {}) {
   if (!hasRecovered(reading)) return null;
-  const now = t(NOW_KEYS[reading.status] || 'base.nowOk');
   const peak = formatNumber(peakValue(reading));
-  return peak != null ? t('base.peakNow', { peak, now }) : t('base.faultEarlier', { now });
+  const note = peak != null
+    ? t(short ? 'base.peakShort' : 'base.peakEarlier', { peak })
+    : t(short ? 'base.faultShort' : 'base.faultEarlier');
+  return !short && reading.status === 'caution' ? `${note} · ${t('base.nowCaution')}` : note;
 }
 
 /** "A 2.148 · B 2.41" for channels with redundant sensors; null otherwise. */
@@ -107,7 +110,7 @@ function ReadingTile({ reading, spark, onOpen }) {
   const now = nowOf(reading);
   const value = formatValue(reading);
   const quality = qualityOf(reading);
-  const second = recoveryNote(reading, t)
+  const second = recoveryNote(reading, t, { short: true })
     ?? (quality ? t(QUALITY_KEYS[quality] || 'base.qualityOther', { quality }) : null);
   return (
     <button

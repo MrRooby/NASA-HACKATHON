@@ -66,6 +66,8 @@ describe('BaseScreen', () => {
     expect(roomDialog()).toHaveAttribute('data-room', 'quarters_north');
     expect(within(dialog()).getByRole('heading', { name: 'CREW QUARTERS N' })).toBeInTheDocument();
     expect(within(roomDialog()).getByText(/module_M1 · Habitation module M1/)).toBeInTheDocument();
+    // sol status ALRT in the title bar, the zone is CAUT now: NOW shows the current status once
+    expect(within(roomDialog().querySelector('[data-fact="now"]')).getByText('[ CAUT ]')).toBeInTheDocument();
 
     const co2 = findTile('ppco2');
     expect(co2).toHaveAttribute('data-status', 'alert');
@@ -74,7 +76,9 @@ describe('BaseScreen', () => {
     expect(within(co2).getByText('2.279')).toBeInTheDocument();
     expect(within(co2).getByText('mmHg')).toBeInTheDocument();
     expect(within(co2).getByText('[ ALRT ]')).toBeInTheDocument();
-    expect(within(co2).getByText('PEAK 7.737 · NOW OK')).toBeInTheDocument();
+    // one status per tile: the tag; the note keeps only the extra fact (the peak)
+    expect(within(co2).getByText('PEAK 7.737')).toBeInTheDocument();
+    expect(within(co2).queryByText(/NOW|OK\b/)).toBeNull();
     expect(within(roomDialog()).queryByText('SIMULATED')).toBeNull();
 
     // details only on tap: sol min – max, normal range, time, sensors, quality
@@ -86,6 +90,7 @@ describe('BaseScreen', () => {
     expect(within(detail).getByText('A 2.148 · B 2.41')).toBeInTheDocument();
     expect(within(detail).getByText('SENSOR SUSPECT')).toBeInTheDocument();
     expect(within(detail).getByText('AIR COMPOSITION')).toBeInTheDocument();
+    expect(within(detail).getByText('PEAK 7.737 EARLIER THIS SOL')).toBeInTheDocument();
     fireEvent.click(within(detail).getByRole('button', { name: /BACK/ }));
     expect(document.querySelector('.base-detail')).toBeNull();
     expect(tile('ppco2')).toBeInTheDocument();
@@ -106,7 +111,7 @@ describe('BaseScreen', () => {
     const air = channels.indexOf('o2_fraction');
     expect(channels.slice(air, air + 3)).toEqual(['o2_fraction', 'ppco2', 'ppo2_inspired']);
     // categorical channel whose fault has passed; unrated channel shows INFO
-    expect(within(findTile('subsystem_status') ?? tile('subsystem_status')).getByText('FAULT EARLIER THIS SOL · NOW OK')).toBeInTheDocument();
+    expect(within(findTile('subsystem_status') ?? tile('subsystem_status')).getByText('EARLIER FAULT')).toBeInTheDocument();
     fireEvent.click(within(dialog()).getByRole('button', { name: 'Previous page' }));
     fireEvent.click(within(dialog()).getByRole('button', { name: 'Previous page' }));
     expect(within(findTile('voc_benzene')).getByText('INFO')).toBeInTheDocument();
@@ -191,10 +196,12 @@ describe('BaseScreen', () => {
     expect(own).toHaveAttribute('data-status', 'ok');
     expect(farm).toHaveAttribute('aria-selected', 'true');
     expect(within(dialog().querySelector('.dlg-head')).getByText('[ ALRT ]')).toBeInTheDocument();
-    expect(within(findTile('o2_fraction')).getByText('PEAK 34.23 · NOW OK')).toBeInTheDocument();
+    expect(within(findTile('o2_fraction')).getByText('PEAK 34.23')).toBeInTheDocument();
 
     fireEvent.click(gym);
     expect(gym).toHaveAttribute('aria-selected', 'true');
+    // the gym is OK all sol: its segment tag is the only status, no NOW line repeating it
+    expect(roomDialog().querySelector('[data-fact="now"]')).toBeNull();
     expect(findTile('ppco2')).toBeInTheDocument();
     expect(within(roomDialog()).getByText(/^gym · /)).toBeInTheDocument();
   });
@@ -217,7 +224,7 @@ describe('BaseScreen', () => {
     const leak = tile('leak_detector');
     expect(within(leak).getByText('Leak detector (joint)')).toBeInTheDocument();
     expect(within(leak).getByText('OK')).toBeInTheDocument();
-    expect(within(leak).getByText('FAULT EARLIER THIS SOL · NOW OK')).toBeInTheDocument();
+    expect(within(leak).getByText('EARLIER FAULT')).toBeInTheDocument();
 
     fireEvent.click(dialog().querySelector('[data-zone="surface"]'));
     expect([...dialog().querySelectorAll('.base-tile')].map(node => node.getAttribute('data-channel'))).toEqual([
@@ -403,7 +410,7 @@ describe('BaseScreen', () => {
     expect(within(dialog()).getByRole('heading', { name: 'STREFA MIESZKALNA N' })).toBeInTheDocument();
     const co2 = findTile('ppco2');
     expect(within(co2).getByText('CO2 partial pressure')).toBeInTheDocument(); // from MOTHER, not translated
-    expect(within(co2).getByText('SZCZYT 7.737 · TERAZ OK')).toBeInTheDocument();
+    expect(within(co2).getByText('SZCZYT 7.737')).toBeInTheDocument();
     fireEvent.click(co2);
     expect(within(dialog()).getByText('SKŁAD POWIETRZA')).toBeInTheDocument();
     expect(within(dialog()).getByRole('button', { name: /WSTECZ/ })).toBeInTheDocument();

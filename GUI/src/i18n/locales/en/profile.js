@@ -83,7 +83,6 @@ export default {
   checkinCommit: 'Commit entry',
   checkinCommitted: 'Committed {time} UTC.',
   checkinAttention: 'To check: {n}.',
-  checkinAllNormal: 'All normal.',
 
   // [ FLIGHT SURGEON REPORT ]
   reportTitle: 'Flight surgeon report',

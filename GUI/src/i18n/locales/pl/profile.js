@@ -83,7 +83,6 @@ export default {
   checkinCommit: 'Zatwierdź wpis',
   checkinCommitted: 'Zatwierdzono {time} UTC.',
   checkinAttention: 'Do sprawdzenia: {n}.',
-  checkinAllNormal: 'Wszystko w normie.',
 
   // [ RAPORT DLA FLIGHT SURGEONA ]
   reportTitle: 'Raport dla flight surgeona',

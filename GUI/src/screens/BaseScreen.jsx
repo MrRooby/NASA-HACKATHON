@@ -106,6 +106,9 @@ function RoomDialog({ room, history, navigate, onClose }) {
     : room.occupants;
   const partName = sub ? t(`base.zone_${sub.code}`) : name;
   const readings = sub ? sub.readings : room.readings;
+  // the title bar / selected segment already shows the sol status: NOW only when it differs
+  const partStatus = sub ? sub.status : room.status;
+  const nowStatus = sub ? sub.nowStatus : room.nowStatus;
 
   return (
     <DataDialog title={name} status={worstStatus([room.status, ...room.subZones.map(item => item.status)])} icon="base" onClose={onClose}>
@@ -123,10 +126,12 @@ function RoomDialog({ room, history, navigate, onClose }) {
               <CrewList occupants={sub ? sub.occupants : ownOccupants} navigate={navigate} />
             </p>
           )}
-          <p className="base-fact">
-            <span className="base-fact-key">{t('base.statusNow')}</span>
-            <StatusTag status={sub ? sub.nowStatus : room.nowStatus} />
-          </p>
+          {nowStatus !== partStatus && (
+            <p className="base-fact" data-fact="now">
+              <span className="base-fact-key">{t('base.statusNow')}</span>
+              <StatusTag status={nowStatus} />
+            </p>
+          )}
         </div>
         {room.subZones.length > 0 && (
           <Segments

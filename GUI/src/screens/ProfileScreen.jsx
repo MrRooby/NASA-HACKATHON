@@ -159,8 +159,8 @@ export default function ProfileScreen({ mother, session, viewedCode, setViewedCo
             status={committed ? (
               <p className="pf-state" role="status">
                 <StatusTag status={attention > 0 ? 'caution' : 'ok'} />{' '}
-                {t('profile.checkinCommitted', { time: committed.at.slice(11, 16) })}{' '}
-                {attention > 0 ? t('profile.checkinAttention', { n: attention }) : t('profile.checkinAllNormal')}
+                {t('profile.checkinCommitted', { time: committed.at.slice(11, 16) })}
+                {attention > 0 ? ` ${t('profile.checkinAttention', { n: attention })}` : null}
               </p>
             ) : null}
           />
