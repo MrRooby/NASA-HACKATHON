@@ -55,7 +55,8 @@
 /* ── tab bar: big touch targets across the full width, settings in the corner ── */
 .topbar-nav {
   display: grid;
-  grid-template-columns: repeat(var(--tabs, 5), minmax(0, 1fr)) var(--tab-h);
+  /* home · person (wider: full name) · base · crew · tests · settings */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) repeat(3, minmax(0, 1fr)) var(--tab-h);
   gap: 8px;
   --tab-h: clamp(56px, 9vh, 76px);
 }
@@ -78,14 +79,6 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
-.navtab-key {
-  position: absolute;
-  top: 4px;
-  left: 8px;
-  color: var(--dim);
-  font-size: 13px;
-  letter-spacing: 0.08em;
-}
 .navtab-label {
   max-width: 100%;
   overflow: hidden;
@@ -101,7 +94,7 @@
   letter-spacing: 0.08em;
   overflow-wrap: anywhere;
 }
-.navtab-person .navtab-label { font-size: clamp(14px, 1.5vw, 20px); }
+.navtab-person .navtab-label { font-size: clamp(14px, 1.6vw, 22px); letter-spacing: 0.02em; }
 
 /* pressed feedback does not depend on hover (touch) */
 .navtab:active { background: var(--raised); border-color: var(--accent); }
@@ -125,7 +118,6 @@
   height: 5px;
   background: var(--accent-bright);
 }
-.navtab[aria-current='page'] .navtab-key { color: var(--bg); }
 
 /* parent of a sub-screen (wearables under home, another person's profile under crew) */
 .navtab.is-parent { border-color: var(--accent); color: var(--accent-bright); }
@@ -163,10 +155,10 @@
   .topbar-brand { display: none; }
   .topbar-status { gap: 4px 12px; font-size: 13px; }
   .topbar-clock { display: none; }
-  .navtab-key { display: none; }
   .topbar-nav { gap: 4px; }
   .navtab { padding: 2px 4px; }
   .navtab-label { font-size: 14px; letter-spacing: 0.04em; }
+  .navtab-settings .navtab-label { font-size: 26px; }
   .statusline > span:last-child { display: none; }
 }
 @media (max-height: 500px) {

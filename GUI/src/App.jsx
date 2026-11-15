@@ -68,7 +68,7 @@ class ScreenBoundary extends React.Component {
   }
 }
 
-function NavTab({ id, index, label, name, current, parent, className, onClick }) {
+function NavTab({ id, label, name, current, parent, className, onClick }) {
   return (
     <button
       type="button"
@@ -79,7 +79,6 @@ function NavTab({ id, index, label, name, current, parent, className, onClick })
       title={name ?? label}
       onClick={onClick}
     >
-      {index != null && <span className="navtab-key" aria-hidden="true">{String(index).padStart(2, '0')}</span>}
       <span className="navtab-label" aria-hidden={name ? 'true' : undefined}>{label}</span>
     </button>
   );
@@ -94,7 +93,7 @@ function TopBar({ mother, session, viewedCode, screen, navigate, onLogout }) {
   // Big full-width tabs for a touch tablet; settings sit as a square button in the corner.
   const tabs = [
     { id: 'home', label: t('common.navHome'), opts: own, current: screen === 'home', parent: screen === 'wearables' },
-    { id: 'profile', label: me ? <>{me.name.split(' ')[0]}<br />«{me.callsign}»</> : session, name: me?.name, opts: own, current: screen === 'profile' && !viewingOther, className: 'navtab-person' },
+    { id: 'profile', label: me ? <>{me.name.split(' ')[0]}<br />{me.name.split(' ').slice(1).join(' ')}</> : session, name: me?.name, opts: own, current: screen === 'profile' && !viewingOther, className: 'navtab-person' },
     { id: 'base', label: t('common.navBase'), current: screen === 'base' },
     { id: 'crew', label: t('common.navCrew'), current: screen === 'crew', parent: screen === 'profile' && viewingOther },
     { id: 'tests', label: t('common.navTests'), current: screen === 'tests' },
@@ -118,9 +117,9 @@ function TopBar({ mother, session, viewedCode, screen, navigate, onLogout }) {
         </div>
       </div>
 
-      <nav className="topbar-nav" aria-label={t('common.navMain')} style={{ '--tabs': tabs.length }}>
-        {tabs.map((tab, i) => (
-          <NavTab key={tab.id} {...tab} index={i + 1} onClick={() => navigate(tab.id, tab.opts)} />
+      <nav className="topbar-nav" aria-label={t('common.navMain')}>
+        {tabs.map(tab => (
+          <NavTab key={tab.id} {...tab} onClick={() => navigate(tab.id, tab.opts)} />
         ))}
         <NavTab
           id="settings"
