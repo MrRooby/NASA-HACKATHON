@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Button } from '../components/index.js';
 import { useI18n } from '../i18n/index.js';
-import { Pager } from '../home/DataDialog.jsx';
+import { Pager, popupPageSize } from '../home/DataDialog.jsx';
 import { COGNITIVE_BATTERY, PSYCH_TEST_CATALOG, listPsychResults, listPsychTests } from '../data/crewStore.js';
 import { localized } from '../crew/crewStatus.js';
 import { useStoreList } from './useStoreList.js';
 
-const PER_PAGE = 3;
+const PER_PAGE = popupPageSize(3, 2);
 
 /** Latest result per test id (highest sol). */
 function latestByTest(results) {

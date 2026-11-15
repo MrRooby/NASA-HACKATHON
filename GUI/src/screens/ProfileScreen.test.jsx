@@ -49,9 +49,9 @@ describe('ProfileScreen: header and personal data', () => {
     expect(screen.queryByText(/ŚRUBA|FICTIONAL|SYNTHETIC|TODO/)).not.toBeInTheDocument(); // no badges or callsigns
   });
 
-  it('falls back to the pixel avatar without a photo', async () => {
+  it('shows the crew photo of every member (the avatar fallback is covered in crewPhotos)', async () => {
     renderScreen(ProfileScreen, { session: 'HAB-C5' });
-    expect(screen.getByRole('img', { name: /^Avatar of / })).toHaveAttribute('data-code', 'C5');
+    expect(document.querySelector('img[src*="generated-woman5"]')).not.toBeNull();
     await waitFor(() => expect(globalThis.fetch).toHaveBeenCalled());
   });
 
@@ -150,6 +150,7 @@ describe('ProfileScreen: not connected parts', () => {
   it('[ START ] of the PVT opens the tests screen', async () => {
     const { navigate } = await renderProfile({ session: 'HAB-C2' });
     const tests = open('tests', 'Psych tests');
+    fireEvent.click(tests.getByRole('button', { name: 'Next page' }));
     fireEvent.click(tests.getByRole('button', { name: 'Start: Psychomotor vigilance test (PVT, reaction time)' }));
     expect(navigate).toHaveBeenCalledTimes(1);
     expect(navigate).toHaveBeenCalledWith('tests');
@@ -388,7 +389,7 @@ describe('ProfileScreen: Polish', () => {
     const tests = open('tests', 'Testy psych.');
     expect(tests.getAllByText(/Co tydzień/).length).toBeGreaterThan(0);
     fireEvent.click(tests.getByRole('button', { name: 'Następna strona' }));
-    expect(tests.getByText(PSYCH_TEST_CATALOG[3].name.pl)).toBeInTheDocument();
+    expect(tests.getByText(PSYCH_TEST_CATALOG[2].name.pl)).toBeInTheDocument();
   });
 });
 

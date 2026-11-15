@@ -7,7 +7,7 @@ import { buildNotifications } from '../notifications/buildNotifications.js';
 import NotificationList from '../notifications/NotificationList.jsx';
 import CheckIn, { CHECKIN_DEFAULTS } from '../checkin/CheckIn.jsx';
 import { createBiometrics, updateBiometric } from '../checkin/thresholdLogic.js';
-import DataDialog, { Pager } from '../home/DataDialog.jsx';
+import DataDialog, { Pager, popupPageSize } from '../home/DataDialog.jsx';
 import { setPendingFocus } from '../home/focus.js';
 import { useCrewReport } from '../home/useCrewReport.js';
 import { findLocation } from '../crew/crewStatus.js';
@@ -18,7 +18,7 @@ import SurgeonReportPanel from '../profile/SurgeonReportPanel.jsx';
 import './home.css'; // DataDialog and Pager styles
 import './profile.css';
 
-const NOTIFS_PER_PAGE = 4;
+const NOTIFS_PER_PAGE = popupPageSize(4, 3);
 
 /**
  * Notifications that concern one person: their organs and wearables, plus habitat zones and

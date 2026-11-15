@@ -55,7 +55,7 @@ describe('CrewScreen: roster list', () => {
   it('shows the photo, or the pixel avatar for a member without one', async () => {
     await renderCrew({ session: 'HAB-C1' });
     expect(within(tile('HAB-C3')).getByRole('img', { name: 'Avatar of Roman Czarny', hidden: true }).tagName).toBe('IMG');
-    expect(tile('HAB-C5').querySelector('.crew-portrait .avatar')).not.toBeNull(); // no photo: pixel avatar
+    expect(tile('HAB-C5').querySelector('.crew-portrait img')).not.toBeNull(); // every member has a photo now
   });
 
   it('keeps each row short: name, role, one status, one line; no callsigns, no badges', async () => {

@@ -4,7 +4,7 @@ import { SegBar, SolControl, StatusTag, cx } from '../components/index.js';
 import { useT } from '../i18n/index.js';
 import NavIcon from '../navIcons.jsx';
 import { LIMB_SEGMENTS, ORGAN_SEGMENTS, organsForSegment, segmentStatusFromReport, worstStatus } from '../organSegments.js';
-import DataDialog, { Pager } from '../home/DataDialog.jsx';
+import DataDialog, { Pager, popupPageSize } from '../home/DataDialog.jsx';
 import LimbCard from '../home/LimbCard.jsx';
 import TelemetryNotice from '../home/TelemetryNotice.jsx';
 import { clearPendingFocus, peekPendingFocus } from '../home/focus.js';
@@ -15,7 +15,7 @@ import './wearables.css';
 
 export const SOL_MAX = 600;
 const DAY_MAX = 400;
-const CHECKS_PER_PAGE = 6;
+const CHECKS_PER_PAGE = popupPageSize(6, 4);
 
 // Body regions of the 3D model. Left / right are the astronaut's own sides, as in MOTHER.
 export const REGIONS = [

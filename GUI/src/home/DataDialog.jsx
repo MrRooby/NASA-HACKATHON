@@ -57,3 +57,9 @@ export function Pager({ page, pages, onPage }) {
     </div>
   );
 }
+
+/** Items per popup page: more on a tall screen (the popup is up to 880 px high), fewer on 768 px. */
+export function popupPageSize(tall, short) {
+  const h = typeof window !== 'undefined' ? window.innerHeight : 0;
+  return h >= 900 ? tall : short;
+}
