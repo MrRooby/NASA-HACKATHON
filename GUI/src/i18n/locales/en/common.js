@@ -9,6 +9,7 @@ export default {
   navCrew: 'Crew',
   navTests: 'Tests',
   navSettings: 'Settings',
+  navCalendar: 'Calendar',
   logout: 'Log out',
 
   screenHome: 'Home',
@@ -18,6 +19,7 @@ export default {
   screenCrew: 'Crew',
   screenTests: 'Tests',
   screenSettings: 'Settings',
+  screenCalendar: 'Calendar',
   viewing: 'Viewing {code}',
   screenFault: 'Screen fault',
   screenFaultHint: 'This screen stopped with an error. The other screens still work.',

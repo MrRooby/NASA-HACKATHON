@@ -9,6 +9,7 @@ export default {
   navCrew: 'Załoga',
   navTests: 'Badania',
   navSettings: 'Ustawienia',
+  navCalendar: 'Kalendarz',
   logout: 'Wyloguj',
 
   screenHome: 'Start',
@@ -18,6 +19,7 @@ export default {
   screenCrew: 'Załoga',
   screenTests: 'Badania',
   screenSettings: 'Ustawienia',
+  screenCalendar: 'Kalendarz',
   viewing: 'Podgląd: {code}',
   screenFault: 'Awaria ekranu',
   screenFaultHint: 'Ten ekran zatrzymał się z błędem. Pozostałe ekrany działają.',

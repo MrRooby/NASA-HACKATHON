@@ -11,6 +11,7 @@ import ProfileScreen from './screens/ProfileScreen.jsx';
 import CrewScreen from './screens/CrewScreen.jsx';
 import TestsScreen from './screens/TestsScreen.jsx';
 import SettingsScreen from './screens/SettingsScreen.jsx';
+import CalendarScreen from './screens/CalendarScreen.jsx';
 
 /**
  * Screen id -> component. Every screen gets { mother, session, viewedCode, setViewedCode, navigate, profile,
@@ -25,6 +26,7 @@ export const SCREEN_COMPONENTS = {
   crew: CrewScreen,
   tests: TestsScreen,
   settings: SettingsScreen,
+  calendar: CalendarScreen,
 };
 
 export const SCREENS = Object.keys(SCREEN_COMPONENTS);
@@ -37,6 +39,7 @@ const SCREEN_TITLE_KEYS = {
   crew: 'common.screenCrew',
   tests: 'common.screenTests',
   settings: 'common.screenSettings',
+  calendar: 'common.screenCalendar',
 };
 
 function UtcClock() {
@@ -79,6 +82,7 @@ function TopBar({ mother, session, viewedCode, screen, navigate, onLogout }) {
     { id: 'crew', label: t('common.navCrew'), current: screen === 'crew' },
     { id: 'tests', label: t('common.navTests'), current: screen === 'tests' },
     { id: 'settings', label: '⚙', name: t('common.navSettings'), current: screen === 'settings' },
+    { id: 'calendar', label: 'CAL', name: t('common.navCalendar'), current: screen === 'calendar' },
   ];
 
   return (

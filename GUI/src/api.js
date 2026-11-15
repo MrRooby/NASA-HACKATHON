@@ -123,3 +123,11 @@ export function getHabitat({ sol } = {}, options) {
   const query = params.toString();
   return request(`/api/habitat${query ? `?${query}` : ''}`, options);
 }
+
+export function getCalendar({ start, end } = {}, options) {
+  const params = new URLSearchParams();
+  if (start) params.set('start', String(start));
+  if (end) params.set('end', String(end));
+  const query = params.toString();
+  return request(`/api/calendar${query ? `?${query}` : ''}`, options);
+}
