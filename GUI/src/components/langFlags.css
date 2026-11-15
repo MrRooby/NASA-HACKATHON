@@ -1,0 +1,24 @@
+/* LangFlags.jsx: flag buttons, touch size; current language = accent frame. */
+.langflags { display: inline-flex; align-items: center; gap: 8px; }
+.langflag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 52px;
+  padding: 6px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.langflag-svg { display: block; width: 100%; height: 100%; opacity: 0.55; }
+.langflag[aria-pressed='true'] { padding: 3px; border: 4px solid var(--accent); }
+.langflag[aria-pressed='true'] .langflag-svg { opacity: 1; }
+.langflag:active { border-color: var(--accent-bright); }
+.langflag:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
+@media (hover: hover) {
+  .langflag:hover .langflag-svg { opacity: 1; }
+  .langflag:hover { border-color: var(--accent); }
+}

@@ -1,62 +1,152 @@
-/* LoginScreen.jsx — crew identification terminal (theme variables only). */
+/* LoginScreen.jsx — crew identification for a touch tablet (theme variables only).
+   One viewport, no scrolling: header · prompt · crew cards (the cards take the rest).
+   The status line reuses the top-bar classes of shell.css (.topbar-row, .topbar-sol, .topbar-clock). */
 .login {
+  --gap: clamp(10px, 1.4vw, 20px);
   display: grid;
-  gap: 16px;
-  align-content: center;
-  width: min(880px, 100%);
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: 24px 16px;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: clamp(8px, 1.6vh, 16px);
+  height: 100%;
+  padding: clamp(10px, 1.6vh, 18px) clamp(12px, 2vw, 28px) clamp(12px, 2.2vh, 24px);
+  overflow: hidden;
 }
-.login-boot p { margin: 0; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; }
-.login-brand { margin-bottom: 8px; font-size: 22px; }
-.login-boot p.login-link-online { color: var(--ok); }
-.login-boot p.login-link-connecting { color: var(--caution); }
-.login-boot p.login-link-offline { color: var(--alert); }
 
-.login-prompt { margin-bottom: 8px; color: var(--fg); text-transform: uppercase; letter-spacing: 0.08em; }
-
-.login-crew { display: grid; gap: 0; margin-bottom: 10px; border-top: 1px solid var(--border); }
-.login-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1.4fr) minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 4px 16px;
-  width: 100%;
-  padding: 8px;
-  color: var(--fg);
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-  cursor: pointer;
-}
-.login-who, .login-ids { display: grid; gap: 2px; min-width: 0; }
-.login-name { font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; overflow-wrap: anywhere; }
-.login-role, .login-callsign { color: var(--dim); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
-.login-code { color: var(--accent); font-weight: 700; letter-spacing: 0.08em; }
-.login-go { color: var(--accent); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
-
-/* inverse video for the whole row */
-.login-row:hover, .login-row:focus-visible, .login-row:active { color: var(--bg); background: var(--accent); }
-.login-row:hover :is(.login-role, .login-callsign, .login-code, .login-go),
-.login-row:focus-visible :is(.login-role, .login-callsign, .login-code, .login-go),
-.login-row:active :is(.login-role, .login-callsign, .login-code, .login-go) { color: var(--bg); }
-
-.login-note { margin: 0; color: var(--dim); font-size: 12px; }
-.login-foot {
+/* ── header: title left, status + language right ── */
+.login-top {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 6px 16px;
-  color: var(--dim);
-  font-size: 12px;
+  gap: 8px 24px;
+  min-width: 0;
+}
+.login-brand {
+  font-size: clamp(30px, 3.4vw, 52px);
+  line-height: 1.3;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+.login-version { color: var(--dim); font-size: 0.5em; font-weight: 500; text-transform: none; letter-spacing: 0.06em; }
+
+.login-status { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px 20px; margin-left: auto; }
+.login-statusline { gap: 4px 20px; font-size: 15px; }
+.login-statusline .topbar-sol { font-size: 18px; }
+.login-statusline .conn { font-size: 15px; }
+.login-statusline .conn-mark { width: 10px; height: 10px; }
+
+/* ── prompt ── */
+.login-prompt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  margin: 0;
+  color: var(--fg);
+  font-size: clamp(14px, 1.3vw, 18px);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
-@media (max-width: 720px) {
-  .login-row { grid-template-columns: auto minmax(0, 1fr); }
-  .login-ids, .login-go { grid-column: 2; }
+/* ── crew cards: 4 in a row, or 2×2 when the free area is tall (portrait).
+   The card width follows the free height so the 600×700 photo is never squeezed. ── */
+.login-crewbox { min-height: 0; container-type: size; }
+.login-crew {
+  --cols: 4;
+  --name-fs: clamp(16px, 1.5vw, 24px);
+  --text-h: calc(var(--name-fs) * 2.3 + 76px); /* 2 name lines + role + body + padding */
+  --below: calc(var(--text-h) + 4px); /* text block + card borders */
+  --card-w: min(
+    (100cqw - (var(--cols) - 1) * var(--gap)) / var(--cols),
+    (100cqh - var(--below)) * 6 / 7
+  );
+  /* photo 6:7, taller (cropped at the sides, up to 3:4) when the free height allows it */
+  --photo-h: min(100cqh - var(--below), var(--card-w) * 4 / 3);
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--card-w));
+  justify-content: center;
+  align-content: center;
+  gap: var(--gap);
+  height: 100%;
+}
+@container (aspect-ratio < 1.1) {
+  .login-crew {
+    --cols: 2;
+    --card-w: min(
+      (100cqw - var(--gap)) / 2,
+      ((100cqh - var(--gap)) / 2 - var(--below)) * 6 / 7
+    );
+    --photo-h: min((100cqh - var(--gap)) / 2 - var(--below), var(--card-w) * 4 / 3);
+  }
+}
+.login-cell { min-width: 0; }
+
+.login-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.login-photo {
+  display: block;
+  flex: none;
+  height: var(--photo-h);
+  overflow: hidden;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.login-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+.login-photo .login-avatar { width: 100%; height: 100%; padding: 12%; border: 0; }
+
+.login-who {
+  display: grid;
+  flex: none;
+  height: var(--text-h);
+  align-content: start;
+  gap: 2px;
+  min-width: 0;
+  padding: 10px 12px;
+  overflow: hidden;
+}
+.login-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: var(--name-fs);
+  font-weight: 700;
+  line-height: 1.15;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+}
+.login-role, .login-body {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.login-role { color: var(--accent); font-size: 15px; }
+.login-body { color: var(--dim); font-size: 14px; }
+
+/* pressed feedback does not depend on hover (touch) */
+.login-card:active { border-color: var(--accent-bright); }
+.login-card:active .login-who { color: var(--bg); background: var(--accent); }
+.login-card:active :is(.login-role, .login-body) { color: var(--bg); }
+.login-card:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
+@media (hover: hover) {
+  .login-card:hover { border-color: var(--accent); }
+  .login-card:hover .login-name { color: var(--accent-bright); }
 }
