@@ -18,7 +18,6 @@ export const PHOTO_FOR_CREW = {
   'HAB-C2': 'generated-woman3',
   'HAB-C3': 'konrad',
   'HAB-C4': 'kinga',
-  'HAB-C5': 'generated-woman2',
   'HAB-C6': 'hartek',
   'HAB-C7': 'jan',
   'HAB-C8': 'kamil',
