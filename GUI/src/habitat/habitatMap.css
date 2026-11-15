@@ -61,6 +61,7 @@
   text-transform: uppercase;
   pointer-events: none;
 }
+.hmap-label.is-small { font-size: 16px; letter-spacing: 1px; } /* narrow airlocks */
 .hmap-room.is-selected .hmap-label,
 .hmap-room:hover .hmap-label { fill: var(--accent-bright); }
 

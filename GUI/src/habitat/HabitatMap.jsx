@@ -33,12 +33,12 @@ const toLookup = rooms => (Array.isArray(rooms)
   : rooms || {});
 
 function RoomLabel({ def, text, simulatedText }) {
-  const { x, y, rotate, wrap, align = 'middle', lineHeight = 24 } = def.label;
+  const { x, y, rotate, wrap, small, align = 'middle', lineHeight = 24 } = def.label;
   const lines = wrap ? String(text).split(' ') : [text];
   return (
     <g transform={rotate ? `rotate(${rotate} ${x} ${y})` : undefined} aria-hidden="true">
       {lines.map((line, index) => (
-        <text key={index} className="hmap-label" x={x} y={y + index * lineHeight} textAnchor={align} dominantBaseline="central">
+        <text key={index} className={small ? 'hmap-label is-small' : 'hmap-label'} x={x} y={y + index * lineHeight} textAnchor={align} dominantBaseline="central">
           {line}
         </text>
       ))}
